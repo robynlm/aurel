@@ -1,0 +1,4 @@
+/* Hide the entire type block for attributes */
+div.rst-content dl.py.attribute .field-list {
+    display: none !important;
+}
