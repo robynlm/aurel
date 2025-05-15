@@ -3,8 +3,8 @@ import inspect
 import sys
 
 # Add the src directory to the Python path
-sys.path.insert(0, os.path.abspath('../src'))
-import aurel
+sys.path.insert(0, os.path.abspath('../../src'))
+import aurel.core as core
 
 # Directory to save the generated .rst files
 output_dir = "."
@@ -53,12 +53,12 @@ def print_subsec(title, subsecvars, allfunctions, varsdone):
     if title != "":
         f.write(title+"\n")
         f.write("-"*len(title)+"\n\n")
-    for name in list(aurel.descriptions.keys()):
+    for name in list(core.descriptions.keys()):
         if ((name in allfunctions) 
             and (name in subsecvars) 
             and (name not in varsdone)):
             # Check if the function is in `allfunctions`
-            f.write(f"**{name}**: {aurel.descriptions[name]}\n\n")
+            f.write(f"**{name}**: {core.descriptions[name]}\n\n")
             varsdone.append(name)
     return varsdone
 
@@ -74,17 +74,17 @@ with open(output_file, "w") as f:
     f.write("descriptions\n")
     f.write("************\n\n")
     allfunctions = []
-    for name, func in inspect.getmembers(aurel.AurelCore, inspect.isfunction):
+    for name, func in inspect.getmembers(core.AurelCore, inspect.isfunction):
         allfunctions.append(name)
 
     f.write(".. _required_quantities:\n\n")
     f.write("Required quantities\n")
     f.write("===================\n\n")
-    for name in list(aurel.descriptions.keys()):
+    for name in list(core.descriptions.keys()):
         if ((name not in allfunctions)
             and (name not in varsdone)):
             # Check if the function is in `allfunctions`
-            f.write(f"**{name}**: {aurel.descriptions[name]}\n\n")
+            f.write(f"**{name}**: {core.descriptions[name]}\n\n")
             varsdone.append(name)
 
     f.write(".. _assumed_quantities:\n\n")

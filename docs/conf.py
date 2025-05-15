@@ -3,7 +3,7 @@ import sys
 
 # Add the src directory to the Python path
 sys.path.insert(0, os.path.abspath('../src'))
-import aurel
+import aurel.core as core
 
 # Configuration file for the Sphinx documentation builder.
 
@@ -46,7 +46,7 @@ autodoc_typehints = "none"
 
 def skip_member_handler(app, what, name, obj, skip, options):
     # List of functions to skip
-    functions_to_skip = ["func"]+list(aurel.descriptions.keys())
+    functions_to_skip = ["func"]+list(core.descriptions.keys())
     # Check if the function belongs to the specified modules and should be skipped
     if ((name in functions_to_skip) 
         and (getattr(obj, "__module__", None) in ["aurel.core", "aurel.coreanalytic"])):
