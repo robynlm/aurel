@@ -1,4 +1,4 @@
-name: Deploy pre-built Docs to GitHub Pages
+name: Deploy Docs to GitHub Pages
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  contents: write  # allow pushing to gh-pages
+  contents: write  # Allow pushing to gh-pages
 
 jobs:
   deploy:
@@ -16,10 +16,25 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+
+    - name: Install dependencies
+      run: |
+        pip install sphinx
+        pip install sphinx-rtd-theme
+
+    - name: Build documentation
+      run: |
+        cd docs
+        make html
+
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: docs/_build/html
+        publish_dir: _build/html
         publish_branch: gh-pages
 
