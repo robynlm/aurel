@@ -1,25 +1,28 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "aurel"
-dynamic = ["version"]
+version = "2025.05"
 description = "A Python package for general relativity calculations."
 readme = "README.md"
-license = { file = "LICENSE" }
+license = "GPL-3.0-or-later"
+
 authors = [
     { name = "Robyn L Munoz", email = "r.l.munoz@sussex.ac.uk" }
 ]
+
 keywords = [
     "numerical relativity", 
     "general relativity", 
     "simulation",
     "Python", 
-    "tensor"]
+    "tensor"
+]
+
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent"
 ]
 requires-python = ">=3.8"
@@ -36,7 +39,4 @@ dependencies = [
 
 [project.urls]
 Source = "https://github.com/robynlm/aurel"
-
-[tool.setuptools_scm]
-version_scheme = "post-release"
-write_to = "src/aurel/_version.py"
+Documentation = "https://robynlm.github.io/aurel/"
