@@ -85,6 +85,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.data"><code class="docutils literal notranslate"><span class="pre">AurelCore.data</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.data_shape"><code class="docutils literal notranslate"><span class="pre">AurelCore.data_shape</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.required_vars"><code class="docutils literal notranslate"><span class="pre">AurelCore.required_vars</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.fancy_print"><code class="docutils literal notranslate"><span class="pre">AurelCore.fancy_print</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.Lambda"><code class="docutils literal notranslate"><span class="pre">AurelCore.Lambda</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.tetrad_to_use"><code class="docutils literal notranslate"><span class="pre">AurelCore.tetrad_to_use</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.kappa"><code class="docutils literal notranslate"><span class="pre">AurelCore.kappa</span></code></a></li>
@@ -104,6 +105,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.load_data"><code class="docutils literal notranslate"><span class="pre">AurelCore.load_data()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.magnitude3"><code class="docutils literal notranslate"><span class="pre">AurelCore.magnitude3()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.magnitude4"><code class="docutils literal notranslate"><span class="pre">AurelCore.magnitude4()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.myprint"><code class="docutils literal notranslate"><span class="pre">AurelCore.myprint()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.norm3"><code class="docutils literal notranslate"><span class="pre">AurelCore.norm3()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.norm4"><code class="docutils literal notranslate"><span class="pre">AurelCore.norm4()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.null_vector_base"><code class="docutils literal notranslate"><span class="pre">AurelCore.null_vector_base()</span></code></a></li>
@@ -424,6 +426,18 @@ saves it in the AurelCore.data dictionary.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="aurel.core.AurelCore.fancy_print">
+<span class="sig-name descname"><span class="pre">fancy_print</span></span><a class="headerlink" href="#aurel.core.AurelCore.fancy_print" title="Link to this definition"></a></dt>
+<dd><p>(<em>bool</em>) - If True, display messages in a fancy ipython format,
+else normal print is used. Default is True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="aurel.core.AurelCore.Lambda">
 <span class="sig-name descname"><span class="pre">Lambda</span></span><a class="headerlink" href="#aurel.core.AurelCore.Lambda" title="Link to this definition"></a></dt>
 <dd><p>(<em>float</em>) - Cosmological constant. Default is 0.0.</p>
@@ -587,6 +601,12 @@ each key has a list of values for each iteration.</p></li>
 <dt class="sig sig-object py" id="aurel.core.AurelCore.magnitude4">
 <span class="sig-name descname"><span class="pre">magnitude4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdown</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.magnitude4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.core.AurelCore.magnitude4" title="Link to this definition"></a></dt>
 <dd><p>Compute magnitude of a 4D rank 2 tensor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aurel.core.AurelCore.myprint">
+<span class="sig-name descname"><span class="pre">myprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.myprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.core.AurelCore.myprint" title="Link to this definition"></a></dt>
+<dd><p>Print a message with a fancy format.</p>
 </dd></dl>
 
 <dl class="py method">

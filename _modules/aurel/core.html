@@ -343,6 +343,9 @@
 <span class="sd">        &quot;kxx&quot;, &quot;kxy&quot;, &quot;kxz&quot;, &quot;kyy&quot;, &quot;kyz&quot;, &quot;kzz&quot;,</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;rho0&quot;</span>
+<span class="sd">    fancy_print : bool</span>
+<span class="sd">        (*bool*) - If True, display messages in a fancy ipython format, </span>
+<span class="sd">        else normal print is used. Default is True.</span>
 <span class="sd">    Lambda : float</span>
 <span class="sd">        (*float*) - Cosmological constant. Default is 0.0.</span>
 <span class="sd">    tetrad_to_use : str</span>
@@ -372,13 +375,13 @@
                            <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">],</span> 
                            <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fancy_print</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># Physics variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kappa</span> <span class="o">=</span> <span class="mi">8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1"># Einstein&#39;s constant with G = c = 1</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="n">display</span><span class="p">(</span><span class="n">Latex</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Setting Cosmological constant &quot;</span>
-                          <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;$\Lambda$&#39;</span>
-                          <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; to 0.0, if not then redefine AurelCore.Lambda&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Setting Cosmological constant &quot;</span>
+                     <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;$\Lambda$&#39;</span>
+                     <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; to 0.0, if not then redefine AurelCore.Lambda&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Lambda</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tetrad_to_use</span> <span class="o">=</span> <span class="s2">&quot;quasi-Kinnersley&quot;</span>
 
@@ -411,6 +414,17 @@
     <span class="c1"># Functions to manage the data dictionary</span>
     <span class="c1">###########################################################################</span>
 
+<div class="viewcode-block" id="AurelCore.myprint">
+<a class="viewcode-back" href="../../source/core.html#aurel.core.AurelCore.myprint">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">myprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Print a message with a fancy format.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fancy_print</span><span class="p">:</span>
+                <span class="n">display</span><span class="p">(</span><span class="n">Latex</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get data[key] or compute it if not present.&quot;&quot;&quot;</span>
         <span class="c1"># First check if the key is already cached</span>
@@ -422,7 +436,7 @@
         <span class="c1"># If the key is not in the data dictionary, check if it is required</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_vars</span><span class="p">:</span>
             <span class="c1"># Raise an error asking the user to define the variable</span>
-            <span class="n">display</span><span class="p">(</span><span class="n">Latex</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I need </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">descriptions</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I need </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">descriptions</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; is not defined. &quot;</span>
                 <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;Please define AurelCore.data[&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39;] = ...&quot;</span>
@@ -435,8 +449,7 @@
         <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="vm">__code__</span><span class="o">.</span><span class="n">co_argcount</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span>
             <span class="c1"># Print the calculation description if available</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="n">display</span><span class="p">(</span><span class="n">Latex</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Calculated </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: &quot;</span> <span class="o">+</span> <span class="n">descriptions</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Calculated </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: &quot;</span> <span class="o">+</span> <span class="n">descriptions</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">calculation_count</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># Increment the calculation count</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">last_accessed</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculation_count</span> <span class="c1"># Update</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cleanup_cache</span><span class="p">()</span>  <span class="c1"># Clean the cache after each new calculation</span>
@@ -638,17 +651,13 @@
     
     <span class="c1"># Lapse</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="n">display</span><span class="p">(</span><span class="n">Latex</span><span class="p">(</span>
-                <span class="sa">r</span><span class="s2">&quot;I assume $\alpha = 1$, if not then &quot;</span>
-                <span class="o">+</span><span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;alpha&#39;] = ... &quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;I assume $\alpha = 1$, if not then &quot;</span>
+                     <span class="o">+</span><span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;alpha&#39;] = ... &quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span><span class="p">)</span>
     
     <span class="k">def</span><span class="w"> </span><span class="nf">dtalpha</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="n">display</span><span class="p">(</span><span class="n">Latex</span><span class="p">(</span>
-                <span class="sa">r</span><span class="s2">&quot;I assume $\partial_t \alpha = 0$, if not then &quot;</span>
-                <span class="o">+</span><span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;dtalpha&#39;] = ... &quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;I assume $\partial_t \alpha = 0$, if not then &quot;</span>
+                     <span class="o">+</span><span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;dtalpha&#39;] = ... &quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span><span class="p">)</span>
     
     <span class="c1"># Shift</span>
@@ -658,10 +667,8 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
                 <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betax&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betay&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betaz&quot;</span><span class="p">]])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="n">display</span><span class="p">(</span><span class="n">Latex</span><span class="p">(</span>
-                    <span class="sa">r</span><span class="s2">&quot;I assume $\beta^i=0$, if not then &quot;</span>
-                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;betaup3&#39;] = ... &quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;I assume $\beta^i=0$, if not then &quot;</span>
+                         <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;betaup3&#39;] = ... &quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                 <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]))</span>
     
@@ -670,10 +677,9 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
                 <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;dtbetax&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;dtbetay&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;dtbetaz&quot;</span><span class="p">]])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="n">display</span><span class="p">(</span><span class="n">Latex</span><span class="p">(</span>
-                    <span class="sa">r</span><span class="s2">&quot;I assume $\partial_t \beta^i=0$, if not then &quot;</span>
-                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;dtbetaup3&#39;] = ... &quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s2">&quot;I assume $\partial_t \beta^i=0$, if not then &quot;</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;dtbetaup3&#39;] = ... &quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                 <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]))</span>
     
@@ -755,17 +761,15 @@
     <span class="c1"># Eulerian observer follows n^mu</span>
     <span class="c1"># Lagrangian observer follows u^mu</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">press</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="n">display</span><span class="p">(</span><span class="n">Latex</span><span class="p">(</span>
-                <span class="sa">r</span><span class="s2">&quot;I assume $p = 0$, if not then &quot;</span>
-                <span class="o">+</span><span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;press&#39;] = ... &quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;I assume $p = 0$, if not then &quot;</span>
+            <span class="o">+</span><span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;press&#39;] = ... &quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span><span class="p">)</span>
     
     <span class="k">def</span><span class="w"> </span><span class="nf">eps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="n">display</span><span class="p">(</span><span class="n">Latex</span><span class="p">(</span>
-                <span class="sa">r</span><span class="s2">&quot;I assume $\epsilon = 0$, if not then &quot;</span>
-                <span class="o">+</span><span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;eps&#39;] = ... &quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;I assume $\epsilon = 0$, if not then &quot;</span>
+            <span class="o">+</span><span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;eps&#39;] = ... &quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span><span class="p">)</span>
     
     <span class="k">def</span><span class="w"> </span><span class="nf">rho</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -785,10 +789,9 @@
     
     <span class="c1"># Fluid velocity</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">w_lorentz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="n">display</span><span class="p">(</span><span class="n">Latex</span><span class="p">(</span>
-                <span class="sa">r</span><span class="s2">&quot;I assume $W = 1$, if not then &quot;</span>
-                <span class="o">+</span><span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;w_lorentz&#39;] = ... &quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;I assume $W = 1$, if not then &quot;</span>
+            <span class="o">+</span><span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;w_lorentz&#39;] = ... &quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span><span class="p">)</span>
     
     <span class="k">def</span><span class="w"> </span><span class="nf">velup3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -796,10 +799,9 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
                 <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;velx&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;vely&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;velz&quot;</span><span class="p">]])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="n">display</span><span class="p">(</span><span class="n">Latex</span><span class="p">(</span>
-                    <span class="sa">r</span><span class="s2">&quot;I assume $v^i=0$, if not then &quot;</span>
-                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;velup3&#39;] = ... &quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s2">&quot;I assume $v^i=0$, if not then &quot;</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;please define AurelCore.data[&#39;velup3&#39;] = ... &quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                 <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]))</span>
     
