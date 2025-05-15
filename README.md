@@ -1,5 +1,5 @@
 <p align="left">
-    <a href="" target = "_blank">
+    <a href="https://robynlm.github.io/aurel/" target = "_blank">
     <img src="docs/_static/aurel.png" width="250px" />
 </a>
 
@@ -18,8 +18,8 @@
 
 ## Documentation
 
-See LINK
+See the [documentation](https://robynlm.github.io/aurel/)
 
-See the `notebooks/Example.ipynb` for a full demonstration.
+See the [`notebooks/Example.ipynb`](https://github.com/your-username/aurel/blob/main/notebooks/Example.ipynb) for a full demonstration.
 
-Also see `notebooks/tov_ET.ipynb` for a demonstration with numerical simulation output (e.g., Einstein Toolkit).
+Also see [`notebooks/tov_ET.ipynb`](https://github.com/your-username/aurel/blob/main/notebooks/tov_ET.ipynb) for a demonstration with numerical simulation output (e.g., Einstein Toolkit).

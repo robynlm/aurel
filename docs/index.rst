@@ -100,9 +100,10 @@ any relativistic term you ask for.**
 
 For further examples on how to use aurel see:
 
-- the Example notebook LINK, for an in depth description with tips and tricks,
-- the tov_ET notebook LINK, for an example of how to load in data from 
-  an Einstein Toolkit simulation.
+- the `Example notebook <https://github.com/your-username/aurel/blob/main/notebooks/Example.ipynb>`_, 
+  for an in depth description with tips and tricks,
+- the `tov_ET notebook <https://github.com/your-username/aurel/blob/main/notebooks/tov_ET.ipynb>`_, 
+  for an example of how to load in data from an Einstein Toolkit simulation.
 
 .. toctree::
    :maxdepth: 1
@@ -117,5 +118,15 @@ For further examples on how to use aurel see:
    source/solutions
 
 Copyright (C) 2025  Robyn L. Munoz
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
 You may contact the author at : r.l.munoz@sussex.ac.uk
