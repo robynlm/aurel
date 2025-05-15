@@ -134,11 +134,11 @@ with open(output_file, "w") as f:
     f.write("===========\n\n")
     print_subsec("", constraints, allfunctions, varsdone)
 
-    if len(varsdone) != len(au.descriptions):
+    if len(varsdone) != len(core.descriptions):
         f.write("Miscellaneous\n")
         f.write("=============\n\n")
         f.write("Need to update `docs/source/source/generate_rst.py`\n\n")
-        print_subsec("", au.descriptions, allfunctions, varsdone)
+        print_subsec("", core.descriptions, allfunctions, varsdone)
 
     # Add a section for other functions
     f.write("AurelCore\n")

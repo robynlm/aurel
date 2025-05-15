@@ -18,7 +18,6 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx_math_dollar', 
     'sphinx.ext.mathjax',
-    'myst_parser',
 ]
 
 #napoleon_use_rtype = False
