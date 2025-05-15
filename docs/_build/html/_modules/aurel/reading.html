@@ -1,0 +1,827 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aurel.reading &mdash; aurel May 2025 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=0e075184" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d170800"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aurel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../source/core.html">aurel.core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/finitedifference.html">aurel.finitedifference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/maths.html">aurel.maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/numerical.html">aurel.numerical</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/reading.html">aurel.reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/solutions.html">solutions package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aurel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aurel.reading</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aurel.reading</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">reading.py</span>
+
+<span class="sd">This module contains functions to work with data generated from </span>
+<span class="sd">Einstein Toolkit simulations, including:</span>
+
+<span class="sd">- reading parameters from the simulation</span>
+<span class="sd">- listing available iterations of the simulation</span>
+<span class="sd">- reading data from the simulation output files</span>
+<span class="sd">- joining chunks of data together</span>
+<span class="sd">- fixing the x-z indexing of the data</span>
+
+<span class="sd">Note</span>
+<span class="sd">----</span>
+<span class="sd">Users should first provide the path to their simulations:</span>
+
+<span class="sd">**export SIMLOC=&quot;/path/to/simulations/&quot;**</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
+
+<div class="viewcode-block" id="bash">
+<a class="viewcode-back" href="../../source/reading.html#aurel.reading.bash">[docs]</a>
+<span class="k">def</span> <span class="nf">bash</span><span class="p">(</span><span class="n">command</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run a bash command and return the output as a string.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    command : str</span>
+<span class="sd">        The bash command to run.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        The output of the command as a string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">strresults</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">strresults</span></div>
+
+
+<div class="viewcode-block" id="parameters">
+<a class="viewcode-back" href="../../source/reading.html#aurel.reading.parameters">[docs]</a>
+<span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="n">simname</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read the parameters from the simulation.</span>
+<span class="sd">    </span>
+<span class="sd">    This also counts the number of restarts, and calculates the</span>
+<span class="sd">    size and number of grid points in each direction </span>
+<span class="sd">    of the simulation box.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    simname : str</span>
+<span class="sd">        The name of the simulation to read the parameters from.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        A dictionary containing the parameters of the simulation.</span>
+<span class="sd">    </span>
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    Users should first provide the path to their simulations:</span>
+
+<span class="sd">    **export SIMLOC=&quot;/path/to/simulations/&quot;**</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;simname&#39;</span><span class="p">:</span><span class="n">simname</span><span class="p">}</span>
+
+    <span class="c1"># Looking for data</span>
+    <span class="n">founddata</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">simlocs</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SIMLOC&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">simlocs</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Could not find environment variable SIMLOC. &#39;</span>
+            <span class="o">+</span><span class="s1">&#39;Please set it to the path of your simulations.&#39;</span>
+            <span class="o">+</span><span class="s1">&#39;`export SIMLOC=&quot;/path/to/simulations/&quot;`&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">simloc</span> <span class="ow">in</span> <span class="n">simlocs</span><span class="p">:</span>
+        <span class="n">parampath</span> <span class="o">=</span> <span class="p">(</span><span class="n">simloc</span> <span class="o">+</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span> 
+                     <span class="o">+</span> <span class="s1">&#39;/output-0000/&#39;</span> <span class="o">+</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.par&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">parampath</span><span class="p">):</span>
+            <span class="n">founddata</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># save paths of files</span>
+            <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;simpath&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">simloc</span>
+            <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;datapath&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;simpath&#39;</span><span class="p">]</span> 
+                                      <span class="o">+</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span> 
+                                      <span class="o">+</span> <span class="s1">&#39;/output-0000/&#39;</span> 
+                                      <span class="o">+</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span>
+            <span class="c1"># number of restarts</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="n">bash</span><span class="p">(</span><span class="s1">&#39;ls &#39;</span> <span class="o">+</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;simpath&#39;</span><span class="p">]</span> 
+                            <span class="o">+</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;nbr_restarts&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">fl</span> <span class="k">for</span> <span class="n">fl</span> <span class="ow">in</span> <span class="n">files</span> 
+                 <span class="k">if</span> <span class="s1">&#39;output&#39;</span> <span class="ow">in</span> <span class="n">fl</span> <span class="ow">and</span> <span class="s1">&#39;active&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fl</span><span class="p">])</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">founddata</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not find simulation: &#39;</span> <span class="o">+</span> <span class="n">simname</span><span class="p">)</span>
+
+    <span class="c1"># save all parameters</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">bash</span><span class="p">(</span><span class="s1">&#39;cat &#39;</span> <span class="o">+</span> <span class="n">parampath</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1"># read file</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">]</span> <span class="c1"># remove comments</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="n">l</span><span class="o">!=</span><span class="s1">&#39;&#39;</span><span class="p">]</span> <span class="c1"># remove empty lines</span>
+
+    <span class="n">list_of_thorns</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;::&#39;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">and</span> <span class="s1">&#39;=&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="c1"># split line into thorn, variable and value</span>
+            <span class="c1"># thorn::variable=value</span>
+            <span class="c1"># split thorn and rest of line</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;::&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="n">thorn</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">linerest</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
+                    <span class="n">linerest</span> <span class="o">+=</span> <span class="s1">&#39;::&#39;</span> <span class="o">+</span> <span class="n">l</span>
+            <span class="c1"># split rest of line into variable and value</span>
+            <span class="c1"># TODO: case where value goes accross multiple lines</span>
+            <span class="n">linerest</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">linerest</span><span class="p">)</span>
+            <span class="n">variable</span> <span class="o">=</span> <span class="n">linerest</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">linerest</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">linerest</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">linerest</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
+                    <span class="n">value</span> <span class="o">+=</span> <span class="s1">&#39;=&#39;</span><span class="o">+</span><span class="n">l</span>
+            <span class="n">thorn</span> <span class="o">=</span> <span class="n">thorn</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">variable</span> <span class="o">=</span> <span class="n">variable</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            
+            <span class="c1"># format value, number or string</span>
+            <span class="n">digitvalue</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">digitvalue</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                <span class="k">if</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">value</span> <span class="ow">or</span> <span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s1">&#39;&quot;&#39;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                    
+            <span class="c1"># save variable and value</span>
+            <span class="k">if</span> <span class="n">variable</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="s1">&#39;verbose&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;timelevels&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;evolution_method&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;out_every&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;one_file_per_group&#39;</span><span class="p">]:</span>
+                <span class="c1"># different thorns use the same variable name</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="n">thorn</span> <span class="o">+</span> <span class="s1">&#39;::&#39;</span> <span class="o">+</span> <span class="n">variable</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+            <span class="c1"># save thorn name</span>
+            <span class="n">list_of_thorns</span> <span class="o">+=</span> <span class="p">[</span><span class="n">thorn</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;ActiveThorns&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">thorns</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">list_of_thorns</span> <span class="o">+=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">thorns</span><span class="p">)</span>
+    <span class="n">list_of_thorns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">list_of_thorns</span><span class="p">))</span> <span class="c1"># remove duplicates</span>
+    <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;list_of_thorns&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">list_of_thorns</span>
+                
+    <span class="c1"># calculate extra grid info</span>
+    <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]:</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="n">coord</span><span class="o">+</span><span class="s1">&#39;max&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">parameters</span><span class="p">[</span><span class="n">coord</span><span class="o">+</span><span class="s1">&#39;min&#39;</span><span class="p">]</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">L</span><span class="o">/</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="o">+</span><span class="n">coord</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;boundary_shiftout_&#39;</span><span class="o">+</span><span class="n">coord</span><span class="o">+</span><span class="s1">&#39;_upper&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;L&#39;</span><span class="o">+</span><span class="n">coord</span><span class="p">]</span> <span class="o">=</span> <span class="n">L</span>
+        <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="o">+</span><span class="n">coord</span><span class="p">]</span> <span class="o">=</span> <span class="n">N</span>
+    <span class="k">if</span> <span class="s1">&#39;max_refinement_levels&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;max_refinement_levels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        
+    <span class="k">return</span> <span class="n">parameters</span></div>
+
+
+<div class="viewcode-block" id="saveprint">
+<a class="viewcode-back" href="../../source/reading.html#aurel.reading.saveprint">[docs]</a>
+<span class="k">def</span> <span class="nf">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span> <span class="n">some_str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save the string to the file and print it to the screen.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">some_str</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">it_file</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">some_str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="iterations">
+<a class="viewcode-back" href="../../source/reading.html#aurel.reading.iterations">[docs]</a>
+<span class="k">def</span> <span class="nf">iterations</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">skip_last</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lists available iterations of the simulation&#39;s 3D output files.</span>
+
+<span class="sd">    Prints available iterations on screen and records this </span>
+<span class="sd">    in a file called iterations.txt in the simulation directory.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    param : dict</span>
+<span class="sd">        The parameters of the simulation.</span>
+<span class="sd">    skip_last : bool, optional</span>
+<span class="sd">        If True, skip the last restart. The default is True.</span>
+<span class="sd">        This is to not mess with things in case they&#39;re still running.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">nbr_restarts</span> <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;nbr_restarts&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">skip_last</span><span class="p">:</span>
+        <span class="n">nbr_restarts</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="n">it_filename</span> <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;simpath&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;/iterations.txt&#39;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">it_filename</span><span class="p">,</span> <span class="s2">&quot;a+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">it_file</span><span class="p">:</span>
+        <span class="c1"># print content of file</span>
+        <span class="n">it_file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">contents</span> <span class="o">=</span> <span class="n">it_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># restart from which to continue</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">contents</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">restarts_done</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;restart &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span> 
+                         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span> 
+                         <span class="k">if</span> <span class="s1">&#39;restart&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">restarts_done</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">first_restart</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">first_restart</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">restarts_done</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># for each restart</span>
+        <span class="k">for</span> <span class="n">restart</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">first_restart</span><span class="p">,</span> <span class="n">nbr_restarts</span><span class="p">):</span>
+            <span class="n">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span> <span class="s1">&#39; === restart </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">restart</span><span class="p">))</span>
+            <span class="c1"># find the data</span>
+            <span class="n">datapath</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;simpath&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span>
+                        <span class="o">+</span><span class="s1">&#39;/output-</span><span class="si">{:04d}</span><span class="s1">/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">restart</span><span class="p">)</span>
+                        <span class="o">+</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+            <span class="c1"># look at what&#39;s going on in one of the files</span>
+            <span class="n">h5files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datapath</span><span class="o">+</span><span class="s1">&#39;*.h5&#39;</span><span class="p">)</span>
+            <span class="n">found3Dfile</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">h5files</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">((</span><span class="s1">&#39;admbase&#39;</span> <span class="ow">in</span> <span class="n">file</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;gxx&#39;</span> <span class="ow">in</span> <span class="n">file</span><span class="p">)):</span>
+                    <span class="n">is3D</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">for</span> <span class="nb">slice</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;.xx.&#39;</span><span class="p">,</span> <span class="s1">&#39;.xy.&#39;</span><span class="p">,</span> <span class="s1">&#39;.xz.&#39;</span><span class="p">,</span> 
+                                  <span class="s1">&#39;.yy.&#39;</span><span class="p">,</span> <span class="s1">&#39;.yz.&#39;</span><span class="p">,</span> <span class="s1">&#39;.zz.&#39;</span><span class="p">]:</span>
+                        <span class="k">if</span> <span class="nb">slice</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+                            <span class="n">is3D</span> <span class="o">=</span> <span class="kc">False</span>
+                            <span class="k">break</span>
+                    <span class="k">if</span> <span class="n">is3D</span><span class="p">:</span>
+                        <span class="n">found3Dfile</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">found3Dfile</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not find 3D data in &#39;</span> <span class="o">+</span> <span class="n">datapath</span><span class="p">)</span>
+            
+            <span class="n">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span> <span class="s1">&#39;Reading &#39;</span><span class="o">+</span><span class="n">file</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                <span class="c1"># only consider one of the variables in this file</span>
+                <span class="n">varkey</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c1"># all the keys of this varible</span>
+                <span class="n">fkeys</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">varkey</span> <span class="ow">in</span> <span class="n">k</span><span class="p">]</span>
+                <span class="c1"># all the iterations</span>
+                <span class="n">allits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;it=&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; tl&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> 
+                                  <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">fkeys</span><span class="p">])</span>
+                <span class="n">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span> <span class="s1">&#39;it = </span><span class="si">{}</span><span class="s1"> -&gt; </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">allits</span><span class="p">),</span> 
+                                                          <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">allits</span><span class="p">)))</span>
+                <span class="c1"># maximum refinement level present</span>
+                <span class="n">rlmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;rl=&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> 
+                                         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">fkeys</span><span class="p">])))</span>
+                <span class="c1"># for each refinement level</span>
+                <span class="k">for</span> <span class="n">rl</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rlmax</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="c1"># take the corresponding keys</span>
+                    <span class="n">keysrl</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">fkeys</span><span class="p">:</span>
+                        <span class="n">krl</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;rl=&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">krl</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">rl</span><span class="p">):</span>
+                            <span class="n">keysrl</span> <span class="o">+=</span> <span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">keysrl</span><span class="o">!=</span><span class="p">[]:</span>
+                        <span class="k">if</span> <span class="s1">&#39;c=&#39;</span> <span class="ow">in</span> <span class="n">keysrl</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                            <span class="n">cs</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;c=&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keysrl</span><span class="p">]</span>
+                            <span class="n">chosen_c</span> <span class="o">=</span> <span class="s1">&#39; c=&#39;</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">cs</span><span class="p">)))[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">chosen_c</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                        <span class="n">keysrl</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keysrl</span> <span class="k">if</span> <span class="n">chosen_c</span> <span class="ow">in</span> <span class="n">k</span><span class="p">]</span>
+                        
+                        <span class="c1"># and look at what iterations they have</span>
+                        <span class="n">allits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; tl&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> 
+                                          <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keysrl</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">allits</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                            <span class="n">saveprint</span><span class="p">(</span>
+                                <span class="n">it_file</span><span class="p">,</span> 
+                                <span class="s1">&#39;rl = </span><span class="si">{}</span><span class="s1"> at it = np.arange(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="n">rl</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">allits</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">allits</span><span class="p">),</span> 
+                                <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">allits</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span> <span class="s1">&#39;rl = </span><span class="si">{}</span><span class="s1"> at it = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="n">rl</span><span class="p">,</span> <span class="n">allits</span><span class="p">))</span></div>
+
+                            
+<div class="viewcode-block" id="read_data">
+<a class="viewcode-back" href="../../source/reading.html#aurel.reading.read_data">[docs]</a>
+<span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">it</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">rl</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">restart</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read the data from the simulation output files.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    param : dict</span>
+<span class="sd">        The parameters of the simulation.</span>
+<span class="sd">    var : list</span>
+<span class="sd">        The variables to read from the simulation output files.</span>
+<span class="sd">    it : list, optional</span>
+<span class="sd">        The iterations to read from the simulation output files.</span>
+<span class="sd">        The default is [0].</span>
+<span class="sd">    rl : int, optional</span>
+<span class="sd">        The refinement level to read from the simulation output files.</span>
+<span class="sd">    restart : int, optional</span>
+<span class="sd">        The restart number to read from the simulation output files.</span>
+<span class="sd">        The default is 0.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        A dictionary containing the data from the simulation output files.</span>
+<span class="sd">        </span>
+<span class="sd">        dict.keys() = [&#39;it&#39;, &#39;t&#39;, var[0], var[1], ...]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># data to be returned</span>
+    <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;it&#39;</span><span class="p">:</span><span class="n">it</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">:[]}</span>
+    
+    <span class="c1"># data directory path</span>
+    <span class="n">data_path</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;simpath&#39;</span><span class="p">]</span>
+                 <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span>
+                 <span class="o">+</span> <span class="s1">&#39;/output-</span><span class="si">{:04d}</span><span class="s1">/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">restart</span><span class="p">)</span>
+                 <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span>
+
+    <span class="n">h5files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">data_path</span><span class="o">+</span><span class="s1">&#39;*.h5&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">data_path</span><span class="o">+</span><span class="s1">&#39;gxx.h5&#39;</span> <span class="ow">in</span> <span class="n">h5files</span><span class="p">)</span> 
+        <span class="ow">or</span> <span class="p">(</span><span class="n">data_path</span><span class="o">+</span><span class="s1">&#39;admbase-metric.h5&#39;</span> <span class="ow">in</span> <span class="n">h5files</span><span class="p">)):</span>
+        <span class="c1"># one file per variable</span>
+        <span class="n">cmax</span> <span class="o">=</span> <span class="s1">&#39;in file&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># one file per chunk</span>
+        <span class="n">cfiles</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">data_path</span> <span class="o">+</span> <span class="s1">&#39;admbase-metric.file_*.h5&#39;</span><span class="p">)</span>
+        <span class="n">cfiles</span> <span class="o">+=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">data_path</span> <span class="o">+</span> <span class="s1">&#39;gxx.file_*.h5&#39;</span><span class="p">)</span>
+        <span class="n">cmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;file_&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> 
+                       <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">cfiles</span><span class="p">])</span>
+
+    <span class="n">individual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+        <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">h5files</span> <span class="k">if</span> <span class="s1">&#39;hydrobase-rho.&#39;</span> <span class="ow">in</span> <span class="n">file</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">individual</span><span class="p">:</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rho&#39;</span><span class="p">:[</span><span class="s1">&#39;rho.&#39;</span><span class="p">,</span> <span class="s1">&#39;HYDROBASE::rho&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;eps&#39;</span><span class="p">:[</span><span class="s1">&#39;eps.&#39;</span><span class="p">,</span> <span class="s1">&#39;HYDROBASE::eps&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;w_lorentz&#39;</span><span class="p">:[</span><span class="s1">&#39;w_lorentz.&#39;</span><span class="p">,</span> <span class="s1">&#39;HYDROBASE::w_lorentz&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;press&#39;</span><span class="p">:[</span><span class="s1">&#39;press.&#39;</span><span class="p">,</span> <span class="s1">&#39;HYDROBASE::press&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;vel[0]&#39;</span><span class="p">:[</span><span class="s1">&#39;vel[0].&#39;</span><span class="p">,</span> <span class="s1">&#39;HYDROBASE::vel[0]&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;vel[1]&#39;</span><span class="p">:[</span><span class="s1">&#39;vel[1].&#39;</span><span class="p">,</span> <span class="s1">&#39;HYDROBASE::vel[1]&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;vel[2]&#39;</span><span class="p">:[</span><span class="s1">&#39;vel[2].&#39;</span><span class="p">,</span> <span class="s1">&#39;HYDROBASE::vel[2]&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;alp&#39;</span><span class="p">:[</span><span class="s1">&#39;alp.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::alp&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;dtalp&#39;</span><span class="p">:[</span><span class="s1">&#39;dtalp.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::dtalp&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;betax&#39;</span><span class="p">:[</span><span class="s1">&#39;betax.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::betax&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;betay&#39;</span><span class="p">:[</span><span class="s1">&#39;betay.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::betay&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;betaz&#39;</span><span class="p">:[</span><span class="s1">&#39;betaz.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::betaz&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;dtbetax&#39;</span><span class="p">:[</span><span class="s1">&#39;dtbetax.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::dtbetax&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;dtbetay&#39;</span><span class="p">:[</span><span class="s1">&#39;dtbetay.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::dtbetay&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;dtbetaz&#39;</span><span class="p">:[</span><span class="s1">&#39;dtbetaz.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::dtbetaz&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;tau&#39;</span><span class="p">:[</span><span class="s1">&#39;tau.&#39;</span><span class="p">,</span> <span class="s1">&#39;COSMOLAPSE::tau&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;gxx&#39;</span><span class="p">:[</span><span class="s1">&#39;gxx.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::gxx&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;gxy&#39;</span><span class="p">:[</span><span class="s1">&#39;gxy.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::gxy&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;gxz&#39;</span><span class="p">:[</span><span class="s1">&#39;gxz.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::gxz&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;gyy&#39;</span><span class="p">:[</span><span class="s1">&#39;gyy.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::gyy&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;gyz&#39;</span><span class="p">:[</span><span class="s1">&#39;gyz.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::gyz&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;gzz&#39;</span><span class="p">:[</span><span class="s1">&#39;gzz.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::gzz&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;kxx&#39;</span><span class="p">:[</span><span class="s1">&#39;kxx.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::kxx&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;kxy&#39;</span><span class="p">:[</span><span class="s1">&#39;kxy.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::kxy&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;kxz&#39;</span><span class="p">:[</span><span class="s1">&#39;kxz.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::kxz&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;kyy&#39;</span><span class="p">:[</span><span class="s1">&#39;kyy.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::kyy&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;kyz&#39;</span><span class="p">:[</span><span class="s1">&#39;kyz.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::kyz&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;kzz&#39;</span><span class="p">:[</span><span class="s1">&#39;kzz.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::kzz&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;trK&#39;</span><span class="p">:[</span><span class="s1">&#39;trK.&#39;</span><span class="p">,</span> <span class="s1">&#39;ML_BSSN::trK&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;H&#39;</span><span class="p">:[</span><span class="s1">&#39;H.&#39;</span><span class="p">,</span> <span class="s1">&#39;ML_BSSN::H&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;M1&#39;</span><span class="p">:[</span><span class="s1">&#39;M1.&#39;</span><span class="p">,</span> <span class="s1">&#39;ML_BSSN::M1&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;M2&#39;</span><span class="p">:[</span><span class="s1">&#39;M2.&#39;</span><span class="p">,</span> <span class="s1">&#39;ML_BSSN::M2&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;M3&#39;</span><span class="p">:[</span><span class="s1">&#39;M3.&#39;</span><span class="p">,</span> <span class="s1">&#39;ML_BSSN::M3&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="s1">&#39;lapse&#39;</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;lapse&#39;</span><span class="p">)</span>
+            <span class="n">var</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;alp&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;dtlapse&#39;</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;dtlapse&#39;</span><span class="p">)</span>
+            <span class="n">var</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;dtalp&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;gdown&#39;</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;gdown&#39;</span><span class="p">)</span>
+            <span class="n">var</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;gxx&#39;</span><span class="p">,</span> <span class="s1">&#39;gxy&#39;</span><span class="p">,</span> <span class="s1">&#39;gxz&#39;</span><span class="p">,</span> <span class="s1">&#39;gyy&#39;</span><span class="p">,</span> <span class="s1">&#39;gyz&#39;</span><span class="p">,</span> <span class="s1">&#39;gzz&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;metric&#39;</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;metric&#39;</span><span class="p">)</span>
+            <span class="n">var</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;gxx&#39;</span><span class="p">,</span> <span class="s1">&#39;gxy&#39;</span><span class="p">,</span> <span class="s1">&#39;gxz&#39;</span><span class="p">,</span> <span class="s1">&#39;gyy&#39;</span><span class="p">,</span> <span class="s1">&#39;gyz&#39;</span><span class="p">,</span> <span class="s1">&#39;gzz&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;kdown&#39;</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;kdown&#39;</span><span class="p">)</span>
+            <span class="n">var</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;kxx&#39;</span><span class="p">,</span> <span class="s1">&#39;kxy&#39;</span><span class="p">,</span> <span class="s1">&#39;kxz&#39;</span><span class="p">,</span> <span class="s1">&#39;kyy&#39;</span><span class="p">,</span> <span class="s1">&#39;kyz&#39;</span><span class="p">,</span> <span class="s1">&#39;kzz&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;curv&#39;</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;curv&#39;</span><span class="p">)</span>
+            <span class="n">var</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;kxx&#39;</span><span class="p">,</span> <span class="s1">&#39;kxy&#39;</span><span class="p">,</span> <span class="s1">&#39;kxz&#39;</span><span class="p">,</span> <span class="s1">&#39;kyy&#39;</span><span class="p">,</span> <span class="s1">&#39;kyz&#39;</span><span class="p">,</span> <span class="s1">&#39;kzz&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;betaup&#39;</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;betaup&#39;</span><span class="p">)</span>
+            <span class="n">var</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;betax&#39;</span><span class="p">,</span> <span class="s1">&#39;betay&#39;</span><span class="p">,</span> <span class="s1">&#39;betaz&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;shift&#39;</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;shift&#39;</span><span class="p">)</span>
+            <span class="n">var</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;betax&#39;</span><span class="p">,</span> <span class="s1">&#39;betay&#39;</span><span class="p">,</span> <span class="s1">&#39;betaz&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;dtshift&#39;</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;dtshift&#39;</span><span class="p">)</span>
+            <span class="n">var</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;dtbetax&#39;</span><span class="p">,</span> <span class="s1">&#39;dtbetay&#39;</span><span class="p">,</span> <span class="s1">&#39;dtbetaz&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;vel&#39;</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;vel&#39;</span><span class="p">)</span>
+            <span class="n">var</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;vel[0]&#39;</span><span class="p">,</span> <span class="s1">&#39;vel[1]&#39;</span><span class="p">,</span> <span class="s1">&#39;vel[2]&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;ML_Ham&#39;</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;ML_Ham&#39;</span><span class="p">)</span>
+            <span class="n">var</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;ML_Mom&#39;</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;ML_Mom&#39;</span><span class="p">)</span>
+            <span class="n">var</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;M2&#39;</span><span class="p">,</span> <span class="s1">&#39;M3&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rho&#39;</span><span class="p">:[</span><span class="s1">&#39;hydrobase-rho.&#39;</span><span class="p">,</span> <span class="s1">&#39;HYDROBASE::rho&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;eps&#39;</span><span class="p">:[</span><span class="s1">&#39;hydrobase-eps.&#39;</span><span class="p">,</span> <span class="s1">&#39;HYDROBASE::eps&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;press&#39;</span><span class="p">:[</span><span class="s1">&#39;hydrobase-press.&#39;</span><span class="p">,</span> <span class="s1">&#39;HYDROBASE::press&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;w_lorentz&#39;</span><span class="p">:[</span><span class="s1">&#39;hydrobase-w_lorentz.&#39;</span><span class="p">,</span> <span class="s1">&#39;HYDROBASE::w_lorentz&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;vel&#39;</span><span class="p">:[</span><span class="s1">&#39;hydrobase-vel.&#39;</span><span class="p">,</span> <span class="s1">&#39;HYDROBASE::vel&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;alp&#39;</span><span class="p">:[</span><span class="s1">&#39;admbase-lapse.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::alp&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;lapse&#39;</span><span class="p">:[</span><span class="s1">&#39;admbase-lapse.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::alp&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;dtalp&#39;</span><span class="p">:[</span><span class="s1">&#39;admbase-dtlapse.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::dtalp&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;dtlapse&#39;</span><span class="p">:[</span><span class="s1">&#39;admbase-dtlapse.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::dtalp&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;betaup&#39;</span><span class="p">:[</span><span class="s1">&#39;admbase-shift.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::beta&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;shift&#39;</span><span class="p">:[</span><span class="s1">&#39;admbase-shift.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::beta&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;dtbetaup&#39;</span><span class="p">:[</span><span class="s1">&#39;admbase-dtshift.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::dtbeta&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;dtshift&#39;</span><span class="p">:[</span><span class="s1">&#39;admbase-dtshift.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::dtbeta&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;tau&#39;</span><span class="p">:[</span><span class="s1">&#39;cosmolapse-propertime.&#39;</span><span class="p">,</span> <span class="s1">&#39;COSMOLAPSE::tau&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;gdown&#39;</span><span class="p">:[</span><span class="s1">&#39;admbase-metric.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::g&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+            <span class="s1">&#39;metric&#39;</span><span class="p">:[</span><span class="s1">&#39;admbase-metric.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::g&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+            <span class="s1">&#39;kdown&#39;</span><span class="p">:[</span><span class="s1">&#39;admbase-curv.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::k&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+            <span class="s1">&#39;curv&#39;</span><span class="p">:[</span><span class="s1">&#39;admbase-curv.&#39;</span><span class="p">,</span> <span class="s1">&#39;ADMBASE::k&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+            <span class="s1">&#39;trK&#39;</span><span class="p">:[</span><span class="s1">&#39;ml_bssn-ml_trace_curv.&#39;</span><span class="p">,</span> <span class="s1">&#39;ML_BSSN::trK&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;ML_Ham&#39;</span><span class="p">:[</span><span class="s1">&#39;ml_bssn-ml_ham.&#39;</span><span class="p">,</span> <span class="s1">&#39;ML_BSSN::H&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;ML_Mom&#39;</span><span class="p">:[</span><span class="s1">&#39;ml_bssn-ml_mom.&#39;</span><span class="p">,</span> <span class="s1">&#39;ML_BSSN::M&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">variables</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">att</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_data_tensor</span><span class="p">(</span>
+            <span class="n">data_path</span><span class="p">,</span> <span class="n">att</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">att</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">it</span><span class="p">,</span> <span class="n">rl</span><span class="p">,</span> <span class="n">cmax</span><span class="p">,</span> <span class="n">att</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Variable </span><span class="si">{}</span><span class="s1"> not found&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="get_data_tensor">
+<a class="viewcode-back" href="../../source/reading.html#aurel.reading.get_data_tensor">[docs]</a>
+<span class="k">def</span> <span class="nf">get_data_tensor</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">varkey</span><span class="p">,</span> <span class="n">it</span><span class="p">,</span> <span class="n">rl</span><span class="p">,</span> <span class="n">cmax</span><span class="p">,</span> <span class="n">rank</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read the data from the simulation output files.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str</span>
+<span class="sd">        The path to the simulation output files.</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Identifying part of the variable output file name.</span>
+<span class="sd">    varkey : str</span>
+<span class="sd">        Identifying part of the variable&#39;s hdf5 key.</span>
+<span class="sd">    it : list</span>
+<span class="sd">        The iterations to read from the simulation output files.</span>
+<span class="sd">    rl : int</span>
+<span class="sd">        The refinement level to read from the simulation output files.</span>
+<span class="sd">    cmax : int</span>
+<span class="sd">        The maximum number of chunks to read from the simulation output files.</span>
+<span class="sd">        If &#39;in file&#39;, it will be extracted from the file.</span>
+<span class="sd">    rank : int</span>
+<span class="sd">        The rank of the variable to read from the simulation output files.</span>
+<span class="sd">        0 scalar, 1 vector, 2 tensor.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        A dictionary containing the data from the simulation output files.</span>
+
+<span class="sd">        dict.keys() = [&#39;it&#39;, &#39;t&#39;, var]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># collect data files</span>
+    <span class="k">if</span> <span class="n">cmax</span> <span class="o">==</span> <span class="s1">&#39;in file&#39;</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span><span class="s1">&#39;h5&#39;</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">filename</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">cmax</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;h5&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># a file per chunk</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cmax</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">files</span> <span class="o">+=</span> <span class="p">[</span><span class="n">path</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;file_</span><span class="si">{}</span><span class="s1">.h5&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="p">)]</span>
+    
+    <span class="c1"># dictionary to collect the chunked data at each it for each component</span>
+    <span class="k">if</span> <span class="n">rank</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">all_components</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">rank</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">all_components</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;HYDROBASE::vel&#39;</span> <span class="ow">in</span> <span class="n">varkey</span><span class="p">:</span>
+            <span class="n">all_components</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;[0]&#39;</span><span class="p">,</span> <span class="s1">&#39;[1]&#39;</span><span class="p">,</span> <span class="s1">&#39;[2]&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s1">&#39;ML_BSSN::M&#39;</span> <span class="ow">in</span> <span class="n">varkey</span><span class="p">:</span>
+            <span class="n">all_components</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">rank</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">all_components</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;xx&#39;</span><span class="p">,</span> <span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="s1">&#39;xz&#39;</span><span class="p">,</span> <span class="s1">&#39;yy&#39;</span><span class="p">,</span> <span class="s1">&#39;yz&#39;</span><span class="p">,</span> <span class="s1">&#39;zz&#39;</span><span class="p">]</span>
+    <span class="n">var_chunks</span> <span class="o">=</span> <span class="p">{</span><span class="n">iit</span><span class="p">:{</span><span class="n">ij</span><span class="p">:{}</span> <span class="k">for</span> <span class="n">ij</span> <span class="ow">in</span> <span class="n">all_components</span><span class="p">}</span> <span class="k">for</span> <span class="n">iit</span> <span class="ow">in</span> <span class="n">it</span><span class="p">}</span> 
+    
+    <span class="c1"># also collect time while you&#39;re at it</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">collect_time</span> <span class="o">=</span> <span class="kc">True</span>
+    
+    <span class="c1"># go through one file at a time</span>
+    <span class="k">for</span> <span class="n">fi</span><span class="p">,</span> <span class="n">filename</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+        <span class="c1"># open the file and collect data</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="c1"># collect all it of that file</span>
+            <span class="k">for</span> <span class="n">iit</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+                <span class="c1"># key of data to collect </span>
+                <span class="n">key_end</span> <span class="o">=</span> <span class="s1">&#39; it=</span><span class="si">{}</span><span class="s1"> tl=0 rl=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iit</span><span class="p">,</span> <span class="n">rl</span><span class="p">)</span>
+    
+                <span class="c1"># find the actual number of chunks</span>
+                <span class="k">if</span> <span class="n">cmax</span> <span class="o">==</span> <span class="s1">&#39;in file&#39;</span><span class="p">:</span>
+                    <span class="n">fkeys</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> 
+                             <span class="k">if</span> <span class="n">varkey</span><span class="o">+</span><span class="n">all_components</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">key_end</span> <span class="ow">in</span> <span class="n">k</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="s1">&#39;c=&#39;</span> <span class="ow">in</span> <span class="n">fkeys</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">actual_cmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;c=&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span> 
+                            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">fkeys</span><span class="p">])))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">actual_cmax</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">crange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">actual_cmax</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">actual_cmax</span> <span class="o">=</span> <span class="n">cmax</span>
+                    <span class="n">crange</span> <span class="o">=</span> <span class="p">[</span><span class="n">fi</span><span class="p">]</span>
+
+                <span class="c1"># for each chunk</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">crange</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">actual_cmax</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span> 
+                        <span class="n">key_end_with_c</span> <span class="o">=</span> <span class="n">key_end</span> <span class="o">+</span> <span class="s1">&#39; c=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">key_end_with_c</span> <span class="o">=</span> <span class="n">key_end</span>
+
+                    <span class="c1"># For each component</span>
+                    <span class="k">for</span> <span class="n">ij</span> <span class="ow">in</span> <span class="n">all_components</span><span class="p">:</span>
+                        <span class="c1"># the full key to use</span>
+                        <span class="n">key</span> <span class="o">=</span> <span class="n">varkey</span> <span class="o">+</span> <span class="n">ij</span> <span class="o">+</span> <span class="n">key_end_with_c</span>
+                        <span class="c1"># cut off ghost grid points</span>
+                        <span class="n">ghost_x</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;cctk_nghostzones&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">ghost_y</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;cctk_nghostzones&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="n">ghost_z</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;cctk_nghostzones&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+                        <span class="n">var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">])[</span>
+                            <span class="n">ghost_z</span><span class="p">:</span><span class="o">-</span><span class="n">ghost_z</span><span class="p">,</span> 
+                            <span class="n">ghost_y</span><span class="p">:</span><span class="o">-</span><span class="n">ghost_y</span><span class="p">,</span> 
+                            <span class="n">ghost_x</span><span class="p">:</span><span class="o">-</span><span class="n">ghost_x</span><span class="p">]</span>
+                        <span class="n">iorigin</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;iorigin&#39;</span><span class="p">])</span>
+                        <span class="n">var_chunks</span><span class="p">[</span><span class="n">iit</span><span class="p">][</span><span class="n">ij</span><span class="p">][</span><span class="n">iorigin</span><span class="p">]</span> <span class="o">=</span> <span class="n">var</span>
+                <span class="k">if</span> <span class="n">collect_time</span><span class="p">:</span>
+                    <span class="n">time</span> <span class="o">+=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]]</span>
+            <span class="n">collect_time</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># only do this in one file</span>
+    
+
+    <span class="c1"># rename some variables to work with AurelCore</span>
+    <span class="n">varname</span> <span class="o">=</span> <span class="n">varkey</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;::&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">vartorename</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;rho&#39;</span><span class="p">:</span><span class="s1">&#39;rho0&#39;</span><span class="p">,</span> <span class="s1">&#39;vel[0]&#39;</span><span class="p">:</span><span class="s1">&#39;velx&#39;</span><span class="p">,</span> <span class="s1">&#39;vel[1]&#39;</span><span class="p">:</span><span class="s1">&#39;vely&#39;</span><span class="p">,</span> <span class="s1">&#39;vel[2]&#39;</span><span class="p">:</span><span class="s1">&#39;velz&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;alp&#39;</span><span class="p">:</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="s1">&#39;dtalp&#39;</span><span class="p">:</span><span class="s1">&#39;dtalpha&#39;</span><span class="p">,</span> <span class="s1">&#39;trK&#39;</span><span class="p">:</span><span class="s1">&#39;Ktrace&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;H&#39;</span><span class="p">:</span><span class="s1">&#39;Hamiltonian&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;M1&#39;</span><span class="p">:</span><span class="s1">&#39;Momentumx&#39;</span><span class="p">,</span> <span class="s1">&#39;M2&#39;</span><span class="p">:</span><span class="s1">&#39;Momentumy&#39;</span><span class="p">,</span> <span class="s1">&#39;M3&#39;</span><span class="p">:</span><span class="s1">&#39;Momentumz&#39;</span><span class="p">}</span>
+
+    <span class="c1"># per iteration, join the chunks together</span>
+    <span class="c1"># fix the indexing to be x, y, z</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="p">{}</span><span class="c1">#varname+ij:[] for ij in all_components}</span>
+    <span class="k">for</span> <span class="n">iit</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">ij</span> <span class="ow">in</span> <span class="n">all_components</span><span class="p">:</span>
+            <span class="n">full_varname</span> <span class="o">=</span> <span class="n">varname</span><span class="o">+</span><span class="n">ij</span>
+            <span class="k">if</span> <span class="n">full_varname</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">vartorename</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">full_varname</span> <span class="o">=</span> <span class="n">vartorename</span><span class="p">[</span><span class="n">full_varname</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">iit</span> <span class="o">==</span> <span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">var</span><span class="p">[</span><span class="n">full_varname</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">fixij</span><span class="p">(</span><span class="n">join_chunks</span><span class="p">(</span><span class="n">var_chunks</span><span class="p">[</span><span class="n">iit</span><span class="p">][</span><span class="n">ij</span><span class="p">]))]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">var</span><span class="p">[</span><span class="n">full_varname</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">fixij</span><span class="p">(</span><span class="n">join_chunks</span><span class="p">(</span><span class="n">var_chunks</span><span class="p">[</span><span class="n">iit</span><span class="p">][</span><span class="n">ij</span><span class="p">]))]</span>
+    <span class="n">var</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span>
+    <span class="k">return</span> <span class="n">var</span></div>
+
+
+<div class="viewcode-block" id="fixij">
+<a class="viewcode-back" href="../../source/reading.html#aurel.reading.fixij">[docs]</a>
+<span class="k">def</span> <span class="nf">fixij</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fix the x-z indexing as you read in the data.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="unfixij">
+<a class="viewcode-back" href="../../source/reading.html#aurel.reading.unfixij">[docs]</a>
+<span class="k">def</span> <span class="nf">unfixij</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fix the x-z indexing as you record data.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="join_chunks">
+<a class="viewcode-back" href="../../source/reading.html#aurel.reading.join_chunks">[docs]</a>
+<span class="k">def</span> <span class="nf">join_chunks</span><span class="p">(</span><span class="n">cut_data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Join the chunks of data together.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cut_data : dict of dict</span>
+<span class="sd">        A dictionary containing the data from the simulation output files.</span>
+<span class="sd">        dict.keys() = tuple of the chunks &#39;iorigin&#39; attribute </span>
+<span class="sd">        which maps out how the data is to be joined together.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    uncut_data : array_like</span>
+<span class="sd">        The data now joined together.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cut_data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">cmax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_keys</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">cmax</span><span class="p">,</span> <span class="n">all_keys</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_keys</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">cut_data</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+        <span class="nb">print</span><span class="p">()</span>
+    <span class="c1"># =================</span>
+    <span class="k">if</span> <span class="n">cmax</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">uncut_data</span> <span class="o">=</span> <span class="n">cut_data</span><span class="p">[</span><span class="n">all_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="k">elif</span> <span class="n">cmax</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">uncut_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">cut_data</span><span class="p">[</span><span class="n">all_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">cut_data</span><span class="p">[</span><span class="n">all_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">cmax</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">uncut_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cut_data</span><span class="p">[</span><span class="n">all_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">cut_data</span><span class="p">[</span><span class="n">all_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> 
+            <span class="n">cut_data</span><span class="p">[</span><span class="n">all_keys</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># =================</span>
+    <span class="k">elif</span> <span class="n">cmax</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]:</span> <span class="c1"># TO CHECK</span>
+        <span class="c1"># fix axis = 2</span>
+        <span class="k">if</span> <span class="n">cmax</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span> <span class="c1"># TO CHECK</span>
+            <span class="n">ndata</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cut_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cut_data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> 
+                     <span class="n">cut_data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> 
+                     <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cut_data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">cut_data</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> 
+                     <span class="n">cut_data</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> 
+                     <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cut_data</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">cut_data</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> 
+                     <span class="n">cut_data</span><span class="p">[</span><span class="mi">8</span><span class="p">]]</span>
+        <span class="k">elif</span> <span class="n">cmax</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span> <span class="c1"># TO CHECK</span>
+            <span class="n">ndata</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cut_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cut_data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> 
+                     <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cut_data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cut_data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> 
+                     <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cut_data</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">cut_data</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> 
+                     <span class="n">cut_data</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+                     <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cut_data</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">cut_data</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> 
+                     <span class="n">cut_data</span><span class="p">[</span><span class="mi">9</span><span class="p">]]</span>
+        <span class="k">elif</span> <span class="n">cmax</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span> <span class="c1"># TO CHECK</span>
+            <span class="n">ndata</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cut_data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cut_data</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> 
+                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">ndata</span> <span class="o">+=</span> <span class="p">[</span><span class="n">cut_data</span><span class="p">[</span><span class="mi">10</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># TO CHECK</span>
+            <span class="n">ndata</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cut_data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cut_data</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> 
+                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span>
+        <span class="c1"># fix axis = 1 and 0</span>
+        <span class="n">nndata</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ndata</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ndata</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> 
+                  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">uncut_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nndata</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nndata</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> 
+            <span class="n">nndata</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># =================</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># append along axis = 2</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">all_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">current_key</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">ndata</span> <span class="o">=</span> <span class="p">{</span><span class="n">current_key</span><span class="p">:</span><span class="n">cut_data</span><span class="p">[</span><span class="n">k</span><span class="p">]}</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="k">if</span> <span class="n">current_key</span> <span class="o">==</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">ndata</span><span class="p">[</span><span class="n">current_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">ndata</span><span class="p">[</span><span class="n">current_key</span><span class="p">],</span> <span class="n">cut_data</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">current_key</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="n">ndata</span><span class="p">[</span><span class="n">current_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">cut_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">all_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ndata</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_keys</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ndata</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">()</span>
+
+        <span class="c1"># append along axis = 1</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">all_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">current_key</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">nndata</span> <span class="o">=</span> <span class="p">{</span><span class="n">current_key</span><span class="p">:</span><span class="n">ndata</span><span class="p">[</span><span class="n">k</span><span class="p">]}</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="k">if</span> <span class="n">current_key</span> <span class="o">==</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">nndata</span><span class="p">[</span><span class="n">current_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">nndata</span><span class="p">[</span><span class="n">current_key</span><span class="p">],</span> <span class="n">ndata</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">current_key</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="n">nndata</span><span class="p">[</span><span class="n">current_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">all_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nndata</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_keys</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">nndata</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">()</span>
+                
+        <span class="c1"># append along axis = 0</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">all_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">uncut_data</span> <span class="o">=</span> <span class="n">nndata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">uncut_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">uncut_data</span><span class="p">,</span> <span class="n">nndata</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">uncut_data</span><span class="p">),</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">uncut_data</span></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Robyn L. Munoz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

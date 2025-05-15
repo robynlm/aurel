@@ -1,0 +1,13 @@
+# Compiling the docs
+
+in aurel/docs/
+>> make clean
+>> make html
+
+to see the docs, in aurel/docs/_build/html
+>> python3 -m http.server
+then go to http://localhost:8000
+
+if Address already in use
+>> lsof -i :8000
+>> kill PID
