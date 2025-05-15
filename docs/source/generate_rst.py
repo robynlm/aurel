@@ -3,7 +3,7 @@ import inspect
 import sys
 
 # Add the src directory to the Python path
-sys.path.insert(0, os.path.abspath('../../src'))
+sys.path.insert(0, os.path.abspath('../src'))
 import aurel.core as core
 
 # Directory to save the generated .rst files
