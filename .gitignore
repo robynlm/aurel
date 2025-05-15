@@ -6,3 +6,4 @@ dist/
 *_version.py
 docs/_build/
 docs/notes.txt
+.pypirc
