@@ -1,6 +1,6 @@
 <p align="left">
     <a href="https://robynlm.github.io/aurel/" target = "_blank">
-    <img src="docs/_static/aurel.png" width="250px" />
+    <img src="https://raw.githubusercontent.com/robynlm/aurel/main/docs/_static/aurel.png" width="250px" />
 </a>
 
 </p>
