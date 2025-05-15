@@ -1,8 +1,7 @@
 <p align="left">
     <a href="https://robynlm.github.io/aurel/" target = "_blank">
-    <img src="https://raw.githubusercontent.com/robynlm/aurel/main/docs/_static/aurel.png" width="250px" />
+    <img src="https://raw.githubusercontent.com/robynlm/aurel/refs/heads/main/docs/_static/aurel.png" width="250px" />
 </a>
-
 </p>
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
