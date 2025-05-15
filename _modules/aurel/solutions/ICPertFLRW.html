@@ -1,0 +1,177 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aurel.solutions.ICPertFLRW &mdash; aurel May 2025 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=0e075184" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=8d170800"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            aurel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/core.html">aurel.core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/finitedifference.html">aurel.finitedifference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/maths.html">aurel.maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/numerical.html">aurel.numerical</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/reading.html">aurel.reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/solutions.html">aurel.solutions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">aurel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aurel.solutions.ICPertFLRW</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aurel.solutions.ICPertFLRW</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;See: https://arxiv.org/pdf/2302.09033</span>
+<span class="sd"> and: https://arxiv.org/pdf/1307.1478&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
+
+<div class="viewcode-block" id="Rc_func">
+<a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.ICPertFLRW.Rc_func">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">Rc_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">lamb</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Comoving curvature perturbation&quot;&quot;&quot;</span>
+    <span class="n">Ax</span><span class="p">,</span> <span class="n">Ay</span><span class="p">,</span> <span class="n">Az</span> <span class="o">=</span> <span class="n">amp</span>
+    <span class="n">Lx</span><span class="p">,</span> <span class="n">Ly</span><span class="p">,</span> <span class="n">Lz</span> <span class="o">=</span> <span class="n">lamb</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">Ax</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span> <span class="o">/</span> <span class="n">Lx</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">Ay</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">y</span> <span class="o">/</span> <span class="n">Ly</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">Az</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">z</span> <span class="o">/</span> <span class="n">Lz</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="gammadown3">
+<a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.ICPertFLRW.gammadown3">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">gammadown3</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">Rc</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spatial metric with 1st order perturbations&quot;&quot;&quot;</span>
+    <span class="n">a2</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Omega_m</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">m2iFH2</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span> <span class="n">F</span> <span class="o">*</span><span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
+    <span class="n">gxx</span> <span class="o">=</span> <span class="n">a2</span> <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Rc</span> <span class="p">)</span> <span class="o">+</span> <span class="n">m2iFH2</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span>
+    <span class="n">gxy</span> <span class="o">=</span> <span class="n">m2iFH2</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span>
+    <span class="n">gxz</span> <span class="o">=</span> <span class="n">m2iFH2</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span>
+    <span class="n">gyy</span> <span class="o">=</span> <span class="n">a2</span> <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Rc</span> <span class="p">)</span> <span class="o">+</span> <span class="n">m2iFH2</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span>
+    <span class="n">gyz</span> <span class="o">=</span> <span class="n">m2iFH2</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span>
+    <span class="n">gzz</span> <span class="o">=</span> <span class="n">a2</span> <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Rc</span> <span class="p">)</span> <span class="o">+</span> <span class="n">m2iFH2</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="n">gxx</span><span class="p">,</span> <span class="n">gxy</span><span class="p">,</span> <span class="n">gxz</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">gxy</span><span class="p">,</span> <span class="n">gyy</span><span class="p">,</span> <span class="n">gyz</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">gxz</span><span class="p">,</span> <span class="n">gyz</span><span class="p">,</span> <span class="n">gzz</span><span class="p">]])</span></div>
+
+
+<div class="viewcode-block" id="Kdown3">
+<a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.ICPertFLRW.Kdown3">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">Kdown3</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">Rc</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrinsic curvature, nonlinear from gammmadown3&quot;&quot;&quot;</span>
+    <span class="n">a2</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Omega_m</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">iFH</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span> <span class="n">F</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">kxx</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">a2</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Rc</span> <span class="p">)</span> 
+           <span class="o">+</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">*</span> <span class="n">iFH</span><span class="p">)</span>
+    <span class="n">kxy</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">*</span> <span class="n">iFH</span>
+    <span class="n">kxz</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">*</span> <span class="n">iFH</span>
+    <span class="n">kyy</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">a2</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Rc</span> <span class="p">)</span> 
+           <span class="o">+</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">*</span> <span class="n">iFH</span><span class="p">)</span>
+    <span class="n">kyz</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">*</span> <span class="n">iFH</span>
+    <span class="n">kzz</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">a2</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Rc</span> <span class="p">)</span> 
+           <span class="o">+</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">*</span> <span class="n">iFH</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="n">kxx</span><span class="p">,</span> <span class="n">kxy</span><span class="p">,</span> <span class="n">kxz</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">kxy</span><span class="p">,</span> <span class="n">kyy</span><span class="p">,</span> <span class="n">kyz</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">kxz</span><span class="p">,</span> <span class="n">kyz</span><span class="p">,</span> <span class="n">kzz</span><span class="p">]])</span></div>
+
+
+<div class="viewcode-block" id="delta1">
+<a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.ICPertFLRW.delta1">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">delta1</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">Rc</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Linear density contrast&quot;&quot;&quot;</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Omega_m</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">+</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">+</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">Rc</span><span class="p">)))</span> 
+        <span class="o">/</span> <span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">F</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Robyn L. Munoz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
