@@ -23,7 +23,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install sympy numpy matplotlib h5py scipy glob2 ipython
+        pip install build sympy numpy matplotlib h5py scipy glob2 ipython
 
     - name: Deploy to PyPI
       if: github.ref == 'refs/heads/main'
