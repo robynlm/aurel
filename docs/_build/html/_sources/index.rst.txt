@@ -100,9 +100,9 @@ any relativistic term you ask for.**
 
 For further examples on how to use aurel see:
 
-- the `Example notebook <https://github.com/your-username/aurel/blob/main/notebooks/Example.ipynb>`_, 
+- the `Example notebook <https://github.com/robynlm/aurel/blob/main/notebooks/Example.ipynb>`_, 
   for an in depth description with tips and tricks,
-- the `tov_ET notebook <https://github.com/your-username/aurel/blob/main/notebooks/tov_ET.ipynb>`_, 
+- the `tov_ET notebook <https://github.com/robynlm/aurel/blob/main/notebooks/tov_ET.ipynb>`_, 
   for an example of how to load in data from an Einstein Toolkit simulation.
 
 .. toctree::
