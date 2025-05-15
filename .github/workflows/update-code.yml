@@ -1,0 +1,35 @@
+name: Update Code on Push
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write  # Allow pushing to PyPI if needed
+
+jobs:
+  test-and-update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+
+    - name: Install dependencies
+      run: |
+        pip install sympy numpy matplotlib h5py scipy glob2 ipython
+
+    - name: Deploy to PyPI
+      if: github.ref == 'refs/heads/main'
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        python3 -m build
+        twine upload dist/*
