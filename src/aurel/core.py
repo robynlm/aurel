@@ -263,6 +263,9 @@ class AurelCore():
         "kxx", "kxy", "kxz", "kyy", "kyz", "kzz",
         
         "rho0"
+    fancy_print : bool
+        (*bool*) - If True, display messages in a fancy ipython format, 
+        else normal print is used. Default is True.
     Lambda : float
         (*float*) - Cosmological constant. Default is 0.0.
     tetrad_to_use : str
@@ -292,13 +295,13 @@ class AurelCore():
                            self.param['Ny'], 
                            self.param['Nz'])
         self.verbose = verbose
+        self.fancy_print = True
 
         # Physics variables
         self.kappa = 8*np.pi  # Einstein's constant with G = c = 1
-        if self.verbose:
-            display(Latex(f"Setting Cosmological constant "
-                          + r'$\Lambda$'
-                          + f" to 0.0, if not then redefine AurelCore.Lambda"))
+        self.myprint(f"Setting Cosmological constant "
+                     + r'$\Lambda$'
+                     + f" to 0.0, if not then redefine AurelCore.Lambda")
         self.Lambda = 0.0
         self.tetrad_to_use = "quasi-Kinnersley"
 
@@ -331,6 +334,14 @@ class AurelCore():
     # Functions to manage the data dictionary
     ###########################################################################
 
+    def myprint(self, message):
+        """Print a message with a fancy format."""
+        if self.verbose:
+            if self.fancy_print:
+                display(Latex(message))
+            else:
+                print(message, flush=True)
+
     def __getitem__(self, key):
         """Get data[key] or compute it if not present."""
         # First check if the key is already cached
@@ -342,7 +353,7 @@ class AurelCore():
         # If the key is not in the data dictionary, check if it is required
         if key in self.required_vars:
             # Raise an error asking the user to define the variable
-            display(Latex(f"I need {key}: {descriptions[key]}"))
+            self.myprint(f"I need {key}: {descriptions[key]}")
             raise ValueError(
                 f"'{key}' is not defined. "
                 + f"Please define AurelCore.data['{key}'] = ..."
@@ -355,8 +366,7 @@ class AurelCore():
         if func.__code__.co_argcount == 1:
             self.data[key] = func()
             # Print the calculation description if available
-            if self.verbose:
-                display(Latex(f"Calculated {key}: " + descriptions[key]))
+            self.myprint(f"Calculated {key}: " + descriptions[key])
             self.calculation_count += 1 # Increment the calculation count
             self.last_accessed[key] = self.calculation_count # Update
             self.cleanup_cache()  # Clean the cache after each new calculation
@@ -549,17 +559,13 @@ class AurelCore():
     
     # Lapse
     def alpha(self):
-        if self.verbose:
-            display(Latex(
-                r"I assume $\alpha = 1$, if not then "
-                +f"please define AurelCore.data['alpha'] = ... "))
+        self.myprint(r"I assume $\alpha = 1$, if not then "
+                     +f"please define AurelCore.data['alpha'] = ... ")
         return np.ones(self.data_shape)
     
     def dtalpha(self):
-        if self.verbose:
-            display(Latex(
-                r"I assume $\partial_t \alpha = 0$, if not then "
-                +f"please define AurelCore.data['dtalpha'] = ... "))
+        self.myprint(r"I assume $\partial_t \alpha = 0$, if not then "
+                     +f"please define AurelCore.data['dtalpha'] = ... ")
         return np.zeros(self.data_shape)
     
     # Shift
@@ -569,10 +575,8 @@ class AurelCore():
             return np.array([
                 self["betax"], self["betay"], self["betaz"]])
         else:
-            if self.verbose:
-                display(Latex(
-                    r"I assume $\beta^i=0$, if not then "
-                    + f"please define AurelCore.data['betaup3'] = ... "))
+            self.myprint(r"I assume $\beta^i=0$, if not then "
+                         + f"please define AurelCore.data['betaup3'] = ... ")
             return np.zeros(
                 (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
     
@@ -581,10 +585,9 @@ class AurelCore():
             return np.array([
                 self["dtbetax"], self["dtbetay"], self["dtbetaz"]])
         else:
-            if self.verbose:
-                display(Latex(
-                    r"I assume $\partial_t \beta^i=0$, if not then "
-                    + f"please define AurelCore.data['dtbetaup3'] = ... "))
+            self.myprint(
+                r"I assume $\partial_t \beta^i=0$, if not then "
+                + f"please define AurelCore.data['dtbetaup3'] = ... ")
             return np.zeros(
                 (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
     
@@ -666,17 +669,15 @@ class AurelCore():
     # Eulerian observer follows n^mu
     # Lagrangian observer follows u^mu
     def press(self):
-        if self.verbose:
-            display(Latex(
-                r"I assume $p = 0$, if not then "
-                +f"please define AurelCore.data['press'] = ... "))
+        self.myprint(
+            r"I assume $p = 0$, if not then "
+            +f"please define AurelCore.data['press'] = ... ")
         return np.zeros(self.data_shape)
     
     def eps(self):
-        if self.verbose:
-            display(Latex(
-                r"I assume $\epsilon = 0$, if not then "
-                +f"please define AurelCore.data['eps'] = ... "))
+        self.myprint(
+            r"I assume $\epsilon = 0$, if not then "
+            +f"please define AurelCore.data['eps'] = ... ")
         return np.zeros(self.data_shape)
     
     def rho(self):
@@ -696,10 +697,9 @@ class AurelCore():
     
     # Fluid velocity
     def w_lorentz(self):
-        if self.verbose:
-            display(Latex(
-                r"I assume $W = 1$, if not then "
-                +f"please define AurelCore.data['w_lorentz'] = ... "))
+        self.myprint(
+            r"I assume $W = 1$, if not then "
+            +f"please define AurelCore.data['w_lorentz'] = ... ")
         return np.ones(self.data_shape)
     
     def velup3(self):
@@ -707,10 +707,9 @@ class AurelCore():
             return np.array([
                 self["velx"], self["vely"], self["velz"]])
         else:
-            if self.verbose:
-                display(Latex(
-                    r"I assume $v^i=0$, if not then "
-                    + f"please define AurelCore.data['velup3'] = ... "))
+            self.myprint(
+                r"I assume $v^i=0$, if not then "
+                + f"please define AurelCore.data['velup3'] = ... ")
             return np.zeros(
                 (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
     
