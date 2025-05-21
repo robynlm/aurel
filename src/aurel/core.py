@@ -98,8 +98,6 @@ descriptions = {
     "eps": (r"$\epsilon$ Specific internal energy"
             + r" (need to input or I assume =0)"),
     "rho": r"$\rho$ Energy density",
-    "rho_fromHam": (r"$\rho$ Energy density computed from"
-                    + r" the Hamiltonian constraint"),
     "enthalpy": r"$h$ Specific enthalpy of the fluid",
     # Fluid velocity
     "w_lorentz": r"$W$ Lorentz factor (need to input or I assume =1)",
@@ -141,6 +139,11 @@ descriptions = {
     "anisotropic_press_down3_n": (r"$\pi^{\{n\}_{ij}}$ Anisotropic pressure"
                                   + r" in the $n^\mu$ frame"
                                   + r" with spatial indices down"),
+    "rho_n_fromHam": (r"$\rho^{\{n\}}$ Energy density in the $n^\mu$ frame"
+                    + r" computed from the Hamiltonian constraint"),
+    "fluxup3_n_fromMom": (r"$S^{\{n\}i}$ Energy flux (or momentum density) in"
+                          + r" the $n^\mu$ frame with spatial indices up"
+                          + r" computed from the Momentum constraint"),
     # Conserved quantities
     "conserved_D": r"$D$ Conserved mass-energy density in Wilson's formalism",
     "conserved_E": (r"$E$ Conserved internal energy density"
@@ -683,13 +686,6 @@ class AurelCore():
     def rho(self):
         return self["rho0"] * (1 + self["eps"])
     
-    def rho_fromHam(self):
-        return (self["s_RicciS"] 
-                + self["Ktrace"]**2 
-                - np.einsum('ij..., ij... -> ...', 
-                            self["Kdown3"], self["Kup3"])
-                - 2 * self.Lambda) / (2 * self.kappa)
-    
     def enthalpy(self):
         return (
             1 + self["eps"] 
@@ -795,6 +791,18 @@ class AurelCore():
     
     def anisotropic_press_down3_n(self):
         return self["Stressdown3_n"] - self["gammadown3"] * self["press_n"]
+    
+    def rho_n_fromHam(self):
+        return (self["s_RicciS"] 
+                + self["Ktrace"]**2 
+                - np.einsum('ij..., ij... -> ...', 
+                            self["Kdown3"], self["Kup3"])
+                - 2 * self.Lambda) / (2 * self.kappa)
+    
+    def fluxup3_n_fromMom(self):
+        CovD_term = self.s_covd(
+                self["Kup3"] - self["gammaup3"] * self["Ktrace"], 'uu')
+        return np.einsum('bab... -> a...', CovD_term) / self.kappa
     
     # Conserved quantities
     def conserved_D(self):
