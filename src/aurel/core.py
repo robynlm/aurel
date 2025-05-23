@@ -345,6 +345,14 @@ class AurelCore():
             else:
                 print(message, flush=True)
 
+    def assumption(self, keyname, assumption):
+        """Print assumption message."""
+        if self.verbose:
+            message = ("I assume " + assumption + ", "
+                    + "if not then please define "
+                    + "AurelCore.data['"+keyname+"'] = ... ")
+            self.myprint(message)
+
     def __getitem__(self, key):
         """Get data[key] or compute it if not present."""
         # First check if the key is already cached
@@ -562,13 +570,11 @@ class AurelCore():
     
     # Lapse
     def alpha(self):
-        self.myprint(r"I assume $\alpha = 1$, if not then "
-                     +f"please define AurelCore.data['alpha'] = ... ")
+        self.assumption('alpha', r"$\alpha=1$")
         return np.ones(self.data_shape)
     
     def dtalpha(self):
-        self.myprint(r"I assume $\partial_t \alpha = 0$, if not then "
-                     +f"please define AurelCore.data['dtalpha'] = ... ")
+        self.assumption('dtalpha', r"$\partial_t \alpha=0$")
         return np.zeros(self.data_shape)
     
     # Shift
@@ -578,8 +584,7 @@ class AurelCore():
             return np.array([
                 self["betax"], self["betay"], self["betaz"]])
         else:
-            self.myprint(r"I assume $\beta^i=0$, if not then "
-                         + f"please define AurelCore.data['betaup3'] = ... ")
+            self.assumption('betaup3', r"$\beta^i=0$")
             return np.zeros(
                 (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
     
@@ -588,9 +593,7 @@ class AurelCore():
             return np.array([
                 self["dtbetax"], self["dtbetay"], self["dtbetaz"]])
         else:
-            self.myprint(
-                r"I assume $\partial_t \beta^i=0$, if not then "
-                + f"please define AurelCore.data['dtbetaup3'] = ... ")
+            self.assumption('dtbetaup3', r"$\partial_t \beta^i=0$")
             return np.zeros(
                 (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
     
@@ -672,15 +675,11 @@ class AurelCore():
     # Eulerian observer follows n^mu
     # Lagrangian observer follows u^mu
     def press(self):
-        self.myprint(
-            r"I assume $p = 0$, if not then "
-            +f"please define AurelCore.data['press'] = ... ")
+        self.assumption('press', r"$p=0$")
         return np.zeros(self.data_shape)
     
     def eps(self):
-        self.myprint(
-            r"I assume $\epsilon = 0$, if not then "
-            +f"please define AurelCore.data['eps'] = ... ")
+        self.assumption('eps', r"$\epsilon=0$")
         return np.zeros(self.data_shape)
     
     def rho(self):
@@ -693,9 +692,7 @@ class AurelCore():
     
     # Fluid velocity
     def w_lorentz(self):
-        self.myprint(
-            r"I assume $W = 1$, if not then "
-            +f"please define AurelCore.data['w_lorentz'] = ... ")
+        self.assumption('w_lorentz', r"$W=1$")
         return np.ones(self.data_shape)
     
     def velup3(self):
@@ -703,9 +700,7 @@ class AurelCore():
             return np.array([
                 self["velx"], self["vely"], self["velz"]])
         else:
-            self.myprint(
-                r"I assume $v^i=0$, if not then "
-                + f"please define AurelCore.data['velup3'] = ... ")
+            self.assumption('velup3', r"$v^i=0$")
             return np.zeros(
                 (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
     
