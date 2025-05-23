@@ -42,3 +42,33 @@ then in your python script you can have
 .. code-block:: python
 
    import aurel
+
+Parallelisation
+---------------
+
+Aurel uses JAX for vectorisation, JIT compilation and parallelisation.
+See the `JAX documentation <https://docs.jax.dev/en/latest/user_guides.html#user-guides>`_ for more information on how to use it.
+
+To accelerate things, make sure anything you pass to aurel is a JAX array.
+
+* In a **jupyter notebook**
+
+.. code-block:: python
+
+   import jax
+   jax.config.update('jax_num_cpu_devices', N)
+   # Replace N with the number of threads you want to use
+   print(jax.devices()) # check the number of devices visible to jax
+   import aurel 
+
+All jax configuration options need to be set before importing aurel.
+
+* In a **python script**
+
+You can put the above in your python script, or before calling the script, put in the terminal or your executable:
+
+.. code-block:: bash
+
+   export XLA_FLAGS="--xla_cpu_multi_thread_eigen=true intra_op_parallelism_threads=N"
+
+Replace N with the number of threads you want to use.

@@ -25,6 +25,7 @@ jobs:
       run: |
         pip install sympy numpy matplotlib h5py scipy glob2 ipython
         pip install build twine
+        pip install jax jaxlib
 
     - name: Deploy to PyPI
       if: github.ref == 'refs/heads/main'

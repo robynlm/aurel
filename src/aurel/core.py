@@ -22,6 +22,8 @@ This module is the main event. It contains:
 
 import sys
 import numpy as np
+import jax
+import jax.numpy as jnp
 from IPython.display import display, Math, Latex
 from . import maths
 
@@ -301,7 +303,7 @@ class AurelCore():
         self.fancy_print = True
 
         # Physics variables
-        self.kappa = 8*np.pi  # Einstein's constant with G = c = 1
+        self.kappa = 8*jnp.pi  # Einstein's constant with G = c = 1
         self.myprint(f"Setting Cosmological constant "
                      + r'$\Lambda$'
                      + f" to 0.0, if not then redefine AurelCore.Lambda")
@@ -358,7 +360,7 @@ class AurelCore():
         # First check if the key is already cached
         if key in self.data:
             # Update the last accessed time
-            self.last_accessed[key] = self.calculation_count  
+            self.last_accessed[key] = self.calculation_count
             return self.data[key]
 
         # If the key is not in the data dictionary, check if it is required
@@ -513,18 +515,18 @@ class AurelCore():
     
     def dtgammaup3(self):
         dbetaup = self.fd.d3_rank1tensor(self["betaup3"])
-        Lbgup = (np.einsum(
+        Lbgup = (jnp.einsum(
             's..., sij... -> ij...', 
             self["betaup3"], self.fd.d3_rank2tensor(self["gammaup3"]))
-            - np.einsum('si..., sj... -> ij...', dbetaup, self["gammaup3"])
-            - np.einsum('sj..., is... -> ij...', dbetaup, self["gammaup3"]))
+            - jnp.einsum('si..., sj... -> ij...', dbetaup, self["gammaup3"])
+            - jnp.einsum('sj..., is... -> ij...', dbetaup, self["gammaup3"]))
         return Lbgup - 2 * self["alpha"] * self["Kup3"]
 
     def gammadet(self):
         return maths.determinant3(self["gammadown3"])
     
     def gammadown4(self):
-        return np.array(
+        return jnp.array(
                 [[self["betamag"], self["betadown3"][0], 
                   self["betadown3"][1], self["betadown3"][2]], 
                  [self["betadown3"][0], self["gammadown3"][0,0], 
@@ -535,8 +537,8 @@ class AurelCore():
                   self["gammadown3"][2,1], self["gammadown3"][2,2]]])
     
     def gammaup4(self):
-        zero = np.zeros(self.data_shape)
-        return np.array(
+        zero = jnp.zeros(self.data_shape)
+        return jnp.array(
                 [[zero, zero, zero, zero], 
                  [zero, self["gammaup3"][0,0], 
                   self["gammaup3"][0,1], self["gammaup3"][0,2]], 
@@ -552,7 +554,7 @@ class AurelCore():
              self["kyy"], self["kyz"], self["kzz"]])
     
     def Kup3(self):
-        return np.einsum('ia..., jb..., ij... -> ab...', 
+        return jnp.einsum('ia..., jb..., ij... -> ab...', 
                          self["gammaup3"], self["gammaup3"],  self["Kdown3"])
     
     def Ktrace(self):
@@ -562,7 +564,7 @@ class AurelCore():
         return self["Kdown3"] - (1/3)*self["gammadown3"]*self["Ktrace"]
     
     def Aup3(self):
-        return np.einsum('ia..., jb..., ab... -> ij...',
+        return jnp.einsum('ia..., jb..., ab... -> ij...',
                          self["gammaup3"], self["gammaup3"], self["Adown3"])
     
     def A2(self):
@@ -571,65 +573,65 @@ class AurelCore():
     # Lapse
     def alpha(self):
         self.assumption('alpha', r"$\alpha=1$")
-        return np.ones(self.data_shape)
+        return jnp.ones(self.data_shape)
     
     def dtalpha(self):
         self.assumption('dtalpha', r"$\partial_t \alpha=0$")
-        return np.zeros(self.data_shape)
+        return jnp.zeros(self.data_shape)
     
     # Shift
     
     def betaup3(self):
         if "betax" in self.data:
-            return np.array([
+            return jnp.array([
                 self["betax"], self["betay"], self["betaz"]])
         else:
             self.assumption('betaup3', r"$\beta^i=0$")
-            return np.zeros(
+            return jnp.zeros(
                 (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
     
     def dtbetaup3(self):
         if "dtbetax" in self.data:
-            return np.array([
+            return jnp.array([
                 self["dtbetax"], self["dtbetay"], self["dtbetaz"]])
         else:
             self.assumption('dtbetaup3', r"$\partial_t \beta^i=0$")
-            return np.zeros(
+            return jnp.zeros(
                 (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
     
     def betadown3(self):
-        return np.einsum(
+        return jnp.einsum(
                 'i..., ij... -> j...',
                 self["betaup3"], self["gammadown3"])
         
     def betamag(self):
-        return np.einsum(
+        return jnp.einsum(
                 'i..., i... -> ...',
                 self["betaup3"], self["betadown3"])
     
     # Timelike normal vector
     def nup4(self):
-        return maths.safe_division(np.array(
-            [np.ones(self.data_shape), 
+        return maths.safe_division(jnp.array(
+            [jnp.ones(self.data_shape), 
              -self["betaup3"][0],
              -self["betaup3"][1], 
              -self["betaup3"][2]]),
              self["alpha"])
 
     def ndown4(self):
-        return np.array(
+        return jnp.array(
                 [-self["alpha"], 
-                 np.zeros(self.data_shape),
-                 np.zeros(self.data_shape),
-                 np.zeros(self.data_shape)])
+                 jnp.zeros(self.data_shape),
+                 jnp.zeros(self.data_shape),
+                 jnp.zeros(self.data_shape)])
     
     # Spacetime metric
     def gdown4(self):
         g00 = (-self["alpha"]**2 
-               + np.einsum('i..., j..., ij... -> ...', 
+               + jnp.einsum('i..., j..., ij... -> ...', 
                            self["betaup3"], self["betaup3"], 
                            self["gammadown3"]))
-        return np.array(
+        return jnp.array(
                 [[g00, self["betadown3"][0], 
                   self["betadown3"][1], self["betadown3"][2]],
                  [self["betadown3"][0], self["gammadown3"][0,0], 
@@ -649,24 +651,24 @@ class AurelCore():
     def null_ray_exp(self):
         # outward pointing unit spatial vector
         r, phi, theta = self.fd.spherical_coords
-        xynorm = (np.cos(phi)**2 * self["gammadown3"][0,0] 
-              + 2 * np.cos(phi) * np.sin(phi) * self["gammadown3"][0,1]
-              + np.sin(phi)**2 * self["gammadown3"][1,1])
+        xynorm = (jnp.cos(phi)**2 * self["gammadown3"][0,0] 
+              + 2 * jnp.cos(phi) * jnp.sin(phi) * self["gammadown3"][0,1]
+              + jnp.sin(phi)**2 * self["gammadown3"][1,1])
         xyznorm = (
-            np.sin(theta)**2 * xynorm 
-            + 2 * np.cos(theta) * np.sin(theta) * (
-                np.cos(phi) * self["gammadown3"][0,2]
-                + np.sin(phi) * self["gammadown3"][1,2])
-            + np.cos(theta)**2 * self["gammadown3"][2,2])
-        nfac = maths.safe_division(1, np.sqrt(xyznorm))
-        Sx = np.cos(phi) * np.sin(theta) * nfac
-        Sy = np.sin(phi) * np.sin(theta) * nfac
-        Sz = np.cos(theta) * nfac
-        sup = np.array([Sx, Sy, Sz])
+            jnp.sin(theta)**2 * xynorm 
+            + 2 * jnp.cos(theta) * jnp.sin(theta) * (
+                jnp.cos(phi) * self["gammadown3"][0,2]
+                + jnp.sin(phi) * self["gammadown3"][1,2])
+            + jnp.cos(theta)**2 * self["gammadown3"][2,2])
+        nfac = maths.safe_division(1, jnp.sqrt(xyznorm))
+        Sx = jnp.cos(phi) * jnp.sin(theta) * nfac
+        Sy = jnp.sin(phi) * jnp.sin(theta) * nfac
+        Sz = jnp.cos(theta) * nfac
+        sup = jnp.array([Sx, Sy, Sz])
         
         # expansion
-        Disi = np.einsum('aa... -> ...', self.s_covd(sup, 'u'))
-        Kss = np.einsum('ij..., i..., j... -> ...', self["Kdown3"], sup, sup)
+        Disi = jnp.einsum('aa... -> ...', self.s_covd(sup, 'u'))
+        Kss = jnp.einsum('ij..., i..., j... -> ...', self["Kdown3"], sup, sup)
         Theta_out = (Disi + Kss - self["Ktrace"])
         Theta_in = ( - Disi + Kss - self["Ktrace"])
         return Theta_out,  Theta_in
@@ -676,11 +678,11 @@ class AurelCore():
     # Lagrangian observer follows u^mu
     def press(self):
         self.assumption('press', r"$p=0$")
-        return np.zeros(self.data_shape)
+        return jnp.zeros(self.data_shape)
     
     def eps(self):
         self.assumption('eps', r"$\epsilon=0$")
-        return np.zeros(self.data_shape)
+        return jnp.zeros(self.data_shape)
     
     def rho(self):
         return self["rho0"] * (1 + self["eps"])
@@ -693,15 +695,15 @@ class AurelCore():
     # Fluid velocity
     def w_lorentz(self):
         self.assumption('w_lorentz', r"$W=1$")
-        return np.ones(self.data_shape)
+        return jnp.ones(self.data_shape)
     
     def velup3(self):
         if "velx" in self.data:
-            return np.array([
+            return jnp.array([
                 self["velx"], self["vely"], self["velz"]])
         else:
             self.assumption('velup3', r"$v^i=0$")
-            return np.zeros(
+            return jnp.zeros(
                 (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
     
     def uup0(self):
@@ -713,67 +715,67 @@ class AurelCore():
             - maths.safe_division(self["betaup3"], self["alpha"]))
     
     def uup4(self):
-        return np.array(
+        return jnp.array(
             [self["uup0"], self["uup3"][0], self["uup3"][1], self["uup3"][2]])
     
     def udown4(self):
-        return np.einsum('ab..., b... -> a...', self["gdown4"], self["uup4"])
+        return jnp.einsum('ab..., b... -> a...', self["gdown4"], self["uup4"])
     
     def udown3(self):
         return self["udown4"][1:]
     
     def hdown4(self):
-        return self["gdown4"] + np.einsum('a..., b... -> ab...', 
+        return self["gdown4"] + jnp.einsum('a..., b... -> ab...', 
                                           self["udown4"], self["udown4"])
     
     def hmixed4(self):
-        return np.einsum('ac...,cb...->ab...', 
+        return jnp.einsum('ac...,cb...->ab...', 
                          self["gup4"], self["hdown4"])
     
     def hup4(self):
-        return self["gup4"] + np.einsum('a..., b... -> ab...', 
+        return self["gup4"] + jnp.einsum('a..., b... -> ab...', 
                                         self["uup4"], self["uup4"])
     
     # Energy-stress tensor
     def Tdown4(self):
-        return (self["rho"] * np.einsum('a..., b... -> ab...', 
+        return (self["rho"] * jnp.einsum('a..., b... -> ab...', 
                                         self["uup4"], self["uup4"])
                 + self["press"] * self["hdown4"])
     
     # Fluid quantities in Eulerian frame
     def rho_n(self):
-        return np.einsum('ab..., a..., b... -> ...',
+        return jnp.einsum('ab..., a..., b... -> ...',
                          self["Tdown4"], self["nup4"], self["nup4"])
     
     def fluxup3_n(self):
-        return - np.einsum(
+        return - jnp.einsum(
             'ab..., bc..., c... -> a...', 
             self["gammaup4"], self["Tdown4"], self["nup4"])[1:]
     
     def fluxdown3_n(self):
-        return np.einsum(
+        return jnp.einsum(
             'a..., ab... -> b...', 
             self["fluxup3_n"], self["gammadown3"])
     
     def angmomup3_n(self):
-        return np.einsum(
+        return jnp.einsum(
             'ij..., j... -> i...', 
             self["gammaup3"], self["angmomdown3_n"])
     
     def angmomdown3_n(self):
-        return np.einsum(
+        return jnp.einsum(
             'ijk..., j..., k... -> i...', 
             self.levicivita_down3(), 
             self.fd.cartesian_coords, 
             self["fluxup3_n"])
     
     def Stressup3_n(self):
-        return np.einsum(
+        return jnp.einsum(
             'ac..., bd..., ab... -> cd...', 
             self["gammaup3"], self["gammaup3"], self["Tdown4"][1:,1:])
     
     def Stressdown3_n(self):
-        return np.einsum(
+        return jnp.einsum(
             'ac..., bd..., ab... -> cd...', 
             self["gammadown3"], self["gammadown3"], self["Stressup3_n"])
     
@@ -781,7 +783,7 @@ class AurelCore():
         return self.trace3(self["Tdown4"][1:,1:])
     
     def press_n(self):
-        return np.einsum('ab..., ab... -> ...', 
+        return jnp.einsum('ab..., ab... -> ...', 
                         self["gammaup3"], self["Tdown4"][1:,1:]) / 3
     
     def anisotropic_press_down3_n(self):
@@ -790,18 +792,18 @@ class AurelCore():
     def rho_n_fromHam(self):
         return (self["s_RicciS"] 
                 + self["Ktrace"]**2 
-                - np.einsum('ij..., ij... -> ...', 
+                - jnp.einsum('ij..., ij... -> ...', 
                             self["Kdown3"], self["Kup3"])
                 - 2 * self.Lambda) / (2 * self.kappa)
     
     def fluxup3_n_fromMom(self):
         CovD_term = self.s_covd(
                 self["Kup3"] - self["gammaup3"] * self["Ktrace"], 'uu')
-        return np.einsum('bab... -> a...', CovD_term) / self.kappa
+        return jnp.einsum('bab... -> a...', CovD_term) / self.kappa
     
     # Conserved quantities
     def conserved_D(self):
-        return self["rho0"] * self["w_lorentz"] * np.sqrt(self["gammadet"])
+        return self["rho0"] * self["w_lorentz"] * jnp.sqrt(self["gammadet"])
     
     def conserved_E(self):
         return self["conserved_D"] * self["eps"]
@@ -813,7 +815,7 @@ class AurelCore():
         return self["conserved_Sdown4"][1:]
     
     def conserved_Sup4(self):
-        return np.einsum('im...,m...->i...', 
+        return jnp.einsum('im...,m...->i...', 
                          self["gup4"], self["conserved_Sdown4"])
     
     def conserved_Sup3(self):
@@ -823,18 +825,18 @@ class AurelCore():
         if self.verbose:
             print('WARNING: dtconserved only works for constant press/rho')
         V = maths.safe_division(self["uup4"][1:], self["uup4"][0])
-        sgdet = np.sqrt(self["gammadet"]) 
+        sgdet = jnp.sqrt(self["gammadet"]) 
 
-        divD = np.einsum('ii...->...', 
+        divD = jnp.einsum('ii...->...', 
                          self.fd.d3_rank1tensor(self["conserved_D"] * V))
-        divE = np.einsum('ii... -> ...', 
+        divE = jnp.einsum('ii... -> ...', 
                          self.fd.d3_rank1tensor(self["conserved_E"] * V))
-        divW = np.einsum('ii... -> ...', 
+        divW = jnp.einsum('ii... -> ...', 
                          self.fd.d3_rank1tensor(sgdet * self["w_lorentz"] * V))
-        divSdown3 = np.einsum(
+        divSdown3 = jnp.einsum(
                     'jij...->i...', 
                     self.fd.d3_rank2tensor(
-                        np.einsum('i...,j...->ij...', 
+                        jnp.einsum('i...,j...->ij...', 
                                   self["conserved_Sdown3"], V)))
 
         dtD = - divD
@@ -842,10 +844,10 @@ class AurelCore():
                  * self["conserved_Sdown4"][0] 
                  * self.fd.d3_scalar(self["gdown4"][0,0]))
                 + (self["conserved_Sdown4"][0] 
-                   * np.einsum('j..., ij... -> i...', 
+                   * jnp.einsum('j..., ij... -> i...', 
                                self["conserved_Sup3"], 
                                self.fd.d3_rank1tensor(self["betadown3"])))
-                + (np.einsum('j..., k..., ijk... -> i...', 
+                + (jnp.einsum('j..., k..., ijk... -> i...', 
                              self["conserved_Sup3"],
                              self["conserved_Sup3"], 
                              self.fd.d3_rank2tensor(self["gammadown3"]))))
@@ -855,21 +857,21 @@ class AurelCore():
         # dtw_lorentz
         CovDbeta = self.s_covd(self["betaup3"], 'u')
         dtsgdet = sgdet * ( - self["alpha"] * self["Ktrace"]
-                            + np.einsum('ii... -> ...', CovDbeta))
+                            + jnp.einsum('ii... -> ...', CovDbeta))
         W2m1 = self["w_lorentz"]**2 - 1
         W2m1oDpE = maths.safe_division(
             W2m1, (self["conserved_D"] + self["conserved_E"]))
         fac1 = maths.safe_division(
             W2m1, 2 * self["w_lorentz"] 
-            * np.einsum('ij..., i..., j... -> ...', 
+            * jnp.einsum('ij..., i..., j... -> ...', 
                 self["gammaup3"], 
                 self["conserved_Sdown3"], 
                 self["conserved_Sdown3"]))
-        par1 = (np.einsum('ij..., i..., j... -> ...',
+        par1 = (jnp.einsum('ij..., i..., j... -> ...',
                           self["dtgammaup3"], 
                           self["conserved_Sdown3"], 
                           self["conserved_Sdown3"])
-                + 2 * np.einsum('ij..., i..., j... -> ...',
+                + 2 * jnp.einsum('ij..., i..., j... -> ...',
                                 self["gammaup3"], 
                                 self["conserved_Sdown3"], 
                                 dtSdown3))
@@ -897,33 +899,33 @@ class AurelCore():
                                   self["conserved_D"] + self["conserved_E"]))
         dtudown0 = (
             maths.safe_division(
-                (np.einsum('ij...,i...,j...->...',
+                (jnp.einsum('ij...,i...,j...->...',
                         self["dtgammaup3"], self["udown3"], self["udown3"])
-                + 2*np.einsum('i...,i...->...', self["uup3"], dtudown3)),
+                + 2*jnp.einsum('i...,i...->...', self["uup3"], dtudown3)),
                 (2 * self["alpha"] * self["w_lorentz"])) 
             - maths.safe_division(self["uup0"] * self["dtalpha"], 
                                   self["alpha"]))
-        dtudown4 = np.array(
+        dtudown4 = jnp.array(
                     [dtudown0, 
                      dtudown3[0], dtudown3[1], dtudown3[2]])
         # spacetime covariant derivative
         CovDu = self.st_covd(
             self["udown4"], dtudown4, 'u')
         # project along fluid flow
-        CovariantCovDu = np.einsum(
+        CovariantCovDu = jnp.einsum(
             'ab...,ac...->bc...', self["hmixed4"], CovDu)
         # make it symmetric
         return maths.symmetrise_tensor(CovariantCovDu)
     
     def theta(self):
-        return np.einsum('ab..., ab... -> ...', 
+        return jnp.einsum('ab..., ab... -> ...', 
                          self["hup4"], self["thetadown4"])
     
     def sheardown4(self):
         return self["thetadown4"] - (1/3) * self["theta"] * self["hdown4"]
     
     def shear2(self):
-        return 0.5 * np.einsum(
+        return 0.5 * jnp.einsum(
             'ai..., bj..., ab..., ij... -> ...', 
             self["hup4"], self["hup4"], self["sheardown4"], self["sheardown4"])
 
@@ -949,62 +951,62 @@ class AurelCore():
             
         # Spatial Christoffel symbols with all indices down: Gamma_{jkl}.
         Gxyz = dgammaxz[1] + dgammaxy[2] - dgammayz[0]
-        Gx = 0.5 * np.array(
+        Gx = 0.5 * jnp.array(
             [[dgammaxx[0], dgammaxx[1], dgammaxx[2]],
              [dgammaxx[1], 2*dgammaxy[1]-dgammayy[0], Gxyz],
              [dgammaxx[2], Gxyz, 2*dgammaxz[2]-dgammazz[0]]])
             
         Gyxz = dgammayz[0] + dgammaxy[2] - dgammaxz[1]
-        Gy = 0.5 * np.array(
+        Gy = 0.5 * jnp.array(
             [[2*dgammaxy[0]-dgammaxx[1], dgammayy[0], Gyxz],
              [dgammayy[0], dgammayy[1], dgammayy[2]],
              [Gyxz, dgammayy[2], 2*dgammayz[2]-dgammazz[1]]])
             
         Gzxy = dgammayz[0] + dgammaxz[1] - dgammaxy[2]
-        Gz = 0.5 * np.array(
+        Gz = 0.5 * jnp.array(
             [[2*dgammaxz[0]-dgammaxx[2], Gzxy, dgammazz[0]],
              [Gzxy, 2*dgammayz[1]-dgammayy[2], dgammazz[1]],
              [dgammazz[0], dgammazz[1], dgammazz[2]]])
-        Gddd = np.array([Gx,Gy,Gz])
+        Gddd = jnp.array([Gx,Gy,Gz])
             
         # Spatial Christoffel symbols with indices: Gamma^{i}_{kl}.
-        return np.einsum('ij..., jkl... -> ikl...', self["gammaup3"], Gddd)
+        return jnp.einsum('ij..., jkl... -> ikl...', self["gammaup3"], Gddd)
     
     def s_Riemann_uddd3(self):
-        dGudd3 = np.array([
+        dGudd3 = jnp.array([
             [self.fd.d3x_rank2tensor(self["s_Gamma_udd3"][j]) 
              for j in range(3)],
             [self.fd.d3y_rank2tensor(self["s_Gamma_udd3"][j]) 
              for j in range(3)],
             [self.fd.d3z_rank2tensor(self["s_Gamma_udd3"][j]) 
              for j in range(3)]])
-        Rterm0 = np.einsum('cabd... -> abcd...', dGudd3)
-        Rterm1 = np.einsum('dabc... -> abcd...', dGudd3)
-        Rterm2 = np.einsum('apc..., pbd... -> abcd...', 
+        Rterm0 = jnp.einsum('cabd... -> abcd...', dGudd3)
+        Rterm1 = jnp.einsum('dabc... -> abcd...', dGudd3)
+        Rterm2 = jnp.einsum('apc..., pbd... -> abcd...', 
                         self["s_Gamma_udd3"], self["s_Gamma_udd3"])
-        Rterm3 = np.einsum('apd..., pbc... -> abcd...', 
+        Rterm3 = jnp.einsum('apd..., pbc... -> abcd...', 
                             self["s_Gamma_udd3"], self["s_Gamma_udd3"])
         return Rterm0 - Rterm1 + Rterm2 - Rterm3
     
     def s_Riemann_down3(self):
-        return np.einsum('abcd..., ai... -> ibcd...', 
+        return jnp.einsum('abcd..., ai... -> ibcd...', 
                          self["s_Riemann_uddd3"], self["gammadown3"])
     
     def s_Ricci_down3(self):
         if "s_Riemann_down3" in self.data.keys():
-            return np.einsum('abcd..., ac... -> bd...', 
+            return jnp.einsum('abcd..., ac... -> bd...', 
                              self["s_Riemann_down3"], self["gammaup3"])
         else:
-            Rterm0 = np.array([[self.fd.d3x(self["s_Gamma_udd3"][0, j, k])
+            Rterm0 = jnp.array([[self.fd.d3x(self["s_Gamma_udd3"][0, j, k])
                                 + self.fd.d3y(self["s_Gamma_udd3"][1, j, k])
                                 + self.fd.d3z(self["s_Gamma_udd3"][2, j, k]) 
                                 for k in range(3)] 
                             for j in range(3)])  # = partial_i Gamma^{i}_{jk}
-            Gd3 = np.einsum('iik... -> k...', self["s_Gamma_udd3"])
-            Rterm1 = np.array([self.fd.d3_scalar(Gd3[j]) for j in range(3)])
-            Rterm2 = np.einsum('iip..., pjk... -> jk...', 
+            Gd3 = jnp.einsum('iik... -> k...', self["s_Gamma_udd3"])
+            Rterm1 = jnp.array([self.fd.d3_scalar(Gd3[j]) for j in range(3)])
+            Rterm2 = jnp.einsum('iip..., pjk... -> jk...', 
                             self["s_Gamma_udd3"], self["s_Gamma_udd3"])
-            Rterm3 = np.einsum('ijp..., pik... -> jk...', 
+            Rterm3 = jnp.einsum('ijp..., pik... -> jk...', 
                             self["s_Gamma_udd3"], self["s_Gamma_udd3"])
             return Rterm0 - Rterm1 + Rterm2 - Rterm3   #R_{jk}
     
@@ -1015,10 +1017,10 @@ class AurelCore():
     def st_Gamma_udd4(self):
         # Repeated calculations
         dalpha = self.fd.d3_scalar(self["alpha"])
-        betadalpha = np.einsum('m..., m... -> ...', self["betaup3"], dalpha)
-        betaK = np.einsum('m..., mn... -> n...', 
+        betadalpha = jnp.einsum('m..., m... -> ...', self["betaup3"], dalpha)
+        betaK = jnp.einsum('m..., mn... -> n...', 
                           self["betaup3"], self["Kdown3"])
-        betabetaK = np.einsum('m..., n... -> ...', self["betaup3"], betaK)
+        betabetaK = jnp.einsum('m..., n... -> ...', self["betaup3"], betaK)
         dbeta = self.s_covd(self["betaup3"], 'u')
 
         # time part of index up
@@ -1027,7 +1029,7 @@ class AurelCore():
             self["alpha"])
         Gtti = maths.safe_division(dalpha - betaK, self["alpha"])
         Gtij = maths.safe_division(- self["Kdown3"], self["alpha"])
-        Gt = np.array(
+        Gt = jnp.array(
             [[Gttt, Gtti[0], Gtti[1], Gtti[2]],
             [Gtti[0], Gtij[0,0], Gtij[0,1], Gtij[0,2]],
             [Gtti[1], Gtij[1,0], Gtij[1,1], Gtij[1,2]],
@@ -1035,87 +1037,90 @@ class AurelCore():
 
         # space part of index up
         Gltt = (
-            np.einsum('lm..., m... -> l...', 
+            jnp.einsum('lm..., m... -> l...', 
                     self["gammaup3"], 
                     self["alpha"] * dalpha - 2 * self["alpha"]*betaK)
             - self["betaup3"] * Gttt 
             + self["dtbetaup3"]
-            + np.einsum('m..., ml...-> l...', self["betaup3"], dbeta))
+            + jnp.einsum('m..., ml...-> l...', self["betaup3"], dbeta))
         Glmt = (
-            np.einsum('l..., m...-> lm...', -self["betaup3"], Gtti)
-            - self["alpha"] * np.einsum('ln..., nm... -> lm...', 
+            jnp.einsum('l..., m...-> lm...', -self["betaup3"], Gtti)
+            - self["alpha"] * jnp.einsum('ln..., nm... -> lm...', 
                                     self["gammaup3"], 
                                     self["Kdown3"])
             + dbeta)
         Glij = (
             self["s_Gamma_udd3"] 
             + maths.safe_division(
-                np.einsum(
+                jnp.einsum(
                     'l..., ij... -> lij...', self["betaup3"], self["Kdown3"]), 
                     self["alpha"]))
-        Gl = np.array(
+        Gl = jnp.array(
             [[Gltt, Glmt[:,0], Glmt[:,1], Glmt[:,2]], 
             [Glmt[:,0], Glij[:,0,0], Glij[:,0,1], Glij[:,0,2]],
             [Glmt[:,1], Glij[:,1,0], Glij[:,1,1], Glij[:,1,2]],
             [Glmt[:,2], Glij[:,2,0], Glij[:,2,1], Glij[:,2,2]]])
-        return np.array([Gt, Gl[:,:,0], Gl[:,:,1], Gl[:,:,2]])
+        return jnp.array([Gt, Gl[:,:,0], Gl[:,:,1], Gl[:,:,2]])
     
     def st_Riemann_uddd4(self):
-        return np.einsum('abcd..., ai... -> ibcd...',
+        return jnp.einsum('abcd..., ai... -> ibcd...',
                          self["st_Riemann_down4"], self["gup4"])
     
     def st_Riemann_down4(self):
         # Riemann_ssss : Gauss equation, eq 2.38 in Shibata
         Riemann_ssss = (self["s_Riemann_down3"]
-                        + np.einsum('ac..., bd... -> abcd...', 
+                        + jnp.einsum('ac..., bd... -> abcd...', 
                                     self["Kdown3"], self["Kdown3"])
-                        - np.einsum('ad..., bc... -> abcd...', 
+                        - jnp.einsum('ad..., bc... -> abcd...', 
                                     self["Kdown3"], self["Kdown3"]))
         # Riemann_ssst : Codazzi equation, eq 2.41 in Shibata
         dKdown = self.s_covd(self["Kdown3"], 'dd')
         Riemann_ssst = (
-            np.einsum('ijkl..., l... -> ijk...', Riemann_ssss, self["betaup3"])
-            + self["alpha"] * (np.einsum('jik... -> ijk...', dKdown) - dKdown))
+            jnp.einsum('ijkl..., l... -> ijk...', 
+                       Riemann_ssss, self["betaup3"])
+            + self["alpha"] * (jnp.einsum('jik... -> ijk...', dKdown) 
+                               - dKdown))
             
         # Riemann_stst: the Mainardi equation, eq 2.56 in Shibata
         Kdown4 = self.s_to_st(self["Kdown3"])
         Riemann_stst = (
-            np.einsum('jki..., k... -> ij...', Riemann_ssst, self["betaup3"])
-            + np.einsum('ikj..., k... -> ij...', Riemann_ssst, self["betaup3"])
-            + np.einsum('ikjl..., k..., l... -> ij...', 
+            jnp.einsum('jki..., k... -> ij...', Riemann_ssst, self["betaup3"])
+            + jnp.einsum('ikj..., k... -> ij...', 
+                         Riemann_ssst, self["betaup3"])
+            + jnp.einsum('ikjl..., k..., l... -> ij...', 
                         Riemann_ssss, self["betaup3"], self["betaup3"])
         + self["alpha"]**2 * (
             self["s_Ricci_down3"]
             - self["st_Ricci_down3"]
-            - np.einsum('ib..., ja..., ab... -> ij...', 
+            - jnp.einsum('ib..., ja..., ab... -> ij...', 
                         Kdown4, Kdown4, self["gup4"])[1:,1:]
-            + self["Kdown3"] * np.einsum('ab..., ab... -> ...', 
+            + self["Kdown3"] * jnp.einsum('ab..., ab... -> ...', 
                                         self["Kdown3"], self["gammaup3"])))
             
         # put it all together
-        Riemann4down4 = np.zeros(
+        R = jnp.zeros(
             (4, 4, 4, 4, self.param['Nx'], self.param['Ny'], self.param['Nz']))
         # Riemann_ssss part
-        Riemann4down4[1:4, 1:4, 1:4, 1:4] = Riemann_ssss
+        R = R.at[1:4, 1:4, 1:4, 1:4].set(Riemann_ssss)
         # Riemann_ssst part
         for i in range(1, 4):
             for j in range(1, 4):
                 for k in range(1, 4):
-                    Riemann4down4[i, j, k, 0] = Riemann_ssst[i-1, j-1, k-1]
-                    Riemann4down4[i, j, 0, k] = -Riemann_ssst[i-1, j-1, k-1]
-                    Riemann4down4[k, 0, i, j] = Riemann_ssst[i-1, j-1, k-1]
-                    Riemann4down4[0, k, i, j] = -Riemann_ssst[i-1, j-1, k-1]
+                    R = R.at[i, j, k, 0].set(Riemann_ssst[i-1, j-1, k-1])
+                    R = R.at[i, j, 0, k].set(-Riemann_ssst[i-1, j-1, k-1])
+                    R = R.at[k, 0, i, j].set(Riemann_ssst[i-1, j-1, k-1])
+                    R = R.at[0, k, i, j].set(-Riemann_ssst[i-1, j-1, k-1])
         # Riemann_stst part
-        Riemann4down4[1:4, 0, 1:4, 0] = Riemann_stst
-        Riemann4down4[1:4, 0, 0, 1:4] = - Riemann_stst
-        Riemann4down4[0, 1:4, 0, 1:4] = Riemann_stst
-        Riemann4down4[0, 1:4, 1:4, 0] = - Riemann_stst
+        R = R.at[1:4, 0, 1:4, 0].set(Riemann_stst)
+        R = R.at[1:4, 0, 0, 1:4].set(- Riemann_stst)
+        R = R.at[0, 1:4, 0, 1:4].set(Riemann_stst)
+        R = R.at[0, 1:4, 1:4, 0].set(- Riemann_stst)
 
         # remaining terms are all zero
-        return Riemann4down4
+        return R
     
     def st_Riemann_uudd4(self):
-        return np.einsum('abcd..., ae..., bf... -> efcd...', 
+        return jnp.einsum('abcd..., ae..., bf... -> efcd...', 
                          self["st_Riemann_down4"], self["gup4"], self["gup4"])
     
     def st_Ricci_down4(self):
@@ -1126,7 +1131,7 @@ class AurelCore():
                self["Tdown4"]
                 - 0.5 * self.trace4(self["Tdown4"]) * self["gdown4"]))
         else:
-            return np.einsum('abad... -> bd...', self["st_Riemann_uddd4"])
+            return jnp.einsum('abad... -> bd...', self["st_Riemann_uddd4"])
     
     def st_Ricci_down3(self):
         if "st_Ricci_down4" in self.data.keys():
@@ -1142,7 +1147,7 @@ class AurelCore():
         return self.trace4(self["st_Ricci_down4"])
     
     def Kretschmann(self):
-        return np.einsum(
+        return jnp.einsum(
             'abcd..., cdab... -> ...', 
             self["st_Riemann_uudd4"], self["st_Riemann_uudd4"])
     
@@ -1150,53 +1155,53 @@ class AurelCore():
     def Hamiltonian(self):
         return (self["s_RicciS"] 
                 + self["Ktrace"]**2 
-                - np.einsum('ij..., ij... -> ...', 
+                - jnp.einsum('ij..., ij... -> ...', 
                             self["Kdown3"], self["Kup3"])
                 - 2 * self.kappa * self["rho_n"] 
                 - 2 * self.Lambda)
     
     def Hamiltonian_Escale(self):
-        return np.sqrt(abs(
+        return jnp.sqrt(abs(
             self["s_RicciS"]**2 
             + self["Ktrace"]**4 
-            + np.einsum('ij..., ij... -> ...', 
+            + jnp.einsum('ij..., ij... -> ...', 
                         self["Kdown3"], self["Kup3"])**2 
             + (2 * self.kappa * self["rho_n"])**2 
             + (2 * self.Lambda)**2))
     
     def Momentumup3(self):
         if "Momentumx" in self.data.keys():
-            return np.array(
+            return jnp.array(
                 [self["Momentumx"], self["Momentumy"], self["Momentumz"]]) 
         else:
             CovD_term = self.s_covd(
                 self["Kup3"] - self["gammaup3"] * self["Ktrace"], 'uu')
-            return (np.einsum('bab... -> a...', CovD_term) 
+            return (jnp.einsum('bab... -> a...', CovD_term) 
                     - self.kappa * self["fluxup3_n"])
     
     def Momentum_Escale(self):
         DdKdd = self.s_covd(self["Kdown3"], 'dd')
 
-        DKd = np.einsum('ab..., abc... -> c...', self["gammaup3"], DdKdd)
-        DdK = np.einsum('bc..., abc... -> a...', self["gammaup3"], DdKdd)
-        DKd2 = np.einsum('a..., ad..., d... -> ...', 
+        DKd = jnp.einsum('ab..., abc... -> c...', self["gammaup3"], DdKdd)
+        DdK = jnp.einsum('bc..., abc... -> a...', self["gammaup3"], DdKdd)
+        DKd2 = jnp.einsum('a..., ad..., d... -> ...', 
                          DKd, self["gammaup3"], DKd)
-        DdK2 = np.einsum('a..., ad..., d... -> ...', 
+        DdK2 = jnp.einsum('a..., ad..., d... -> ...', 
                          DdK, self["gammaup3"], DdK)
         Eflux2 = ((self.kappa**2)
-                  * np.einsum('a..., a... -> ...', 
+                  * jnp.einsum('a..., a... -> ...', 
                               self["fluxup3_n"], self["fluxdown3_n"]))
-        return np.sqrt(abs(DKd2 + DdK2 + Eflux2))
+        return jnp.sqrt(abs(DKd2 + DdK2 + Eflux2))
     
     # === Gravito-electromagnetism quantities
     def st_Weyl_down4(self): 
         if "st_Riemann_down4" in self.data.keys():
-            Cdown = np.zeros(np.shape(self["st_Riemann_down4"]))
+            Cdown = jnp.zeros(jnp.shape(self["st_Riemann_down4"]))
             for a in range(4):
                 for b in range(4):
                     for c in range(4):
                         for d in range(4):
-                            Cdown[a,b,c,d] = (
+                            Cdown = Cdown.at[a,b,c,d].set(
             self["st_Riemann_down4"][a,b,c,d]
             - 0.5 * (self["gdown4"][a,c] * self["st_Ricci_down4"][d,b]
                        - self["gdown4"][a,d] * self["st_Ricci_down4"][c,b]
@@ -1210,58 +1215,58 @@ class AurelCore():
             Endown4 = self.s_to_st(self["eweyl_n_down3"])
             Bndown4 = self.s_to_st(self["bweyl_n_down3"])
             ldown4 = (self["gdown4"] 
-                      + 2.0 * np.einsum('a..., b... -> ab...',
+                      + 2.0 * jnp.einsum('a..., b... -> ab...',
                                         self["ndown4"], self["ndown4"]))
-            LCudd4 = np.einsum('ec..., d..., dcab... -> eab...', self["gup4"], 
+            LCudd4 = jnp.einsum('ec..., d..., dcab... -> eab...', self["gup4"], 
                             self["nup4"], self.levicivita_down4())
                 
-            Cdown4 = (np.einsum('ac..., db... -> abcd...', ldown4, Endown4)
-                    - np.einsum('ad..., cb... -> abcd...', ldown4, Endown4))
-            Cdown4 -= (np.einsum('bc..., da... -> abcd...', ldown4, Endown4)
-                    - np.einsum('bd..., ca... -> abcd...', ldown4, Endown4))
-            Cdown4 -= np.einsum('cde..., eab... -> abcd...',
-                                (np.einsum('c..., de... -> cde...',
+            Cdown4 = (jnp.einsum('ac..., db... -> abcd...', ldown4, Endown4)
+                    - jnp.einsum('ad..., cb... -> abcd...', ldown4, Endown4))
+            Cdown4 -= (jnp.einsum('bc..., da... -> abcd...', ldown4, Endown4)
+                    - jnp.einsum('bd..., ca... -> abcd...', ldown4, Endown4))
+            Cdown4 -= jnp.einsum('cde..., eab... -> abcd...',
+                                (jnp.einsum('c..., de... -> cde...',
                                         self["ndown4"], Bndown4)
-                                - np.einsum('d..., ce... -> cde...',
+                                - jnp.einsum('d..., ce... -> cde...',
                                             self["ndown4"], Bndown4)), LCudd4)
-            Cdown4 -= np.einsum('abe..., ecd... -> abcd...', 
-                                (np.einsum('a..., be... -> abe...', 
+            Cdown4 -= jnp.einsum('abe..., ecd... -> abcd...', 
+                                (jnp.einsum('a..., be... -> abe...', 
                                         self["ndown4"], Bndown4) 
-                                - np.einsum('b..., ae... -> abe...', 
+                                - jnp.einsum('b..., ae... -> abe...', 
                                             self["ndown4"], Bndown4)), LCudd4)
             return Cdown4
                    
     def Weyl_Psi(self):
         lup4, kup4, mup4, mbup4 = self.null_vector_base()
-        psi0 = np.einsum('abcd..., a..., b..., c..., d... -> ...', 
+        psi0 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
                          self["st_Weyl_down4"], kup4, mup4, kup4, mup4)
-        psi1 = np.einsum('abcd..., a..., b..., c..., d... -> ...', 
+        psi1 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
                          self["st_Weyl_down4"], kup4, lup4, kup4, mup4)
-        psi2 = np.einsum('abcd..., a..., b..., c..., d... -> ...', 
+        psi2 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
                          self["st_Weyl_down4"], kup4, mup4, mbup4, lup4)
-        psi3 = np.einsum('abcd..., a..., b..., c..., d... -> ...', 
+        psi3 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
                          self["st_Weyl_down4"], kup4, lup4, mbup4, lup4)
-        psi4 = np.einsum('abcd..., a..., b..., c..., d... -> ...', 
+        psi4 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
                          self["st_Weyl_down4"], mbup4, lup4, mbup4, lup4)
 
         # As these are then used to compute the invariant scalars, here I check 
         # if psi4 = 0 while psi0 =/= 0.  If it is the case I need to switch
         # psi0 and psi4 as well as psi1 and psi3 so I do that here.
-        mask = np.where(np.logical_and(abs(psi4) < 1e-5, abs(psi0) > 1e-5))
+        mask = jnp.where(jnp.logical_and(abs(psi4) < 1e-5, abs(psi0) > 1e-5))
         psi0new = psi0
-        psi0new[mask] = psi4[mask]
-        psi4[mask] = psi0[mask]
+        psi0new = psi0new.at[mask].set(psi4[mask])
+        psi4 = psi4.at[mask].set(psi0[mask])
         psi0 = psi0new
         psi1new = psi1
-        psi1new[mask] = psi3[mask]
-        psi3[mask] = psi1[mask]
+        psi1new = psi1new.at[mask].set(psi3[mask])
+        psi3 = psi3.at[mask].set(psi1[mask])
         psi1 = psi1new
         return [psi0, psi1, psi2, psi3, psi4]
     
     def Weyl_invariants(self):
         Psis = self["Weyl_Psi"]
         I_inv = Psis[0]*Psis[4] - 4*Psis[1]*Psis[3] + 3*Psis[2]*Psis[2]
-        J_inv = maths.determinant3(np.array([[Psis[4], Psis[3], Psis[2]], 
+        J_inv = maths.determinant3(jnp.array([[Psis[4], Psis[3], Psis[2]], 
                                        [Psis[3], Psis[2], Psis[1]], 
                                        [Psis[2], Psis[1], Psis[0]]]))
         L_inv = Psis[2]*Psis[4] - (Psis[3]**2)
@@ -1272,25 +1277,25 @@ class AurelCore():
         return {'I': I_inv, 'J': J_inv, 'L': L_inv, 'K': K_inv, 'N': N_inv}
     
     def eweyl_u_down4(self):
-        return np.einsum(
+        return jnp.einsum(
             'b..., d..., abcd... -> ac...', 
             self["uup4"], self["uup4"], self["st_Weyl_down4"])
     
     def eweyl_n_down3(self):
         # 1st compute K terms
-        Kmixed3 = np.einsum('ij..., jk... -> ik...', 
+        Kmixed3 = jnp.einsum('ij..., jk... -> ik...', 
                             self["gammaup3"], self["Kdown3"])
-        KKterm = np.einsum('im..., mj... -> ij...', self["Kdown3"], Kmixed3)
-        KKtermH = np.einsum('ij..., ji... -> ...', Kmixed3, Kmixed3)
+        KKterm = jnp.einsum('im..., mj... -> ij...', self["Kdown3"], Kmixed3)
+        KKtermH = jnp.einsum('ij..., ji... -> ...', Kmixed3, Kmixed3)
         del Kmixed3
             
         # 2nd compute S terrms
         # TODO: make this more efficient
-        gmixed4 = np.einsum('ab..., bc... -> ac...', 
+        gmixed4 = jnp.einsum('ab..., bc... -> ac...', 
                             self["gup4"], self["gdown4"])
-        gammamixed4 = gmixed4 + np.einsum('a..., c... -> ac...',
+        gammamixed4 = gmixed4 + jnp.einsum('a..., c... -> ac...',
                                         self["ndown4"], self["nup4"])
-        Sdown3 = np.einsum('ca..., db..., cd... -> ab...', 
+        Sdown3 = jnp.einsum('ca..., db..., cd... -> ab...', 
                         gammamixed4, gammamixed4, self["Tdown4"])[1:,1:]
         del gmixed4, gammamixed4
             
@@ -1308,27 +1313,27 @@ class AurelCore():
                 - (1/3) * self["gammadown3"] * self["Stresstrace_n"]))
     
     def bweyl_u_down4(self):
-        LCuudd4 = np.einsum(
+        LCuudd4 = jnp.einsum(
             'ac..., bd..., abef... -> cdef...', 
             self["gup4"], self["gup4"], self.levicivita_down4())
-        return 0.5 * np.einsum(
+        return 0.5 * jnp.einsum(
             'b..., f..., abcd..., cdef... -> ae...', 
             self["uup4"], self["uup4"], self["st_Weyl_down4"], LCuudd4)
     
     def bweyl_n_down3(self):
-        LCuud3 = np.einsum('ae..., bf..., d..., defc... -> abc...', 
+        LCuud3 = jnp.einsum('ae..., bf..., d..., defc... -> abc...', 
                         self["gup4"], self["gup4"], self["nup4"], 
                         self.levicivita_down4())[1:, 1:, 1:]
             
         dKdown = self.s_covd(self["Kdown3"], 'dd')
-        Bterm1 = np.einsum('cdb..., cda... -> ab...', LCuud3, dKdown)
+        Bterm1 = jnp.einsum('cdb..., cda... -> ab...', LCuud3, dKdown)
 
-        Kmixed3 = np.einsum('ij..., jk... -> ik...', 
+        Kmixed3 = jnp.einsum('ij..., jk... -> ik...', 
                             self["gammaup3"], self["Kdown3"])
         Bterm2K = (self.s_covd(self["Ktrace"], '') 
-                - np.einsum('ccb... -> b...', 
+                - jnp.einsum('ccb... -> b...', 
                             self.s_covd(Kmixed3, 'ud')))
-        Bterm2 = 0.5 * np.einsum('cdb..., ac..., d... -> ab...', LCuud3, 
+        Bterm2 = 0.5 * jnp.einsum('cdb..., ac..., d... -> ab...', LCuud3, 
                         self["gammadown3"], Bterm2K)
             
         return Bterm1 + Bterm2
@@ -1351,7 +1356,7 @@ class AurelCore():
         by M. Alcubierre page 295
         """
         e0up4, e1up4, e2up4, e3up4 = self.tetrad_base()
-        inverse_sqrt_2 = 1 / np.sqrt(2)
+        inverse_sqrt_2 = 1 / jnp.sqrt(2)
         kup4 = (e0up4 + e1up4) * inverse_sqrt_2
         lup4 = (e0up4 - e1up4) * inverse_sqrt_2
         mup4 = (e2up4 + 1j*e3up4) * inverse_sqrt_2
@@ -1387,12 +1392,12 @@ class AurelCore():
 
         """
         if self.tetrad_to_use == "quasi-Kinnersley":
-            v1 = np.array([-self.fd.y, self.fd.x, 
-                           np.zeros(np.shape(self.fd.x))])
-            v2 = np.array([self.fd.x, self.fd.y, self.fd.z])
-            LC = np.einsum('a..., abcd... -> bcd...', 
+            v1 = jnp.array([-self.fd.y, self.fd.x, 
+                           jnp.zeros(jnp.shape(self.fd.x))])
+            v2 = jnp.array([self.fd.x, self.fd.y, self.fd.z])
+            LC = jnp.einsum('a..., abcd... -> bcd...', 
                         self["nup4"], self.levicivita_down4())[1:,1:,1:]
-            v3 = np.sqrt(self["gammadet"]) * np.einsum(
+            v3 = jnp.sqrt(self["gammadet"]) * jnp.einsum(
                 'ad..., dbc..., b..., c... -> a...',
                 self["gammaup3"], LC, v1, v2)
 
@@ -1408,18 +1413,21 @@ class AurelCore():
 
             
             e0up4 = self["nup4"]
-            e1up4 = np.array([np.ones(self.data_shape), v2[0], v2[1], v2[2]])
-            e2up4 = np.array([np.zeros(self.data_shape), v3[0], v3[1], v3[2]])
-            e3up4 = np.array([np.zeros(self.data_shape), v1[0], v1[1], v1[2]])
+            e1up4 = jnp.array(
+                [jnp.ones(self.data_shape), v2[0], v2[1], v2[2]])
+            e2up4 = jnp.array(
+                [jnp.zeros(self.data_shape), v3[0], v3[1], v3[2]])
+            e3up4 = jnp.array(
+                [jnp.zeros(self.data_shape), v1[0], v1[1], v1[2]])
         else:
             # this is just an arbitrary orthonormal tetrad base
-            zeros = np.zeros(self.data_shape)
-            v1 = np.array([zeros, maths.safe_division(
-                1.0, np.sqrt(self["gdown4"][1,1])), zeros, zeros])
-            v2 = np.array([zeros, zeros, maths.safe_division(
-                1.0, np.sqrt(self["gdown4"][2,2])), zeros])
-            v3 = np.array([zeros, zeros, zeros, maths.safe_division(
-                1.0, np.sqrt(self["gdown4"][3,3]))])
+            zeros = jnp.zeros(self.data_shape)
+            v1 = jnp.array([zeros, maths.safe_division(
+                1.0, jnp.sqrt(self["gdown4"][1,1])), zeros, zeros])
+            v2 = jnp.array([zeros, zeros, maths.safe_division(
+                1.0, jnp.sqrt(self["gdown4"][2,2])), zeros])
+            v3 = jnp.array([zeros, zeros, zeros, maths.safe_division(
+                1.0, jnp.sqrt(self["gdown4"][3,3]))])
 
             e0up4 = self["uup4"]
             
@@ -1466,10 +1474,10 @@ class AurelCore():
         elif rank == 1:
             df = self.fd.d3_rank1tensor(f)
             if indexing == 'u':
-                G1 = np.einsum('abc..., b... -> ca...', 
+                G1 = jnp.einsum('abc..., b... -> ca...', 
                                self["s_Gamma_udd3"], f)
             elif indexing == 'd':
-                G1 = - np.einsum('abc..., a... -> bc...', 
+                G1 = - jnp.einsum('abc..., a... -> bc...', 
                                  self["s_Gamma_udd3"], f)
             else:
                 raise ValueError(f"Field if of rank {rank} so indexing"
@@ -1478,24 +1486,24 @@ class AurelCore():
         elif rank ==2:
             df = self.fd.d3_rank2tensor(f)
             if indexing == 'uu':
-                G1 = np.einsum('acd..., db... -> cab...', 
+                G1 = jnp.einsum('acd..., db... -> cab...', 
                                self["s_Gamma_udd3"], f)
-                G2 = np.einsum('bcd..., ad... -> cab...', 
+                G2 = jnp.einsum('bcd..., ad... -> cab...', 
                                self["s_Gamma_udd3"], f)
             elif indexing == 'dd':
-                G1 = - np.einsum('dca..., db... -> cab...', 
+                G1 = - jnp.einsum('dca..., db... -> cab...', 
                                  self["s_Gamma_udd3"], f)
-                G2 = - np.einsum('dcb..., ad... -> cab...', 
+                G2 = - jnp.einsum('dcb..., ad... -> cab...', 
                                  self["s_Gamma_udd3"], f)
             elif indexing == 'ud':
-                G1 = np.einsum('acd..., db... -> cab...', 
+                G1 = jnp.einsum('acd..., db... -> cab...', 
                                self["s_Gamma_udd3"], f)
-                G2 = - np.einsum('dcb..., ad... -> cab...', 
+                G2 = - jnp.einsum('dcb..., ad... -> cab...', 
                                  self["s_Gamma_udd3"], f)
             elif indexing == 'du':
-                G1 = - np.einsum('dca..., db... -> cab...', 
+                G1 = - jnp.einsum('dca..., db... -> cab...', 
                                  self["s_Gamma_udd3"], f)
-                G2 = np.einsum('bcd..., ad... -> cab...', 
+                G2 = jnp.einsum('bcd..., ad... -> cab...', 
                                self["s_Gamma_udd3"], f)
             else:
                 raise ValueError(f"Field if of rank {rank} so indexing"
@@ -1527,15 +1535,15 @@ class AurelCore():
         """
         rank = len(indexing)
         if rank == 0:
-            covd = np.append(np.array([dtf]), self.fd.d3_scalar(f), axis = 0)
+            covd = jnp.append(jnp.array([dtf]), self.fd.d3_scalar(f), axis = 0)
         elif rank == 1:
-            df = np.append(np.array([dtf]), self.fd.d3_rank1tensor(f), 
+            df = jnp.append(jnp.array([dtf]), self.fd.d3_rank1tensor(f), 
                            axis = 0)
             if indexing == 'd':
-                G1 = np.einsum('abc..., b... -> ca...', 
+                G1 = jnp.einsum('abc..., b... -> ca...', 
                                self["st_Gamma_udd4"], f)
             elif indexing == 'u':
-                G1 = - np.einsum('abc..., a... -> bc...', 
+                G1 = - jnp.einsum('abc..., a... -> bc...', 
                                  self["st_Gamma_udd4"], f)
             else:
                 raise ValueError(f"Field if of rank {rank} so indexing"+
@@ -1564,15 +1572,15 @@ class AurelCore():
         """
         covd = self.s_covd(f, indexing)
         if indexing == 'u':
-            return np.einsum('aa... -> ...', covd)
+            return jnp.einsum('aa... -> ...', covd)
         elif indexing == 'd':
-            return np.einsum('ab..., ab... -> ...', self["gammaup3"], covd)
+            return jnp.einsum('ab..., ab... -> ...', self["gammaup3"], covd)
         elif indexing == 'uu' or indexing == 'ud':
-            return np.einsum('aab... -> b...', covd)
+            return jnp.einsum('aab... -> b...', covd)
         elif indexing == 'du':
-            return np.einsum('aba... -> b...', covd)
+            return jnp.einsum('aba... -> b...', covd)
         elif indexing == 'dd':
-            return np.einsum('ab..., abc... -> c...', self["gammaup3"], covd)
+            return jnp.einsum('ab..., abc... -> c...', self["gammaup3"], covd)
         else:
             raise ValueError(f"Don't know how to compute divergence of tensor"+
                              + f" with indices {indexing}")
@@ -1593,11 +1601,11 @@ class AurelCore():
         """
         covd = self.s_covd(fdown3, indexing)
         if indexing == 'dd':
-            LCuud3 = np.einsum('ae..., bf..., d..., defc... -> abc...', 
+            LCuud3 = jnp.einsum('ae..., bf..., d..., defc... -> abc...', 
                             self["gup4"], self["gup4"], self["nup4"], 
                             self.levicivita_down4())[1:, 1:, 1:]
             curl = maths.symmetrise_tensor(
-                np.einsum('cda..., cbd... -> ab...', 
+                jnp.einsum('cda..., cbd... -> ab...', 
                           LCuud3, covd))
         else:
             raise ValueError(f"Don't know how to compute curl of tensor"+
@@ -1630,10 +1638,10 @@ class AurelCore():
         $K^{\alpha\beta}$. 
         So this function only applied to those three tensors.
         """
-        f00 = np.einsum('i..., j..., ij... -> ...', 
+        f00 = jnp.einsum('i..., j..., ij... -> ...', 
                         self["betaup3"], self["betaup3"], fdown3)
-        f0k = np.einsum('i..., ik... -> k...', self["betaup3"], fdown3)
-        fdown4 = np.array([[f00, f0k[0], f0k[1], f0k[2]],
+        f0k = jnp.einsum('i..., ik... -> k...', self["betaup3"], fdown3)
+        fdown4 = jnp.array([[f00, f0k[0], f0k[1], f0k[2]],
                            [f0k[0], fdown3[0, 0], fdown3[0, 1], fdown3[0, 2]],
                            [f0k[1], fdown3[1, 0], fdown3[1, 1], fdown3[1, 2]],
                            [f0k[2], fdown3[2, 0], fdown3[2, 1], fdown3[2, 2]]])
@@ -1641,75 +1649,75 @@ class AurelCore():
     
     def vector_inner_product4(self, a, b):
         """Inner product of rank 1 4D tensors with indices up."""
-        return np.einsum('a..., b..., ab... -> ...', 
+        return jnp.einsum('a..., b..., ab... -> ...', 
                          a, b, self["gdown4"])
     
     def vector_inner_product3(self, a, b):
         """Inner product of rank 1 3D tensors with indices up."""
-        return np.einsum('a..., b..., ab... -> ...', 
+        return jnp.einsum('a..., b..., ab... -> ...', 
                          a, b, self["gammadown3"])
 
     def trace4(self, fdown4):
         """Compute trace of a 4D rank 2 tensor."""
-        return np.einsum('jk..., jk... -> ...', 
+        return jnp.einsum('jk..., jk... -> ...', 
                          self["gup4"], fdown4)
 
     def trace3(self, fdown3):
         """Compute trace of a 3D rank 2 tensor."""
-        return np.einsum('jk..., jk... -> ...', 
+        return jnp.einsum('jk..., jk... -> ...', 
                          self["gammaup3"], fdown3)
     
     def magnitude4(self, fdown):
         """Compute magnitude of a 4D rank 2 tensor."""
-        return 0.5 * np.einsum(
+        return 0.5 * jnp.einsum(
             'ab..., ij..., ai..., bj... -> ...', 
             fdown, fdown,
             self["gup4"], self["gup4"])
     
     def magnitude3(self, fdown):
         """Compute magnitude of a 3D rank 2 tensor."""
-        return 0.5 * np.einsum(
+        return 0.5 * jnp.einsum(
             'ab..., ij..., ai..., bj... -> ...', 
             fdown, fdown,
             self["gammaup3"], self["gammaup3"])
     
     def norm4(self, a): 
         """Compute norm of a 4D rank 1 tensor."""
-        return np.sqrt(abs(self.vector_inner_product4(a, a)))
+        return jnp.sqrt(abs(self.vector_inner_product4(a, a)))
     
     def norm3(self, a): 
         """Compute norm of a 3D rank 1 tensor."""
-        return np.sqrt(abs(self.vector_inner_product3(a, a)))
+        return jnp.sqrt(abs(self.vector_inner_product3(a, a)))
     
     def kronecker_delta4(self):
         """Compute Kronecker delta with 4 4D indices."""
-        kronecker = np.zeros(
+        kronecker = jnp.zeros(
             (4, 4, self.param['Nx'], self.param['Ny'], self.param['Nz']))
         for i in range(4):
-            kronecker[i, i] = 1.0
+            kronecker = kronecker.at[i, i].set(1.0)
         return kronecker
     
     def kronecker_delta3(self):
         """Compute Kronecker delta with 3 3D indices."""
-        kronecker = np.zeros(
+        kronecker = jnp.zeros(
             (3, 3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
         for i in range(3):
-            kronecker[i, i] = 1.0
+            kronecker = kronecker.at[i, i].set(1.0)
         return kronecker
-    
+
     def levicivita_down4(self):
         """Compute Levi-Civita tensor with 4 4D indices down."""
         return (self.levicivita_symbol_down4() 
-                * np.sqrt(-self["gdet"]))
+                * jnp.sqrt(-self["gdet"]))
     
     def levicivita_down3(self):
         """Compute Levi-Civita tensor with 3 3D indices down."""
         return (self.levicivita_symbol_down3() 
-                * np.sqrt(self["gammadet"]))
+                * jnp.sqrt(self["gammadet"]))
 
     def levicivita_symbol_down4(self): 
         """Compute Levi-Civita symbol with 4 4D indices down."""
-        LC = np.zeros(
+        LC = jnp.zeros(
             (4, 4, 4, 4, self.param['Nx'], self.param['Ny'], self.param['Nz']))
         allindices = [0, 1, 2, 3]
         for i0 in allindices:
@@ -1720,12 +1728,12 @@ class AurelCore():
                                * (i2-i1) * (i3-i1) * (i3-i2))
                         bot = (abs(i1-i0) * abs(i2-i0) * abs(i3-i0)
                                * abs(i2-i1) * abs(i3-i1) * abs(i3-i2))
-                        LC[i0, i1, i2, i3, :, :, :] = float(top/bot)
+                        LC = LC.at[i0, i1, i2, i3, :, :, :].set(float(top/bot))
         return LC
 
     def levicivita_symbol_down3(self):
         """Compute Levi-Civita symbol with 3 3D indices down."""
-        LC = np.zeros(
+        LC = jnp.zeros(
             (3, 3, 3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
         allindices = [1, 2, 3]
         for i1 in allindices:
@@ -1733,7 +1741,7 @@ class AurelCore():
                 for i3 in np.delete(allindices, [i1-1, i2-1]):
                     top = ((i2-i1) * (i3-i1) * (i3-i2))
                     bot = (abs(i2-i1) * abs(i3-i1) * abs(i3-i2))
-                    LC[i1-1, i2-1, i3-1, :, :, :] = float(top/bot)
+                    LC = LC.at[i1-1, i2-1, i3-1, :, :, :].set(float(top/bot))
         return LC
 
 # Update __doc__ of the functions listed in descriptions

@@ -10,6 +10,7 @@ This module contains functions for manipulating rank 2 tensors, including:
 """
 
 import numpy as np
+import jax.numpy as jnp
            
 def getcomponents3(f):
     """Extract components of a rank 2 tensor with 3D indices.
@@ -27,10 +28,10 @@ def getcomponents3(f):
     """
     if isinstance(f, list):
         return f
-    elif isinstance(f, np.ndarray):
+    elif isinstance(f, np.ndarray) or isinstance(f, jnp.ndarray):
         return [f[0, 0], f[0, 1], f[0, 2], 
                 f[1, 1], f[1, 2], f[2, 2]]
-                                      
+
 def getcomponents4(f):
     """Extract components of a rank 2 tensor with 4D indices.
     
@@ -47,7 +48,7 @@ def getcomponents4(f):
     """
     if isinstance(f, list):
         return f
-    elif isinstance(f, np.ndarray):
+    elif isinstance(f, np.ndarray) or isinstance(f, jnp.ndarray):
         return [f[0, 0], f[0, 1], f[0, 2], f[0, 3], 
                 f[1, 1], f[1, 2], f[1, 3], 
                 f[2, 2], f[2, 3], f[3, 3]]
@@ -55,18 +56,18 @@ def getcomponents4(f):
 def format_rank2_3(f):
     """Format a rank 2 tensor with 3D indices into a 3x3 array."""
     xx, xy, xz, yy, yz, zz = getcomponents3(f)
-    farray = np.array([[xx, xy, xz], 
-                       [xy, yy, yz],
-                       [xz, yz, zz]])
+    farray = jnp.array([[xx, xy, xz], 
+                        [xy, yy, yz],
+                        [xz, yz, zz]])
     return farray
 
 def format_rank2_4(f):
     """Format a rank 2 tensor with 4D indices into a 4x4 array."""
     tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = getcomponents4(f)
-    farray = np.array([[tt, tx, ty, tz],
-                       [tx, xx, xy, xz], 
-                       [ty, xy, yy, yz],
-                       [tz, xz, yz, zz]])
+    farray = jnp.array([[tt, tx, ty, tz],
+                        [tx, xx, xy, xz], 
+                        [ty, xy, yy, yz],
+                        [tz, xz, yz, zz]])
     return farray
                    
 def determinant3(f):
@@ -87,15 +88,15 @@ def determinant4(f):
 def inverse3(f):
     """Inverse of a 3x3 matrice in every position of the data grid."""
     xx, xy, xz, yy, yz, zz = getcomponents3(f)
-    fup = np.array([[yy*zz - yz*yz, -(xy*zz - yz*xz), xy*yz - yy*xz], 
-                    [-(xy*zz - xz*yz), xx*zz - xz*xz, -(xx*yz - xy*xz)],
-                    [xy*yz - xz*yy, -(xx*yz - xz*xy), xx*yy - xy*xy]])
+    fup = jnp.array([[yy*zz - yz*yz, -(xy*zz - yz*xz), xy*yz - yy*xz], 
+                     [-(xy*zz - xz*yz), xx*zz - xz*xz, -(xx*yz - xy*xz)],
+                     [xy*yz - xz*yy, -(xx*yz - xz*xy), xx*yy - xy*xy]])
     return safe_division(fup, determinant3(f))
                    
 def inverse4(f):
     """Inverse of a 4x4 matrice in every position of the data grid."""
     tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = getcomponents4(f)
-    fup = np.array([
+    fup = jnp.array([
         [-xz*xz*yy + 2*xy*xz*yz - xx*yz*yz - xy*xy*zz + xx*yy*zz, 
          tz*xz*yy - tz*xy*yz - ty*xz*yz + tx*yz*yz + ty*xy*zz - tx*yy*zz, 
          -tz*xy*xz + ty*xz*xz + tz*xx*yz - tx*xz*yz - ty*xx*zz + tx*xy*zz, 
@@ -116,11 +117,11 @@ def inverse4(f):
     
 def symmetrise_tensor(fdown):
     """Symmetrise a rank 2 tensor."""
-    return (fdown + np.einsum('ab... -> ba...', fdown)) * 0.5
+    return (fdown + jnp.einsum('ab... -> ba...', fdown)) * 0.5
     
 def antisymmetrise_tensor(fdown):
     """Antisymmetrise a rank 2 tensor."""
-    return (fdown - np.einsum('ab... -> ba...', fdown)) * 0.5
+    return (fdown - jnp.einsum('ab... -> ba...', fdown)) * 0.5
 
 def safe_division(a, b):
     """Safe division to avoid division by zero, so x/0 = 0."""
@@ -132,6 +133,11 @@ def safe_division(a, b):
             a = a.astype(np.float32)
         elif a.dtype == np.int64:
             a = a.astype(np.float64)
+    elif isinstance(a, jnp.ndarray):
+        if a.dtype == jnp.int32:
+            a = a.astype(jnp.float32)
+        elif a.dtype == jnp.int64:
+            a = a.astype(jnp.float64)
     if isinstance(b, int):
         b = b*1.0
     elif isinstance(b, np.ndarray):
@@ -139,20 +145,27 @@ def safe_division(a, b):
             b = b.astype(np.float32)
         elif b.dtype == np.int64:
             b = b.astype(np.float64)
+    elif isinstance(b, jnp.ndarray):
+        if b.dtype == jnp.int32:
+            b = b.astype(jnp.float32)
+        elif b.dtype == jnp.int64:
+            b = b.astype(jnp.float64)
+
+    if isinstance(a, jnp.ndarray) or isinstance(b, jnp.ndarray):
+        a = jnp.asarray(a)
+        b = jnp.asarray(b)
 
     # now divide
     if isinstance(b, float):
         if isinstance(a, float):
             c = 0.0 if b==0 else a/b
-        else:
+        elif isinstance(a, np.ndarray):
             c = np.zeros_like(a) if b==0 else a/b
-    else:
-        if isinstance(a, float):
-            c = np.divide(a, b, out=np.zeros_like(b), where=b!=0)
         else:
-            if len(np.shape(a)) >= len(np.shape(b)):
-                c = np.divide(a, b, out=np.zeros_like(a), where=b!=0)
-            else:
-                c = np.divide(a, b, out=np.zeros_like(b), where=b!=0)
+            c = jnp.zeros_like(a) if b==0 else a/b
+    elif isinstance(b, np.ndarray):
+        c = np.where(b != 0, a / b, 0.0)
+    else:
+        c = jnp.where(b != 0, a / b, 0.0)
     return c
     
