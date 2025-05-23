@@ -1,0 +1,9 @@
+sympy
+numpy
+matplotlib
+h5py
+scipy
+glob2
+ipython
+jax
+jaxlib
