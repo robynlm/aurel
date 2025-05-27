@@ -1,0 +1,180 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advice &mdash; aurel May 2025 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d170800"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="aurel.solutions" href="solutions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aurel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="core.html">aurel.core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="finitedifference.html">aurel.finitedifference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths.html">aurel.maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="numerical.html">aurel.numerical</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reading.html">aurel.reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solutions.html">aurel.solutions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Advice</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#working-on-an-hpc">Working on an HPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parallelisation">Parallelisation</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aurel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Advice</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/advice.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="advice">
+<h1>Advice<a class="headerlink" href="#advice" title="Link to this heading"></a></h1>
+<section id="working-on-an-hpc">
+<h2>Working on an HPC<a class="headerlink" href="#working-on-an-hpc" title="Link to this heading"></a></h2>
+<p>While HPCs won’t let you install packages globally, you can still use aurel.
+You just need to create a virtual environment and install aurel there.</p>
+<ul class="simple">
+<li><p>Create a virtual environment</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/myenv
+<span class="nb">source</span><span class="w"> </span>~/myenv/bin/activate
+pip<span class="w"> </span>install<span class="w"> </span>aurel
+</pre></div>
+</div>
+<p>and install any other packages you may use.</p>
+<ul class="simple">
+<li><p>If you want to use aurel in a <strong>jupyter notebook</strong>, add your virtual environment as a Jupyter kernel</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>ipykernel
+python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>myenv<span class="w"> </span>--display-name<span class="w"> </span><span class="s2">&quot;Python (myenv)&quot;</span>
+</pre></div>
+</div>
+<p>then select <cite>Python (myenv)</cite> for your kernel and then in your notebook you can have</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If you want to use aurel in a <strong>python script</strong>, before running it, activate the environment</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>~/myenv/bin/activate
+python<span class="w"> </span>myscript.py
+</pre></div>
+</div>
+<p>then in your python script you can have</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
+</pre></div>
+</div>
+</section>
+<section id="parallelisation">
+<h2>Parallelisation<a class="headerlink" href="#parallelisation" title="Link to this heading"></a></h2>
+<p>Aurel uses JAX for vectorisation, JIT compilation and parallelisation.
+See the <a class="reference external" href="https://docs.jax.dev/en/latest/user_guides.html#user-guides">JAX documentation</a> for more information on how to use it.</p>
+<p>To accelerate things, make sure anything you pass to aurel is a JAX array.</p>
+<ul class="simple">
+<li><p>In a <strong>jupyter notebook</strong></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;jax_num_cpu_devices&#39;</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="c1"># Replace N with the number of threads you want to use</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">())</span> <span class="c1"># check the number of devices visible to jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
+</pre></div>
+</div>
+<p>All jax configuration options need to be set before importing aurel.</p>
+<ul class="simple">
+<li><p>In a <strong>python script</strong></p></li>
+</ul>
+<p>You can put the above in your python script, or before calling the script, put in the terminal or your executable:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">XLA_FLAGS</span><span class="o">=</span><span class="s2">&quot;--xla_cpu_multi_thread_eigen=true intra_op_parallelism_threads=N&quot;</span>
+</pre></div>
+</div>
+<p>Replace N with the number of threads you want to use.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="solutions.html" class="btn btn-neutral float-left" title="aurel.solutions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Robyn L. Munoz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

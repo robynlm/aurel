@@ -56,6 +56,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.mask_len"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.mask_len</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.cutoffmask"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.cutoffmask()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.cutoffmask2"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.cutoffmask2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3_rank1tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3_rank1tensor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3_rank2tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3_rank2tensor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3_scalar"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3_scalar()</span></code></a></li>
@@ -78,12 +79,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.fd8_backward"><code class="docutils literal notranslate"><span class="pre">fd8_backward()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.fd8_centered"><code class="docutils literal notranslate"><span class="pre">fd8_centered()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.fd8_forward"><code class="docutils literal notranslate"><span class="pre">fd8_forward()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.fd_map"><code class="docutils literal notranslate"><span class="pre">fd_map()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="maths.html">aurel.maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="numerical.html">aurel.numerical</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reading.html">aurel.reading</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solutions.html">aurel.solutions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Advice</a></li>
 </ul>
 
         </div>
@@ -153,10 +156,10 @@ FD schemes are used.</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">xarray,</span> <span class="pre">yarray,</span> <span class="pre">zarray</span></span></dt>
-<dd><p>(<em>numpy.ndarray</em>) - 1D arrays of x, y, and z coordinates.</p>
+<dd><p>(<em>jax.numpy.ndarray</em>) - 1D arrays of x, y, and z coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -175,10 +178,10 @@ FD schemes are used.</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z</span></span></dt>
-<dd><p>(<em>numpy.ndarray</em>) - 3D arrays of x, y, and z coordinates.</p>
+<dd><p>(<em>jax.numpy.ndarray</em>) - 3D arrays of x, y, and z coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -186,10 +189,10 @@ FD schemes are used.</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.cartesian_coords">
 <span class="sig-name descname"><span class="pre">cartesian_coords</span></span><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.cartesian_coords" title="Link to this definition"></a></dt>
-<dd><p>(<em>list</em>) - List of 3D arrays of x, y, and z coordinates.</p>
+<dd><p>(<em>jax.numpy.ndarray</em>) - 3D array of x, y, and z coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -197,11 +200,11 @@ FD schemes are used.</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">r,</span> <span class="pre">phi,</span> <span class="pre">theta</span></span></dt>
-<dd><p>(<em>numpy.ndarray</em>) - 3D arrays of radius, azimuth, and inclination
+<dd><p>(<em>jax.numpy.ndarray</em>) - 3D arrays of radius, azimuth, and inclination
 coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -209,11 +212,11 @@ coordinates.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.spherical_coords">
 <span class="sig-name descname"><span class="pre">spherical_coords</span></span><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.spherical_coords" title="Link to this definition"></a></dt>
-<dd><p>(<em>list</em>) - List of 3D arrays of radius, azimuth, and inclination
+<dd><p>(<em>jax.numpy.ndarray</em>) - 3D array of radius, azimuth, and inclination
 coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -239,6 +242,12 @@ coordinates.</p>
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.cutoffmask2">
 <span class="sig-name descname"><span class="pre">cutoffmask2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.cutoffmask2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.cutoffmask2" title="Link to this definition"></a></dt>
 <dd><p>Remove boundary points, for when FDs were applied twice.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3">
+<span class="sig-name descname"><span class="pre">d3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3" title="Link to this definition"></a></dt>
+<dd><p>Apply the finite difference scheme to the data grid.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -371,6 +380,12 @@ or <span class="math notranslate nohighlight">\(\partial_z (f^{k}_{j})\)</span>.
 <dt class="sig sig-object py" id="aurel.finitedifference.fd8_forward">
 <span class="sig-prename descclassname"><span class="pre">aurel.finitedifference.</span></span><span class="sig-name descname"><span class="pre">fd8_forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inverse_dx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#fd8_forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.fd8_forward" title="Link to this definition"></a></dt>
 <dd><p>8th order forward finite difference scheme.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.finitedifference.fd_map">
+<span class="sig-prename descclassname"><span class="pre">aurel.finitedifference.</span></span><span class="sig-name descname"><span class="pre">fd_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">farray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imax</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#fd_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.fd_map" title="Link to this definition"></a></dt>
+<dd><p>Map the finite difference function over the grid.</p>
 </dd></dl>
 
 </section>

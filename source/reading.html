@@ -53,16 +53,19 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">aurel.reading</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.bash"><code class="docutils literal notranslate"><span class="pre">bash()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.fixij"><code class="docutils literal notranslate"><span class="pre">fixij()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.get_data_tensor"><code class="docutils literal notranslate"><span class="pre">get_data_tensor()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.iterations"><code class="docutils literal notranslate"><span class="pre">iterations()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.join_chunks"><code class="docutils literal notranslate"><span class="pre">join_chunks()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.parameters"><code class="docutils literal notranslate"><span class="pre">parameters()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_ET_data"><code class="docutils literal notranslate"><span class="pre">read_ET_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_ET_var"><code class="docutils literal notranslate"><span class="pre">read_ET_var()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_aurel_data"><code class="docutils literal notranslate"><span class="pre">read_aurel_data()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_data"><code class="docutils literal notranslate"><span class="pre">read_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.saveprint"><code class="docutils literal notranslate"><span class="pre">saveprint()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.unfixij"><code class="docutils literal notranslate"><span class="pre">unfixij()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="solutions.html">aurel.solutions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Advice</a></li>
 </ul>
 
         </div>
@@ -92,14 +95,16 @@
   <section id="module-aurel.reading">
 <span id="aurel-reading"></span><h1>aurel.reading<a class="headerlink" href="#module-aurel.reading" title="Link to this heading"></a></h1>
 <p>reading.py</p>
-<p>This module contains functions to work with data generated from
-Einstein Toolkit simulations, including:</p>
+<p>This module contains functions to read/write data, and has specific
+functions for using data generated from Einstein Toolkit simulations.
+This includes:</p>
 <ul class="simple">
 <li><p>reading parameters from the simulation</p></li>
 <li><p>listing available iterations of the simulation</p></li>
 <li><p>reading data from the simulation output files</p></li>
 <li><p>joining chunks of data together</p></li>
 <li><p>fixing the x-z indexing of the data</p></li>
+<li><p>saving data to files</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -127,35 +132,6 @@ Einstein Toolkit simulations, including:</p>
 <dt class="sig sig-object py" id="aurel.reading.fixij">
 <span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">fixij</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#fixij"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.fixij" title="Link to this definition"></a></dt>
 <dd><p>Fix the x-z indexing as you read in the data.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="aurel.reading.get_data_tensor">
-<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">get_data_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varkey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">it</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#get_data_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.get_data_tensor" title="Link to this definition"></a></dt>
-<dd><p>Read the data from the simulation output files.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<em>str</em>) – The path to the simulation output files.</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – Identifying part of the variable output file name.</p></li>
-<li><p><strong>varkey</strong> (<em>str</em>) – Identifying part of the variable’s hdf5 key.</p></li>
-<li><p><strong>it</strong> (<em>list</em>) – The iterations to read from the simulation output files.</p></li>
-<li><p><strong>rl</strong> (<em>int</em>) – The refinement level to read from the simulation output files.</p></li>
-<li><p><strong>cmax</strong> (<em>int</em>) – The maximum number of chunks to read from the simulation output files.
-If ‘in file’, it will be extracted from the file.</p></li>
-<li><p><strong>rank</strong> (<em>int</em>) – The rank of the variable to read from the simulation output files.
-0 scalar, 1 vector, 2 tensor.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p>A dictionary containing the data from the simulation output files.</p>
-<p>dict.keys() = [‘it’, ‘t’, var]</p>
-</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -220,24 +196,53 @@ of the simulation box.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="aurel.reading.read_data">
-<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">it</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_data" title="Link to this definition"></a></dt>
-<dd><p>Read the data from the simulation output files.</p>
+<dt class="sig sig-object py" id="aurel.reading.read_ET_data">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_ET_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_ET_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_ET_data" title="Link to this definition"></a></dt>
+<dd><p>Read the data from Einstein Toolkit simulation output files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>param</strong> (<em>dict</em>) – The parameters of the simulation.</p></li>
 <li><p><strong>var</strong> (<em>list</em>) – The variables to read from the simulation output files.</p></li>
-<li><p><strong>it</strong> (<em>list</em><em>, </em><em>optional</em>) – The iterations to read from the simulation output files.
+<li><p><strong>it</strong> (<em>list</em><em>, </em><em>optional</em>) – The iterations to save from the data.
 The default is [0].</p></li>
-<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – The refinement level to read from the simulation output files.</p></li>
-<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – The restart number to read from the simulation output files.
+<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – The refinement level to save from the data.
+The default is 0.</p></li>
+<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – The restart number to save the data to.
 The default is 0.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the data from the simulation output files.
+dict.keys() = [‘it’, ‘t’, var[0], var[1], …]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.read_ET_var">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_ET_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varkey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">it</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_ET_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_ET_var" title="Link to this definition"></a></dt>
+<dd><p>Read variables from Einstein Toolkit simulation output files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – The path to the simulation output files.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Identifying part of the variable output file name.</p></li>
+<li><p><strong>varkey</strong> (<em>str</em>) – Identifying part of the variable’s hdf5 key.</p></li>
+<li><p><strong>it</strong> (<em>list</em>) – The iterations to read from the simulation output files.</p></li>
+<li><p><strong>rl</strong> (<em>int</em>) – The refinement level to read from the simulation output files.</p></li>
+<li><p><strong>cmax</strong> (<em>int</em>) – The maximum number of chunks to read from the simulation output files.
+If ‘in file’, it will be extracted from the file.</p></li>
+<li><p><strong>rank</strong> (<em>int</em>) – The rank of the variable to read from the simulation output files.
+0 scalar, 1 vector, 2 tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p>A dictionary containing the data from the simulation output files.</p>
-<p>dict.keys() = [‘it’, ‘t’, var[0], var[1], …]</p>
+<p>dict.keys() = [‘it’, ‘t’, var]</p>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -247,15 +252,97 @@ The default is 0.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="aurel.reading.saveprint">
-<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">saveprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">it_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">some_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#saveprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.saveprint" title="Link to this definition"></a></dt>
-<dd><p>Save the string to the file and print it to the screen.</p>
+<dt class="sig sig-object py" id="aurel.reading.read_aurel_data">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_aurel_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_aurel_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_aurel_data" title="Link to this definition"></a></dt>
+<dd><p>Read the data from AurelCore simulation output files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param</strong> (<em>dict</em>) – The parameters of the simulation.</p></li>
+<li><p><strong>var</strong> (<em>list</em>) – The variables to read from the simulation output files.</p></li>
+<li><p><strong>it</strong> (<em>list</em><em>, </em><em>optional</em>) – The iterations to read from the simulation output files.
+The default is [0].</p></li>
+<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – The refinement level to read from the simulation output files.
+The default is 0.</p></li>
+<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – The restart number to read from the simulation output files.
+The default is 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the data from the simulation output files.
+dict.keys() = [‘it’, ‘t’, var[0], var[1], …]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="aurel.reading.unfixij">
-<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">unfixij</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#unfixij"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.unfixij" title="Link to this definition"></a></dt>
-<dd><p>Fix the x-z indexing as you record data.</p>
+<dt class="sig sig-object py" id="aurel.reading.read_data">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_data" title="Link to this definition"></a></dt>
+<dd><p>Read the data from the simulation output files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param</strong> (<em>dict</em>) – The parameters of the simulation.</p></li>
+<li><p><strong>var</strong> (<em>list</em>) – The variables to read from the simulation output files.</p></li>
+<li><p><strong>it</strong> (<em>list</em><em>, </em><em>optional</em>) – The iterations to read from the simulation output files.
+The default is [0].</p></li>
+<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – The refinement level to read from the simulation output files.
+The default is 0.</p></li>
+<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – The restart number to read from the simulation output files.
+The default is 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the data from the simulation output files.
+dict.keys() = [‘it’, ‘t’, var[0], var[1], …]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.save_data">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.save_data" title="Link to this definition"></a></dt>
+<dd><p>Save the data to a file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param</strong> (<em>dict</em>) – The parameters of the simulation.
+Needs to contain the key ‘datapath’,
+this is where the data will be saved.</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – The data to be saved.
+dict.keys() = [‘it’, ‘t’, var[0], var[1], …]</p></li>
+<li><p><strong>vars</strong> (<em>list</em><em>, </em><em>optional</em>) – The variables to save from the data.
+If not provided, all variables in data will be saved.
+The default is [].</p></li>
+<li><p><strong>it</strong> (<em>list</em><em>, </em><em>optional</em>) – The iterations to save from the data.
+The default is [0].</p></li>
+<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – The refinement level to save from the data.
+The default is 0.</p></li>
+<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – The restart number to save the data to.
+The default is 0.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The data will be saved in the format:
+datapath/it_&lt;iteration&gt;.hdf5
+where &lt;iteration&gt; is the iteration number.
+The variables will be saved as datasets in the file,
+with keys ‘&lt;variable_name&gt; rl=&lt;refinement_level&gt;’</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.saveprint">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">saveprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">it_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">some_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#saveprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.saveprint" title="Link to this definition"></a></dt>
+<dd><p>Save the string to the file and print it to the screen.</p>
 </dd></dl>
 
 </section>

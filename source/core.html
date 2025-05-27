@@ -94,6 +94,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.memory_threshold_inGB"><code class="docutils literal notranslate"><span class="pre">AurelCore.memory_threshold_inGB</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.last_accessed"><code class="docutils literal notranslate"><span class="pre">AurelCore.last_accessed</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.var_importance"><code class="docutils literal notranslate"><span class="pre">AurelCore.var_importance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.assumption"><code class="docutils literal notranslate"><span class="pre">AurelCore.assumption()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.cleanup_cache"><code class="docutils literal notranslate"><span class="pre">AurelCore.cleanup_cache()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.freeze_data"><code class="docutils literal notranslate"><span class="pre">AurelCore.freeze_data()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.kronecker_delta3"><code class="docutils literal notranslate"><span class="pre">AurelCore.kronecker_delta3()</span></code></a></li>
@@ -131,6 +132,7 @@
 <li class="toctree-l1"><a class="reference internal" href="numerical.html">aurel.numerical</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reading.html">aurel.reading</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solutions.html">aurel.solutions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Advice</a></li>
 </ul>
 
         </div>
@@ -267,7 +269,6 @@ saves it in the AurelCore.data dictionary.</p></li>
 <p><strong>press</strong>: <span class="math notranslate nohighlight">\(p\)</span> Pressure (need to input or I assume =0)</p>
 <p><strong>eps</strong>: <span class="math notranslate nohighlight">\(\epsilon\)</span> Specific internal energy (need to input or I assume =0)</p>
 <p><strong>rho</strong>: <span class="math notranslate nohighlight">\(\rho\)</span> Energy density</p>
-<p><strong>rho_fromHam</strong>: <span class="math notranslate nohighlight">\(\rho\)</span> Energy density computed from the Hamiltonian constraint</p>
 <p><strong>enthalpy</strong>: <span class="math notranslate nohighlight">\(h\)</span> Specific enthalpy of the fluid</p>
 </section>
 <section id="fluid-velocity">
@@ -299,6 +300,8 @@ saves it in the AurelCore.data dictionary.</p></li>
 <p><strong>Stresstrace_n</strong>: <span class="math notranslate nohighlight">\(S^{\{n\}}\)</span> Trace of Stress tensor in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame</p>
 <p><strong>press_n</strong>: <span class="math notranslate nohighlight">\(p^{\{n\}}\)</span> Pressure in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame</p>
 <p><strong>anisotropic_press_down3_n</strong>: <span class="math notranslate nohighlight">\(\pi^{\{n\}_{ij}}\)</span> Anisotropic pressure in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices down</p>
+<p><strong>rho_n_fromHam</strong>: <span class="math notranslate nohighlight">\(\rho^{\{n\}}\)</span> Energy density in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame computed from the Hamiltonian constraint</p>
+<p><strong>fluxup3_n_fromMom</strong>: <span class="math notranslate nohighlight">\(S^{\{n\}i}\)</span> Energy flux (or momentum density) in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices up computed from the Momentum constraint</p>
 </section>
 <section id="conserved-variables">
 <h4>Conserved variables<a class="headerlink" href="#conserved-variables" title="Link to this heading"></a></h4>
@@ -526,6 +529,12 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aurel.core.AurelCore.assumption">
+<span class="sig-name descname"><span class="pre">assumption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keyname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assumption</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.assumption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.core.AurelCore.assumption" title="Link to this definition"></a></dt>
+<dd><p>Print assumption message.</p>
 </dd></dl>
 
 <dl class="py method">
