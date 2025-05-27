@@ -181,7 +181,8 @@ class FiniteDifference():
             self,
             param, 
             boundary='no boundary', 
-            fd_order=4):
+            fd_order=4,
+            verbose=True):
         """Initialize the FiniteDifference class."""
 
         self.param = param
@@ -228,19 +229,22 @@ class FiniteDifference():
         self.spherical_coords = jnp.array([self.r, self.phi, self.theta])
 
         if fd_order == 8:
-            print("8th order finite difference schemes are defined")
+            if verbose:
+                print("8th order finite difference schemes are defined")
             self.backward = fd8_backward
             self.centered = fd8_centered
             self.forward = fd8_forward
             self.mask_len = 4
         elif fd_order == 6:
-            print("6th order finite difference schemes are defined")
+            if verbose:
+                print("6th order finite difference schemes are defined")
             self.backward = fd6_backward
             self.centered = fd6_centered
             self.forward = fd6_forward
             self.mask_len = 3
         else:
-            print("4th order finite difference schemes are defined")
+            if verbose:
+                print("4th order finite difference schemes are defined")
             self.backward = fd4_backward
             self.centered = fd4_centered
             self.forward = fd4_forward
