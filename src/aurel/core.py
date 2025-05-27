@@ -166,12 +166,27 @@ descriptions = {
                     + r" and energy flux (or momentum density)"
                     + r" with spatial indices down in Wilson's formalism"),
     # Kinematics
+    "st_covd_udown4": (r"$\nabla_{\mu} u_{\nu}$ Spacetime covariant derivative"
+                       + r" of Lagrangian fluid four velocity"
+                       + r" with spacetime indices down"),
+    "accelerationdown4": (r"$a_{\mu}$ Acceleration of the fluid"
+                          + r" with spacetime indices down"),
+    "accelerationup4": (r"$a^{\mu}$ Acceleration of the fluid"
+                          + r" with spacetime indices up"),
+    "s_covd_udown4": (r"$\mathcal{D}^{\{u\}}_{\mu} u_{\nu}$ Spatial covariant"
+                      + r" derivative of Lagrangian fluid four velocity"
+                      + r" with spacetime indices down, with respect to"
+                      + r" spatial hypersurfaces orthonormal to"
+                      + r" the fluid flow"),
     "thetadown4": (r"$\Theta_{\mu\nu}$ Fluid expansion tensor"
                    + r" with spacetime indices down"),
     "theta": r"$\Theta$ Fluid expansion scalar",
     "sheardown4": (r"$\sigma_{\mu\nu}$ Fluid shear tensor"
                    + r" with spacetime indices down"),
     "shear2": r"$\sigma^2$ Magnitude of fluid shear",
+    "omegadown4": (r"$\omega_{\mu\nu}$ Fluid vorticity tensor"
+                   + r" with spacetime indices down"),
+    "omega2": r"$\omega^2$ Magnitude of fluid vorticity",
     "s_RicciS_u": (r"${}^{(3)}R^{\{u\}}$ Ricci scalar of the spatial metric"
                    + r" orthonormal to fluid flow"),
 
@@ -889,9 +904,9 @@ class AurelCore():
         return dtD, dtE, dtSdown3
     
     # Kinematics
-    def thetadown4(self):
+    def st_covd_udown4(self):
         dtD, dtE, dtSdown3 = self["dtconserved"]
-
+    
         # dtu
         dtudown3 = self["udown3"] * (
             maths.safe_division(dtSdown3, self["conserved_Sdown3"])
@@ -909,13 +924,24 @@ class AurelCore():
                     [dtudown0, 
                      dtudown3[0], dtudown3[1], dtudown3[2]])
         # spacetime covariant derivative
-        CovDu = self.st_covd(
-            self["udown4"], dtudown4, 'u')
-        # project along fluid flow
-        CovariantCovDu = jnp.einsum(
-            'ab...,ac...->bc...', self["hmixed4"], CovDu)
-        # make it symmetric
-        return maths.symmetrise_tensor(CovariantCovDu)
+        return self.st_covd(self["udown4"], dtudown4, 'u')
+    
+    def accelerationdown4(self):
+        return jnp.einsum(
+            'a..., ab... -> b...',
+            self["uup4"], self["st_covd_udown4"])
+    
+    def accelerationup4(self):
+        return jnp.einsum(
+            'ab..., b... -> a...',
+            self["gup4"], self["accelerationdown4"])
+    
+    def s_covd_udown4(self):
+        return jnp.einsum(
+            'ab...,ac...->bc...', self["hmixed4"], self["st_covd_udown4"])
+    
+    def thetadown4(self):
+        return maths.symmetrise_tensor(self["s_covd_udown4"])
     
     def theta(self):
         return jnp.einsum('ab..., ab... -> ...', 
@@ -928,7 +954,15 @@ class AurelCore():
         return 0.5 * jnp.einsum(
             'ai..., bj..., ab..., ij... -> ...', 
             self["hup4"], self["hup4"], self["sheardown4"], self["sheardown4"])
-
+    
+    def omegadown4(self):
+        return maths.antisymmetrise_tensor(self["s_covd_udown4"])
+    
+    def omega2(self):
+        return 0.5 * jnp.einsum(
+            'ai..., bj..., ab..., ij... -> ...', 
+            self["hup4"], self["hup4"], self["omegadown4"], self["omegadown4"])
+    
     def s_RicciS_u(self):
         return 2 * (
             self["shear2"]
