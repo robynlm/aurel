@@ -118,4 +118,10 @@ For further examples on how to use aurel see:
    source/solutions
    source/advice
 
+Links
+-----
+GitHub page: `<https://github.com/robynlm/aurel>`_
+
+PyPI page: `<https://pypi.org/project/aurel/>`_
+
 You may contact the author at : r.l.munoz@sussex.ac.uk
