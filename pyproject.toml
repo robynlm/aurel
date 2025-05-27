@@ -35,7 +35,9 @@ dependencies = [
     "h5py",
     "glob2",
     "scipy",
-    "ipython"
+    "ipython",
+    "jax",
+    "jaxlib"
 ]
 
 [project.urls]
