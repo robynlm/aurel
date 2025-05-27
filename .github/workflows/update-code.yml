@@ -28,10 +28,12 @@ jobs:
         pip install -r requirements.txt
         pip install build twine
 
+    - name: Build the package
+      run: python -m build
+
     - name: Deploy to PyPI
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        python3 -m build
         twine upload dist/*
