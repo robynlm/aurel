@@ -292,7 +292,8 @@
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">param</span><span class="p">,</span> 
             <span class="n">boundary</span><span class="o">=</span><span class="s1">&#39;no boundary&#39;</span><span class="p">,</span> 
-            <span class="n">fd_order</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+            <span class="n">fd_order</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the FiniteDifference class.&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">param</span> <span class="o">=</span> <span class="n">param</span>
@@ -339,19 +340,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">spherical_coords</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">fd_order</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;8th order finite difference schemes are defined&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;8th order finite difference schemes are defined&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">backward</span> <span class="o">=</span> <span class="n">fd8_backward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">centered</span> <span class="o">=</span> <span class="n">fd8_centered</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="o">=</span> <span class="n">fd8_forward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="k">elif</span> <span class="n">fd_order</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;6th order finite difference schemes are defined&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;6th order finite difference schemes are defined&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">backward</span> <span class="o">=</span> <span class="n">fd6_backward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">centered</span> <span class="o">=</span> <span class="n">fd6_centered</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="o">=</span> <span class="n">fd6_forward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span> <span class="o">=</span> <span class="mi">3</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;4th order finite difference schemes are defined&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;4th order finite difference schemes are defined&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">backward</span> <span class="o">=</span> <span class="n">fd4_backward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">centered</span> <span class="o">=</span> <span class="n">fd4_centered</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="o">=</span> <span class="n">fd4_forward</span>
