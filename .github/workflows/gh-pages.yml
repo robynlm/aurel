@@ -23,7 +23,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install sympy numpy matplotlib h5py scipy glob2 ipython
+        pip install -r requirements.txt
         pip install sphinx sphinx-rtd-theme sphinx-math-dollar
 
     - name: Build documentation

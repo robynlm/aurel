@@ -1,14 +1,16 @@
 """
 reading.py
 
-This module contains functions to work with data generated from 
-Einstein Toolkit simulations, including:
+This module contains functions to read/write data, and has specific
+functions for using data generated from Einstein Toolkit simulations. 
+This includes:
 
 - reading parameters from the simulation
 - listing available iterations of the simulation
 - reading data from the simulation output files
 - joining chunks of data together
 - fixing the x-z indexing of the data
+- saving data to files
 
 Note
 ----
@@ -18,6 +20,7 @@ Users should first provide the path to their simulations:
 """
 
 import os
+import jax.numpy as jnp
 import numpy as np
 import glob
 import h5py
@@ -65,7 +68,11 @@ def parameters(simname):
 
     **export SIMLOC="/path/to/simulations/"**
     """
-    parameters = {'simname':simname}
+    parameters = {
+        'simname':simname,
+        'simulation':'ET',
+        'split_per_it':True
+        }
 
     # Looking for data
     founddata = False
@@ -239,7 +246,6 @@ def iterations(param, skip_last=True):
             
             saveprint(it_file, 'Reading '+file)
             with h5py.File(file, 'r') as f:
-                print(f.keys())
                 # only consider one of the variables in this file
                 varkey = list(f.keys())[0].split(' ')[0]
                 # all the keys of this varible
@@ -281,9 +287,9 @@ def iterations(param, skip_last=True):
                             saveprint(it_file, 'rl = {} at it = {}'.format(
                                 rl, allits))
                             
-def read_data(param, var, it=[0], rl=0, restart=0):
+def read_data(param, var, **kwargs):
     """Read the data from the simulation output files.
-    
+
     Parameters
     ----------
     param : dict
@@ -295,22 +301,238 @@ def read_data(param, var, it=[0], rl=0, restart=0):
         The default is [0].
     rl : int, optional
         The refinement level to read from the simulation output files.
+        The default is 0.
     restart : int, optional
         The restart number to read from the simulation output files.
+        The default is 0.
+    
+    Returns
+    -------
+    dict
+        A dictionary containing the data from the simulation output files.
+        dict.keys() = ['it', 't', var[0], var[1], ...]
+    """
+
+    if 'simulation' in param.keys():
+        if 'split_per_it' in param.keys():
+            if param['split_per_it']:
+                # different variable names, tensor to scalar
+                replacements = {
+                    'gammadown3': ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
+                    'Kdown3': ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
+                    'betaup3': ['betax', 'betay', 'betaz'],
+                    'dtbetaup3': ['dtbetax', 'dtbetay', 'dtbetaz'],
+                    'velup3': ['velx', 'vely', 'velz'],
+                    'Momentumup3': ['Momentumx', 'Momentumy', 'Momentumz'],
+                }
+                avar = var.copy()
+                for key, new_vars in replacements.items():
+                    if key in avar:
+                        avar.remove(key)
+                        avar += new_vars
+
+                # First get variables from split iterations
+                data = read_aurel_data(param, avar, **kwargs)
+                # find those that are missing
+                its_missing = {v: [] for v in avar}
+                it = np.sort(kwargs.get('it', [0]))
+                avart = avar + ['t']
+                for it_idx, iit in enumerate(it):
+                    for av in avart:
+                        if data[av][it_idx] is None:
+                            its_missing[av] += [iit]
+                # if some are missing, read them from the ET data
+                for v in var:
+                    if v in list(replacements.keys()):
+                        avar = replacements[v]
+                        need_to_read = np.sum(
+                            [its_missing[av] != [] for av in avar]) > 0
+                    else:
+                        avar = [v]
+                        need_to_read = its_missing[v] != []
+                    if need_to_read:
+                        kwargs_temp = dict(kwargs)
+                        kwargs_temp.pop('it', None)
+                        data_temp = read_ET_data(
+                            param, [v], it=its_missing[avar[0]], **kwargs_temp)
+                        # update the data with the missing iterations
+                        avart = avar + ['t']
+                        for av in avart:
+                            for it_idx, iit in enumerate(it):
+                                if iit in its_missing[av]:
+                                    it_idx_temp = np.argmin(np.abs(
+                                    data_temp['it'] - iit))
+                                    data[av][it_idx] = data_temp[av][it_idx_temp]
+                                    if av == 't':
+                                        its_missing[av].remove(iit)
+                        # save the data for the missing iterations
+                            # and save them individually
+                            save_data(
+                                param, data_temp,
+                                vars=[av], it=its_missing[av], **kwargs_temp)
+        else:
+            data = read_ET_data(param, var, **kwargs)
+    else:
+        data = read_aurel_data(param, var, **kwargs)
+    return data
+
+def read_aurel_data(param, var, **kwargs):
+    """Read the data from AurelCore simulation output files.
+
+    Parameters
+    ----------
+    param : dict
+        The parameters of the simulation.
+    var : list
+        The variables to read from the simulation output files.
+    it : list, optional
+        The iterations to read from the simulation output files.
+        The default is [0].
+    rl : int, optional
+        The refinement level to read from the simulation output files.
+        The default is 0.
+    restart : int, optional
+        The restart number to read from the simulation output files.
+        The default is 0.
+
+    Returns
+    -------
+    dict
+        A dictionary containing the data from the simulation output files.
+        dict.keys() = ['it', 't', var[0], var[1], ...]
+    """
+    it = np.sort(kwargs.get('it', [0]))
+
+    if 'simulation' in param.keys():
+        restart = kwargs.get('restart', 0)
+        datapath = (param['simpath']
+                    + param['simname']
+                    + '/output-{:04d}/'.format(restart)
+                    + param['simname'] + '/')
+    else:
+        datapath = param['datapath']
+    var += ['t']
+    data = {'it': it, **{v: [] for v in var}}
+    for it_index, iit in enumerate(it):
+        fname = '{}it_{}.hdf5'.format(datapath, int(iit))
+        if os.path.exists(fname):
+            with h5py.File(fname, 'r') as f:
+                for key in var:
+                    rl = kwargs.get('rl', 0)
+                    skey = key + ' rl={}'.format(rl)
+                    if skey in list(f.keys()):
+                        data[key].append(jnp.array(f[skey]))
+                    else:
+                        data[key].append(None)
+        else:
+            for key in var:
+                rl = kwargs.get('rl', 0)
+                skey = key + ' rl={}'.format(rl)
+                data[key].append(None)
+    return data
+
+def save_data(param, data, **kwargs):
+    """Save the data to a file
+    
+    Parameters
+    ----------
+    param : dict
+        The parameters of the simulation.
+        Needs to contain the key 'datapath', 
+        this is where the data will be saved.
+    data : dict
+        The data to be saved.
+        dict.keys() = ['it', 't', var[0], var[1], ...]
+    vars : list, optional
+        The variables to save from the data.
+        If not provided, all variables in data will be saved.
+        The default is [].
+    it : list, optional
+        The iterations to save from the data.
+        The default is [0].
+    rl : int, optional
+        The refinement level to save from the data.
+        The default is 0.
+    restart : int, optional
+        The restart number to save the data to.
+        The default is 0.
+    
+    Note
+    ----
+    The data will be saved in the format:
+    datapath/it_<iteration>.hdf5
+    where <iteration> is the iteration number.
+    The variables will be saved as datasets in the file, 
+    with keys '<variable_name> rl=<refinement_level>'
+    """
+    vars = kwargs.get('vars', [])
+    if vars == []:
+        vars = list(data.keys())
+
+    # check paths
+    if 'simulation' in param.keys():
+        restart = kwargs.get('restart', 0)
+        datapath = (param['simpath']
+                 + param['simname']
+                 + '/output-{:04d}/'.format(restart)
+                 + param['simname']
+                 + '/all_iterations/')
+        lastpart = ''
+    else:
+        datapath = param['datapath']
+        if not datapath.endswith('/'):
+            lastpart = datapath.split('/')[-1]
+            firstpart = datapath.split('/')[:-1]
+            datapath = '/'.join(firstpart) + '/'
+        else:
+            lastpart = ''
+    if not os.path.exists(datapath):
+        os.makedirs(datapath)
+    datapath += lastpart
+
+    it = np.sort(kwargs.get('it', [0]))
+    for it_index, iit in enumerate(it):
+        fname = '{}it_{}.hdf5'.format(datapath, int(iit))
+        with h5py.File(fname, 'a') as f:
+            for key in vars:
+                rl = kwargs.get('rl', 0)
+                skey = key + ' rl={}'.format(rl)
+                # TODO: are you sure about overwritting?
+                if skey in list(f.keys()):
+                    del f[skey]
+                f.create_dataset(skey, data=data[key][it_index])
+
+def read_ET_data(param, var, **kwargs):
+    """Read the data from Einstein Toolkit simulation output files.
+    
+    Parameters
+    ----------
+    param : dict
+        The parameters of the simulation.
+    var : list
+        The variables to read from the simulation output files.
+    it : list, optional
+        The iterations to save from the data.
+        The default is [0].
+    rl : int, optional
+        The refinement level to save from the data.
+        The default is 0.
+    restart : int, optional
+        The restart number to save the data to.
         The default is 0.
         
     Returns
     -------
     dict
         A dictionary containing the data from the simulation output files.
-        
         dict.keys() = ['it', 't', var[0], var[1], ...]
     """
     # data to be returned
-    it = np.sort(it)
+    it = np.sort(kwargs.get('it', [0]))
     data = {'it':it, 't':[]}
-    
+
     # data directory path
+    restart = kwargs.get('restart', 0)
     data_path = (param['simpath']
                  + param['simname']
                  + '/output-{:04d}/'.format(restart)
@@ -332,15 +554,15 @@ def read_data(param, var, it=[0], rl=0, restart=0):
         [1 for file in h5files if 'hydrobase-rho.' in file]) == 0
     if individual:
         variables = {
-            'rho':['rho.', 'HYDROBASE::rho', 0],
+            'rho0':['rho.', 'HYDROBASE::rho', 0],
             'eps':['eps.', 'HYDROBASE::eps', 0],
             'w_lorentz':['w_lorentz.', 'HYDROBASE::w_lorentz', 0],
             'press':['press.', 'HYDROBASE::press', 0],
             'vel[0]':['vel[0].', 'HYDROBASE::vel[0]', 0],
             'vel[1]':['vel[1].', 'HYDROBASE::vel[1]', 0],
             'vel[2]':['vel[2].', 'HYDROBASE::vel[2]', 0],
-            'alp':['alp.', 'ADMBASE::alp', 0],
-            'dtalp':['dtalp.', 'ADMBASE::dtalp', 0],
+            'alpha':['alp.', 'ADMBASE::alp', 0],
+            'dtalpha':['dtalp.', 'ADMBASE::dtalp', 0],
             'betax':['betax.', 'ADMBASE::betax', 0],
             'betay':['betay.', 'ADMBASE::betay', 0],
             'betaz':['betaz.', 'ADMBASE::betaz', 0],
@@ -360,77 +582,51 @@ def read_data(param, var, it=[0], rl=0, restart=0):
             'kyy':['kyy.', 'ADMBASE::kyy', 0],
             'kyz':['kyz.', 'ADMBASE::kyz', 0],
             'kzz':['kzz.', 'ADMBASE::kzz', 0],
-            'trK':['trK.', 'ML_BSSN::trK', 0],
-            'H':['H.', 'ML_BSSN::H', 0],
+            'Ktrace':['trK.', 'ML_BSSN::trK', 0],
+            'Hamiltonian':['H.', 'ML_BSSN::H', 0],
             'M1':['M1.', 'ML_BSSN::M1', 0],
             'M2':['M2.', 'ML_BSSN::M2', 0],
             'M3':['M3.', 'ML_BSSN::M3', 0],
         }
-        if 'lapse' in var:
-            var.remove('lapse')
-            var += ['alp']
-        if 'dtlapse' in var:
-            var.remove('dtlapse')
-            var += ['dtalp']
-        if 'gdown' in var:
-            var.remove('gdown')
-            var += ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz']
-        if 'metric' in var:
-            var.remove('metric')
-            var += ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz']
-        if 'kdown' in var:
-            var.remove('kdown')
-            var += ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz']
-        if 'curv' in var:
-            var.remove('curv')
-            var += ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz']
-        if 'betaup' in var:
-            var.remove('betaup')
-            var += ['betax', 'betay', 'betaz']
-        if 'shift' in var:
-            var.remove('shift')
-            var += ['betax', 'betay', 'betaz']
-        if 'dtshift' in var:
-            var.remove('dtshift')
-            var += ['dtbetax', 'dtbetay', 'dtbetaz']
-        if 'vel' in var:
-            var.remove('vel')
-            var += ['vel[0]', 'vel[1]', 'vel[2]']
-        if 'ML_Ham' in var:
-            var.remove('ML_Ham')
-            var += ['H']
-        if 'ML_Mom' in var:
-            var.remove('ML_Mom')
-            var += ['M1', 'M2', 'M3']
+        # Define replacements as a dictionary
+        replacements = {
+            'gammadown3': ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
+            'Kdown3': ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
+            'betaup3': ['betax', 'betay', 'betaz'],
+            'dtbetaup3': ['dtbetax', 'dtbetay', 'dtbetaz'],
+            'velup3': ['vel[0]', 'vel[1]', 'vel[2]'],
+            'Momentumup3': ['M1', 'M2', 'M3'],
+        }
+
+        # Replace variables in var according to the mapping
+        for key, new_vars in replacements.items():
+            if key in var:
+                var.remove(key)
+                var += new_vars
     else:
         variables = {
-            'rho':['hydrobase-rho.', 'HYDROBASE::rho', 0],
+            'rho0':['hydrobase-rho.', 'HYDROBASE::rho', 0],
             'eps':['hydrobase-eps.', 'HYDROBASE::eps', 0],
             'press':['hydrobase-press.', 'HYDROBASE::press', 0],
             'w_lorentz':['hydrobase-w_lorentz.', 'HYDROBASE::w_lorentz', 0],
-            'vel':['hydrobase-vel.', 'HYDROBASE::vel', 1],
-            'alp':['admbase-lapse.', 'ADMBASE::alp', 0],
-            'lapse':['admbase-lapse.', 'ADMBASE::alp', 0],
-            'dtalp':['admbase-dtlapse.', 'ADMBASE::dtalp', 0],
-            'dtlapse':['admbase-dtlapse.', 'ADMBASE::dtalp', 0],
-            'betaup':['admbase-shift.', 'ADMBASE::beta', 1],
-            'shift':['admbase-shift.', 'ADMBASE::beta', 1],
-            'dtbetaup':['admbase-dtshift.', 'ADMBASE::dtbeta', 1],
-            'dtshift':['admbase-dtshift.', 'ADMBASE::dtbeta', 1],
+            'velup3':['hydrobase-vel.', 'HYDROBASE::vel', 1],
+            'alpha':['admbase-lapse.', 'ADMBASE::alp', 0],
+            'dtalpha':['admbase-dtlapse.', 'ADMBASE::dtalp', 0],
+            'betaup3':['admbase-shift.', 'ADMBASE::beta', 1],
+            'dtbetaup3':['admbase-dtshift.', 'ADMBASE::dtbeta', 1],
             'tau':['cosmolapse-propertime.', 'COSMOLAPSE::tau', 0],
-            'gdown':['admbase-metric.', 'ADMBASE::g', 2],
-            'metric':['admbase-metric.', 'ADMBASE::g', 2],
-            'kdown':['admbase-curv.', 'ADMBASE::k', 2],
-            'curv':['admbase-curv.', 'ADMBASE::k', 2],
-            'trK':['ml_bssn-ml_trace_curv.', 'ML_BSSN::trK', 0],
-            'ML_Ham':['ml_bssn-ml_ham.', 'ML_BSSN::H', 0],
-            'ML_Mom':['ml_bssn-ml_mom.', 'ML_BSSN::M', 1],
+            'gammadown3':['admbase-metric.', 'ADMBASE::g', 2],
+            'Kdown3':['admbase-curv.', 'ADMBASE::k', 2],
+            'Ktrace':['ml_bssn-ml_trace_curv.', 'ML_BSSN::trK', 0],
+            'Hamiltonian':['ml_bssn-ml_ham.', 'ML_BSSN::H', 0],
+            'Momentumup3':['ml_bssn-ml_mom.', 'ML_BSSN::M', 1],
         }
 
+    rl = kwargs.get('rl', 0)
     for v in var:
         if v in list(variables.keys()):
             att = variables[v]
-            data.update(get_data_tensor(
+            data.update(read_ET_var(
             data_path, att[0], att[1],
             it, rl, cmax, att[2]))
         else:
@@ -438,8 +634,8 @@ def read_data(param, var, it=[0], rl=0, restart=0):
 
     return data
 
-def get_data_tensor(path, filename, varkey, it, rl, cmax, rank):
-    """Read the data from the simulation output files.
+def read_ET_var(path, filename, varkey, it, rl, cmax, rank):
+    """Read variables from Einstein Toolkit simulation output files.
     
     Parameters
     ----------
@@ -483,11 +679,12 @@ def get_data_tensor(path, filename, varkey, it, rl, cmax, rank):
     if rank==0:
         all_components = ['']
     if rank==1:
-        all_components = ['x', 'y', 'z']
         if 'HYDROBASE::vel' in varkey:
             all_components = ['[0]', '[1]', '[2]']
         elif 'ML_BSSN::M' in varkey:
             all_components = ['1', '2', '3']
+        else:
+            all_components = ['x', 'y', 'z']
     if rank==2:
         all_components = ['xx', 'xy', 'xz', 'yy', 'yz', 'zz']
     var_chunks = {iit:{ij:{} for ij in all_components} for iit in it} 
@@ -544,14 +741,13 @@ def get_data_tensor(path, filename, varkey, it, rl, cmax, rank):
                 if collect_time:
                     time += [f[key].attrs['time']]
             collect_time = False # only do this in one file
-    
 
     # rename some variables to work with AurelCore
     varname = varkey.split('::')[1]
     vartorename = {
-        'rho':'rho0', 'vel[0]':'velx', 'vel[1]':'vely', 'vel[2]':'velz',
-        'alp':'alpha', 'dtalp':'dtalpha', 'trK':'Ktrace', 
-        'H':'Hamiltonian', 
+        'rho':'rho0', 'alp':'alpha', 'dtalp':'dtalpha',
+        'trK':'Ktrace', 'H':'Hamiltonian',
+        'vel[0]':'velx', 'vel[1]':'vely', 'vel[2]':'velz',
         'M1':'Momentumx', 'M2':'Momentumy', 'M3':'Momentumz'}
 
     # per iteration, join the chunks together
@@ -571,11 +767,7 @@ def get_data_tensor(path, filename, varkey, it, rl, cmax, rank):
 
 def fixij(f):
     """Fix the x-z indexing as you read in the data."""
-    return np.transpose(np.array(f), (2, 1, 0))
-
-def unfixij(data):
-    """Fix the x-z indexing as you record data."""
-    return np.transpose(data, (2, 1, 0))
+    return jnp.transpose(jnp.array(f), (2, 1, 0))
 
 def join_chunks(cut_data):
     """Join the chunks of data together.
@@ -611,36 +803,6 @@ def join_chunks(cut_data):
         uncut_data = np.append(
             np.append(cut_data[all_keys[0]], cut_data[all_keys[1]], axis=1), 
             cut_data[all_keys[2]], axis=0)
-    # =================
-    elif cmax in [8, 9, 10]: # TO CHECK
-        # fix axis = 2
-        if cmax == 8: # TO CHECK
-            ndata = [np.append(cut_data[0], cut_data[1], axis=2), 
-                     cut_data[2], 
-                     np.append(cut_data[3], cut_data[4], axis=2), 
-                     cut_data[5], 
-                     np.append(cut_data[6], cut_data[7], axis=2), 
-                     cut_data[8]]
-        elif cmax == 9: # TO CHECK
-            ndata = [np.append(cut_data[0], cut_data[1], axis=2), 
-                     np.append(cut_data[2], cut_data[3], axis=2), 
-                     np.append(cut_data[4], cut_data[5], axis=2), 
-                     cut_data[6],
-                     np.append(cut_data[7], cut_data[8], axis=2), 
-                     cut_data[9]]
-        elif cmax == 10: # TO CHECK
-            ndata = [np.append(cut_data[i], cut_data[i+1], axis=2) 
-                     for i in np.arange(5)*2]
-            ndata += [cut_data[10]]
-        else: # TO CHECK
-            ndata = [np.append(cut_data[i], cut_data[i+1], axis=2) 
-                     for i in np.arange(6)*2]
-        # fix axis = 1 and 0
-        nndata = [np.append(ndata[i], ndata[i+1], axis=1) 
-                  for i in np.arange(3)*2]
-        uncut_data = np.append(
-            np.append(nndata[0], nndata[1], axis=0), 
-            nndata[2], axis=0)
     # =================
     else:
         # append along axis = 2

@@ -146,8 +146,6 @@ Lagrangian matter variables
 
 **rho**: $\rho$ Energy density
 
-**rho_fromHam**: $\rho$ Energy density computed from the Hamiltonian constraint
-
 **enthalpy**: $h$ Specific enthalpy of the fluid
 
 Fluid velocity
@@ -200,6 +198,10 @@ Eulerian matter variables
 **press_n**: $p^{\{n\}}$ Pressure in the $n^\mu$ frame
 
 **anisotropic_press_down3_n**: $\pi^{\{n\}_{ij}}$ Anisotropic pressure in the $n^\mu$ frame with spatial indices down
+
+**rho_n_fromHam**: $\rho^{\{n\}}$ Energy density in the $n^\mu$ frame computed from the Hamiltonian constraint
+
+**fluxup3_n_fromMom**: $S^{\{n\}i}$ Energy flux (or momentum density) in the $n^\mu$ frame with spatial indices up computed from the Momentum constraint
 
 Conserved variables
 -------------------

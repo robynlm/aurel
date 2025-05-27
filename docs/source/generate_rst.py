@@ -24,14 +24,14 @@ shift = ['betaup3', 'dtbetaup3', 'betadown3', 'betamag']
 enne = ['nup4', 'ndown4']
 gee = ['gdown4', 'gup4', 'gdet']
 nullrayexp = ['null_ray_exp']
-matter = ['press', 'eps', 'rho', 'rho_fromHam', 'enthalpy']
+matter = ['press', 'eps', 'rho', 'enthalpy']
 vel = ['w_lorentz', 'velup3', 'uup0', 'uup3', 'uup4', 
        'udown3', 'udown4', 'hdown4', 'hmixed4', 'hup4']
 est = ['Tdown4']
 fluid = ['rho_n', 'fluxup3_n', 'fluxdown3_n', 'angmomup3_n', 
          'angmomdown3_n', 'Stressup3_n', 
          'Stressdown3_n', 'Stresstrace_n', 'press_n', 
-         'anisotropic_press_down3_n']
+         'anisotropic_press_down3_n', 'rho_n_fromHam', 'fluxup3_n_fromMom']
 conserv = ['conserved_D', 'conserved_E', 'conserved_Sdown4', 
            'conserved_Sdown3', 'conserved_Sup4', 
            'conserved_Sup3', 'dtconserved']

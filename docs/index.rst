@@ -116,5 +116,6 @@ For further examples on how to use aurel see:
    source/numerical
    source/reading
    source/solutions
+   source/advice
 
 You may contact the author at : r.l.munoz@sussex.ac.uk
