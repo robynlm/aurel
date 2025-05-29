@@ -422,6 +422,7 @@ class AurelCore():
         memory_threshold = self.memory_threshold_inGB * 1024 * 1024 * 1024
         memory_limit_exceeded = total_cache_size >= memory_threshold
         if regular_cleanup or memory_limit_exceeded:
+            # TODO: case where key is in last_accessed but not in var_importance
             if self.verbose:
                 print(f"Cleaning up cache after {self.calculation_count}"
                       + f" calculations...")
