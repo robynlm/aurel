@@ -21,11 +21,12 @@ This module is the main event. It contains:
 """
 
 import sys
+import scipy
 import numpy as np
-import jax
 import jax.numpy as jnp
 from IPython.display import display, Math, Latex
 from . import maths
+import spinsfast
 
 # Descriptions for each AurelCore.data entry and function
 # assumed variables need to be listed in docs/source/source/generate_rst.py
@@ -237,6 +238,9 @@ descriptions = {
     "Weyl_Psi": (r"$\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$"
                  + r" List of Weyl scalars for an null vector base defined"
                  + r" with AurelCore.tetrad_to_use"),
+    "Psi4_lm": (r"$\Psi_4^{l,m}$ Dictionary of spin weighted spherical"
+                + r" harmonic decomposition of the 4th Weyl scalar,"
+                + r" control radius with AurelCore.Psi4_lm_radius"),
     "Weyl_invariants": (r"$I, \; J, \; L, \; K, \; N$"
                         + r" Dictionary of Weyl invariants"),
     "eweyl_u_down4": (r"$E^{\{u\}}_{\alpha\beta}$ Electric part of the Weyl"
@@ -291,6 +295,9 @@ class AurelCore():
     tetrad_to_use : str
         (*str*) - Tetrad to use for calculations. 
         Default is "quasi-Kinnersley".
+    Psi4_lm_radius : float
+        (*float*) - Radius for the Psi4_lm calculations. 
+        Default is 0.9 * min(Lx, Ly, Lz).
     kappa : float
         (*float*) - Einstein's constant with G = c = 1. Default is 8 * pi.
     calculation_count : int
@@ -324,6 +331,8 @@ class AurelCore():
                      + f" to 0.0, if not then redefine AurelCore.Lambda")
         self.Lambda = 0.0
         self.tetrad_to_use = "quasi-Kinnersley"
+        self.Psi4_lm_radius = 0.9 * min(
+            [self.param['Lx'], self.param['Ly'], self.param['Lz']])
 
         # data dictionary where everything is stored
         self.data = {}
@@ -1300,6 +1309,48 @@ class AurelCore():
             psi3 = psi3.at[mask].set(psi1[mask])
             psi1 = psi1new
             return [psi0, psi1, psi2, psi3, psi4]
+        
+    def Psi4_lm(self):
+        lmax = 8
+        Ntheta = 2*lmax + 1
+        Nphi = 2*lmax + 1
+
+        theta = jnp.linspace(0, jnp.pi, Ntheta)
+        phi = jnp.linspace(0, 2*jnp.pi, Nphi, endpoint=False)
+        theta_sphere, phi_sphere = jnp.meshgrid(theta, phi, indexing='ij')
+
+        x_sphere = (self.Psi4_lm_radius 
+                    * jnp.sin(theta_sphere) * jnp.cos(phi_sphere))
+        y_sphere = (self.Psi4_lm_radius 
+                    * jnp.sin(theta_sphere) * jnp.sin(phi_sphere))
+        z_sphere = (self.Psi4_lm_radius 
+                    * jnp.cos(theta_sphere))
+        points_sphere = jnp.stack(
+            (x_sphere.flatten(), y_sphere.flatten(), z_sphere.flatten()), 
+            axis=-1)
+
+        # Psi4 on a sphere
+        # sphere around the origin with radius 1
+        interp_real = scipy.interpolate.RegularGridInterpolator(
+            (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
+            jnp.real(self["Weyl_Psi"][4]), 
+            bounds_error=False, fill_value=0)
+        interp_imag = scipy.interpolate.RegularGridInterpolator(
+            (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
+            jnp.imag(self["Weyl_Psi"][4]), 
+            bounds_error=False, fill_value=0)
+        psi4_sphere = (interp_real(points_sphere) 
+                       + 1j * interp_imag(points_sphere))
+        psi4_sphere = psi4_sphere.reshape(Ntheta, Nphi)
+
+        # lm mode of Psi4
+        alm = spinsfast.map2salm(psi4_sphere, -2, lmax)
+        lm_dict = {}
+        for l in range(lmax + 1):
+            for m in range(-l, l + 1):
+                lm_dict[l, m] = alm[l**2 + m + l]
+        return lm_dict
+        
     
     def Weyl_invariants(self):
         Psis = self["Weyl_Psi"]

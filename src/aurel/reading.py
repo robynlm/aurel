@@ -619,7 +619,7 @@ def read_ET_data(param, var, **kwargs):
                        for f in cfiles])
 
     individual = np.sum(
-        [1 for file in h5files if 'hydrobase-rho.' in file]) == 0
+        [1 for file in h5files if 'admbase-metric.' in file]) == 0
     if individual:
         variables = {
             'rho0':['rho.', 'HYDROBASE::rho', 0],
@@ -655,8 +655,8 @@ def read_ET_data(param, var, **kwargs):
             'M1':['M1.', 'ML_BSSN::M1', 0],
             'M2':['M2.', 'ML_BSSN::M2', 0],
             'M3':['M3.', 'ML_BSSN::M3', 0],
-            'psi4r':['Psi4r.', 'WeylScal4::psi4r', 0],
-            'psi4i':['Psi4i.', 'WeylScal4::psi4i', 0],
+            'Psi4r':['Psi4r.', 'WEYLSCAL4::Psi4r', 0],
+            'Psi4i':['Psi4i.', 'WEYLSCAL4::Psi4i', 0],
         }
         # Define replacements as a dictionary
         replacements = {
@@ -666,7 +666,7 @@ def read_ET_data(param, var, **kwargs):
             'dtbetaup3': ['dtbetax', 'dtbetay', 'dtbetaz'],
             'velup3': ['vel[0]', 'vel[1]', 'vel[2]'],
             'Momentumup3': ['M1', 'M2', 'M3'],
-            'Weyl_Psi': ['psi4r', 'psi4i'],
+            'Weyl_Psi': ['Psi4r', 'Psi4i'],
         }
 
         # Replace variables in var according to the mapping
@@ -691,8 +691,8 @@ def read_ET_data(param, var, **kwargs):
             'Ktrace':['ml_bssn-ml_trace_curv.', 'ML_BSSN::trK', 0],
             'Hamiltonian':['ml_bssn-ml_ham.', 'ML_BSSN::H', 0],
             'Momentumup3':['ml_bssn-ml_mom.', 'ML_BSSN::M', 1],
-            'Weyl_Psi4r':['weylscal4-psi4r_group', 'WeylScal4::psi4r', 0],
-            'Weyl_Psi4i':['weylscal4-psi4i_group', 'WeylScal4::psi4i', 0],
+            'Weyl_Psi4r':['weylscal4-psi4r_group', 'WEYLSCAL4::Psi4r', 0],
+            'Weyl_Psi4i':['weylscal4-psi4i_group', 'WEYLSCAL4::Psi4i', 0],
         }
         replacements = {
             'Weyl_Psi': ['Weyl_Psi4r', 'Weyl_Psi4i'],
@@ -844,7 +844,7 @@ def read_ET_var(path, filename, varkey, cmax, rank, **kwargs):
         'trK':'Ktrace', 'H':'Hamiltonian',
         'vel[0]':'velx', 'vel[1]':'vely', 'vel[2]':'velz',
         'M1':'Momentumx', 'M2':'Momentumy', 'M3':'Momentumz',
-        'psi4r':'Weyl_Psi4r', 'psi4i':'Weyl_Psi4i'}
+        'Psi4r':'Weyl_Psi4r', 'Psi4i':'Weyl_Psi4i'}
     # per iteration, join the chunks together
     # fix the indexing to be x, y, z
     var = {}#varname+ij:[] for ij in all_components}

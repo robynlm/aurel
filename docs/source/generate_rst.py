@@ -46,7 +46,7 @@ st_curv = ['st_Gamma_udd4', 'st_Riemann_uddd4',
     'st_RicciS', 'Kretschmann']
 constraints = ['Hamiltonian', 'Hamiltonian_Escale',
     'Momentumup3', 'Momentum_Escale']
-gravimag = ['st_Weyl_down4', 'Weyl_Psi', 'Weyl_invariants',
+gravimag = ['st_Weyl_down4', 'Weyl_Psi', 'Psi4_lm', 'Weyl_invariants',
     'eweyl_u_down4', 'eweyl_n_down3', 'bweyl_u_down4',
     'bweyl_n_down3']
 varsdone = []
