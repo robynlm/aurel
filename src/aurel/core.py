@@ -441,8 +441,9 @@ class AurelCore():
                 # Get the size of the entry
                 data_size = sys.getsizeof(self.data[key])
                 if time_since_last_access > 1:
+                    importance = self.var_importance.get(key, 1.0)
                     strain = (time_since_last_access * data_size 
-                              * self.var_importance[key])
+                              * importance)
                 else:
                     strain = 0
 
@@ -467,9 +468,10 @@ class AurelCore():
                 for key, last_time in self.last_accessed.items():
                     time_since_last_access = self.calculation_count - last_time
                     if time_since_last_access > 1:
+                        importance = self.var_importance.get(key, 1.0)
                         strain = (time_since_last_access 
                                 * sys.getsizeof(self.data[key]) 
-                                * self.var_importance[key])
+                                * importance)
                         if strain > maxstrain:
                             maxstrain = strain
                             key_to_remove = key
