@@ -338,6 +338,7 @@ def read_data(param, var, **kwargs):
                 'dtbetaup3': ['dtbetax', 'dtbetay', 'dtbetaz'],
                 'velup3': ['velx', 'vely', 'velz'],
                 'Momentumup3': ['Momentumx', 'Momentumy', 'Momentumz'],
+                'Weyl_Psi': ['Weyl_Psi4r', 'Weyl_Psi4i'],
             }
             avar = var.copy()
             for key, new_vars in replacements.items():
@@ -365,6 +366,7 @@ def read_data(param, var, **kwargs):
             ETread_vars = []
             saved_vars = []
             for v in var:
+                # collect missing iterations
                 if v in list(replacements.keys()):
                     avar = replacements[v]
                     its_temp = []
@@ -374,10 +376,13 @@ def read_data(param, var, **kwargs):
                 else:
                     avar = [v]
                     its_temp = its_missing[v]
+                # if there are missing iterations
                 if its_temp != []:
                     kwargs['it'] = its_temp
+                    # retrieve missing iterations
                     data_temp = read_ET_data(
                         param, [v], **kwargs)
+                    # verbose update
                     ETread_vars += list(data_temp.keys())
                     if veryverbose:
                         print('Data read from ET files:', 
@@ -650,6 +655,8 @@ def read_ET_data(param, var, **kwargs):
             'M1':['M1.', 'ML_BSSN::M1', 0],
             'M2':['M2.', 'ML_BSSN::M2', 0],
             'M3':['M3.', 'ML_BSSN::M3', 0],
+            'psi4r':['Psi4r.', 'WeylScal4::psi4r', 0],
+            'psi4i':['Psi4i.', 'WeylScal4::psi4i', 0],
         }
         # Define replacements as a dictionary
         replacements = {
@@ -659,6 +666,7 @@ def read_ET_data(param, var, **kwargs):
             'dtbetaup3': ['dtbetax', 'dtbetay', 'dtbetaz'],
             'velup3': ['vel[0]', 'vel[1]', 'vel[2]'],
             'Momentumup3': ['M1', 'M2', 'M3'],
+            'Weyl_Psi': ['psi4r', 'psi4i'],
         }
 
         # Replace variables in var according to the mapping
@@ -683,7 +691,16 @@ def read_ET_data(param, var, **kwargs):
             'Ktrace':['ml_bssn-ml_trace_curv.', 'ML_BSSN::trK', 0],
             'Hamiltonian':['ml_bssn-ml_ham.', 'ML_BSSN::H', 0],
             'Momentumup3':['ml_bssn-ml_mom.', 'ML_BSSN::M', 1],
+            'Weyl_Psi4r':['weylscal4-psi4r_group', 'WeylScal4::psi4r', 0],
+            'Weyl_Psi4i':['weylscal4-psi4i_group', 'WeylScal4::psi4i', 0],
         }
+        replacements = {
+            'Weyl_Psi': ['Weyl_Psi4r', 'Weyl_Psi4i'],
+        }
+        for key, new_vars in replacements.items():
+            if key in var:
+                var.remove(key)
+                var += new_vars
 
     for v in var:
         if v in list(variables.keys()):
@@ -826,7 +843,8 @@ def read_ET_var(path, filename, varkey, cmax, rank, **kwargs):
         'rho':'rho0', 'alp':'alpha', 'dtalp':'dtalpha',
         'trK':'Ktrace', 'H':'Hamiltonian',
         'vel[0]':'velx', 'vel[1]':'vely', 'vel[2]':'velz',
-        'M1':'Momentumx', 'M2':'Momentumy', 'M3':'Momentumz'}
+        'M1':'Momentumx', 'M2':'Momentumy', 'M3':'Momentumz',
+        'psi4r':'Weyl_Psi4r', 'psi4i':'Weyl_Psi4i'}
     # per iteration, join the chunks together
     # fix the indexing to be x, y, z
     var = {}#varname+ij:[] for ij in all_components}

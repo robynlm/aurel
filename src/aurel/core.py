@@ -1271,31 +1271,35 @@ class AurelCore():
             return Cdown4
                    
     def Weyl_Psi(self):
-        lup4, kup4, mup4, mbup4 = self.null_vector_base()
-        psi0 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                         self["st_Weyl_down4"], kup4, mup4, kup4, mup4)
-        psi1 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                         self["st_Weyl_down4"], kup4, lup4, kup4, mup4)
-        psi2 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                         self["st_Weyl_down4"], kup4, mup4, mbup4, lup4)
-        psi3 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                         self["st_Weyl_down4"], kup4, lup4, mbup4, lup4)
-        psi4 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                         self["st_Weyl_down4"], mbup4, lup4, mbup4, lup4)
+        if "Weyl_Psi4r" in self.data.keys():
+            return [None, None, None, None, 
+                    self["Weyl_Psi4r"] + 1j * self["Weyl_Psi4i"]]
+        else:
+            lup4, kup4, mup4, mbup4 = self.null_vector_base()
+            psi0 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
+                            self["st_Weyl_down4"], kup4, mup4, kup4, mup4)
+            psi1 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
+                            self["st_Weyl_down4"], kup4, lup4, kup4, mup4)
+            psi2 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
+                            self["st_Weyl_down4"], kup4, mup4, mbup4, lup4)
+            psi3 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
+                            self["st_Weyl_down4"], kup4, lup4, mbup4, lup4)
+            psi4 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
+                            self["st_Weyl_down4"], mbup4, lup4, mbup4, lup4)
 
-        # As these are then used to compute the invariant scalars, here I check 
-        # if psi4 = 0 while psi0 =/= 0.  If it is the case I need to switch
-        # psi0 and psi4 as well as psi1 and psi3 so I do that here.
-        mask = jnp.where(jnp.logical_and(abs(psi4) < 1e-5, abs(psi0) > 1e-5))
-        psi0new = psi0
-        psi0new = psi0new.at[mask].set(psi4[mask])
-        psi4 = psi4.at[mask].set(psi0[mask])
-        psi0 = psi0new
-        psi1new = psi1
-        psi1new = psi1new.at[mask].set(psi3[mask])
-        psi3 = psi3.at[mask].set(psi1[mask])
-        psi1 = psi1new
-        return [psi0, psi1, psi2, psi3, psi4]
+            # As these are then used to compute the invariant scalars, here I check 
+            # if psi4 = 0 while psi0 =/= 0.  If it is the case I need to switch
+            # psi0 and psi4 as well as psi1 and psi3 so I do that here.
+            mask = jnp.where(jnp.logical_and(abs(psi4) < 1e-5, abs(psi0) > 1e-5))
+            psi0new = psi0
+            psi0new = psi0new.at[mask].set(psi4[mask])
+            psi4 = psi4.at[mask].set(psi0[mask])
+            psi0 = psi0new
+            psi1new = psi1
+            psi1new = psi1new.at[mask].set(psi3[mask])
+            psi3 = psi3.at[mask].set(psi1[mask])
+            psi1 = psi1new
+            return [psi0, psi1, psi2, psi3, psi4]
     
     def Weyl_invariants(self):
         Psis = self["Weyl_Psi"]
