@@ -176,6 +176,10 @@ def parameters(simname):
     if 'max_refinement_levels' not in parameters.keys():
         parameters['max_refinement_levels'] = 1
         
+    if 'out3D_ghosts' in parameters.keys():
+        if parameters['out3D_ghosts'] == 'no':
+            print("I don't know how to handle 3D output when"
+                  + " out3D_ghosts is set to 'no'.", flush=True)
     return parameters
 
 def saveprint(it_file, some_str):
@@ -693,8 +697,8 @@ def read_ET_data(param, var, **kwargs):
             'Ktrace':['ml_bssn-ml_trace_curv.', 'ML_BSSN::trK', 0],
             'Hamiltonian':['ml_bssn-ml_ham.', 'ML_BSSN::H', 0],
             'Momentumup3':['ml_bssn-ml_mom.', 'ML_BSSN::M', 1],
-            'Weyl_Psi4r':['weylscal4-psi4r_group', 'WEYLSCAL4::Psi4r', 0],
-            'Weyl_Psi4i':['weylscal4-psi4i_group', 'WEYLSCAL4::Psi4i', 0],
+            'Weyl_Psi4r':['weylscal4-psi4r_group.', 'WEYLSCAL4::Psi4r', 0],
+            'Weyl_Psi4i':['weylscal4-psi4i_group.', 'WEYLSCAL4::Psi4i', 0],
         }
         replacements = {
             'Weyl_Psi': ['Weyl_Psi4r', 'Weyl_Psi4i'],

@@ -10,11 +10,6 @@ You just need to create a virtual environment and install aurel there.
 Create a virtual environment
 ++++++++++++++++++++++++++++
 
-.. code-block:: bash
-
-   python -m venv ~/myenv
-   source ~/myenv/bin/activate
-
 You need to install FFTW, typically on an HPC this is one of the modules available, so find its name (replace fftw_name below), load it and check its paths
 
 .. code-block:: bash
@@ -22,6 +17,13 @@ You need to install FFTW, typically on an HPC this is one of the modules availab
    module avail
    module load fftw_name
    module show fftw_name
+
+Now create a virtual environment and activate it.
+
+.. code-block:: bash
+
+   python -m venv ~/myenv
+   source ~/myenv/bin/activate
 
 Then you should be able to do:
 
@@ -79,8 +81,8 @@ If you want to use aurel in a python script, before running it, activate the env
 
 .. code-block:: bash
 
-   source ~/myenv/bin/activate
    module load fftw_name
+   source ~/myenv/bin/activate
    python myscript.py
 
 then in your python script you can have

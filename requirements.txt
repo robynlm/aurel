@@ -7,3 +7,4 @@ glob2
 ipython
 jax
 jaxlib
+spinsfast
