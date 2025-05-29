@@ -167,8 +167,10 @@ def parameters(simname):
     for coord in ['x', 'y', 'z']:
         L = parameters[coord+'max']-parameters[coord+'min']
         N = int(L/parameters['d'+coord])
-        if parameters['boundary_shiftout_'+coord+'_upper'] == 1:
-            N += 1
+        for key in parameters.keys():
+            if key in ['boundary_shiftout_'+coord+'_lower', 
+                       'boundary_shiftout_'+coord+'_upper']:
+                N += parameters[key]
         parameters['L'+coord] = L
         parameters['N'+coord] = N
     if 'max_refinement_levels' not in parameters.keys():
