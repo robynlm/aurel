@@ -70,8 +70,7 @@ def parameters(simname):
     """
     parameters = {
         'simname':simname,
-        'simulation':'ET',
-        'split_per_it':True
+        'simulation':'ET'
         }
 
     # Looking for data
@@ -168,13 +167,19 @@ def parameters(simname):
     for coord in ['x', 'y', 'z']:
         L = parameters[coord+'max']-parameters[coord+'min']
         N = int(L/parameters['d'+coord])
-        if parameters['boundary_shiftout_'+coord+'_upper'] == 1:
-            N += 1
+        for key in parameters.keys():
+            if key in ['boundary_shiftout_'+coord+'_lower', 
+                       'boundary_shiftout_'+coord+'_upper']:
+                N += parameters[key]
         parameters['L'+coord] = L
         parameters['N'+coord] = N
     if 'max_refinement_levels' not in parameters.keys():
         parameters['max_refinement_levels'] = 1
         
+    if 'out3D_ghosts' in parameters.keys():
+        if parameters['out3D_ghosts'] == 'no':
+            print("I don't know how to handle 3D output when"
+                  + " out3D_ghosts is set to 'no'.", flush=True)
     return parameters
 
 def saveprint(it_file, some_str):
@@ -296,6 +301,9 @@ def read_data(param, var, **kwargs):
         The parameters of the simulation.
     var : list
         The variables to read from the simulation output files.
+
+    Other Parameters
+    ----------------
     it : list, optional
         The iterations to read from the simulation output files.
         The default is [0].
@@ -303,8 +311,17 @@ def read_data(param, var, **kwargs):
         The refinement level to read from the simulation output files.
         The default is 0.
     restart : int, optional
-        The restart number to read from the simulation output files.
+        The restart number to save the data to.
         The default is 0.
+    split_per_it : bool, optional
+        If True, if possible read the data from the split iterations.
+        Complete request ET files and save variables 
+        in individual files per iteration.
+        Else just read ET files.
+    verbose : bool, optional
+        If True, print additional information during the reading process.
+    veryverbose : bool, optional
+        If True, print even more information during the reading process.
     
     Returns
     -------
@@ -312,64 +329,105 @@ def read_data(param, var, **kwargs):
         A dictionary containing the data from the simulation output files.
         dict.keys() = ['it', 't', var[0], var[1], ...]
     """
+    it = np.sort(kwargs.get('it', [0]))
+    split_per_it = kwargs.get('split_per_it', True)
+    verbose = kwargs.get('verbose', False)
+    veryverbose = kwargs.get('veryverbose', False)
 
     if 'simulation' in param.keys():
-        if 'split_per_it' in param.keys():
-            if param['split_per_it']:
-                # different variable names, tensor to scalar
-                replacements = {
-                    'gammadown3': ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
-                    'Kdown3': ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
-                    'betaup3': ['betax', 'betay', 'betaz'],
-                    'dtbetaup3': ['dtbetax', 'dtbetay', 'dtbetaz'],
-                    'velup3': ['velx', 'vely', 'velz'],
-                    'Momentumup3': ['Momentumx', 'Momentumy', 'Momentumz'],
-                }
-                avar = var.copy()
-                for key, new_vars in replacements.items():
-                    if key in avar:
-                        avar.remove(key)
-                        avar += new_vars
+        if split_per_it:
+            # different variable names, tensor to scalar
+            replacements = {
+                'gammadown3': ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
+                'Kdown3': ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
+                'betaup3': ['betax', 'betay', 'betaz'],
+                'dtbetaup3': ['dtbetax', 'dtbetay', 'dtbetaz'],
+                'velup3': ['velx', 'vely', 'velz'],
+                'Momentumup3': ['Momentumx', 'Momentumy', 'Momentumz'],
+                'Weyl_Psi': ['Weyl_Psi4r', 'Weyl_Psi4i'],
+            }
+            avar = var.copy()
+            for key, new_vars in replacements.items():
+                if key in avar:
+                    avar.remove(key)
+                    avar += new_vars
 
-                # First get variables from split iterations
-                data = read_aurel_data(param, avar, **kwargs)
-                # find those that are missing
-                its_missing = {v: [] for v in avar}
-                it = np.sort(kwargs.get('it', [0]))
-                avart = avar + ['t']
-                for it_idx, iit in enumerate(it):
+            # First get variables from split iterations
+            data = read_aurel_data(param, avar, **kwargs)
+            if verbose:
+                cleaned_dict = {k: v for k, v in data.items() 
+                                if (not (isinstance(v, list) 
+                                         and all(x is None for x in v))
+                                    and k!='it')}
+                print('Data read from split iterations:', 
+                        list(cleaned_dict.keys()), flush=True)
+            # find those that are missing
+            its_missing = {v: [] for v in avar}
+            avart = avar + ['t']
+            for it_idx, iit in enumerate(it):
+                for av in avart:
+                    if data[av][it_idx] is None:
+                        its_missing[av] += [iit]
+            # if some are missing, read them from the ET data
+            ETread_vars = []
+            saved_vars = []
+            for v in var:
+                # collect missing iterations
+                if v in list(replacements.keys()):
+                    avar = replacements[v]
+                    its_temp = []
+                    for av in avar:
+                        its_temp += its_missing[av]
+                    its_temp = list(set(its_temp))
+                else:
+                    avar = [v]
+                    its_temp = its_missing[v]
+                # if there are missing iterations
+                if its_temp != []:
+                    kwargs['it'] = its_temp
+                    # retrieve missing iterations
+                    data_temp = read_ET_data(
+                        param, [v], **kwargs)
+                    # verbose update
+                    ETread_vars += list(data_temp.keys())
+                    if veryverbose:
+                        print('Data read from ET files:', 
+                                v, list(data_temp.keys()), flush=True)
+                    # update the data with the missing iterations
+                    avart = avar + ['t']
                     for av in avart:
-                        if data[av][it_idx] is None:
-                            its_missing[av] += [iit]
-                # if some are missing, read them from the ET data
-                for v in var:
-                    if v in list(replacements.keys()):
-                        avar = replacements[v]
-                        need_to_read = np.sum(
-                            [its_missing[av] != [] for av in avar]) > 0
-                    else:
-                        avar = [v]
-                        need_to_read = its_missing[v] != []
-                    if need_to_read:
-                        kwargs_temp = dict(kwargs)
-                        kwargs_temp.pop('it', None)
-                        data_temp = read_ET_data(
-                            param, [v], it=its_missing[avar[0]], **kwargs_temp)
-                        # update the data with the missing iterations
-                        avart = avar + ['t']
-                        for av in avart:
-                            for it_idx, iit in enumerate(it):
+                        if data_temp[av] is not None:
+                            for iidx, iit in enumerate(it):
                                 if iit in its_missing[av]:
-                                    it_idx_temp = np.argmin(np.abs(
-                                    data_temp['it'] - iit))
-                                    data[av][it_idx] = data_temp[av][it_idx_temp]
-                                    if av == 't':
+                                    iidxtem = np.argmin(np.abs(
+                                        data_temp['it'] - iit))
+                                    data[av][iidx] = data_temp[av][iidxtem]
+                                    # don't save this iteration
+                                    if ((data_temp[av][iidxtem] is None)
+                                        or (av == 't')):
                                         its_missing[av].remove(iit)
-                        # save the data for the missing iterations
-                            # and save them individually
-                            save_data(
-                                param, data_temp,
-                                vars=[av], it=its_missing[av], **kwargs_temp)
+                                        
+                            if its_missing[av] != []:
+                                # save the data for the missing iterations
+                                # and save them individually
+                                kwargs['it'] = its_missing[av]
+                                kwargs['vars'] = [av]
+                                saved_vars += [av]
+                                if veryverbose:
+                                    print('Saving data for {} at it = {}'.format(
+                                        av, its_missing[av]), flush=True)
+                                save_data(
+                                    param, data_temp,
+                                    **kwargs)
+            if verbose:
+                ETread_vars = list(set(ETread_vars))
+                saved_vars = list(set(saved_vars))
+                if ETread_vars != []:
+                    print('Variables read from ET files:', 
+                          ETread_vars, flush=True)
+                if saved_vars != []:
+                    print('Variables saved to split iterations files:', 
+                          saved_vars, flush=True)
         else:
             data = read_ET_data(param, var, **kwargs)
     else:
@@ -385,6 +443,9 @@ def read_aurel_data(param, var, **kwargs):
         The parameters of the simulation.
     var : list
         The variables to read from the simulation output files.
+
+    Other Parameters
+    ----------------
     it : list, optional
         The iterations to read from the simulation output files.
         The default is [0].
@@ -402,13 +463,15 @@ def read_aurel_data(param, var, **kwargs):
         dict.keys() = ['it', 't', var[0], var[1], ...]
     """
     it = np.sort(kwargs.get('it', [0]))
+    rl = kwargs.get('rl', 0)
+    restart = kwargs.get('restart', 0)
 
     if 'simulation' in param.keys():
-        restart = kwargs.get('restart', 0)
         datapath = (param['simpath']
                     + param['simname']
                     + '/output-{:04d}/'.format(restart)
-                    + param['simname'] + '/')
+                    + param['simname']
+                 + '/all_iterations/')
     else:
         datapath = param['datapath']
     var += ['t']
@@ -418,7 +481,6 @@ def read_aurel_data(param, var, **kwargs):
         if os.path.exists(fname):
             with h5py.File(fname, 'r') as f:
                 for key in var:
-                    rl = kwargs.get('rl', 0)
                     skey = key + ' rl={}'.format(rl)
                     if skey in list(f.keys()):
                         data[key].append(jnp.array(f[skey]))
@@ -426,7 +488,6 @@ def read_aurel_data(param, var, **kwargs):
                         data[key].append(None)
         else:
             for key in var:
-                rl = kwargs.get('rl', 0)
                 skey = key + ' rl={}'.format(rl)
                 data[key].append(None)
     return data
@@ -443,6 +504,9 @@ def save_data(param, data, **kwargs):
     data : dict
         The data to be saved.
         dict.keys() = ['it', 't', var[0], var[1], ...]
+
+    Other Parameters
+    ----------------
     vars : list, optional
         The variables to save from the data.
         If not provided, all variables in data will be saved.
@@ -466,12 +530,15 @@ def save_data(param, data, **kwargs):
     with keys '<variable_name> rl=<refinement_level>'
     """
     vars = kwargs.get('vars', [])
+    it = np.sort(kwargs.get('it', [0]))
+    rl = kwargs.get('rl', 0)
+    restart = kwargs.get('restart', 0)
+
     if vars == []:
         vars = list(data.keys())
 
     # check paths
     if 'simulation' in param.keys():
-        restart = kwargs.get('restart', 0)
         datapath = (param['simpath']
                  + param['simname']
                  + '/output-{:04d}/'.format(restart)
@@ -490,17 +557,17 @@ def save_data(param, data, **kwargs):
         os.makedirs(datapath)
     datapath += lastpart
 
-    it = np.sort(kwargs.get('it', [0]))
+    # save the data
     for it_index, iit in enumerate(it):
         fname = '{}it_{}.hdf5'.format(datapath, int(iit))
         with h5py.File(fname, 'a') as f:
             for key in vars:
-                rl = kwargs.get('rl', 0)
-                skey = key + ' rl={}'.format(rl)
-                # TODO: are you sure about overwritting?
-                if skey in list(f.keys()):
-                    del f[skey]
-                f.create_dataset(skey, data=data[key][it_index])
+                if data[key] is not None:
+                    skey = key + ' rl={}'.format(rl)
+                    # TODO: are you sure about overwritting?
+                    if skey in list(f.keys()):
+                        del f[skey]
+                    f.create_dataset(skey, data=data[key][it_index])
 
 def read_ET_data(param, var, **kwargs):
     """Read the data from Einstein Toolkit simulation output files.
@@ -511,15 +578,21 @@ def read_ET_data(param, var, **kwargs):
         The parameters of the simulation.
     var : list
         The variables to read from the simulation output files.
+
+    Other Parameters
+    ----------------
     it : list, optional
         The iterations to save from the data.
         The default is [0].
     rl : int, optional
-        The refinement level to save from the data.
+        The refinement level to read from the simulation output files.
         The default is 0.
     restart : int, optional
         The restart number to save the data to.
         The default is 0.
+    veryverbose : bool, optional
+        If True, print additional information during the joining process.
+        The default is False.
         
     Returns
     -------
@@ -527,12 +600,13 @@ def read_ET_data(param, var, **kwargs):
         A dictionary containing the data from the simulation output files.
         dict.keys() = ['it', 't', var[0], var[1], ...]
     """
-    # data to be returned
     it = np.sort(kwargs.get('it', [0]))
+    restart = kwargs.get('restart', 0)
+
+    # data to be returned
     data = {'it':it, 't':[]}
 
     # data directory path
-    restart = kwargs.get('restart', 0)
     data_path = (param['simpath']
                  + param['simname']
                  + '/output-{:04d}/'.format(restart)
@@ -551,7 +625,7 @@ def read_ET_data(param, var, **kwargs):
                        for f in cfiles])
 
     individual = np.sum(
-        [1 for file in h5files if 'hydrobase-rho.' in file]) == 0
+        [1 for file in h5files if 'admbase-metric.' in file]) == 0
     if individual:
         variables = {
             'rho0':['rho.', 'HYDROBASE::rho', 0],
@@ -587,6 +661,8 @@ def read_ET_data(param, var, **kwargs):
             'M1':['M1.', 'ML_BSSN::M1', 0],
             'M2':['M2.', 'ML_BSSN::M2', 0],
             'M3':['M3.', 'ML_BSSN::M3', 0],
+            'Psi4r':['Psi4r.', 'WEYLSCAL4::Psi4r', 0],
+            'Psi4i':['Psi4i.', 'WEYLSCAL4::Psi4i', 0],
         }
         # Define replacements as a dictionary
         replacements = {
@@ -596,6 +672,7 @@ def read_ET_data(param, var, **kwargs):
             'dtbetaup3': ['dtbetax', 'dtbetay', 'dtbetaz'],
             'velup3': ['vel[0]', 'vel[1]', 'vel[2]'],
             'Momentumup3': ['M1', 'M2', 'M3'],
+            'Weyl_Psi': ['Psi4r', 'Psi4i'],
         }
 
         # Replace variables in var according to the mapping
@@ -620,21 +697,29 @@ def read_ET_data(param, var, **kwargs):
             'Ktrace':['ml_bssn-ml_trace_curv.', 'ML_BSSN::trK', 0],
             'Hamiltonian':['ml_bssn-ml_ham.', 'ML_BSSN::H', 0],
             'Momentumup3':['ml_bssn-ml_mom.', 'ML_BSSN::M', 1],
+            'Weyl_Psi4r':['weylscal4-psi4r_group.', 'WEYLSCAL4::Psi4r', 0],
+            'Weyl_Psi4i':['weylscal4-psi4i_group.', 'WEYLSCAL4::Psi4i', 0],
         }
+        replacements = {
+            'Weyl_Psi': ['Weyl_Psi4r', 'Weyl_Psi4i'],
+        }
+        for key, new_vars in replacements.items():
+            if key in var:
+                var.remove(key)
+                var += new_vars
 
-    rl = kwargs.get('rl', 0)
     for v in var:
         if v in list(variables.keys()):
             att = variables[v]
             data.update(read_ET_var(
             data_path, att[0], att[1],
-            it, rl, cmax, att[2]))
+            cmax, att[2], **kwargs))
         else:
             print('Variable {} not found'.format(v))
 
     return data
 
-def read_ET_var(path, filename, varkey, it, rl, cmax, rank):
+def read_ET_var(path, filename, varkey, cmax, rank, **kwargs):
     """Read variables from Einstein Toolkit simulation output files.
     
     Parameters
@@ -645,16 +730,24 @@ def read_ET_var(path, filename, varkey, it, rl, cmax, rank):
         Identifying part of the variable output file name.
     varkey : str
         Identifying part of the variable's hdf5 key.
-    it : list
-        The iterations to read from the simulation output files.
-    rl : int
-        The refinement level to read from the simulation output files.
     cmax : int
         The maximum number of chunks to read from the simulation output files.
         If 'in file', it will be extracted from the file.
     rank : int
         The rank of the variable to read from the simulation output files.
         0 scalar, 1 vector, 2 tensor.
+
+    Other Parameters
+    ----------------
+    it : list, optional
+        The iterations to save from the data.
+        The default is [0].
+    rl : int, optional
+        The refinement level to read from the simulation output files.
+        The default is 0.
+    veryverbose : bool, optional
+        If True, print additional information during the joining process.
+        The default is False.
         
     Returns
     -------
@@ -663,6 +756,9 @@ def read_ET_var(path, filename, varkey, it, rl, cmax, rank):
 
         dict.keys() = ['it', 't', var]
     """
+
+    it = np.sort(kwargs.get('it', [0]))
+    rl = kwargs.get('rl', 0)
 
     # collect data files
     if cmax == 'in file':
@@ -692,55 +788,60 @@ def read_ET_var(path, filename, varkey, it, rl, cmax, rank):
     # also collect time while you're at it
     time = []
     collect_time = True
-    
+
     # go through one file at a time
     for fi, filename in enumerate(files):
         # open the file and collect data
-        with h5py.File(filename, 'r') as f:
-            # collect all it of that file
-            for iit in it:
-                # key of data to collect 
-                key_end = ' it={} tl=0 rl={}'.format(iit, rl)
-    
-                # find the actual number of chunks
-                if cmax == 'in file':
-                    fkeys = [k for k in f.keys() 
-                             if varkey+all_components[0]+key_end in k]
-                    if 'c=' in fkeys[0]:
-                        actual_cmax = np.max(list(set([
-                            int(k.split('c=')[1]) 
-                            for k in fkeys])))
+        file_present = os.path.exists(filename)
+        if file_present:
+            with h5py.File(filename, 'r') as f:
+                # collect all it of that file
+                for iit in it:
+                    # key of data to collect 
+                    key_end = ' it={} tl=0 rl={}'.format(iit, rl)
+        
+                    # find the actual number of chunks
+                    if cmax == 'in file':
+                        fkeys = [k for k in f.keys() 
+                                if varkey+all_components[0]+key_end in k]
+                        if 'c=' in fkeys[0]:
+                            actual_cmax = np.max(list(set([
+                                int(k.split('c=')[1]) 
+                                for k in fkeys])))
+                        else:
+                            actual_cmax = 0
+                        crange = np.arange(actual_cmax+1)
                     else:
-                        actual_cmax = 0
-                    crange = np.arange(actual_cmax+1)
-                else:
-                    actual_cmax = cmax
-                    crange = [fi]
+                        actual_cmax = cmax
+                        crange = [fi]
 
-                # for each chunk
-                for c in crange:
-                    if actual_cmax!=0: 
-                        key_end_with_c = key_end + ' c={}'.format(c)
-                    else:
-                        key_end_with_c = key_end
+                    # for each chunk
+                    for c in crange:
+                        if actual_cmax!=0: 
+                            key_end_with_c = key_end + ' c={}'.format(c)
+                        else:
+                            key_end_with_c = key_end
 
-                    # For each component
-                    for ij in all_components:
-                        # the full key to use
-                        key = varkey + ij + key_end_with_c
-                        # cut off ghost grid points
-                        ghost_x = f[key].attrs['cctk_nghostzones'][0]
-                        ghost_y = f[key].attrs['cctk_nghostzones'][1]
-                        ghost_z = f[key].attrs['cctk_nghostzones'][2]
-                        var = np.array(f[key])[
-                            ghost_z:-ghost_z, 
-                            ghost_y:-ghost_y, 
-                            ghost_x:-ghost_x]
-                        iorigin = tuple(f[key].attrs['iorigin'])
-                        var_chunks[iit][ij][iorigin] = var
-                if collect_time:
-                    time += [f[key].attrs['time']]
-            collect_time = False # only do this in one file
+                        # For each component
+                        for ij in all_components:
+                            # the full key to use
+                            key = varkey + ij + key_end_with_c
+                            # cut off ghost grid points
+                            ghost_x = f[key].attrs['cctk_nghostzones'][0]
+                            ghost_y = f[key].attrs['cctk_nghostzones'][1]
+                            ghost_z = f[key].attrs['cctk_nghostzones'][2]
+                            var = np.array(f[key])[
+                                ghost_z:-ghost_z, 
+                                ghost_y:-ghost_y, 
+                                ghost_x:-ghost_x]
+                            iorigin = tuple(f[key].attrs['iorigin'])
+                            var_chunks[iit][ij][iorigin] = var
+                    if collect_time:
+                        time += [f[key].attrs['time']]
+                collect_time = False # only do this in one file
+        else:
+            print('File {} not found'.format(filename), flush=True)
+            break
 
     # rename some variables to work with AurelCore
     varname = varkey.split('::')[1]
@@ -748,28 +849,38 @@ def read_ET_var(path, filename, varkey, it, rl, cmax, rank):
         'rho':'rho0', 'alp':'alpha', 'dtalp':'dtalpha',
         'trK':'Ktrace', 'H':'Hamiltonian',
         'vel[0]':'velx', 'vel[1]':'vely', 'vel[2]':'velz',
-        'M1':'Momentumx', 'M2':'Momentumy', 'M3':'Momentumz'}
-
+        'M1':'Momentumx', 'M2':'Momentumy', 'M3':'Momentumz',
+        'Psi4r':'Weyl_Psi4r', 'Psi4i':'Weyl_Psi4i'}
     # per iteration, join the chunks together
     # fix the indexing to be x, y, z
     var = {}#varname+ij:[] for ij in all_components}
-    for iit in it:
+    if file_present:
+        for iit in it:
+            for ij in all_components:
+                full_varname = varname+ij
+                if full_varname in list(vartorename.keys()):
+                    full_varname = vartorename[full_varname]
+                if iit == it[0]:
+                    var[full_varname] = [fixij(join_chunks(
+                        var_chunks[iit][ij], **kwargs))]
+                else:
+                    var[full_varname] += [fixij(join_chunks(
+                        var_chunks[iit][ij], **kwargs))]
+        var['t'] = time
+    else:
+        var = {}#varname+ij:[] for ij in all_components}
         for ij in all_components:
             full_varname = varname+ij
             if full_varname in list(vartorename.keys()):
                 full_varname = vartorename[full_varname]
-            if iit == it[0]:
-                var[full_varname] = [fixij(join_chunks(var_chunks[iit][ij]))]
-            else:
-                var[full_varname] += [fixij(join_chunks(var_chunks[iit][ij]))]
-    var['t'] = time
+            var[full_varname] = None
     return var
 
 def fixij(f):
     """Fix the x-z indexing as you read in the data."""
     return jnp.transpose(jnp.array(f), (2, 1, 0))
 
-def join_chunks(cut_data):
+def join_chunks(cut_data, **kwargs):
     """Join the chunks of data together.
     
     Parameters
@@ -778,17 +889,24 @@ def join_chunks(cut_data):
         A dictionary containing the data from the simulation output files.
         dict.keys() = tuple of the chunks 'iorigin' attribute 
         which maps out how the data is to be joined together.
+
+    Other Parameters
+    ----------------
+    veryverbose : bool, optional
+        If True, print additional information during the joining process.
+        The default is False.
     
     Returns
     -------
     uncut_data : array_like
         The data now joined together.
     """
+    veryverbose = kwargs.get('veryverbose', False)
+
     all_keys = list(cut_data.keys())
     cmax = len(all_keys) - 1
 
-    verbose = False
-    if verbose:
+    if veryverbose:
         print(cmax, all_keys)
         for k in all_keys:
             print(k, np.shape(cut_data[k]))
@@ -807,36 +925,31 @@ def join_chunks(cut_data):
     else:
         # append along axis = 2
         k = all_keys[0]
-        current_key = k[1:]
-        ndata = {current_key:cut_data[k]}
+        ndata = {k[1:]:cut_data[k]}
         for k in all_keys[1:]:
-            if current_key == k[1:]:
-                ndata[current_key] = np.append(
-                    ndata[current_key], cut_data[k], axis=2)
+            if k[1:] in list(ndata.keys()):
+                ndata[k[1:]] = np.append(
+                    ndata[k[1:]], cut_data[k], axis=2)
             else:
-                current_key = k[1:]
-                ndata[current_key] = cut_data[k]
+                ndata[k[1:]] = cut_data[k]
         all_keys = list(ndata.keys())
         
-        if verbose:
+        if veryverbose:
             for k in all_keys:
                 print(k, np.shape(ndata[k]), flush=True)
             print()
 
         # append along axis = 1
-        k = all_keys[0]
-        current_key = k[1:]
-        nndata = {current_key:ndata[k]}
-        for k in all_keys[1:]:
-            if current_key == k[1:]:
-                nndata[current_key] = np.append(
-                    nndata[current_key], ndata[k], axis=1)
+        nndata = {}
+        for k in all_keys:
+            if k[1:] in list(nndata.keys()):
+                nndata[k[1:]] = np.append(
+                    nndata[k[1:]], ndata[k], axis=1)
             else:
-                current_key = k[1:]
-                nndata[current_key] = ndata[k]
+                nndata[k[1:]] = ndata[k]
         all_keys = list(nndata.keys())
         
-        if verbose:
+        if veryverbose:
             for k in all_keys:
                 print(k, np.shape(nndata[k]), flush=True)
             print()
@@ -848,7 +961,7 @@ def join_chunks(cut_data):
             uncut_data = np.append(
                 uncut_data, nndata[k], axis=0)
         
-        if verbose:
+        if veryverbose:
             print(np.shape(uncut_data), flush=True)
     return uncut_data
 

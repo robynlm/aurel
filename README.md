@@ -9,13 +9,7 @@
 [![Build](https://img.shields.io/badge/build-passing-brightgreen)]()
 [![Documentation](https://img.shields.io/badge/docs-available-blue)]()
 
-`aurel` is a open source Python package for computing geometric and physical quantities in general relativity on a 3D spatial grid. It is designed to support both analytical and numerical spacetimes by providing an easy interface to automatically calculate any relativistic listed in descriptions LINK.
-
-## Installation
-
-`pip install aurel`
-
-## Documentation
+`aurel` is a open source Python package for computing geometric and physical quantities in general relativity on a 3D spatial grid. It is designed to support both analytical and numerical spacetimes by providing an easy interface to *automatically calculate any relativistic term your heart desires*.
 
 See the [documentation](https://robynlm.github.io/aurel/)
 

@@ -35,7 +35,9 @@ fluid = ['rho_n', 'fluxup3_n', 'fluxdown3_n', 'angmomup3_n',
 conserv = ['conserved_D', 'conserved_E', 'conserved_Sdown4', 
            'conserved_Sdown3', 'conserved_Sup4', 
            'conserved_Sup3', 'dtconserved']
-kinema = ['thetadown4', 'theta', 'sheardown4', 'shear2']
+kinema = ['st_covd_udown4', 'accelerationdown4', 'accelerationup4', 
+          's_covd_udown4', 'thetadown4', 'theta', 'sheardown4', 'shear2',
+          'omegadown4', 'omega2']
 s_curv = ['s_RicciS_u', 's_Gamma_udd3', 's_Riemann_uddd3', 
     's_Riemann_down3', 's_Ricci_down3', 's_RicciS']
 st_curv = ['st_Gamma_udd4', 'st_Riemann_uddd4',
@@ -44,7 +46,7 @@ st_curv = ['st_Gamma_udd4', 'st_Riemann_uddd4',
     'st_RicciS', 'Kretschmann']
 constraints = ['Hamiltonian', 'Hamiltonian_Escale',
     'Momentumup3', 'Momentum_Escale']
-gravimag = ['st_Weyl_down4', 'Weyl_Psi', 'Weyl_invariants',
+gravimag = ['st_Weyl_down4', 'Weyl_Psi', 'Psi4_lm', 'Weyl_invariants',
     'eweyl_u_down4', 'eweyl_n_down3', 'bweyl_u_down4',
     'bweyl_n_down3']
 varsdone = []

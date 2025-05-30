@@ -8,7 +8,7 @@ This module is the main event. It contains:
    **AurelCore.data** dictionary. For an input spacetime and matter 
    distribution, AurelCore can automatically retrieve any relativistic 
    variable listed in the descriptions dictionary.
-   This class has many attributes and functions a
+   This class has many attributes and functions, a
    large part of which are listed in the descriptions dictionary, 
    but also many other tensor calculus functions.
    The descriptions functions are called as:
@@ -21,11 +21,12 @@ This module is the main event. It contains:
 """
 
 import sys
+import scipy
 import numpy as np
-import jax
 import jax.numpy as jnp
 from IPython.display import display, Math, Latex
 from . import maths
+import spinsfast
 
 # Descriptions for each AurelCore.data entry and function
 # assumed variables need to be listed in docs/source/source/generate_rst.py
@@ -166,12 +167,27 @@ descriptions = {
                     + r" and energy flux (or momentum density)"
                     + r" with spatial indices down in Wilson's formalism"),
     # Kinematics
+    "st_covd_udown4": (r"$\nabla_{\mu} u_{\nu}$ Spacetime covariant derivative"
+                       + r" of Lagrangian fluid four velocity"
+                       + r" with spacetime indices down"),
+    "accelerationdown4": (r"$a_{\mu}$ Acceleration of the fluid"
+                          + r" with spacetime indices down"),
+    "accelerationup4": (r"$a^{\mu}$ Acceleration of the fluid"
+                          + r" with spacetime indices up"),
+    "s_covd_udown4": (r"$\mathcal{D}^{\{u\}}_{\mu} u_{\nu}$ Spatial covariant"
+                      + r" derivative of Lagrangian fluid four velocity"
+                      + r" with spacetime indices down, with respect to"
+                      + r" spatial hypersurfaces orthonormal to"
+                      + r" the fluid flow"),
     "thetadown4": (r"$\Theta_{\mu\nu}$ Fluid expansion tensor"
                    + r" with spacetime indices down"),
     "theta": r"$\Theta$ Fluid expansion scalar",
     "sheardown4": (r"$\sigma_{\mu\nu}$ Fluid shear tensor"
                    + r" with spacetime indices down"),
     "shear2": r"$\sigma^2$ Magnitude of fluid shear",
+    "omegadown4": (r"$\omega_{\mu\nu}$ Fluid vorticity tensor"
+                   + r" with spacetime indices down"),
+    "omega2": r"$\omega^2$ Magnitude of fluid vorticity",
     "s_RicciS_u": (r"${}^{(3)}R^{\{u\}}$ Ricci scalar of the spatial metric"
                    + r" orthonormal to fluid flow"),
 
@@ -222,6 +238,10 @@ descriptions = {
     "Weyl_Psi": (r"$\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$"
                  + r" List of Weyl scalars for an null vector base defined"
                  + r" with AurelCore.tetrad_to_use"),
+    "Psi4_lm": (r"$\Psi_4^{l,m}$ Dictionary of spin weighted spherical"
+                + r" harmonic decomposition of the 4th Weyl scalar,"
+                + r" control radius with AurelCore.Psi4_lm_radius."
+                + r" ``Spinsfast`` is used for the decomposition."),
     "Weyl_invariants": (r"$I, \; J, \; L, \; K, \; N$"
                         + r" Dictionary of Weyl invariants"),
     "eweyl_u_down4": (r"$E^{\{u\}}_{\alpha\beta}$ Electric part of the Weyl"
@@ -276,6 +296,9 @@ class AurelCore():
     tetrad_to_use : str
         (*str*) - Tetrad to use for calculations. 
         Default is "quasi-Kinnersley".
+    Psi4_lm_radius : float
+        (*float*) - Radius for the Psi4_lm calculations. 
+        Default is 0.9 * min(Lx, Ly, Lz).
     kappa : float
         (*float*) - Einstein's constant with G = c = 1. Default is 8 * pi.
     calculation_count : int
@@ -309,6 +332,10 @@ class AurelCore():
                      + f" to 0.0, if not then redefine AurelCore.Lambda")
         self.Lambda = 0.0
         self.tetrad_to_use = "quasi-Kinnersley"
+        self.Psi4_lm_radius = 0.9 * min(
+            [self.param['Nx']*self.param['dx'], 
+             self.param['Ny']*self.param['dy'], 
+             self.param['Nz']*self.param['dz']])
 
         # data dictionary where everything is stored
         self.data = {}
@@ -398,11 +425,12 @@ class AurelCore():
         memory_threshold = self.memory_threshold_inGB * 1024 * 1024 * 1024
         memory_limit_exceeded = total_cache_size >= memory_threshold
         if regular_cleanup or memory_limit_exceeded:
-            if self.verbose:
-                print(f"Cleaning up cache after {self.calculation_count}"
-                      + f" calculations...")
-                print(f"data size before cleanup: "
-                      + f"{total_cache_size / 1_048_576:.2f} MB")
+            self.myprint('CLEAN-UP: '+
+                f"Cleaning up cache after {self.calculation_count}"
+                + f" calculations...")
+            self.myprint('CLEAN-UP: '+
+                f"data size before cleanup: "
+                + f"{total_cache_size / 1_048_576:.2f} MB")
             
             scalar_size = (
                 self.param['Nx'] * self.param['Ny'] * self.param['Nz'] * 8)
@@ -416,18 +444,19 @@ class AurelCore():
                 # Get the size of the entry
                 data_size = sys.getsizeof(self.data[key])
                 if time_since_last_access > 1:
+                    importance = self.var_importance.get(key, 1.0)
                     strain = (time_since_last_access * data_size 
-                              * self.var_importance[key])
+                              * importance)
                 else:
                     strain = 0
 
                 # Consider old entries and large entries for removal
                 if strain > strain_tolerance:
-                    if self.verbose:
-                        print(f"Removing cached value for '{key}'"
-                              + f" used {time_since_last_access}"
-                              + f" calculations ago (size: "
-                              + f"{data_size / 1_048_576:.2f} MB).")
+                    self.myprint('CLEAN-UP: '+
+                        f"Removing cached value for '{key}'"
+                        + f" used {time_since_last_access}"
+                        + f" calculations ago (size: "
+                        + f"{data_size / 1_048_576:.2f} MB).")
                     key_to_remove += [key]
             
             for key in key_to_remove:
@@ -442,21 +471,24 @@ class AurelCore():
                 for key, last_time in self.last_accessed.items():
                     time_since_last_access = self.calculation_count - last_time
                     if time_since_last_access > 1:
+                        importance = self.var_importance.get(key, 1.0)
                         strain = (time_since_last_access 
                                 * sys.getsizeof(self.data[key]) 
-                                * self.var_importance[key])
+                                * importance)
                         if strain > maxstrain:
                             maxstrain = strain
                             key_to_remove = key
                 if maxstrain == 0:
-                    if self.verbose:
-                        print(f"Current cache size "
-                              + f"{total_cache_size / 1_048_576:.2f} MB, "
-                              + f"max memory "
-                              + f"{memory_threshold / 1_048_576:.2f} MB")
-                        print("Max memory too small,"
-                              + "no more unimportant cache to remove.")
-                        print("Current variables: ", self.data.keys())
+                    self.myprint('CLEAN-UP: '+
+                        f"Current cache size "
+                        + f"{total_cache_size / 1_048_576:.2f} MB, "
+                        + f"max memory "
+                        + f"{memory_threshold / 1_048_576:.2f} MB")
+                    self.myprint('CLEAN-UP: '+
+                        "Max memory too small,"
+                        + "no more unimportant cache to remove.")
+                    self.myprint('CLEAN-UP: '+
+                                 "Current variables: ", self.data.keys())
                     break
                 else:
                     # Remove the key with the maximum strain
@@ -464,20 +496,22 @@ class AurelCore():
                         calc_age = (self.calculation_count 
                                     - self.last_accessed[key_to_remove])
                         varsize = sys.getsizeof(self.data[key_to_remove])
-                        print(f"Removing cached value for '{key_to_remove}' "
-                              + f"used {calc_age} "
-                              + f"calculations ago (size: "
-                              + f"{varsize / 1_048_576:.2f} MB).")
+                        self.myprint('CLEAN-UP: '+
+                            f"Removing cached value for '{key_to_remove}' "
+                            + f"used {calc_age} "
+                            + f"calculations ago (size: "
+                            + f"{varsize / 1_048_576:.2f} MB).")
                     del self.data[key_to_remove]
                     del self.last_accessed[key_to_remove]
                     nbr_keys_removed += 1
                     total_cache_size = sum(sys.getsizeof(value) 
                                            for value in self.data.values())
 
-            if self.verbose:
-                print(f"Removed {nbr_keys_removed} items")
-                print(f"data size after cleanup: "
-                      + f"{total_cache_size / 1_048_576:.2f} MB")
+            self.myprint('CLEAN-UP: '+
+                         f"Removed {nbr_keys_removed} items")
+            self.myprint('CLEAN-UP: '+
+                         f"data size after cleanup: "
+                         + f"{total_cache_size / 1_048_576:.2f} MB")
 
     def load_data(self, sim_data, iteration):
         """Load simulation data into this classe's data dictionary, and freeze.
@@ -822,8 +856,7 @@ class AurelCore():
         return self["conserved_Sup4"][1:]
 
     def dtconserved(self):
-        if self.verbose:
-            print('WARNING: dtconserved only works for constant press/rho')
+        self.myprint('WARNING: dtconserved only works for constant press/rho')
         V = maths.safe_division(self["uup4"][1:], self["uup4"][0])
         sgdet = jnp.sqrt(self["gammadet"]) 
 
@@ -889,9 +922,9 @@ class AurelCore():
         return dtD, dtE, dtSdown3
     
     # Kinematics
-    def thetadown4(self):
+    def st_covd_udown4(self):
         dtD, dtE, dtSdown3 = self["dtconserved"]
-
+    
         # dtu
         dtudown3 = self["udown3"] * (
             maths.safe_division(dtSdown3, self["conserved_Sdown3"])
@@ -909,13 +942,24 @@ class AurelCore():
                     [dtudown0, 
                      dtudown3[0], dtudown3[1], dtudown3[2]])
         # spacetime covariant derivative
-        CovDu = self.st_covd(
-            self["udown4"], dtudown4, 'u')
-        # project along fluid flow
-        CovariantCovDu = jnp.einsum(
-            'ab...,ac...->bc...', self["hmixed4"], CovDu)
-        # make it symmetric
-        return maths.symmetrise_tensor(CovariantCovDu)
+        return self.st_covd(self["udown4"], dtudown4, 'u')
+    
+    def accelerationdown4(self):
+        return jnp.einsum(
+            'a..., ab... -> b...',
+            self["uup4"], self["st_covd_udown4"])
+    
+    def accelerationup4(self):
+        return jnp.einsum(
+            'ab..., b... -> a...',
+            self["gup4"], self["accelerationdown4"])
+    
+    def s_covd_udown4(self):
+        return jnp.einsum(
+            'ab...,ac...->bc...', self["hmixed4"], self["st_covd_udown4"])
+    
+    def thetadown4(self):
+        return maths.symmetrise_tensor(self["s_covd_udown4"])
     
     def theta(self):
         return jnp.einsum('ab..., ab... -> ...', 
@@ -928,7 +972,15 @@ class AurelCore():
         return 0.5 * jnp.einsum(
             'ai..., bj..., ab..., ij... -> ...', 
             self["hup4"], self["hup4"], self["sheardown4"], self["sheardown4"])
-
+    
+    def omegadown4(self):
+        return maths.antisymmetrise_tensor(self["s_covd_udown4"])
+    
+    def omega2(self):
+        return 0.5 * jnp.einsum(
+            'ai..., bj..., ab..., ij... -> ...', 
+            self["hup4"], self["hup4"], self["omegadown4"], self["omegadown4"])
+    
     def s_RicciS_u(self):
         return 2 * (
             self["shear2"]
@@ -1237,38 +1289,77 @@ class AurelCore():
             return Cdown4
                    
     def Weyl_Psi(self):
-        lup4, kup4, mup4, mbup4 = self.null_vector_base()
-        psi0 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                         self["st_Weyl_down4"], kup4, mup4, kup4, mup4)
-        psi1 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                         self["st_Weyl_down4"], kup4, lup4, kup4, mup4)
-        psi2 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                         self["st_Weyl_down4"], kup4, mup4, mbup4, lup4)
-        psi3 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                         self["st_Weyl_down4"], kup4, lup4, mbup4, lup4)
-        psi4 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                         self["st_Weyl_down4"], mbup4, lup4, mbup4, lup4)
+        if "Weyl_Psi4r" in self.data.keys():
+            return [None, None, None, None, 
+                    self["Weyl_Psi4r"] + 1j * self["Weyl_Psi4i"]]
+        else:
+            lup4, kup4, mup4, mbup4 = self.null_vector_base()
+            psi0 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
+                            self["st_Weyl_down4"], kup4, mup4, kup4, mup4)
+            psi1 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
+                            self["st_Weyl_down4"], kup4, lup4, kup4, mup4)
+            psi2 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
+                            self["st_Weyl_down4"], kup4, mup4, mbup4, lup4)
+            psi3 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
+                            self["st_Weyl_down4"], kup4, lup4, mbup4, lup4)
+            psi4 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
+                            self["st_Weyl_down4"], mbup4, lup4, mbup4, lup4)
+            return [psi0, psi1, psi2, psi3, psi4]
+        
+    def Psi4_lm(self):
+        # TODO: fix interpolation when dealing with half-grid + symmetry
+        lmax = 8
+        Ntheta = 2*lmax + 1
+        Nphi = 2*lmax + 1
 
-        # As these are then used to compute the invariant scalars, here I check 
-        # if psi4 = 0 while psi0 =/= 0.  If it is the case I need to switch
-        # psi0 and psi4 as well as psi1 and psi3 so I do that here.
-        mask = jnp.where(jnp.logical_and(abs(psi4) < 1e-5, abs(psi0) > 1e-5))
-        psi0new = psi0
-        psi0new = psi0new.at[mask].set(psi4[mask])
-        psi4 = psi4.at[mask].set(psi0[mask])
-        psi0 = psi0new
-        psi1new = psi1
-        psi1new = psi1new.at[mask].set(psi3[mask])
-        psi3 = psi3.at[mask].set(psi1[mask])
-        psi1 = psi1new
-        return [psi0, psi1, psi2, psi3, psi4]
+        theta = jnp.linspace(0, jnp.pi, Ntheta)
+        phi = jnp.linspace(0, 2*jnp.pi, Nphi, endpoint=False)
+        theta_sphere, phi_sphere = jnp.meshgrid(theta, phi, indexing='ij')
+
+        x_sphere = (self.Psi4_lm_radius 
+                    * jnp.sin(theta_sphere) * jnp.cos(phi_sphere))
+        y_sphere = (self.Psi4_lm_radius 
+                    * jnp.sin(theta_sphere) * jnp.sin(phi_sphere))
+        z_sphere = (self.Psi4_lm_radius 
+                    * jnp.cos(theta_sphere))
+        points_sphere = jnp.stack(
+            (x_sphere.flatten(), y_sphere.flatten(), z_sphere.flatten()), 
+            axis=-1)
+
+        # Psi4 on a sphere
+        # sphere around the origin with radius 1
+        interp_real = scipy.interpolate.RegularGridInterpolator(
+            (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
+            jnp.real(self["Weyl_Psi"][4]), 
+            bounds_error=False, fill_value=0)
+        interp_imag = scipy.interpolate.RegularGridInterpolator(
+            (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
+            jnp.imag(self["Weyl_Psi"][4]), 
+            bounds_error=False, fill_value=0)
+        psi4_sphere = (interp_real(points_sphere) 
+                       + 1j * interp_imag(points_sphere))
+        psi4_sphere = psi4_sphere.reshape(Ntheta, Nphi)
+
+        # lm mode of Psi4
+        alm = spinsfast.map2salm(psi4_sphere, -2, lmax)
+        lm_dict = {}
+        for l in range(lmax + 1):
+            for m in range(-l, l + 1):
+                lm_dict[l, m] = alm[l**2 + m + l]
+        return lm_dict
+        
     
     def Weyl_invariants(self):
         Psis = self["Weyl_Psi"]
         I_inv = Psis[0]*Psis[4] - 4*Psis[1]*Psis[3] + 3*Psis[2]*Psis[2]
-        J_inv = maths.determinant3(jnp.array([[Psis[4], Psis[3], Psis[2]], 
-                                       [Psis[3], Psis[2], Psis[1]], 
-                                       [Psis[2], Psis[1], Psis[0]]]))
+        J_inv = maths.determinant3(
+            jnp.array([[Psis[4], Psis[3], Psis[2]], 
+                       [Psis[3], Psis[2], Psis[1]], 
+                       [Psis[2], Psis[1], Psis[0]]]))
+        
+        self.myprint("WARNING: I'm not switching Psi0 and Psi4 here, "
+                     + "so the invariants are not correct if Psi4 = 0."
+                     + "Same for Psi1 and Psi3.")
         L_inv = Psis[2]*Psis[4] - (Psis[3]**2)
         K_inv = (Psis[1]*(Psis[4]**2) 
                  - 3*Psis[4]*Psis[3]*Psis[2] 
@@ -1387,6 +1478,9 @@ class AurelCore():
           Cactus/arrangements/EinsteinAnalysis/WeylScal4/m/WeylScal4.m 
           however, like in the WeylScal4 thorn, 
           I do not perform the final rotation
+          Extra note TODO: There is a difference of magnitude between psi4 
+          from this code and WeylScal4, need to compare the 4-Riemann. 
+          But EB calc and Riemann calc give the same.
         - for Gram-Schmidt scheme see Chapter 7 of 
           'Linear Algebra, Theory and applications' by W.Cheney and D.Kincaid
 

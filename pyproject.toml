@@ -38,6 +38,7 @@ dependencies = [
     "ipython",
     "jax",
     "jaxlib"
+    "spinsfast"
 ]
 
 [project.urls]
