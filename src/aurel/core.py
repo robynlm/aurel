@@ -8,7 +8,7 @@ This module is the main event. It contains:
    **AurelCore.data** dictionary. For an input spacetime and matter 
    distribution, AurelCore can automatically retrieve any relativistic 
    variable listed in the descriptions dictionary.
-   This class has many attributes and functions a
+   This class has many attributes and functions, a
    large part of which are listed in the descriptions dictionary, 
    but also many other tensor calculus functions.
    The descriptions functions are called as:
@@ -240,7 +240,8 @@ descriptions = {
                  + r" with AurelCore.tetrad_to_use"),
     "Psi4_lm": (r"$\Psi_4^{l,m}$ Dictionary of spin weighted spherical"
                 + r" harmonic decomposition of the 4th Weyl scalar,"
-                + r" control radius with AurelCore.Psi4_lm_radius"),
+                + r" control radius with AurelCore.Psi4_lm_radius."
+                + r" ``Spinsfast`` is used for the decomposition."),
     "Weyl_invariants": (r"$I, \; J, \; L, \; K, \; N$"
                         + r" Dictionary of Weyl invariants"),
     "eweyl_u_down4": (r"$E^{\{u\}}_{\alpha\beta}$ Electric part of the Weyl"
@@ -332,7 +333,9 @@ class AurelCore():
         self.Lambda = 0.0
         self.tetrad_to_use = "quasi-Kinnersley"
         self.Psi4_lm_radius = 0.9 * min(
-            [self.param['Lx'], self.param['Ly'], self.param['Lz']])
+            [self.param['Nx']*self.param['dx'], 
+             self.param['Ny']*self.param['dy'], 
+             self.param['Nz']*self.param['dz']])
 
         # data dictionary where everything is stored
         self.data = {}
@@ -422,10 +425,10 @@ class AurelCore():
         memory_threshold = self.memory_threshold_inGB * 1024 * 1024 * 1024
         memory_limit_exceeded = total_cache_size >= memory_threshold
         if regular_cleanup or memory_limit_exceeded:
-            self.myprint(
+            self.myprint('CLEAN-UP: '+
                 f"Cleaning up cache after {self.calculation_count}"
                 + f" calculations...")
-            self.myprint(
+            self.myprint('CLEAN-UP: '+
                 f"data size before cleanup: "
                 + f"{total_cache_size / 1_048_576:.2f} MB")
             
@@ -449,7 +452,7 @@ class AurelCore():
 
                 # Consider old entries and large entries for removal
                 if strain > strain_tolerance:
-                    self.myprint(
+                    self.myprint('CLEAN-UP: '+
                         f"Removing cached value for '{key}'"
                         + f" used {time_since_last_access}"
                         + f" calculations ago (size: "
@@ -476,15 +479,16 @@ class AurelCore():
                             maxstrain = strain
                             key_to_remove = key
                 if maxstrain == 0:
-                    self.myprint(
+                    self.myprint('CLEAN-UP: '+
                         f"Current cache size "
                         + f"{total_cache_size / 1_048_576:.2f} MB, "
                         + f"max memory "
                         + f"{memory_threshold / 1_048_576:.2f} MB")
-                    self.myprint(
+                    self.myprint('CLEAN-UP: '+
                         "Max memory too small,"
                         + "no more unimportant cache to remove.")
-                    self.myprint("Current variables: ", self.data.keys())
+                    self.myprint('CLEAN-UP: '+
+                                 "Current variables: ", self.data.keys())
                     break
                 else:
                     # Remove the key with the maximum strain
@@ -492,7 +496,7 @@ class AurelCore():
                         calc_age = (self.calculation_count 
                                     - self.last_accessed[key_to_remove])
                         varsize = sys.getsizeof(self.data[key_to_remove])
-                        self.myprint(
+                        self.myprint('CLEAN-UP: '+
                             f"Removing cached value for '{key_to_remove}' "
                             + f"used {calc_age} "
                             + f"calculations ago (size: "
@@ -503,8 +507,10 @@ class AurelCore():
                     total_cache_size = sum(sys.getsizeof(value) 
                                            for value in self.data.values())
 
-            self.myprint(f"Removed {nbr_keys_removed} items")
-            self.myprint(f"data size after cleanup: "
+            self.myprint('CLEAN-UP: '+
+                         f"Removed {nbr_keys_removed} items")
+            self.myprint('CLEAN-UP: '+
+                         f"data size after cleanup: "
                          + f"{total_cache_size / 1_048_576:.2f} MB")
 
     def load_data(self, sim_data, iteration):
@@ -1301,6 +1307,7 @@ class AurelCore():
             return [psi0, psi1, psi2, psi3, psi4]
         
     def Psi4_lm(self):
+        # TODO: fix interpolation when dealing with half-grid + symmetry
         lmax = 8
         Ntheta = 2*lmax + 1
         Nphi = 2*lmax + 1
@@ -1351,8 +1358,8 @@ class AurelCore():
                        [Psis[2], Psis[1], Psis[0]]]))
         
         self.myprint("WARNING: I'm not switching Psi0 and Psi4 here, "
-                     + "so the invariants are not correct if Psi4 = 0.")
-        self.myprint("Same for Psi1 and Psi3.")
+                     + "so the invariants are not correct if Psi4 = 0."
+                     + "Same for Psi1 and Psi3.")
         L_inv = Psis[2]*Psis[4] - (Psis[3]**2)
         K_inv = (Psis[1]*(Psis[4]**2) 
                  - 3*Psis[4]*Psis[3]*Psis[2] 
@@ -1471,6 +1478,9 @@ class AurelCore():
           Cactus/arrangements/EinsteinAnalysis/WeylScal4/m/WeylScal4.m 
           however, like in the WeylScal4 thorn, 
           I do not perform the final rotation
+          Extra note TODO: There is a difference of magnitude between psi4 
+          from this code and WeylScal4, need to compare the 4-Riemann. 
+          But EB calc and Riemann calc give the same.
         - for Gram-Schmidt scheme see Chapter 7 of 
           'Linear Algebra, Theory and applications' by W.Cheney and D.Kincaid
 
