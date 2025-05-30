@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aurel"
-dynamic = ["version"]
+version = "0.0.dev0"
 description = "A Python package for general relativity calculations."
 readme = "README.md"
 license = "GPL-3.0-or-later"
@@ -44,8 +44,3 @@ dependencies = [
 [project.urls]
 Source = "https://github.com/robynlm/aurel"
 Documentation = "https://robynlm.github.io/aurel/"
-
-[tool.setuptools_scm]
-version_scheme = "post-release"
-local_scheme = "no-local-version"
-write_to = "src/aurel/_version.py"
