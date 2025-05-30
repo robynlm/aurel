@@ -1127,27 +1127,41 @@ class AurelCore():
                                     self["Kdown3"], self["Kdown3"]))
         # Riemann_ssst : Codazzi equation, eq 2.41 in Shibata
         dKdown = self.s_covd(self["Kdown3"], 'dd')
+        #Riemann_ssst = (
+        #    jnp.einsum('ijkl..., l... -> ijk...', 
+        #               Riemann_ssss, self["betaup3"])
+        #    + self["alpha"] * (jnp.einsum('jik... -> ijk...', dKdown) 
+        #                       - dKdown))
         Riemann_ssst = (
-            jnp.einsum('ijkl..., l... -> ijk...', 
-                       Riemann_ssss, self["betaup3"])
-            + self["alpha"] * (jnp.einsum('jik... -> ijk...', dKdown) 
-                               - dKdown))
+            self["alpha"] 
+            * (jnp.einsum('jik... -> ijk...', dKdown) 
+               - dKdown))
             
         # Riemann_stst: the Mainardi equation, eq 2.56 in Shibata
         Kdown4 = self.s_to_st(self["Kdown3"])
+        #Riemann_stst = (
+        #    jnp.einsum('jki..., k... -> ij...', Riemann_ssst, self["betaup3"])
+        #    + jnp.einsum('ikj..., k... -> ij...', 
+        #                 Riemann_ssst, self["betaup3"])
+        #    + jnp.einsum('ikjl..., k..., l... -> ij...', 
+        #                Riemann_ssss, self["betaup3"], self["betaup3"])
+        #+ self["alpha"]**2 * (
+        #    self["s_Ricci_down3"]
+        #    - self["st_Ricci_down3"]
+        #    - jnp.einsum('ib..., ja..., ab... -> ij...', 
+        #                Kdown4, Kdown4, self["gup4"])[1:,1:]
+        #    + self["Kdown3"] * jnp.einsum('ab..., ab... -> ...', 
+        #                                self["Kdown3"], self["gammaup3"])))
         Riemann_stst = (
-            jnp.einsum('jki..., k... -> ij...', Riemann_ssst, self["betaup3"])
-            + jnp.einsum('ikj..., k... -> ij...', 
-                         Riemann_ssst, self["betaup3"])
-            + jnp.einsum('ikjl..., k..., l... -> ij...', 
-                        Riemann_ssss, self["betaup3"], self["betaup3"])
-        + self["alpha"]**2 * (
-            self["s_Ricci_down3"]
-            - self["st_Ricci_down3"]
-            - jnp.einsum('ib..., ja..., ab... -> ij...', 
-                        Kdown4, Kdown4, self["gup4"])[1:,1:]
-            + self["Kdown3"] * jnp.einsum('ab..., ab... -> ...', 
-                                        self["Kdown3"], self["gammaup3"])))
+            self["alpha"]**2 * (
+                self["s_Ricci_down3"]
+                - self["st_Ricci_down3"]
+                - jnp.einsum('ib..., ja..., ab... -> ij...', 
+                             Kdown4, Kdown4, self["gup4"])[1:,1:]
+                             + (self["Kdown3"] 
+                                * jnp.einsum(
+                                    'ab..., ab... -> ...', 
+                                    self["Kdown3"], self["gammaup3"]))))
             
         # put it all together
         R = jnp.zeros(
