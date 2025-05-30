@@ -1152,6 +1152,7 @@ class AurelCore():
         #                Kdown4, Kdown4, self["gup4"])[1:,1:]
         #    + self["Kdown3"] * jnp.einsum('ab..., ab... -> ...', 
         #                                self["Kdown3"], self["gammaup3"])))
+        #
         Riemann_stst = (
             self["alpha"]**2 * (
                 self["s_Ricci_down3"]
