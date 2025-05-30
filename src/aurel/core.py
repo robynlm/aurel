@@ -422,12 +422,12 @@ class AurelCore():
         memory_threshold = self.memory_threshold_inGB * 1024 * 1024 * 1024
         memory_limit_exceeded = total_cache_size >= memory_threshold
         if regular_cleanup or memory_limit_exceeded:
-            # TODO: case where key is in last_accessed but not in var_importance
-            if self.verbose:
-                print(f"Cleaning up cache after {self.calculation_count}"
-                      + f" calculations...")
-                print(f"data size before cleanup: "
-                      + f"{total_cache_size / 1_048_576:.2f} MB")
+            self.myprint(
+                f"Cleaning up cache after {self.calculation_count}"
+                + f" calculations...")
+            self.myprint(
+                f"data size before cleanup: "
+                + f"{total_cache_size / 1_048_576:.2f} MB")
             
             scalar_size = (
                 self.param['Nx'] * self.param['Ny'] * self.param['Nz'] * 8)
@@ -449,11 +449,11 @@ class AurelCore():
 
                 # Consider old entries and large entries for removal
                 if strain > strain_tolerance:
-                    if self.verbose:
-                        print(f"Removing cached value for '{key}'"
-                              + f" used {time_since_last_access}"
-                              + f" calculations ago (size: "
-                              + f"{data_size / 1_048_576:.2f} MB).")
+                    self.myprint(
+                        f"Removing cached value for '{key}'"
+                        + f" used {time_since_last_access}"
+                        + f" calculations ago (size: "
+                        + f"{data_size / 1_048_576:.2f} MB).")
                     key_to_remove += [key]
             
             for key in key_to_remove:
@@ -476,14 +476,15 @@ class AurelCore():
                             maxstrain = strain
                             key_to_remove = key
                 if maxstrain == 0:
-                    if self.verbose:
-                        print(f"Current cache size "
-                              + f"{total_cache_size / 1_048_576:.2f} MB, "
-                              + f"max memory "
-                              + f"{memory_threshold / 1_048_576:.2f} MB")
-                        print("Max memory too small,"
-                              + "no more unimportant cache to remove.")
-                        print("Current variables: ", self.data.keys())
+                    self.myprint(
+                        f"Current cache size "
+                        + f"{total_cache_size / 1_048_576:.2f} MB, "
+                        + f"max memory "
+                        + f"{memory_threshold / 1_048_576:.2f} MB")
+                    self.myprint(
+                        "Max memory too small,"
+                        + "no more unimportant cache to remove.")
+                    self.myprint("Current variables: ", self.data.keys())
                     break
                 else:
                     # Remove the key with the maximum strain
@@ -491,20 +492,20 @@ class AurelCore():
                         calc_age = (self.calculation_count 
                                     - self.last_accessed[key_to_remove])
                         varsize = sys.getsizeof(self.data[key_to_remove])
-                        print(f"Removing cached value for '{key_to_remove}' "
-                              + f"used {calc_age} "
-                              + f"calculations ago (size: "
-                              + f"{varsize / 1_048_576:.2f} MB).")
+                        self.myprint(
+                            f"Removing cached value for '{key_to_remove}' "
+                            + f"used {calc_age} "
+                            + f"calculations ago (size: "
+                            + f"{varsize / 1_048_576:.2f} MB).")
                     del self.data[key_to_remove]
                     del self.last_accessed[key_to_remove]
                     nbr_keys_removed += 1
                     total_cache_size = sum(sys.getsizeof(value) 
                                            for value in self.data.values())
 
-            if self.verbose:
-                print(f"Removed {nbr_keys_removed} items")
-                print(f"data size after cleanup: "
-                      + f"{total_cache_size / 1_048_576:.2f} MB")
+            self.myprint(f"Removed {nbr_keys_removed} items")
+            self.myprint(f"data size after cleanup: "
+                         + f"{total_cache_size / 1_048_576:.2f} MB")
 
     def load_data(self, sim_data, iteration):
         """Load simulation data into this classe's data dictionary, and freeze.
@@ -849,8 +850,7 @@ class AurelCore():
         return self["conserved_Sup4"][1:]
 
     def dtconserved(self):
-        if self.verbose:
-            print('WARNING: dtconserved only works for constant press/rho')
+        self.myprint('WARNING: dtconserved only works for constant press/rho')
         V = maths.safe_division(self["uup4"][1:], self["uup4"][0])
         sgdet = jnp.sqrt(self["gammadet"]) 
 
@@ -1298,19 +1298,6 @@ class AurelCore():
                             self["st_Weyl_down4"], kup4, lup4, mbup4, lup4)
             psi4 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
                             self["st_Weyl_down4"], mbup4, lup4, mbup4, lup4)
-
-            # As these are then used to compute the invariant scalars, here I check 
-            # if psi4 = 0 while psi0 =/= 0.  If it is the case I need to switch
-            # psi0 and psi4 as well as psi1 and psi3 so I do that here.
-            mask = jnp.where(jnp.logical_and(abs(psi4) < 1e-5, abs(psi0) > 1e-5))
-            psi0new = psi0
-            psi0new = psi0new.at[mask].set(psi4[mask])
-            psi4 = psi4.at[mask].set(psi0[mask])
-            psi0 = psi0new
-            psi1new = psi1
-            psi1new = psi1new.at[mask].set(psi3[mask])
-            psi3 = psi3.at[mask].set(psi1[mask])
-            psi1 = psi1new
             return [psi0, psi1, psi2, psi3, psi4]
         
     def Psi4_lm(self):
@@ -1358,9 +1345,14 @@ class AurelCore():
     def Weyl_invariants(self):
         Psis = self["Weyl_Psi"]
         I_inv = Psis[0]*Psis[4] - 4*Psis[1]*Psis[3] + 3*Psis[2]*Psis[2]
-        J_inv = maths.determinant3(jnp.array([[Psis[4], Psis[3], Psis[2]], 
-                                       [Psis[3], Psis[2], Psis[1]], 
-                                       [Psis[2], Psis[1], Psis[0]]]))
+        J_inv = maths.determinant3(
+            jnp.array([[Psis[4], Psis[3], Psis[2]], 
+                       [Psis[3], Psis[2], Psis[1]], 
+                       [Psis[2], Psis[1], Psis[0]]]))
+        
+        self.myprint("WARNING: I'm not switching Psi0 and Psi4 here, "
+                     + "so the invariants are not correct if Psi4 = 0.")
+        self.myprint("Same for Psi1 and Psi3.")
         L_inv = Psis[2]*Psis[4] - (Psis[3]**2)
         K_inv = (Psis[1]*(Psis[4]**2) 
                  - 3*Psis[4]*Psis[3]*Psis[2] 
