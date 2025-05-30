@@ -1,0 +1,41 @@
+name: Test build
+
+on:
+  push:
+    branches:
+      - development
+      - main
+
+jobs:
+  test-and-update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Install system dependencies (FFTW)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libfftw3-dev
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install build twine
+        pip install sphinx sphinx-rtd-theme sphinx-math-dollar
+
+    - name: Build the package
+      run: python -m build
+
+    - name: Build documentation
+      run: |
+        cd docs
+        make html

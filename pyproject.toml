@@ -37,7 +37,7 @@ dependencies = [
     "scipy",
     "ipython",
     "jax",
-    "jaxlib"
+    "jaxlib",
     "spinsfast"
 ]
 
