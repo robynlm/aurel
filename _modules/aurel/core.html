@@ -87,7 +87,7 @@
 <span class="sd">   **AurelCore.data** dictionary. For an input spacetime and matter </span>
 <span class="sd">   distribution, AurelCore can automatically retrieve any relativistic </span>
 <span class="sd">   variable listed in the descriptions dictionary.</span>
-<span class="sd">   This class has many attributes and functions a</span>
+<span class="sd">   This class has many attributes and functions, a</span>
 <span class="sd">   large part of which are listed in the descriptions dictionary, </span>
 <span class="sd">   but also many other tensor calculus functions.</span>
 <span class="sd">   The descriptions functions are called as:</span>
@@ -100,11 +100,12 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Math</span><span class="p">,</span> <span class="n">Latex</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">maths</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">spinsfast</span>
 
 <span class="c1"># Descriptions for each AurelCore.data entry and function</span>
 <span class="c1"># assumed variables need to be listed in docs/source/source/generate_rst.py</span>
@@ -245,12 +246,27 @@
                     <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; and energy flux (or momentum density)&quot;</span>
                     <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; with spatial indices down in Wilson&#39;s formalism&quot;</span><span class="p">),</span>
     <span class="c1"># Kinematics</span>
+    <span class="s2">&quot;st_covd_udown4&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\nabla_{\mu} u_{\nu}$ Spacetime covariant derivative&quot;</span>
+                       <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; of Lagrangian fluid four velocity&quot;</span>
+                       <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; with spacetime indices down&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;accelerationdown4&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$a_{\mu}$ Acceleration of the fluid&quot;</span>
+                          <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; with spacetime indices down&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;accelerationup4&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$a^{\mu}$ Acceleration of the fluid&quot;</span>
+                          <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; with spacetime indices up&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;s_covd_udown4&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{D}</span><span class="s2">^{\{u\}}_{\mu} u_{\nu}$ Spatial covariant&quot;</span>
+                      <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; derivative of Lagrangian fluid four velocity&quot;</span>
+                      <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; with spacetime indices down, with respect to&quot;</span>
+                      <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; spatial hypersurfaces orthonormal to&quot;</span>
+                      <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; the fluid flow&quot;</span><span class="p">),</span>
     <span class="s2">&quot;thetadown4&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Theta_{\mu\nu}$ Fluid expansion tensor&quot;</span>
                    <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; with spacetime indices down&quot;</span><span class="p">),</span>
     <span class="s2">&quot;theta&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$\Theta$ Fluid expansion scalar&quot;</span><span class="p">,</span>
     <span class="s2">&quot;sheardown4&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\sigma_{\mu\nu}$ Fluid shear tensor&quot;</span>
                    <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; with spacetime indices down&quot;</span><span class="p">),</span>
     <span class="s2">&quot;shear2&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$\sigma^2$ Magnitude of fluid shear&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;omegadown4&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\omega_{\mu\nu}$ Fluid vorticity tensor&quot;</span>
+                   <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; with spacetime indices down&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;omega2&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$\omega^2$ Magnitude of fluid vorticity&quot;</span><span class="p">,</span>
     <span class="s2">&quot;s_RicciS_u&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$</span><span class="si">{}</span><span class="s2">^{(3)}R^{\{u\}}$ Ricci scalar of the spatial metric&quot;</span>
                    <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; orthonormal to fluid flow&quot;</span><span class="p">),</span>
 
@@ -301,6 +317,10 @@
     <span class="s2">&quot;Weyl_Psi&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$&quot;</span>
                  <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; List of Weyl scalars for an null vector base defined&quot;</span>
                  <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; with AurelCore.tetrad_to_use&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Psi4_lm&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Psi_4^{l,m}$ Dictionary of spin weighted spherical&quot;</span>
+                <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; harmonic decomposition of the 4th Weyl scalar,&quot;</span>
+                <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; control radius with AurelCore.Psi4_lm_radius.&quot;</span>
+                <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; ``Spinsfast`` is used for the decomposition.&quot;</span><span class="p">),</span>
     <span class="s2">&quot;Weyl_invariants&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$I, \; J, \; L, \; K, \; N$&quot;</span>
                         <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; Dictionary of Weyl invariants&quot;</span><span class="p">),</span>
     <span class="s2">&quot;eweyl_u_down4&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$E^{\{u\}}_{\alpha\beta}$ Electric part of the Weyl&quot;</span>
@@ -357,6 +377,9 @@
 <span class="sd">    tetrad_to_use : str</span>
 <span class="sd">        (*str*) - Tetrad to use for calculations. </span>
 <span class="sd">        Default is &quot;quasi-Kinnersley&quot;.</span>
+<span class="sd">    Psi4_lm_radius : float</span>
+<span class="sd">        (*float*) - Radius for the Psi4_lm calculations. </span>
+<span class="sd">        Default is 0.9 * min(Lx, Ly, Lz).</span>
 <span class="sd">    kappa : float</span>
 <span class="sd">        (*float*) - Einstein&#39;s constant with G = c = 1. Default is 8 * pi.</span>
 <span class="sd">    calculation_count : int</span>
@@ -390,6 +413,10 @@
                      <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; to 0.0, if not then redefine AurelCore.Lambda&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Lambda</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tetrad_to_use</span> <span class="o">=</span> <span class="s2">&quot;quasi-Kinnersley&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Psi4_lm_radius</span> <span class="o">=</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="nb">min</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">],</span> 
+             <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dy&#39;</span><span class="p">],</span> 
+             <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dz&#39;</span><span class="p">]])</span>
 
         <span class="c1"># data dictionary where everything is stored</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
@@ -487,11 +514,12 @@
         <span class="n">memory_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory_threshold_inGB</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span>
         <span class="n">memory_limit_exceeded</span> <span class="o">=</span> <span class="n">total_cache_size</span> <span class="o">&gt;=</span> <span class="n">memory_threshold</span>
         <span class="k">if</span> <span class="n">regular_cleanup</span> <span class="ow">or</span> <span class="n">memory_limit_exceeded</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cleaning up cache after </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation_count</span><span class="si">}</span><span class="s2">&quot;</span>
-                      <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; calculations...&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data size before cleanup: &quot;</span>
-                      <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">total_cache_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1_048_576</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="s1">&#39;CLEAN-UP: &#39;</span><span class="o">+</span>
+                <span class="sa">f</span><span class="s2">&quot;Cleaning up cache after </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation_count</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; calculations...&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="s1">&#39;CLEAN-UP: &#39;</span><span class="o">+</span>
+                <span class="sa">f</span><span class="s2">&quot;data size before cleanup: &quot;</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">total_cache_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1_048_576</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>
             
             <span class="n">scalar_size</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span>
@@ -505,18 +533,19 @@
                 <span class="c1"># Get the size of the entry</span>
                 <span class="n">data_size</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
                 <span class="k">if</span> <span class="n">time_since_last_access</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">importance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_importance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
                     <span class="n">strain</span> <span class="o">=</span> <span class="p">(</span><span class="n">time_since_last_access</span> <span class="o">*</span> <span class="n">data_size</span> 
-                              <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_importance</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                              <span class="o">*</span> <span class="n">importance</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">strain</span> <span class="o">=</span> <span class="mi">0</span>
 
                 <span class="c1"># Consider old entries and large entries for removal</span>
                 <span class="k">if</span> <span class="n">strain</span> <span class="o">&gt;</span> <span class="n">strain_tolerance</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removing cached value for &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-                              <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; used </span><span class="si">{</span><span class="n">time_since_last_access</span><span class="si">}</span><span class="s2">&quot;</span>
-                              <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; calculations ago (size: &quot;</span>
-                              <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1_048_576</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB).&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="s1">&#39;CLEAN-UP: &#39;</span><span class="o">+</span>
+                        <span class="sa">f</span><span class="s2">&quot;Removing cached value for &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; used </span><span class="si">{</span><span class="n">time_since_last_access</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; calculations ago (size: &quot;</span>
+                        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1_048_576</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB).&quot;</span><span class="p">)</span>
                     <span class="n">key_to_remove</span> <span class="o">+=</span> <span class="p">[</span><span class="n">key</span><span class="p">]</span>
             
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">key_to_remove</span><span class="p">:</span>
@@ -531,21 +560,24 @@
                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">last_time</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_accessed</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="n">time_since_last_access</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculation_count</span> <span class="o">-</span> <span class="n">last_time</span>
                     <span class="k">if</span> <span class="n">time_since_last_access</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">importance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_importance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
                         <span class="n">strain</span> <span class="o">=</span> <span class="p">(</span><span class="n">time_since_last_access</span> 
                                 <span class="o">*</span> <span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> 
-                                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_importance</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                                <span class="o">*</span> <span class="n">importance</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">strain</span> <span class="o">&gt;</span> <span class="n">maxstrain</span><span class="p">:</span>
                             <span class="n">maxstrain</span> <span class="o">=</span> <span class="n">strain</span>
                             <span class="n">key_to_remove</span> <span class="o">=</span> <span class="n">key</span>
                 <span class="k">if</span> <span class="n">maxstrain</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current cache size &quot;</span>
-                              <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">total_cache_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1_048_576</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB, &quot;</span>
-                              <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;max memory &quot;</span>
-                              <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">memory_threshold</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1_048_576</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Max memory too small,&quot;</span>
-                              <span class="o">+</span> <span class="s2">&quot;no more unimportant cache to remove.&quot;</span><span class="p">)</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current variables: &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="s1">&#39;CLEAN-UP: &#39;</span><span class="o">+</span>
+                        <span class="sa">f</span><span class="s2">&quot;Current cache size &quot;</span>
+                        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">total_cache_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1_048_576</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB, &quot;</span>
+                        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;max memory &quot;</span>
+                        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">memory_threshold</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1_048_576</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="s1">&#39;CLEAN-UP: &#39;</span><span class="o">+</span>
+                        <span class="s2">&quot;Max memory too small,&quot;</span>
+                        <span class="o">+</span> <span class="s2">&quot;no more unimportant cache to remove.&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="s1">&#39;CLEAN-UP: &#39;</span><span class="o">+</span>
+                                 <span class="s2">&quot;Current variables: &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
                     <span class="k">break</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># Remove the key with the maximum strain</span>
@@ -553,20 +585,22 @@
                         <span class="n">calc_age</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation_count</span> 
                                     <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_accessed</span><span class="p">[</span><span class="n">key_to_remove</span><span class="p">])</span>
                         <span class="n">varsize</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key_to_remove</span><span class="p">])</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removing cached value for &#39;</span><span class="si">{</span><span class="n">key_to_remove</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
-                              <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;used </span><span class="si">{</span><span class="n">calc_age</span><span class="si">}</span><span class="s2"> &quot;</span>
-                              <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;calculations ago (size: &quot;</span>
-                              <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">varsize</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1_048_576</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB).&quot;</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="s1">&#39;CLEAN-UP: &#39;</span><span class="o">+</span>
+                            <span class="sa">f</span><span class="s2">&quot;Removing cached value for &#39;</span><span class="si">{</span><span class="n">key_to_remove</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
+                            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;used </span><span class="si">{</span><span class="n">calc_age</span><span class="si">}</span><span class="s2"> &quot;</span>
+                            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;calculations ago (size: &quot;</span>
+                            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">varsize</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1_048_576</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB).&quot;</span><span class="p">)</span>
                     <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key_to_remove</span><span class="p">]</span>
                     <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_accessed</span><span class="p">[</span><span class="n">key_to_remove</span><span class="p">]</span>
                     <span class="n">nbr_keys_removed</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="n">total_cache_size</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> 
                                            <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="n">nbr_keys_removed</span><span class="si">}</span><span class="s2"> items&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data size after cleanup: &quot;</span>
-                      <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">total_cache_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1_048_576</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="s1">&#39;CLEAN-UP: &#39;</span><span class="o">+</span>
+                         <span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="n">nbr_keys_removed</span><span class="si">}</span><span class="s2"> items&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="s1">&#39;CLEAN-UP: &#39;</span><span class="o">+</span>
+                         <span class="sa">f</span><span class="s2">&quot;data size after cleanup: &quot;</span>
+                         <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">total_cache_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1_048_576</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="AurelCore.load_data">
@@ -918,8 +952,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;conserved_Sup4&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">dtconserved</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;WARNING: dtconserved only works for constant press/rho&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="s1">&#39;WARNING: dtconserved only works for constant press/rho&#39;</span><span class="p">)</span>
         <span class="n">V</span> <span class="o">=</span> <span class="n">maths</span><span class="o">.</span><span class="n">safe_division</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;uup4&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;uup4&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">sgdet</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;gammadet&quot;</span><span class="p">])</span> 
 
@@ -985,9 +1018,9 @@
         <span class="k">return</span> <span class="n">dtD</span><span class="p">,</span> <span class="n">dtE</span><span class="p">,</span> <span class="n">dtSdown3</span>
     
     <span class="c1"># Kinematics</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">thetadown4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">st_covd_udown4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">dtD</span><span class="p">,</span> <span class="n">dtE</span><span class="p">,</span> <span class="n">dtSdown3</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;dtconserved&quot;</span><span class="p">]</span>
-
+    
         <span class="c1"># dtu</span>
         <span class="n">dtudown3</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;udown3&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span>
             <span class="n">maths</span><span class="o">.</span><span class="n">safe_division</span><span class="p">(</span><span class="n">dtSdown3</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;conserved_Sdown3&quot;</span><span class="p">])</span>
@@ -1005,13 +1038,24 @@
                     <span class="p">[</span><span class="n">dtudown0</span><span class="p">,</span> 
                      <span class="n">dtudown3</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtudown3</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtudown3</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
         <span class="c1"># spacetime covariant derivative</span>
-        <span class="n">CovDu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">st_covd</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;udown4&quot;</span><span class="p">],</span> <span class="n">dtudown4</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">)</span>
-        <span class="c1"># project along fluid flow</span>
-        <span class="n">CovariantCovDu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
-            <span class="s1">&#39;ab...,ac...-&gt;bc...&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;hmixed4&quot;</span><span class="p">],</span> <span class="n">CovDu</span><span class="p">)</span>
-        <span class="c1"># make it symmetric</span>
-        <span class="k">return</span> <span class="n">maths</span><span class="o">.</span><span class="n">symmetrise_tensor</span><span class="p">(</span><span class="n">CovariantCovDu</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">st_covd</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;udown4&quot;</span><span class="p">],</span> <span class="n">dtudown4</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">accelerationdown4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+            <span class="s1">&#39;a..., ab... -&gt; b...&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;uup4&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;st_covd_udown4&quot;</span><span class="p">])</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">accelerationup4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+            <span class="s1">&#39;ab..., b... -&gt; a...&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;gup4&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;accelerationdown4&quot;</span><span class="p">])</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">s_covd_udown4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+            <span class="s1">&#39;ab...,ac...-&gt;bc...&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;hmixed4&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;st_covd_udown4&quot;</span><span class="p">])</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">thetadown4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">maths</span><span class="o">.</span><span class="n">symmetrise_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;s_covd_udown4&quot;</span><span class="p">])</span>
     
     <span class="k">def</span><span class="w"> </span><span class="nf">theta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ab..., ab... -&gt; ...&#39;</span><span class="p">,</span> 
@@ -1024,7 +1068,15 @@
         <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
             <span class="s1">&#39;ai..., bj..., ab..., ij... -&gt; ...&#39;</span><span class="p">,</span> 
             <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;hup4&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;hup4&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;sheardown4&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;sheardown4&quot;</span><span class="p">])</span>
-
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">omegadown4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">maths</span><span class="o">.</span><span class="n">antisymmetrise_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;s_covd_udown4&quot;</span><span class="p">])</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">omega2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+            <span class="s1">&#39;ai..., bj..., ab..., ij... -&gt; ...&#39;</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;hup4&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;hup4&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;omegadown4&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;omegadown4&quot;</span><span class="p">])</span>
+    
     <span class="k">def</span><span class="w"> </span><span class="nf">s_RicciS_u</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span>
             <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;shear2&quot;</span><span class="p">]</span>
@@ -1333,38 +1385,77 @@
             <span class="k">return</span> <span class="n">Cdown4</span>
                    
     <span class="k">def</span><span class="w"> </span><span class="nf">Weyl_Psi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">lup4</span><span class="p">,</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">mup4</span><span class="p">,</span> <span class="n">mbup4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">null_vector_base</span><span class="p">()</span>
-        <span class="n">psi0</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;abcd..., a..., b..., c..., d... -&gt; ...&#39;</span><span class="p">,</span> 
-                         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;st_Weyl_down4&quot;</span><span class="p">],</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">mup4</span><span class="p">,</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">mup4</span><span class="p">)</span>
-        <span class="n">psi1</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;abcd..., a..., b..., c..., d... -&gt; ...&#39;</span><span class="p">,</span> 
-                         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;st_Weyl_down4&quot;</span><span class="p">],</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">lup4</span><span class="p">,</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">mup4</span><span class="p">)</span>
-        <span class="n">psi2</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;abcd..., a..., b..., c..., d... -&gt; ...&#39;</span><span class="p">,</span> 
-                         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;st_Weyl_down4&quot;</span><span class="p">],</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">mup4</span><span class="p">,</span> <span class="n">mbup4</span><span class="p">,</span> <span class="n">lup4</span><span class="p">)</span>
-        <span class="n">psi3</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;abcd..., a..., b..., c..., d... -&gt; ...&#39;</span><span class="p">,</span> 
-                         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;st_Weyl_down4&quot;</span><span class="p">],</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">lup4</span><span class="p">,</span> <span class="n">mbup4</span><span class="p">,</span> <span class="n">lup4</span><span class="p">)</span>
-        <span class="n">psi4</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;abcd..., a..., b..., c..., d... -&gt; ...&#39;</span><span class="p">,</span> 
-                         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;st_Weyl_down4&quot;</span><span class="p">],</span> <span class="n">mbup4</span><span class="p">,</span> <span class="n">lup4</span><span class="p">,</span> <span class="n">mbup4</span><span class="p">,</span> <span class="n">lup4</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;Weyl_Psi4r&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> 
+                    <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi4r&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi4i&quot;</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lup4</span><span class="p">,</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">mup4</span><span class="p">,</span> <span class="n">mbup4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">null_vector_base</span><span class="p">()</span>
+            <span class="n">psi0</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;abcd..., a..., b..., c..., d... -&gt; ...&#39;</span><span class="p">,</span> 
+                            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;st_Weyl_down4&quot;</span><span class="p">],</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">mup4</span><span class="p">,</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">mup4</span><span class="p">)</span>
+            <span class="n">psi1</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;abcd..., a..., b..., c..., d... -&gt; ...&#39;</span><span class="p">,</span> 
+                            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;st_Weyl_down4&quot;</span><span class="p">],</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">lup4</span><span class="p">,</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">mup4</span><span class="p">)</span>
+            <span class="n">psi2</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;abcd..., a..., b..., c..., d... -&gt; ...&#39;</span><span class="p">,</span> 
+                            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;st_Weyl_down4&quot;</span><span class="p">],</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">mup4</span><span class="p">,</span> <span class="n">mbup4</span><span class="p">,</span> <span class="n">lup4</span><span class="p">)</span>
+            <span class="n">psi3</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;abcd..., a..., b..., c..., d... -&gt; ...&#39;</span><span class="p">,</span> 
+                            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;st_Weyl_down4&quot;</span><span class="p">],</span> <span class="n">kup4</span><span class="p">,</span> <span class="n">lup4</span><span class="p">,</span> <span class="n">mbup4</span><span class="p">,</span> <span class="n">lup4</span><span class="p">)</span>
+            <span class="n">psi4</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;abcd..., a..., b..., c..., d... -&gt; ...&#39;</span><span class="p">,</span> 
+                            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;st_Weyl_down4&quot;</span><span class="p">],</span> <span class="n">mbup4</span><span class="p">,</span> <span class="n">lup4</span><span class="p">,</span> <span class="n">mbup4</span><span class="p">,</span> <span class="n">lup4</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">psi0</span><span class="p">,</span> <span class="n">psi1</span><span class="p">,</span> <span class="n">psi2</span><span class="p">,</span> <span class="n">psi3</span><span class="p">,</span> <span class="n">psi4</span><span class="p">]</span>
+        
+    <span class="k">def</span><span class="w"> </span><span class="nf">Psi4_lm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># TODO: fix interpolation when dealing with half-grid + symmetry</span>
+        <span class="n">lmax</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">Ntheta</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">lmax</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">Nphi</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">lmax</span> <span class="o">+</span> <span class="mi">1</span>
 
-        <span class="c1"># As these are then used to compute the invariant scalars, here I check </span>
-        <span class="c1"># if psi4 = 0 while psi0 =/= 0.  If it is the case I need to switch</span>
-        <span class="c1"># psi0 and psi4 as well as psi1 and psi3 so I do that here.</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">psi4</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">psi0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-5</span><span class="p">))</span>
-        <span class="n">psi0new</span> <span class="o">=</span> <span class="n">psi0</span>
-        <span class="n">psi0new</span> <span class="o">=</span> <span class="n">psi0new</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">psi4</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
-        <span class="n">psi4</span> <span class="o">=</span> <span class="n">psi4</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">psi0</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
-        <span class="n">psi0</span> <span class="o">=</span> <span class="n">psi0new</span>
-        <span class="n">psi1new</span> <span class="o">=</span> <span class="n">psi1</span>
-        <span class="n">psi1new</span> <span class="o">=</span> <span class="n">psi1new</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">psi3</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
-        <span class="n">psi3</span> <span class="o">=</span> <span class="n">psi3</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">psi1</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
-        <span class="n">psi1</span> <span class="o">=</span> <span class="n">psi1new</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">psi0</span><span class="p">,</span> <span class="n">psi1</span><span class="p">,</span> <span class="n">psi2</span><span class="p">,</span> <span class="n">psi3</span><span class="p">,</span> <span class="n">psi4</span><span class="p">]</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">Ntheta</span><span class="p">)</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">jnp</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">Nphi</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">theta_sphere</span><span class="p">,</span> <span class="n">phi_sphere</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
+
+        <span class="n">x_sphere</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Psi4_lm_radius</span> 
+                    <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_sphere</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi_sphere</span><span class="p">))</span>
+        <span class="n">y_sphere</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Psi4_lm_radius</span> 
+                    <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_sphere</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi_sphere</span><span class="p">))</span>
+        <span class="n">z_sphere</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Psi4_lm_radius</span> 
+                    <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_sphere</span><span class="p">))</span>
+        <span class="n">points_sphere</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">x_sphere</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y_sphere</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">z_sphere</span><span class="o">.</span><span class="n">flatten</span><span class="p">()),</span> 
+            <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Psi4 on a sphere</span>
+        <span class="c1"># sphere around the origin with radius 1</span>
+        <span class="n">interp_real</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">RegularGridInterpolator</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fd</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fd</span><span class="o">.</span><span class="n">zarray</span><span class="p">),</span> 
+            <span class="n">jnp</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi&quot;</span><span class="p">][</span><span class="mi">4</span><span class="p">]),</span> 
+            <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">interp_imag</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">RegularGridInterpolator</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fd</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fd</span><span class="o">.</span><span class="n">zarray</span><span class="p">),</span> 
+            <span class="n">jnp</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi&quot;</span><span class="p">][</span><span class="mi">4</span><span class="p">]),</span> 
+            <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">psi4_sphere</span> <span class="o">=</span> <span class="p">(</span><span class="n">interp_real</span><span class="p">(</span><span class="n">points_sphere</span><span class="p">)</span> 
+                       <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">interp_imag</span><span class="p">(</span><span class="n">points_sphere</span><span class="p">))</span>
+        <span class="n">psi4_sphere</span> <span class="o">=</span> <span class="n">psi4_sphere</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Ntheta</span><span class="p">,</span> <span class="n">Nphi</span><span class="p">)</span>
+
+        <span class="c1"># lm mode of Psi4</span>
+        <span class="n">alm</span> <span class="o">=</span> <span class="n">spinsfast</span><span class="o">.</span><span class="n">map2salm</span><span class="p">(</span><span class="n">psi4_sphere</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">lmax</span><span class="p">)</span>
+        <span class="n">lm_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">l</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">lm_dict</span><span class="p">[</span><span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">alm</span><span class="p">[</span><span class="n">l</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">m</span> <span class="o">+</span> <span class="n">l</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">lm_dict</span>
+        
     
     <span class="k">def</span><span class="w"> </span><span class="nf">Weyl_invariants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">Psis</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi&quot;</span><span class="p">]</span>
         <span class="n">I_inv</span> <span class="o">=</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">Psis</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="mi">4</span><span class="o">*</span><span class="n">Psis</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">Psis</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">Psis</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">Psis</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">J_inv</span> <span class="o">=</span> <span class="n">maths</span><span class="o">.</span><span class="n">determinant3</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">Psis</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span> 
-                                       <span class="p">[</span><span class="n">Psis</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> 
-                                       <span class="p">[</span><span class="n">Psis</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]))</span>
+        <span class="n">J_inv</span> <span class="o">=</span> <span class="n">maths</span><span class="o">.</span><span class="n">determinant3</span><span class="p">(</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">Psis</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span> 
+                       <span class="p">[</span><span class="n">Psis</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> 
+                       <span class="p">[</span><span class="n">Psis</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">myprint</span><span class="p">(</span><span class="s2">&quot;WARNING: I&#39;m not switching Psi0 and Psi4 here, &quot;</span>
+                     <span class="o">+</span> <span class="s2">&quot;so the invariants are not correct if Psi4 = 0.&quot;</span>
+                     <span class="o">+</span> <span class="s2">&quot;Same for Psi1 and Psi3.&quot;</span><span class="p">)</span>
         <span class="n">L_inv</span> <span class="o">=</span> <span class="n">Psis</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">Psis</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">Psis</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">K_inv</span> <span class="o">=</span> <span class="p">(</span><span class="n">Psis</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">Psis</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> 
                  <span class="o">-</span> <span class="mi">3</span><span class="o">*</span><span class="n">Psis</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">*</span><span class="n">Psis</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="n">Psis</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> 
@@ -1488,6 +1579,9 @@
 <span class="sd">          Cactus/arrangements/EinsteinAnalysis/WeylScal4/m/WeylScal4.m </span>
 <span class="sd">          however, like in the WeylScal4 thorn, </span>
 <span class="sd">          I do not perform the final rotation</span>
+<span class="sd">          Extra note TODO: There is a difference of magnitude between psi4 </span>
+<span class="sd">          from this code and WeylScal4, need to compare the 4-Riemann. </span>
+<span class="sd">          But EB calc and Riemann calc give the same.</span>
 <span class="sd">        - for Gram-Schmidt scheme see Chapter 7 of </span>
 <span class="sd">          &#39;Linear Algebra, Theory and applications&#39; by W.Cheney and D.Kincaid</span>
 

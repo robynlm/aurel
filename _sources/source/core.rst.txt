@@ -223,6 +223,14 @@ Conserved variables
 Kinematic variables
 -------------------
 
+**st_covd_udown4**: $\nabla_{\mu} u_{\nu}$ Spacetime covariant derivative of Lagrangian fluid four velocity with spacetime indices down
+
+**accelerationdown4**: $a_{\mu}$ Acceleration of the fluid with spacetime indices down
+
+**accelerationup4**: $a^{\mu}$ Acceleration of the fluid with spacetime indices up
+
+**s_covd_udown4**: $\mathcal{D}^{\{u\}}_{\mu} u_{\nu}$ Spatial covariant derivative of Lagrangian fluid four velocity with spacetime indices down, with respect to spatial hypersurfaces orthonormal to the fluid flow
+
 **thetadown4**: $\Theta_{\mu\nu}$ Fluid expansion tensor with spacetime indices down
 
 **theta**: $\Theta$ Fluid expansion scalar
@@ -230,6 +238,10 @@ Kinematic variables
 **sheardown4**: $\sigma_{\mu\nu}$ Fluid shear tensor with spacetime indices down
 
 **shear2**: $\sigma^2$ Magnitude of fluid shear
+
+**omegadown4**: $\omega_{\mu\nu}$ Fluid vorticity tensor with spacetime indices down
+
+**omega2**: $\omega^2$ Magnitude of fluid vorticity
 
 Curvature quantities
 ====================
@@ -274,6 +286,8 @@ Weyl decomposition
 **st_Weyl_down4**: $C_{\alpha\beta\mu\nu}$ Weyl tensor of spacetime metric with spacetime indices down
 
 **Weyl_Psi**: $\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$ List of Weyl scalars for an null vector base defined with AurelCore.tetrad_to_use
+
+**Psi4_lm**: $\Psi_4^{l,m}$ Dictionary of spin weighted spherical harmonic decomposition of the 4th Weyl scalar, control radius with AurelCore.Psi4_lm_radius. ``Spinsfast`` is used for the decomposition.
 
 **Weyl_invariants**: $I, \; J, \; L, \; K, \; N$ Dictionary of Weyl invariants
 

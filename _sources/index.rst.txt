@@ -35,11 +35,20 @@ advanced numerical computations, including:
 Installation
 ------------
 
-In your terminal, run the following command to install aurel:
+Install FFTW, depending on your operating system, 
+
+ * on Ubuntu/Debian you can run: ``sudo apt install libfftw3-dev``
+ * on macOS you can run: ``brew install fftw`` or ``sudo port install fftw-3`` depending on your package manager.
+
+This is needed for the `spinsfast package <https://github.com/moble/spinsfast>`_.
+
+Install aurel using `pip <https://pip.pypa.io/en/stable/installation/>`_:
 
 .. code-block:: bash
 
    pip install aurel
+
+all other required packages will be installed automatically.
 
 Getting started
 ---------------
@@ -80,16 +89,16 @@ These are passed as numpy arrays to aurel in the following way:
    rel.data['gxx'] = np.ones((param['Nx'], param['Ny'], param['Nz']))
 
 and so on for the other components and required quantities. 
-In this example $g_{xx} = 1$, but you can pass any numpy array, 
+In this example $g_{xx} = 1$, but you can pass any numpy array;
 it can be of numerical relativity simulation data, 
-or a numpy array generated from an analytical expression.
+or an array generated from an analytical expression.
 
 Assumptions are made for other core quantities, 
 if these are not valid they should be overwritten at this point, 
 see :ref:`assumed_quantities`.
 
-With everything defined, you can call any entity listed in the aurel.description list, 
-see :ref:`descriptions_list`. Just call it as:
+With everything defined, you can call any entity listed in the 
+:ref:`descriptions_list` list. Just call it as:
 
 .. code-block:: python
 
@@ -124,4 +133,4 @@ GitHub page: `<https://github.com/robynlm/aurel>`_
 
 PyPI page: `<https://pypi.org/project/aurel/>`_
 
-You may contact the author at : r.l.munoz@sussex.ac.uk
+Contact the author at : r.l.munoz@sussex.ac.uk

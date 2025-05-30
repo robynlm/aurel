@@ -88,6 +88,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.fancy_print"><code class="docutils literal notranslate"><span class="pre">AurelCore.fancy_print</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.Lambda"><code class="docutils literal notranslate"><span class="pre">AurelCore.Lambda</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.tetrad_to_use"><code class="docutils literal notranslate"><span class="pre">AurelCore.tetrad_to_use</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.Psi4_lm_radius"><code class="docutils literal notranslate"><span class="pre">AurelCore.Psi4_lm_radius</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.kappa"><code class="docutils literal notranslate"><span class="pre">AurelCore.kappa</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.calculation_count"><code class="docutils literal notranslate"><span class="pre">AurelCore.calculation_count</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.clear_cache_every_nbr_calc"><code class="docutils literal notranslate"><span class="pre">AurelCore.clear_cache_every_nbr_calc</span></code></a></li>
@@ -170,7 +171,7 @@ project</p></li>
 <strong>AurelCore.data</strong> dictionary. For an input spacetime and matter
 distribution, AurelCore can automatically retrieve any relativistic
 variable listed in the descriptions dictionary.
-This class has many attributes and functions a
+This class has many attributes and functions, a
 large part of which are listed in the descriptions dictionary,
 but also many other tensor calculus functions.
 The descriptions functions are called as:</p>
@@ -315,10 +316,16 @@ saves it in the AurelCore.data dictionary.</p></li>
 </section>
 <section id="kinematic-variables">
 <h4>Kinematic variables<a class="headerlink" href="#kinematic-variables" title="Link to this heading"></a></h4>
+<p><strong>st_covd_udown4</strong>: <span class="math notranslate nohighlight">\(\nabla_{\mu} u_{\nu}\)</span> Spacetime covariant derivative of Lagrangian fluid four velocity with spacetime indices down</p>
+<p><strong>accelerationdown4</strong>: <span class="math notranslate nohighlight">\(a_{\mu}\)</span> Acceleration of the fluid with spacetime indices down</p>
+<p><strong>accelerationup4</strong>: <span class="math notranslate nohighlight">\(a^{\mu}\)</span> Acceleration of the fluid with spacetime indices up</p>
+<p><strong>s_covd_udown4</strong>: <span class="math notranslate nohighlight">\(\mathcal{D}^{\{u\}}_{\mu} u_{\nu}\)</span> Spatial covariant derivative of Lagrangian fluid four velocity with spacetime indices down, with respect to spatial hypersurfaces orthonormal to the fluid flow</p>
 <p><strong>thetadown4</strong>: <span class="math notranslate nohighlight">\(\Theta_{\mu\nu}\)</span> Fluid expansion tensor with spacetime indices down</p>
 <p><strong>theta</strong>: <span class="math notranslate nohighlight">\(\Theta\)</span> Fluid expansion scalar</p>
 <p><strong>sheardown4</strong>: <span class="math notranslate nohighlight">\(\sigma_{\mu\nu}\)</span> Fluid shear tensor with spacetime indices down</p>
 <p><strong>shear2</strong>: <span class="math notranslate nohighlight">\(\sigma^2\)</span> Magnitude of fluid shear</p>
+<p><strong>omegadown4</strong>: <span class="math notranslate nohighlight">\(\omega_{\mu\nu}\)</span> Fluid vorticity tensor with spacetime indices down</p>
+<p><strong>omega2</strong>: <span class="math notranslate nohighlight">\(\omega^2\)</span> Magnitude of fluid vorticity</p>
 </section>
 </section>
 <section id="curvature-quantities">
@@ -347,6 +354,7 @@ saves it in the AurelCore.data dictionary.</p></li>
 <h4>Weyl decomposition<a class="headerlink" href="#weyl-decomposition" title="Link to this heading"></a></h4>
 <p><strong>st_Weyl_down4</strong>: <span class="math notranslate nohighlight">\(C_{\alpha\beta\mu\nu}\)</span> Weyl tensor of spacetime metric with spacetime indices down</p>
 <p><strong>Weyl_Psi</strong>: <span class="math notranslate nohighlight">\(\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4\)</span> List of Weyl scalars for an null vector base defined with AurelCore.tetrad_to_use</p>
+<p><strong>Psi4_lm</strong>: <span class="math notranslate nohighlight">\(\Psi_4^{l,m}\)</span> Dictionary of spin weighted spherical harmonic decomposition of the 4th Weyl scalar, control radius with AurelCore.Psi4_lm_radius. <code class="docutils literal notranslate"><span class="pre">Spinsfast</span></code> is used for the decomposition.</p>
 <p><strong>Weyl_invariants</strong>: <span class="math notranslate nohighlight">\(I, \; J, \; L, \; K, \; N\)</span> Dictionary of Weyl invariants</p>
 <p><strong>eweyl_u_down4</strong>: <span class="math notranslate nohighlight">\(E^{\{u\}}_{\alpha\beta}\)</span> Electric part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(u^{\mu}\)</span> with spacetime indices down</p>
 <p><strong>eweyl_n_down3</strong>: <span class="math notranslate nohighlight">\(E^{\{n\}}_{ij}\)</span> Electric part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(n^{\mu}\)</span> with spatial indices down</p>
@@ -459,6 +467,18 @@ Default is “quasi-Kinnersley”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aurel.core.AurelCore.Psi4_lm_radius">
+<span class="sig-name descname"><span class="pre">Psi4_lm_radius</span></span><a class="headerlink" href="#aurel.core.AurelCore.Psi4_lm_radius" title="Link to this definition"></a></dt>
+<dd><p>(<em>float</em>) - Radius for the Psi4_lm calculations.
+Default is 0.9 * min(Lx, Ly, Lz).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -784,7 +804,10 @@ the first tetrad is the fluid 4-velocity <span class="math notranslate nohighlig
 also see:
 Cactus/arrangements/EinsteinAnalysis/WeylScal4/m/WeylScal4.m
 however, like in the WeylScal4 thorn,
-I do not perform the final rotation</p></li>
+I do not perform the final rotation
+Extra note TODO: There is a difference of magnitude between psi4
+from this code and WeylScal4, need to compare the 4-Riemann.
+But EB calc and Riemann calc give the same.</p></li>
 <li><p>for Gram-Schmidt scheme see Chapter 7 of
 ‘Linear Algebra, Theory and applications’ by W.Cheney and D.Kincaid</p></li>
 </ul>

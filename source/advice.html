@@ -17,6 +17,8 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -52,8 +54,15 @@
 <li class="toctree-l1"><a class="reference internal" href="reading.html">aurel.reading</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solutions.html">aurel.solutions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Advice</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#working-on-an-hpc">Working on an HPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-on-an-hpc">Working on an HPC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-a-virtual-environment">Create a virtual environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jupyter-notebook">Jupyter notebook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-script">Python script</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#parallelisation">Parallelisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#convergence">Convergence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citation">Citation</a></li>
 </ul>
 </li>
 </ul>
@@ -88,30 +97,65 @@
 <h2>Working on an HPC<a class="headerlink" href="#working-on-an-hpc" title="Link to this heading"></a></h2>
 <p>While HPCs won’t let you install packages globally, you can still use aurel.
 You just need to create a virtual environment and install aurel there.</p>
-<ul class="simple">
-<li><p>Create a virtual environment</p></li>
-</ul>
+<section id="create-a-virtual-environment">
+<h3>Create a virtual environment<a class="headerlink" href="#create-a-virtual-environment" title="Link to this heading"></a></h3>
+<p>You need to install FFTW, typically on an HPC this is one of the modules available, so find its name (replace fftw_name below), load it and check its paths</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>avail
+module<span class="w"> </span>load<span class="w"> </span>fftw_name
+module<span class="w"> </span>show<span class="w"> </span>fftw_name
+</pre></div>
+</div>
+<p>Now create a virtual environment and activate it.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/myenv
 <span class="nb">source</span><span class="w"> </span>~/myenv/bin/activate
-pip<span class="w"> </span>install<span class="w"> </span>aurel
+</pre></div>
+</div>
+<p>Then you should be able to do:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>aurel
 </pre></div>
 </div>
 <p>and install any other packages you may use.</p>
-<ul class="simple">
-<li><p>If you want to use aurel in a <strong>jupyter notebook</strong>, add your virtual environment as a Jupyter kernel</p></li>
-</ul>
+</section>
+<section id="jupyter-notebook">
+<h3>Jupyter notebook<a class="headerlink" href="#jupyter-notebook" title="Link to this heading"></a></h3>
+<p>If you want to use aurel in a jupyter notebook, add your virtual environment as a Jupyter kernel</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>ipykernel
 python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>myenv<span class="w"> </span>--display-name<span class="w"> </span><span class="s2">&quot;Python (myenv)&quot;</span>
 </pre></div>
 </div>
-<p>then select <cite>Python (myenv)</cite> for your kernel and then in your notebook you can have</p>
+<p>To have FFTW loaded in your notebook make sure to load the module before starting up your notebook.</p>
+<p>To do this automatically, in the paths listed previously
+(with <cite>module show fftw_name</cite>) you should see:
+<cite>prepend_path(“LD_LIBRARY_PATH”,”/path/to/fftw/lib”)</cite>,
+this needs to be added to the kernel configuration file. So,
+<code class="docutils literal notranslate"><span class="pre">vim</span> <span class="pre">~/.local/share/jupyter/kernels/myenv/kernel.json</span></code> and edit this to
+include the path to the FFTW library in the <cite>env</cite> section,
+so it looks like this (change the path below):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="s2">&quot;argv&quot;</span>:<span class="w"> </span><span class="o">[</span>lots<span class="w"> </span>of<span class="w"> </span>things<span class="w"> </span>here,<span class="w"> </span>keep<span class="w"> </span>them<span class="w"> </span>as<span class="w"> </span>they<span class="w"> </span>are<span class="o">]</span>,
+<span class="s2">&quot;env&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="s2">&quot;LD_LIBRARY_PATH&quot;</span>:<span class="w"> </span><span class="s2">&quot;/path/to/fftw/lib:</span><span class="nv">$LD_LIBRARY_PATH</span><span class="s2">&quot;</span>
+<span class="o">}</span>,
+<span class="s2">&quot;display_name&quot;</span>:<span class="w"> </span><span class="s2">&quot;Python (myenv)&quot;</span>,
+<span class="s2">&quot;language&quot;</span>:<span class="w"> </span><span class="s2">&quot;python&quot;</span>,
+<span class="s2">&quot;metadata&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="s2">&quot;debugger&quot;</span>:<span class="w"> </span><span class="nb">true</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>In vim, press <cite>i</cite> to enter insert mode, modify/include the <cite>env</cite> section,
+then press <cite>Esc</cite> to exit insert mode, and type <cite>:wq</cite> to save and quit.</p>
+<p>Now you can load your jupyter notebook, select the kernel you just created
+<cite>Python (myenv)</cite> and type in your notebook:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li><p>If you want to use aurel in a <strong>python script</strong>, before running it, activate the environment</p></li>
-</ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>~/myenv/bin/activate
+</section>
+<section id="python-script">
+<h3>Python script<a class="headerlink" href="#python-script" title="Link to this heading"></a></h3>
+<p>If you want to use aurel in a python script, before running it, activate the environment</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>load<span class="w"> </span>fftw_name
+<span class="nb">source</span><span class="w"> </span>~/myenv/bin/activate
 python<span class="w"> </span>myscript.py
 </pre></div>
 </div>
@@ -119,6 +163,7 @@ python<span class="w"> </span>myscript.py
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
 </pre></div>
 </div>
+</section>
 </section>
 <section id="parallelisation">
 <h2>Parallelisation<a class="headerlink" href="#parallelisation" title="Link to this heading"></a></h2>
@@ -144,6 +189,63 @@ See the <a class="reference external" href="https://docs.jax.dev/en/latest/user_
 </pre></div>
 </div>
 <p>Replace N with the number of threads you want to use.</p>
+</section>
+<section id="convergence">
+<h2>Convergence<a class="headerlink" href="#convergence" title="Link to this heading"></a></h2>
+<p>See <a class="reference external" href="https://github.com/robynlm/aurel/blob/main/notebooks/Schwarzschild_check.ipynb">Schwarzschild_check notebook</a></p>
+<ul class="simple">
+<li><p>Choose the order of the finite difference scheme you want to use,
+this is done by setting the <cite>fd_order</cite> parameter in the
+<cite>FiniteDifference</cite> class. Options are: 4 (default), 6, 8.
+<code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">=</span> <span class="pre">aurel.FiniteDifference(param,</span> <span class="pre">fd_order=6)</span></code></p></li>
+<li><p>Increase the grid resolution in your simulation, or reduce the grid spacing
+for generated data.</p></li>
+<li><p>Increase float precision, default for jax is float32, you can increase
+this by configuring jax before importing aurel:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;jax_enable_x64&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
+</pre></div>
+</div>
+</section>
+<section id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading"></a></h2>
+<p>If you use aurel in your work, please cite it as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@misc</span><span class="p">{</span><span class="n">aurel2025</span><span class="p">,</span>
+  <span class="n">title</span>     <span class="o">=</span> <span class="p">{</span><span class="n">Aurel</span><span class="p">:</span> <span class="n">A</span> <span class="n">Python</span> <span class="n">package</span> <span class="k">for</span> <span class="n">automatic</span> <span class="n">relativistic</span> <span class="n">calculations</span><span class="p">},</span>
+  <span class="n">author</span>    <span class="o">=</span> <span class="p">{</span><span class="n">Munoz</span><span class="p">,</span> <span class="n">Robyn</span> <span class="n">L</span><span class="o">.</span><span class="p">},</span>
+  <span class="n">publisher</span> <span class="o">=</span> <span class="p">{</span><span class="n">GitHub</span><span class="p">},</span>
+  <span class="n">year</span>      <span class="o">=</span> <span class="p">{</span><span class="mi">2025</span><span class="p">},</span>
+  <span class="n">url</span>       <span class="o">=</span> <span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">robynlm</span><span class="o">/</span><span class="n">aurel</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>If you use aurel to calculate <span class="math notranslate nohighlight">\(\Psi_{4}^{l,m}\)</span> then you ought to also cite
+the <a class="reference external" href="https://github.com/moble/spinsfast">spinsfast package</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@software</span><span class="p">{</span><span class="n">Boyle_Okarin_2024</span><span class="p">,</span>
+  <span class="n">title</span>     <span class="o">=</span> <span class="p">{</span><span class="n">moble</span><span class="o">/</span><span class="n">spinsfast</span><span class="p">:</span> <span class="n">Release</span> <span class="n">v2022</span><span class="mf">.4.10</span><span class="p">},</span>
+  <span class="n">author</span>    <span class="o">=</span> <span class="p">{</span><span class="n">Boyle</span><span class="p">,</span> <span class="n">Mike</span> <span class="ow">and</span> <span class="n">Okarin</span><span class="p">},</span>
+  <span class="n">publisher</span> <span class="o">=</span> <span class="p">{</span><span class="n">Zenodo</span><span class="p">},</span>
+  <span class="n">month</span>     <span class="o">=</span> <span class="n">dec</span><span class="p">,</span>
+  <span class="n">year</span>      <span class="o">=</span> <span class="mi">2024</span><span class="p">,</span>
+  <span class="n">version</span>   <span class="o">=</span> <span class="p">{</span><span class="n">v2022</span><span class="mf">.4.10</span><span class="p">},</span>
+  <span class="n">doi</span>       <span class="o">=</span> <span class="p">{</span><span class="mf">10.5281</span><span class="o">/</span><span class="n">zenodo</span><span class="mf">.14522969</span><span class="p">},</span>
+  <span class="n">url</span>       <span class="o">=</span> <span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">doi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="mf">10.5281</span><span class="o">/</span><span class="n">zenodo</span><span class="mf">.14522969</span><span class="p">}}</span>
+
+<span class="nd">@article</span><span class="p">{</span><span class="n">Huffenberger_Wandel_2010</span><span class="p">,</span>
+  <span class="n">title</span>     <span class="o">=</span> <span class="p">{</span><span class="n">FAST</span> <span class="n">AND</span> <span class="n">EXACT</span> <span class="n">SPIN</span><span class="o">-</span><span class="n">s</span> <span class="n">SPHERICAL</span> <span class="n">HARMONIC</span> <span class="n">TRANSFORMS</span><span class="p">},</span>
+  <span class="n">author</span>    <span class="o">=</span> <span class="p">{</span><span class="n">Huffenberger</span><span class="p">,</span> <span class="n">Kevin</span> <span class="n">M</span><span class="o">.</span> <span class="ow">and</span> <span class="n">Wandelt</span><span class="p">,</span> <span class="n">Benjamin</span> <span class="n">D</span><span class="o">.</span><span class="p">},</span>
+  <span class="n">journal</span>   <span class="o">=</span> <span class="p">{</span><span class="n">The</span> <span class="n">Astrophysical</span> <span class="n">Journal</span> <span class="n">Supplement</span> <span class="n">Series</span><span class="p">},</span>
+  <span class="n">publisher</span> <span class="o">=</span> <span class="p">{</span><span class="n">The</span> <span class="n">American</span> <span class="n">Astronomical</span> <span class="n">Society</span><span class="p">},</span>
+  <span class="n">volume</span>    <span class="o">=</span> <span class="p">{</span><span class="mi">189</span><span class="p">},</span>
+  <span class="n">number</span>    <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">},</span>
+  <span class="n">pages</span>     <span class="o">=</span> <span class="p">{</span><span class="mi">255</span><span class="p">},</span>
+  <span class="n">month</span>     <span class="o">=</span> <span class="p">{</span><span class="n">jul</span><span class="p">},</span>
+  <span class="n">year</span>      <span class="o">=</span> <span class="p">{</span><span class="mi">2010</span><span class="p">},</span>
+  <span class="n">doi</span>       <span class="o">=</span> <span class="p">{</span><span class="mf">10.1088</span><span class="o">/</span><span class="mi">0067</span><span class="o">-</span><span class="mi">0049</span><span class="o">/</span><span class="mi">189</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mi">255</span><span class="p">},</span>
+  <span class="n">url</span>       <span class="o">=</span> <span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">dx</span><span class="o">.</span><span class="n">doi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="mf">10.1088</span><span class="o">/</span><span class="mi">0067</span><span class="o">-</span><span class="mi">0049</span><span class="o">/</span><span class="mi">189</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mi">255</span><span class="p">}}</span>
+</pre></div>
+</div>
 </section>
 </section>
 
