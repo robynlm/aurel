@@ -925,15 +925,13 @@ def join_chunks(cut_data, **kwargs):
     else:
         # append along axis = 2
         k = all_keys[0]
-        current_key = k[1:]
-        ndata = {current_key:cut_data[k]}
+        ndata = {k[1:]:cut_data[k]}
         for k in all_keys[1:]:
-            if current_key == k[1:]:
-                ndata[current_key] = np.append(
-                    ndata[current_key], cut_data[k], axis=2)
+            if k[1:] in list(ndata.keys()):
+                ndata[k[1:]] = np.append(
+                    ndata[k[1:]], cut_data[k], axis=2)
             else:
-                current_key = k[1:]
-                ndata[current_key] = cut_data[k]
+                ndata[k[1:]] = cut_data[k]
         all_keys = list(ndata.keys())
         
         if veryverbose:
