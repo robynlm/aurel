@@ -1127,42 +1127,27 @@ class AurelCore():
                                     self["Kdown3"], self["Kdown3"]))
         # Riemann_ssst : Codazzi equation, eq 2.41 in Shibata
         dKdown = self.s_covd(self["Kdown3"], 'dd')
-        #Riemann_ssst = (
-        #    jnp.einsum('ijkl..., l... -> ijk...', 
-        #               Riemann_ssss, self["betaup3"])
-        #    + self["alpha"] * (jnp.einsum('jik... -> ijk...', dKdown) 
-        #                       - dKdown))
         Riemann_ssst = (
-            self["alpha"] 
-            * (jnp.einsum('jik... -> ijk...', dKdown) 
-               - dKdown))
+            jnp.einsum('ijkl..., l... -> ijk...', 
+                       Riemann_ssss, self["betaup3"])
+            + self["alpha"] * (jnp.einsum('jik... -> ijk...', dKdown) 
+                               - dKdown))
             
         # Riemann_stst: the Mainardi equation, eq 2.56 in Shibata
         Kdown4 = self.s_to_st(self["Kdown3"])
-        #Riemann_stst = (
-        #    jnp.einsum('jki..., k... -> ij...', Riemann_ssst, self["betaup3"])
-        #    + jnp.einsum('ikj..., k... -> ij...', 
-        #                 Riemann_ssst, self["betaup3"])
-        #    + jnp.einsum('ikjl..., k..., l... -> ij...', 
-        #                Riemann_ssss, self["betaup3"], self["betaup3"])
-        #+ self["alpha"]**2 * (
-        #    self["s_Ricci_down3"]
-        #    - self["st_Ricci_down3"]
-        #    - jnp.einsum('ib..., ja..., ab... -> ij...', 
-        #                Kdown4, Kdown4, self["gup4"])[1:,1:]
-        #    + self["Kdown3"] * jnp.einsum('ab..., ab... -> ...', 
-        #                                self["Kdown3"], self["gammaup3"])))
-        #
         Riemann_stst = (
-            self["alpha"]**2 * (
-                self["s_Ricci_down3"]
-                - self["st_Ricci_down3"]
-                - jnp.einsum('ib..., ja..., ab... -> ij...', 
-                             Kdown4, Kdown4, self["gup4"])[1:,1:]
-                             + (self["Kdown3"] 
-                                * jnp.einsum(
-                                    'ab..., ab... -> ...', 
-                                    self["Kdown3"], self["gammaup3"]))))
+            jnp.einsum('jki..., k... -> ij...', Riemann_ssst, self["betaup3"])
+            + jnp.einsum('ikj..., k... -> ij...', 
+                         Riemann_ssst, self["betaup3"])
+            + jnp.einsum('ikjl..., k..., l... -> ij...', 
+                        Riemann_ssss, self["betaup3"], self["betaup3"])
+        + self["alpha"]**2 * (
+            self["s_Ricci_down3"]
+            - self["st_Ricci_down3"]
+            - jnp.einsum('ib..., ja..., ab... -> ij...', 
+                        Kdown4, Kdown4, self["gup4"])[1:,1:]
+            + self["Kdown3"] * jnp.einsum('ab..., ab... -> ...', 
+                                        self["Kdown3"], self["gammaup3"])))
             
         # put it all together
         R = jnp.zeros(
@@ -1320,6 +1305,64 @@ class AurelCore():
             psi4 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
                             self["st_Weyl_down4"], mbup4, lup4, mbup4, lup4)
             return [psi0, psi1, psi2, psi3, psi4]
+        
+    def WeylScal4(self):
+        nup4, lup4, mup4, mbup4 = self.null_vector_base()
+        n = nup4[1:]
+        rm = np.real(mup4[1:])
+        im = np.imag(mup4[1:])
+        rmbar = np.real(mbup4[1:])
+        imbar = np.imag(mbup4[1:])
+
+        nn = 0.7071067811865475244 
+        # not sure this is correct but it's in WeyslScal4
+        mbmb = ( jnp.einsum('j..., l... -> jl...', rmbar, rmbar) 
+                 - jnp.einsum('j..., l... -> jl...', imbar, imbar))
+        mm = - ( jnp.einsum('b..., d... -> bd...', rm, im)
+                 + jnp.einsum('b..., d... -> bd...', im, rm))
+        
+        KK = jnp.einsum('ik..., lj... -> iklj...', 
+                        self["Kdown3"], self["Kdown3"])
+        R4p = (self["s_Riemann_down3"] 
+               + jnp.einsum('iklj -> ijkl...', KK)
+               - jnp.einsum('ilkj -> ijkl...', KK)
+        )
+        
+        dKdown3 = self.fd.d3_rank2tensor(self["Kdown3"])
+        Ro = (
+            - jnp.einsum('ljk... -> jkl...', dKdown3)
+            - jnp.einsum('ujk..., lp... -> jkl...', 
+                         self["s_Gamma_udd3"], self["Kdown3"])
+            + jnp.einsum('kjl... -> jkl...', dKdown3)
+            + jnp.einsum('pjl..., kp... -> jkl...', 
+                         self["s_Gamma_udd3"], self["Kdown3"])
+        )
+        
+        Rojo = (
+            jnp.einsum('cd..., jcld... -> jl...', 
+                       self["gammaup3"], self["s_Riemann_down3"])
+            - jnp.einsum('jp..., pd..., dl... -> jl...', 
+                         self["Kdown3"], self["gammaup3"], self["Kdown3"])
+            + self["Ktrace"] * self["Kdown3"]
+        )
+
+        Psi4r = (
+            jnp.einsum('ijkl..., i..., k..., jl... -> ...', 
+                       R4p, n, n, mbmb)
+            + 2 * nn * jnp.einsum('jkl..., k..., jl... -> ...', 
+                                  Ro, n, mbmb)
+            + nn * nn * jnp.einsum('jl..., jl... -> ...', 
+                                   Rojo, mbmb))
+
+        Psi4i = (
+            jnp.einsum('abcd..., a..., c..., bd... -> ...', 
+                       R4p, n, n, mm)
+            + 2 * nn * jnp.einsum('abc..., b..., ac... -> ...', 
+                                  Ro, n, mm)
+            + nn * nn * jnp.einsum('ab..., ab... -> ...', 
+                                   Rojo, mm))
+        return [None, None, None, None, 
+                    Psi4r + 1j * Psi4i]
         
     def Psi4_lm(self):
         # TODO: fix interpolation when dealing with half-grid + symmetry
