@@ -1324,8 +1324,8 @@ class AurelCore():
         KK = jnp.einsum('ik..., lj... -> iklj...', 
                         self["Kdown3"], self["Kdown3"])
         R4p = (self["s_Riemann_down3"] 
-               + jnp.einsum('iklj -> ijkl...', KK)
-               - jnp.einsum('ilkj -> ijkl...', KK)
+               + jnp.einsum('iklj... -> ijkl...', KK)
+               - jnp.einsum('ilkj... -> ijkl...', KK)
         )
         
         dKdown3 = self.fd.d3_rank2tensor(self["Kdown3"])
