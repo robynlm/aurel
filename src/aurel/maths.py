@@ -10,8 +10,10 @@ This module contains functions for manipulating rank 2 tensors, including:
 """
 
 import numpy as np
+import jax
 import jax.numpy as jnp
            
+@jax.jit
 def getcomponents3(f):
     """Extract components of a rank 2 tensor with 3D indices.
     
@@ -32,6 +34,7 @@ def getcomponents3(f):
         return [f[0, 0], f[0, 1], f[0, 2], 
                 f[1, 1], f[1, 2], f[2, 2]]
 
+@jax.jit
 def getcomponents4(f):
     """Extract components of a rank 2 tensor with 4D indices.
     
@@ -53,6 +56,7 @@ def getcomponents4(f):
                 f[1, 1], f[1, 2], f[1, 3], 
                 f[2, 2], f[2, 3], f[3, 3]]
 
+@jax.jit
 def format_rank2_3(f):
     """Format a rank 2 tensor with 3D indices into a 3x3 array."""
     xx, xy, xz, yy, yz, zz = getcomponents3(f)
@@ -61,6 +65,7 @@ def format_rank2_3(f):
                         [xz, yz, zz]])
     return farray
 
+@jax.jit
 def format_rank2_4(f):
     """Format a rank 2 tensor with 4D indices into a 4x4 array."""
     tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = getcomponents4(f)
@@ -69,12 +74,14 @@ def format_rank2_4(f):
                         [ty, xy, yy, yz],
                         [tz, xz, yz, zz]])
     return farray
-                   
+
+@jax.jit
 def determinant3(f):
     """Determinant 3x3 matrice in every position of the data grid."""
     xx, xy, xz, yy, yz, zz = getcomponents3(f)
     return -xz*xz*yy + 2*xy*xz*yz - xx*yz*yz - xy*xy*zz + xx*yy*zz       
-                   
+
+@jax.jit
 def determinant4(f):
     """Determinant of a 4x4 matrice in every position of the data grid."""
     tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = getcomponents4(f)
@@ -84,7 +91,8 @@ def determinant4(f):
             + 2*tt*xy*xz*yz + tx*tx*yz*yz - tt*xx*yz*yz 
             - ty*ty*xx*zz + 2*tx*ty*xy*zz - tt*xy*xy*zz 
             - tx*tx*yy*zz + tt*xx*yy*zz)
-                   
+
+@jax.jit
 def inverse3(f):
     """Inverse of a 3x3 matrice in every position of the data grid."""
     xx, xy, xz, yy, yz, zz = getcomponents3(f)
@@ -92,7 +100,8 @@ def inverse3(f):
                      [-(xy*zz - xz*yz), xx*zz - xz*xz, -(xx*yz - xy*xz)],
                      [xy*yz - xz*yy, -(xx*yz - xz*xy), xx*yy - xy*xy]])
     return safe_division(fup, determinant3(f))
-                   
+
+@jax.jit
 def inverse4(f):
     """Inverse of a 4x4 matrice in every position of the data grid."""
     tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = getcomponents4(f)
@@ -114,15 +123,18 @@ def inverse4(f):
          ty*tz*xx - tx*tz*xy - tx*ty*xz + tt*xy*xz + tx*tx*yz - tt*xx*yz, 
          -ty*ty*xx + 2*tx*ty*xy - tt*xy*xy - tx*tx*yy + tt*xx*yy]])
     return safe_division(fup, determinant4(f))
-    
+
+@jax.jit
 def symmetrise_tensor(fdown):
     """Symmetrise a rank 2 tensor."""
     return (fdown + jnp.einsum('ab... -> ba...', fdown)) * 0.5
-    
+
+@jax.jit
 def antisymmetrise_tensor(fdown):
     """Antisymmetrise a rank 2 tensor."""
     return (fdown - jnp.einsum('ab... -> ba...', fdown)) * 0.5
 
+@jax.jit
 def safe_division(a, b):
     """Safe division to avoid division by zero, so x/0 = 0."""
     # make sure I'm only working with floats

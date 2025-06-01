@@ -546,9 +546,7 @@ class AurelCore():
 
     def gammaup3(self):
         gup = maths.inverse3(self["gammadown3"])
-        gup = gup.at[1,0].set(gup[0,1])
-        gup = gup.at[2,0].set(gup[0,2])
-        gup = gup.at[2,1].set(gup[1,2])
+        gup = maths.symmetrise_tensor(gup)
         return gup
     
     def dtgammaup3(self):
@@ -559,9 +557,7 @@ class AurelCore():
             - jnp.einsum('si..., sj... -> ij...', dbetaup, self["gammaup3"])
             - jnp.einsum('sj..., is... -> ij...', dbetaup, self["gammaup3"]))
         dtgup = Lbgup - 2 * self["alpha"] * self["Kup3"]
-        dtgup = dtgup.at[1,0].set(dtgup[0,1])
-        dtgup = dtgup.at[2,0].set(dtgup[0,2])
-        dtgup = dtgup.at[2,1].set(dtgup[1,2])
+        dtgup = maths.symmetrise_tensor(dtgup)
         return dtgup
 
     def gammadet(self):
@@ -599,10 +595,7 @@ class AurelCore():
         Kup = jnp.einsum(
             'ia..., jb..., ij... -> ab...', 
             self["gammaup3"], self["gammaup3"],  self["Kdown3"])
-        Kup = Kup.at[1,0].set(Kup[0,1])
-        Kup = Kup.at[2,0].set(Kup[0,2])
-        Kup = Kup.at[2,1].set(Kup[1,2])
-        return Kup
+        return maths.symmetrise_tensor(Kup)
     
     def Ktrace(self):
         return self.trace3(self["Kdown3"])
@@ -690,13 +683,7 @@ class AurelCore():
     
     def gup4(self):
         gup = maths.inverse4(self["gdown4"])
-        gup = gup.at[1,0].set(gup[0,1])
-        gup = gup.at[2,0].set(gup[0,2])
-        gup = gup.at[3,0].set(gup[0,3])
-        gup = gup.at[2,1].set(gup[1,2])
-        gup = gup.at[3,1].set(gup[1,3])
-        gup = gup.at[3,2].set(gup[2,3])
-        return gup
+        return maths.symmetrise_tensor(gup)
 
     def gdet(self):
         return maths.determinant4(self["gdown4"])
@@ -1040,11 +1027,7 @@ class AurelCore():
              [Gzxy, 2*dgammayz[1]-dgammayy[2], dgammazz[1]],
              [dgammazz[0], dgammazz[1], dgammazz[2]]])
         Gddd = jnp.array([Gx,Gy,Gz])
-
-        for i in range(3):
-            Gddd = Gddd.at[i,1,0].set(Gddd[i,0,1])
-            Gddd = Gddd.at[i,2,0].set(Gddd[i,0,2])
-            Gddd = Gddd.at[i,2,1].set(Gddd[i,1,2])
+        Gddd = 0.5 * (Gddd + np.einsum('kij... -> kji...', Gddd))
             
         # Spatial Christoffel symbols with indices: Gamma^{i}_{kl}.
         return jnp.einsum('ij..., jkl... -> ikl...', self["gammaup3"], Gddd)
@@ -1091,9 +1074,7 @@ class AurelCore():
                             self["s_Gamma_udd3"], self["s_Gamma_udd3"])
             Rterm3 = jnp.einsum('apd..., pba... -> bd...', 
                                 self["s_Gamma_udd3"], self["s_Gamma_udd3"])
-            R = Rterm0 - Rterm1 + Rterm2 - Rterm3
-            R = 0.5 * (R + np.einsum('ij... -> ji...', R))
-            return R  #R_{jk}
+            return maths.symmetrise_tensor(Rterm0 - Rterm1 + Rterm2 - Rterm3)
 
     def s_RicciS(self):
         return self.trace3(self["s_Ricci_down3"])
