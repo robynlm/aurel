@@ -549,9 +549,7 @@ class AurelCore():
              self["gyy"], self["gyz"], self["gzz"]])
 
     def gammaup3(self):
-        gup = maths.inverse3(self["gammadown3"])
-        gup = maths.symmetrise_tensor(gup)
-        return gup
+        return maths.inverse3(self["gammadown3"])
     
     def dtgammaup3(self):
         dbetaup = self.fd.d3_rank1tensor(self["betaup3"])
@@ -560,9 +558,7 @@ class AurelCore():
             self["betaup3"], self.fd.d3_rank2tensor(self["gammaup3"]))
             - jnp.einsum('si..., sj... -> ij...', dbetaup, self["gammaup3"])
             - jnp.einsum('sj..., is... -> ij...', dbetaup, self["gammaup3"]))
-        dtgup = Lbgup - 2 * self["alpha"] * self["Kup3"]
-        dtgup = maths.symmetrise_tensor(dtgup)
-        return dtgup
+        return Lbgup - 2 * self["alpha"] * self["Kup3"]
 
     def gammadet(self):
         return maths.determinant3(self["gammadown3"])
@@ -596,10 +592,9 @@ class AurelCore():
              self["kyy"], self["kyz"], self["kzz"]])
     
     def Kup3(self):
-        Kup = jnp.einsum(
+        return jnp.einsum(
             'ia..., jb..., ij... -> ab...', 
             self["gammaup3"], self["gammaup3"],  self["Kdown3"])
-        return maths.symmetrise_tensor(Kup)
     
     def Ktrace(self):
         return self.trace3(self["Kdown3"])
@@ -686,8 +681,7 @@ class AurelCore():
                   self["gammadown3"][2,1], self["gammadown3"][2,2]]])
     
     def gup4(self):
-        gup = maths.inverse4(self["gdown4"])
-        return maths.symmetrise_tensor(gup)
+        return maths.inverse4(self["gdown4"])
 
     def gdet(self):
         return maths.determinant4(self["gdown4"])
@@ -1031,7 +1025,6 @@ class AurelCore():
              [Gzxy, 2*dgammayz[1]-dgammayy[2], dgammazz[1]],
              [dgammazz[0], dgammazz[1], dgammazz[2]]])
         Gddd = jnp.array([Gx,Gy,Gz])
-        Gddd = 0.5 * (Gddd + np.einsum('kij... -> kji...', Gddd))
             
         # Spatial Christoffel symbols with indices: Gamma^{i}_{kl}.
         return jnp.einsum('ij..., jkl... -> ikl...', self["gammaup3"], Gddd)
@@ -1053,12 +1046,8 @@ class AurelCore():
         return Rterm0 - Rterm1 + Rterm2 - Rterm3
     
     def s_Riemann_down3(self):
-        R = jnp.einsum('abcd..., ai... -> ibcd...', 
+        return jnp.einsum('abcd..., ai... -> ibcd...', 
                          self["s_Riemann_uddd3"], self["gammadown3"])
-        R = 0.5 * (R - np.einsum('ijkl... -> jikl...', R))
-        R = 0.5 * (R - np.einsum('ijkl... -> ijlk...', R))
-        R = 0.5 * (R + np.einsum('ijkl... -> klij...', R))
-        return R
     
     def s_Ricci_down3(self):
         if "s_Riemann_down3" in self.data.keys():
@@ -1078,7 +1067,7 @@ class AurelCore():
                             self["s_Gamma_udd3"], self["s_Gamma_udd3"])
             Rterm3 = jnp.einsum('apd..., pba... -> bd...', 
                                 self["s_Gamma_udd3"], self["s_Gamma_udd3"])
-            return maths.symmetrise_tensor(Rterm0 - Rterm1 + Rterm2 - Rterm3)
+            return Rterm0 - Rterm1 + Rterm2 - Rterm3
 
     def s_RicciS(self):
         return self.trace3(self["s_Ricci_down3"])
@@ -1152,8 +1141,6 @@ class AurelCore():
             + self["alpha"] * (
                 jnp.einsum('ljk... -> jkl...', dKdown) 
                 - jnp.einsum('kjl... -> jkl...', dKdown)))
-        Riemann_ssst = 0.5 * (
-            Riemann_ssst - jnp.einsum('ijk... -> jik...', Riemann_ssst))
             
         # Riemann_stst: the Mainardi equation, eq 2.56 in Shibata
         Kdown4 = self.s_to_st(self["Kdown3"])
@@ -1305,8 +1292,6 @@ class AurelCore():
         Riemann_ssst = (
                 jnp.einsum('ljk... -> jkl...', dKdown) 
                 - jnp.einsum('kjl... -> jkl...', dKdown))
-        Riemann_ssst = 0.5 * (
-            Riemann_ssst - jnp.einsum('ijk... -> jik...', Riemann_ssst))
             
         # Riemann_stst: the Mainardi equation, eq 2.56 in Shibata
         Riemann_stst = (
