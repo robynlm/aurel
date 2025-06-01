@@ -235,6 +235,10 @@ descriptions = {
     # === Gravito-electromagnetism quantities
     "st_Weyl_down4": (r"$C_{\alpha\beta\mu\nu}$ Weyl tensor of spacetime"
                       + r" metric with spacetime indices down"),
+    "st_Weyl_down4_wavezone": (r"$C_{\alpha\beta\mu\nu}$ Weyl tensor of"
+                               + r" spacetime metric with spacetime indices"
+                               + r" down, in the wave zone: vacuum and"
+                               + r" $\alpha=1$, $\beta^i=0$"),
     "Weyl_Psi": (r"$\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$"
                  + r" List of Weyl scalars for an null vector base defined"
                  + r" with AurelCore.tetrad_to_use"),
@@ -1301,23 +1305,70 @@ class AurelCore():
                                 - jnp.einsum('b..., ae... -> abe...', 
                                             self["ndown4"], Bndown4)), LCudd4)
             return Cdown4
+        
+    def st_Weyl_down4_wavezone(self):
+        # Riemann_ssss : Gauss equation, eq 2.38 in Shibata
+        Riemann_ssss = (self["s_Riemann_down3"]
+                        + jnp.einsum('ac..., bd... -> abcd...', 
+                                    self["Kdown3"], self["Kdown3"])
+                        - jnp.einsum('ad..., bc... -> abcd...', 
+                                    self["Kdown3"], self["Kdown3"]))
+        
+        # Riemann_ssst : Codazzi equation, eq 2.41 in Shibata
+        dKdown = self.s_covd(self["Kdown3"], 'dd')
+        Riemann_ssst = (
+                jnp.einsum('ljk... -> jkl...', dKdown) 
+                - jnp.einsum('kjl... -> jkl...', dKdown))
+            
+        # Riemann_stst: the Mainardi equation, eq 2.56 in Shibata
+        Riemann_stst = (
+            self["s_Ricci_down3"]
+            - jnp.einsum('ib..., ja..., ab... -> ij...', 
+                        self["Kdown3"], self["Kdown3"], self["gammaup3"])
+            + self["Kdown3"] * self["Ktrace"])
+            
+        # put it all together
+        R = jnp.zeros(
+            (4, 4, 4, 4, self.param['Nx'], self.param['Ny'], self.param['Nz']))
+        # Riemann_ssss part
+        R = R.at[1:4, 1:4, 1:4, 1:4].set(Riemann_ssss)
+        # Riemann_ssst part
+        for i in range(1, 4):
+            for j in range(1, 4):
+                for k in range(1, 4):
+                    R = R.at[i, j, k, 0].set(Riemann_ssst[i-1, j-1, k-1])
+                    R = R.at[i, j, 0, k].set(-Riemann_ssst[i-1, j-1, k-1])
+                    R = R.at[k, 0, i, j].set(Riemann_ssst[i-1, j-1, k-1])
+                    R = R.at[0, k, i, j].set(-Riemann_ssst[i-1, j-1, k-1])
+        # Riemann_stst part
+        R = R.at[1:4, 0, 1:4, 0].set(Riemann_stst)
+        R = R.at[1:4, 0, 0, 1:4].set(- Riemann_stst)
+        R = R.at[0, 1:4, 0, 1:4].set(Riemann_stst)
+        R = R.at[0, 1:4, 1:4, 0].set(- Riemann_stst)
+
+        # remaining terms are all zero
+        return R
                    
     def Weyl_Psi(self):
         if "Weyl_Psi4r" in self.data.keys():
             return [None, None, None, None, 
                     self["Weyl_Psi4r"] + 1j * self["Weyl_Psi4i"]]
         else:
+            if self.tetrad_to_use == "quasi-Kinnersley":
+                C = self["st_Weyl_down4_wavezone"]
+            else:
+                C = self["st_Weyl_down4"]
             lup4, kup4, mup4, mbup4 = self.null_vector_base()
-            psi0 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                            self["st_Weyl_down4"], kup4, mup4, kup4, mup4)
-            psi1 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                            self["st_Weyl_down4"], kup4, lup4, kup4, mup4)
-            psi2 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                            self["st_Weyl_down4"], kup4, mup4, mbup4, lup4)
-            psi3 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                            self["st_Weyl_down4"], kup4, lup4, mbup4, lup4)
-            psi4 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...', 
-                            self["st_Weyl_down4"], mbup4, lup4, mbup4, lup4)
+            psi0 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
+                            C, kup4, mup4, kup4, mup4)
+            psi1 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
+                            C, kup4, lup4, kup4, mup4)
+            psi2 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
+                            C, kup4, mup4, mbup4, lup4)
+            psi3 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
+                            C, kup4, lup4, mbup4, lup4)
+            psi4 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
+                            C, mbup4, lup4, mbup4, lup4)
             return [psi0, psi1, psi2, psi3, psi4]
         
     def WeylScal4(self):
