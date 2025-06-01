@@ -1092,7 +1092,7 @@ class AurelCore():
             Rterm3 = jnp.einsum('apd..., pba... -> bd...', 
                                 self["s_Gamma_udd3"], self["s_Gamma_udd3"])
             R = Rterm0 - Rterm1 + Rterm2 - Rterm3
-            R = 0.5 * (R - np.einsum('ij... -> ji...', R))
+            R = 0.5 * (R + np.einsum('ij... -> ji...', R))
             return R  #R_{jk}
 
     def s_RicciS(self):
