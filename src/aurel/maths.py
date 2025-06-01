@@ -186,21 +186,47 @@ def populate_4Riemann(Riemann_ssss, Riemann_ssst, Riemann_stst):
     """Populate the 4Riemann tensor with R_ssss, R_ssst, and R_stst"""
     Nx, Ny, Nz = np.shape(Riemann_ssss[0,0,0,0])
     R = jnp.zeros((4, 4, 4, 4, Nx, Ny, Nz))
+    
     # Riemann_ssss part
     R = R.at[1:4, 1:4, 1:4, 1:4].set(Riemann_ssss)
+
     # Riemann_ssst part
     for i in range(1, 4):
         for j in range(1, 4):
             for k in range(1, 4):
+                # ijk0
                 R = R.at[i, j, k, 0].set( Riemann_ssst[i-1, j-1, k-1])
                 R = R.at[i, j, 0, k].set(-Riemann_ssst[i-1, j-1, k-1])
                 R = R.at[j, i, 0, k].set( Riemann_ssst[i-1, j-1, k-1])
                 R = R.at[j, i, k, 0].set(-Riemann_ssst[i-1, j-1, k-1])
-                
+
                 R = R.at[k, 0, i, j].set( Riemann_ssst[i-1, j-1, k-1])
                 R = R.at[k, 0, j, i].set(-Riemann_ssst[i-1, j-1, k-1])
                 R = R.at[0, k, j, i].set( Riemann_ssst[i-1, j-1, k-1])
                 R = R.at[0, k, i, j].set(-Riemann_ssst[i-1, j-1, k-1])
+
+                # ikj0
+                R = R.at[i, k, j, 0].set( Riemann_ssst[i-1, k-1, j-1])
+                R = R.at[i, k, 0, j].set(-Riemann_ssst[i-1, k-1, j-1])
+                R = R.at[k, i, 0, j].set( Riemann_ssst[i-1, k-1, j-1])
+                R = R.at[k, i, j, 0].set(-Riemann_ssst[i-1, k-1, j-1])
+
+                R = R.at[j, 0, i, k].set( Riemann_ssst[i-1, k-1, j-1])
+                R = R.at[j, 0, k, i].set(-Riemann_ssst[i-1, k-1, j-1])
+                R = R.at[0, j, k, i].set( Riemann_ssst[i-1, k-1, j-1])
+                R = R.at[0, j, i, k].set(-Riemann_ssst[i-1, k-1, j-1])
+
+                # kji0
+                R = R.at[k, j, i, 0].set( Riemann_ssst[k-1, j-1, i-1])
+                R = R.at[k, j, 0, i].set(-Riemann_ssst[k-1, j-1, i-1])
+                R = R.at[j, k, 0, i].set( Riemann_ssst[k-1, j-1, i-1])
+                R = R.at[j, k, i, 0].set(-Riemann_ssst[k-1, j-1, i-1])
+
+                R = R.at[i, 0, k, j].set( Riemann_ssst[k-1, j-1, i-1])
+                R = R.at[i, 0, j, k].set(-Riemann_ssst[k-1, j-1, i-1])
+                R = R.at[0, i, j, k].set( Riemann_ssst[k-1, j-1, i-1])
+                R = R.at[0, i, k, j].set(-Riemann_ssst[k-1, j-1, i-1])
+                
     # Riemann_stst part
     for i in range(1, 4):
         for j in range(1, 4):
