@@ -1362,13 +1362,13 @@ class AurelCore():
             psi0 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
                             C, kup4, mup4, kup4, mup4)
             psi1 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
-                            C, kup4, lup4, kup4, mup4)
+                            C, lup4, kup4, mup4, kup4)
             psi2 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
                             C, kup4, mup4, mbup4, lup4)
             psi3 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
                             C, kup4, lup4, mbup4, lup4)
             psi4 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
-                            C, mbup4, lup4, mbup4, lup4)
+                            C, lup4, mbup4, lup4, mbup4)
             return [psi0, psi1, psi2, psi3, psi4]
         
     def WeylScal4(self):
