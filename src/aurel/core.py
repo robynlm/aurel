@@ -1040,6 +1040,11 @@ class AurelCore():
              [Gzxy, 2*dgammayz[1]-dgammayy[2], dgammazz[1]],
              [dgammazz[0], dgammazz[1], dgammazz[2]]])
         Gddd = jnp.array([Gx,Gy,Gz])
+
+        for i in range(3):
+            Gddd = Gddd.at[i,1,0].set(Gddd[i,0,1])
+            Gddd = Gddd.at[i,2,0].set(Gddd[i,0,2])
+            Gddd = Gddd.at[i,2,1].set(Gddd[i,1,2])
             
         # Spatial Christoffel symbols with indices: Gamma^{i}_{kl}.
         return jnp.einsum('ij..., jkl... -> ikl...', self["gammaup3"], Gddd)
@@ -1061,8 +1066,12 @@ class AurelCore():
         return Rterm0 - Rterm1 + Rterm2 - Rterm3
     
     def s_Riemann_down3(self):
-        return jnp.einsum('abcd..., ai... -> ibcd...', 
+        R = jnp.einsum('abcd..., ai... -> ibcd...', 
                          self["s_Riemann_uddd3"], self["gammadown3"])
+        R = 0.5 * (R - np.einsum('ijkl... -> jikl...', R))
+        R = 0.5 * (R - np.einsum('ijkl... -> ijlk...', R))
+        R = 0.5 * (R + np.einsum('ijkl... -> klij...', R))
+        return R
     
     def s_Ricci_down3(self):
         if "s_Riemann_down3" in self.data.keys():
@@ -1078,13 +1087,6 @@ class AurelCore():
                     for j in range(3)]])
             Rterm0 = jnp.einsum('aabd... -> bd...', dGudd3)
             Rterm1 = jnp.einsum('daba... -> bd...', dGudd3)
-            #Rterm0 = jnp.array([[self.fd.d3x(self["s_Gamma_udd3"][0, j, k])
-            #                    + self.fd.d3y(self["s_Gamma_udd3"][1, j, k])
-            #                    + self.fd.d3z(self["s_Gamma_udd3"][2, j, k]) 
-            #                    for k in range(3)] 
-            #                for j in range(3)])  # = partial_i Gamma^{i}_{jk}
-            #Gd3 = jnp.einsum('iik... -> k...', self["s_Gamma_udd3"])
-            #Rterm1 = jnp.array([self.fd.d3_scalar(Gd3[j]) for j in range(3)])
             Rterm2 = jnp.einsum('iip..., pjk... -> jk...', 
                             self["s_Gamma_udd3"], self["s_Gamma_udd3"])
             Rterm3 = jnp.einsum('ijp..., pik... -> jk...', 
@@ -1159,8 +1161,9 @@ class AurelCore():
         Riemann_ssst = (
             jnp.einsum('ijkl..., l... -> ijk...', 
                        Riemann_ssss, self["betaup3"])
-            + self["alpha"] * (jnp.einsum('jik... -> ijk...', dKdown) 
-                               - dKdown))
+            + self["alpha"] * (
+                jnp.einsum('ljk... -> jkl...', dKdown) 
+                - jnp.einsum('kjl... -> jkl...', dKdown)))
             
         # Riemann_stst: the Mainardi equation, eq 2.56 in Shibata
         Kdown4 = self.s_to_st(self["Kdown3"])
@@ -1175,8 +1178,7 @@ class AurelCore():
             - self["st_Ricci_down3"]
             - jnp.einsum('ib..., ja..., ab... -> ij...', 
                         Kdown4, Kdown4, self["gup4"])[1:,1:]
-            + self["Kdown3"] * jnp.einsum('ab..., ab... -> ...', 
-                                        self["Kdown3"], self["gammaup3"])))
+            + self["Kdown3"] * self["Ktrace"]))
             
         # put it all together
         R = jnp.zeros(
@@ -1359,7 +1361,7 @@ class AurelCore():
         dKdown3 = self.fd.d3_rank2tensor(self["Kdown3"])
         Ro = (
             - jnp.einsum('ljk... -> jkl...', dKdown3)
-            - jnp.einsum('ujk..., lp... -> jkl...', 
+            - jnp.einsum('pjk..., lp... -> jkl...', 
                          self["s_Gamma_udd3"], self["Kdown3"])
             + jnp.einsum('kjl... -> jkl...', dKdown3)
             + jnp.einsum('pjl..., kp... -> jkl...', 
