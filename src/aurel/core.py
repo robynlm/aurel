@@ -235,10 +235,6 @@ descriptions = {
     # === Gravito-electromagnetism quantities
     "st_Weyl_down4": (r"$C_{\alpha\beta\mu\nu}$ Weyl tensor of spacetime"
                       + r" metric with spacetime indices down"),
-    "st_Weyl_down4_wavezone": (r"$C_{\alpha\beta\mu\nu}$ Weyl tensor of"
-                               + r" spacetime metric with spacetime indices"
-                               + r" down, in the wave zone: vacuum and"
-                               + r" $\alpha=1$, $\beta^i=0$"),
     "Weyl_Psi": (r"$\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$"
                  + r" List of Weyl scalars for an null vector base defined"
                  + r" with AurelCore.tetrad_to_use"),
@@ -1278,110 +1274,24 @@ class AurelCore():
                                 - jnp.einsum('b..., ae... -> abe...', 
                                             self["ndown4"], Bndown4)), LCudd4)
             return Cdown4
-        
-    def st_Weyl_down4_wavezone(self):
-        # Riemann_ssss : Gauss equation, eq 2.38 in Shibata
-        Riemann_ssss = (self["s_Riemann_down3"]
-                        + jnp.einsum('ac..., bd... -> abcd...', 
-                                    self["Kdown3"], self["Kdown3"])
-                        - jnp.einsum('ad..., bc... -> abcd...', 
-                                    self["Kdown3"], self["Kdown3"]))
-        
-        # Riemann_ssst : Codazzi equation, eq 2.41 in Shibata
-        dKdown = self.s_covd(self["Kdown3"], 'dd')
-        Riemann_ssst = jnp.einsum('jik... -> ijk...', dKdown) - dKdown
-            
-        # Riemann_stst: the Mainardi equation, eq 2.56 in Shibata
-        Riemann_stst = (
-            self["s_Ricci_down3"]
-            - jnp.einsum('ib..., ja..., ab... -> ij...', 
-                        self["Kdown3"], self["Kdown3"], self["gammaup3"])
-            + self["Kdown3"] * self["Ktrace"])
-            
-        # put it all together
-        R = maths.populate_4Riemann(
-            Riemann_ssss, Riemann_ssst, Riemann_stst)
-
-        return R
                    
     def Weyl_Psi(self):
         if "Weyl_Psi4r" in self.data.keys():
             return [None, None, None, None, 
                     self["Weyl_Psi4r"] + 1j * self["Weyl_Psi4i"]]
         else:
-            if self.tetrad_to_use == "quasi-Kinnersley":
-                C = self["st_Weyl_down4_wavezone"]
-            else:
-                C = self["st_Weyl_down4"]
             lup4, kup4, mup4, mbup4 = self.null_vector_base()
             psi0 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
-                            C, kup4, mup4, kup4, mup4)
+                            self["st_Weyl_down4"], kup4, mup4, kup4, mup4)
             psi1 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
-                            C, lup4, kup4, mup4, kup4)
+                            self["st_Weyl_down4"], lup4, kup4, mup4, kup4)
             psi2 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
-                            C, kup4, mup4, mbup4, lup4)
+                            self["st_Weyl_down4"], kup4, mup4, mbup4, lup4)
             psi3 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
-                            C, kup4, lup4, mbup4, lup4)
+                            self["st_Weyl_down4"], kup4, lup4, mbup4, lup4)
             psi4 = jnp.einsum('abcd..., a..., b..., c..., d... -> ...',
-                            C, lup4, mbup4, lup4, mbup4)
+                            self["st_Weyl_down4"], lup4, mbup4, lup4, mbup4)
             return [psi0, psi1, psi2, psi3, psi4]
-        
-    def WeylScal4(self):
-        nup4, lup4, mup4, mbup4 = self.null_vector_base()
-        n = nup4[1:]
-        rm = np.real(mup4[1:])
-        im = np.imag(mup4[1:])
-        rmbar = np.real(mbup4[1:])
-        imbar = np.imag(mbup4[1:])
-
-        nn = 0.7071067811865475244 
-        mbmb = ( jnp.einsum('j..., l... -> jl...', rmbar, rmbar) 
-                 - jnp.einsum('j..., l... -> jl...', imbar, imbar))
-        mm = - ( jnp.einsum('b..., d... -> bd...', rm, im)
-                 + jnp.einsum('b..., d... -> bd...', im, rm))
-        
-        KK = jnp.einsum('ik..., lj... -> iklj...', 
-                        self["Kdown3"], self["Kdown3"])
-        R4p = (self["s_Riemann_down3"] 
-               + jnp.einsum('iklj... -> ijkl...', KK)
-               - jnp.einsum('ilkj... -> ijkl...', KK)
-        )
-        
-        dKdown3 = self.fd.d3_rank2tensor(self["Kdown3"])
-        Ro = (
-            - jnp.einsum('ljk... -> jkl...', dKdown3)
-            - jnp.einsum('pjk..., lp... -> jkl...', 
-                         self["s_Gamma_udd3"], self["Kdown3"])
-            + jnp.einsum('kjl... -> jkl...', dKdown3)
-            + jnp.einsum('pjl..., kp... -> jkl...', 
-                         self["s_Gamma_udd3"], self["Kdown3"])
-        )
-        
-        Rojo = (
-            jnp.einsum('cd..., jcld... -> jl...', 
-                       self["gammaup3"], self["s_Riemann_down3"])
-            - jnp.einsum('jp..., pd..., dl... -> jl...', 
-                         self["Kdown3"], self["gammaup3"], self["Kdown3"])
-            + self["Ktrace"] * self["Kdown3"]
-        )
-
-        Psi4r = (
-            jnp.einsum('ijkl..., i..., k..., jl... -> ...', 
-                       R4p, n, n, mbmb)
-            + 2 * nn * jnp.einsum('jkl..., k..., jl... -> ...', 
-                                  Ro, n, mbmb)
-            + nn * nn * jnp.einsum('jl..., jl... -> ...', 
-                                   Rojo, mbmb))
-
-        Psi4i = (
-            jnp.einsum('abcd..., a..., c..., bd... -> ...', 
-                       R4p, n, n, mm)
-            + 2 * nn * jnp.einsum('abc..., b..., ac... -> ...', 
-                                  Ro, n, mm)
-            + nn * nn * jnp.einsum('ab..., ab... -> ...', 
-                                   Rojo, mm))
-        return [None, None, None, None, 
-                    Psi4r + 1j * Psi4i]
         
     def Psi4_lm(self):
         # TODO: fix interpolation when dealing with half-grid + symmetry
@@ -1553,11 +1463,10 @@ class AurelCore():
         - for Kinnersly tetrad see https://doi.org/10.1103/PhysRevD.65.044001 
           also see: 
           Cactus/arrangements/EinsteinAnalysis/WeylScal4/m/WeylScal4.m 
-          however, like in the WeylScal4 thorn, 
-          I do not perform the final rotation
-          Extra note TODO: There is a difference of magnitude between psi4 
-          from this code and WeylScal4, need to compare the 4-Riemann. 
-          But EB calc and Riemann calc give the same.
+          Like the WeylScal4 thorn: tetrad given in wave zone (lapse = 1, 
+          shift = 0) and we do not perform the final rotation.
+          Unlike the WeylScal4 thorn: I calc Weyl tensor in full (no wave zone 
+          assumption), but this gives the same result.
         - for Gram-Schmidt scheme see Chapter 7 of 
           'Linear Algebra, Theory and applications' by W.Cheney and D.Kincaid
 
