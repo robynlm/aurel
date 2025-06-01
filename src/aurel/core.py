@@ -1087,12 +1087,14 @@ class AurelCore():
                     for j in range(3)]])
             Rterm0 = jnp.einsum('aabd... -> bd...', dGudd3)
             Rterm1 = jnp.einsum('daba... -> bd...', dGudd3)
-            Rterm2 = jnp.einsum('iip..., pjk... -> jk...', 
+            Rterm2 = jnp.einsum('apa..., pbd... -> bd...', 
                             self["s_Gamma_udd3"], self["s_Gamma_udd3"])
-            Rterm3 = jnp.einsum('ijp..., pik... -> jk...', 
-                            self["s_Gamma_udd3"], self["s_Gamma_udd3"])
-            return Rterm0 - Rterm1 + Rterm2 - Rterm3   #R_{jk}
-    
+            Rterm3 = jnp.einsum('apd..., pba... -> bd...', 
+                                self["s_Gamma_udd3"], self["s_Gamma_udd3"])
+            R = Rterm0 - Rterm1 + Rterm2 - Rterm3
+            R = 0.5 * (R - np.einsum('ij... -> ji...', R))
+            return R  #R_{jk}
+
     def s_RicciS(self):
         return self.trace3(self["s_Ricci_down3"])
         
