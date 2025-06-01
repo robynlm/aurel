@@ -1139,8 +1139,8 @@ class AurelCore():
             jnp.einsum('ijkl..., l... -> ijk...', 
                        Riemann_ssss, self["betaup3"])
             + self["alpha"] * (
-                jnp.einsum('ljk... -> jkl...', dKdown) 
-                - jnp.einsum('kjl... -> jkl...', dKdown)))
+                jnp.einsum('jik... -> ijk...', dKdown) 
+                - dKdown))
             
         # Riemann_stst: the Mainardi equation, eq 2.56 in Shibata
         Kdown4 = self.s_to_st(self["Kdown3"])
@@ -1289,9 +1289,7 @@ class AurelCore():
         
         # Riemann_ssst : Codazzi equation, eq 2.41 in Shibata
         dKdown = self.s_covd(self["Kdown3"], 'dd')
-        Riemann_ssst = (
-                jnp.einsum('ljk... -> jkl...', dKdown) 
-                - jnp.einsum('kjl... -> jkl...', dKdown))
+        Riemann_ssst = jnp.einsum('jik... -> ijk...', dKdown) - dKdown
             
         # Riemann_stst: the Mainardi equation, eq 2.56 in Shibata
         Riemann_stst = (
