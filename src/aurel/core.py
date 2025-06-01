@@ -546,9 +546,9 @@ class AurelCore():
 
     def gammaup3(self):
         gup = maths.inverse3(self["gammadown3"])
-        gup[1,0] = gup[0,1]
-        gup[2,0] = gup[0,2]
-        gup[2,1] = gup[1,2]
+        gup = gup.at[1,0].set(gup[0,1])
+        gup = gup.at[2,0].set(gup[0,2])
+        gup = gup.at[2,1].set(gup[1,2])
         return gup
     
     def dtgammaup3(self):
@@ -559,9 +559,9 @@ class AurelCore():
             - jnp.einsum('si..., sj... -> ij...', dbetaup, self["gammaup3"])
             - jnp.einsum('sj..., is... -> ij...', dbetaup, self["gammaup3"]))
         dtgup = Lbgup - 2 * self["alpha"] * self["Kup3"]
-        dtgup[1,0] = dtgup[0,1]
-        dtgup[2,0] = dtgup[0,2]
-        dtgup[2,1] = dtgup[1,2]
+        dtgup = dtgup.at[1,0].set(dtgup[0,1])
+        dtgup = dtgup.at[2,0].set(dtgup[0,2])
+        dtgup = dtgup.at[2,1].set(dtgup[1,2])
         return dtgup
 
     def gammadet(self):
@@ -599,9 +599,9 @@ class AurelCore():
         Kup = jnp.einsum(
             'ia..., jb..., ij... -> ab...', 
             self["gammaup3"], self["gammaup3"],  self["Kdown3"])
-        Kup[1,0] = Kup[0,1]
-        Kup[2,0] = Kup[0,2]
-        Kup[2,1] = Kup[1,2]
+        Kup = Kup.at[1,0].set(Kup[0,1])
+        Kup = Kup.at[2,0].set(Kup[0,2])
+        Kup = Kup.at[2,1].set(Kup[1,2])
         return Kup
     
     def Ktrace(self):
@@ -690,12 +690,12 @@ class AurelCore():
     
     def gup4(self):
         gup = maths.inverse4(self["gdown4"])
-        gup[1,0] = gup[0,1]
-        gup[2,0] = gup[0,2]
-        gup[3,0] = gup[0,3]
-        gup[2,1] = gup[1,2]
-        gup[3,1] = gup[1,3]
-        gup[3,2] = gup[2,3]
+        gup = gup.at[1,0].set(gup[0,1])
+        gup = gup.at[2,0].set(gup[0,2])
+        gup = gup.at[3,0].set(gup[0,3])
+        gup = gup.at[2,1].set(gup[1,2])
+        gup = gup.at[3,1].set(gup[1,3])
+        gup = gup.at[3,2].set(gup[2,3])
         return gup
 
     def gdet(self):
