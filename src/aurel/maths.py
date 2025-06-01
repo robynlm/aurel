@@ -180,4 +180,39 @@ def safe_division(a, b):
     else:
         c = jnp.where(b != 0, a / b, 0.0)
     return c
+
+@jax.jit
+def populate_4Riemann(Riemann_ssss, Riemann_ssst, Riemann_stst):
+    """Populate the 4Riemann tensor with R_ssss, R_ssst, and R_stst"""
+    Nx, Ny, Nz = np.shape(Riemann_ssss[0,0,0,0])
+    R = jnp.zeros((4, 4, 4, 4, Nx, Ny, Nz))
+    # Riemann_ssss part
+    R = R.at[1:4, 1:4, 1:4, 1:4].set(Riemann_ssss)
+    # Riemann_ssst part
+    for i in range(1, 4):
+        for j in range(1, 4):
+            for k in range(1, 4):
+                R = R.at[i, j, k, 0].set( Riemann_ssst[i-1, j-1, k-1])
+                R = R.at[i, j, 0, k].set(-Riemann_ssst[i-1, j-1, k-1])
+                R = R.at[j, i, 0, k].set( Riemann_ssst[i-1, j-1, k-1])
+                R = R.at[j, i, k, 0].set(-Riemann_ssst[i-1, j-1, k-1])
+                
+                R = R.at[k, 0, i, j].set( Riemann_ssst[i-1, j-1, k-1])
+                R = R.at[k, 0, j, i].set(-Riemann_ssst[i-1, j-1, k-1])
+                R = R.at[0, k, j, i].set( Riemann_ssst[i-1, j-1, k-1])
+                R = R.at[0, k, i, j].set(-Riemann_ssst[i-1, j-1, k-1])
+    # Riemann_stst part
+    for i in range(1, 4):
+        for j in range(1, 4):
+            R = R.at[i, 0, j, 0].set( Riemann_stst[i-1, j-1])
+            R = R.at[i, 0, 0, j].set(-Riemann_stst[i-1, j-1])
+            R = R.at[0, i, 0, j].set( Riemann_stst[i-1, j-1])
+            R = R.at[0, i, j, 0].set(-Riemann_stst[i-1, j-1])
+            
+            R = R.at[j, 0, i, 0].set( Riemann_stst[i-1, j-1])
+            R = R.at[j, 0, 0, i].set(-Riemann_stst[i-1, j-1])
+            R = R.at[0, j, 0, i].set( Riemann_stst[i-1, j-1])
+            R = R.at[0, j, i, 0].set(-Riemann_stst[i-1, j-1])
     
+    # remaining terms are all zero
+    return R

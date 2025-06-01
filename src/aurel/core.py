@@ -1143,6 +1143,7 @@ class AurelCore():
                                     self["Kdown3"], self["Kdown3"])
                         - jnp.einsum('ad..., bc... -> abcd...', 
                                     self["Kdown3"], self["Kdown3"]))
+        
         # Riemann_ssst : Codazzi equation, eq 2.41 in Shibata
         dKdown = self.s_covd(self["Kdown3"], 'dd')
         Riemann_ssst = (
@@ -1151,6 +1152,8 @@ class AurelCore():
             + self["alpha"] * (
                 jnp.einsum('ljk... -> jkl...', dKdown) 
                 - jnp.einsum('kjl... -> jkl...', dKdown)))
+        Riemann_ssst = 0.5 * (
+            Riemann_ssst - jnp.einsum('ijk... -> jik...', Riemann_ssst))
             
         # Riemann_stst: the Mainardi equation, eq 2.56 in Shibata
         Kdown4 = self.s_to_st(self["Kdown3"])
@@ -1168,25 +1171,8 @@ class AurelCore():
             + self["Kdown3"] * self["Ktrace"]))
             
         # put it all together
-        R = jnp.zeros(
-            (4, 4, 4, 4, self.param['Nx'], self.param['Ny'], self.param['Nz']))
-        # Riemann_ssss part
-        R = R.at[1:4, 1:4, 1:4, 1:4].set(Riemann_ssss)
-        # Riemann_ssst part
-        for i in range(1, 4):
-            for j in range(1, 4):
-                for k in range(1, 4):
-                    R = R.at[i, j, k, 0].set(Riemann_ssst[i-1, j-1, k-1])
-                    R = R.at[i, j, 0, k].set(-Riemann_ssst[i-1, j-1, k-1])
-                    R = R.at[k, 0, i, j].set(Riemann_ssst[i-1, j-1, k-1])
-                    R = R.at[0, k, i, j].set(-Riemann_ssst[i-1, j-1, k-1])
-        # Riemann_stst part
-        R = R.at[1:4, 0, 1:4, 0].set(Riemann_stst)
-        R = R.at[1:4, 0, 0, 1:4].set(- Riemann_stst)
-        R = R.at[0, 1:4, 0, 1:4].set(Riemann_stst)
-        R = R.at[0, 1:4, 1:4, 0].set(- Riemann_stst)
-
-        # remaining terms are all zero
+        R = maths.populate_4Riemann(
+            Riemann_ssss, Riemann_ssst, Riemann_stst)
         return R
     
     def st_Riemann_uudd4(self):
@@ -1319,6 +1305,8 @@ class AurelCore():
         Riemann_ssst = (
                 jnp.einsum('ljk... -> jkl...', dKdown) 
                 - jnp.einsum('kjl... -> jkl...', dKdown))
+        Riemann_ssst = 0.5 * (
+            Riemann_ssst - jnp.einsum('ijk... -> jik...', Riemann_ssst))
             
         # Riemann_stst: the Mainardi equation, eq 2.56 in Shibata
         Riemann_stst = (
@@ -1328,25 +1316,9 @@ class AurelCore():
             + self["Kdown3"] * self["Ktrace"])
             
         # put it all together
-        R = jnp.zeros(
-            (4, 4, 4, 4, self.param['Nx'], self.param['Ny'], self.param['Nz']))
-        # Riemann_ssss part
-        R = R.at[1:4, 1:4, 1:4, 1:4].set(Riemann_ssss)
-        # Riemann_ssst part
-        for i in range(1, 4):
-            for j in range(1, 4):
-                for k in range(1, 4):
-                    R = R.at[i, j, k, 0].set(Riemann_ssst[i-1, j-1, k-1])
-                    R = R.at[i, j, 0, k].set(-Riemann_ssst[i-1, j-1, k-1])
-                    R = R.at[k, 0, i, j].set(Riemann_ssst[i-1, j-1, k-1])
-                    R = R.at[0, k, i, j].set(-Riemann_ssst[i-1, j-1, k-1])
-        # Riemann_stst part
-        R = R.at[1:4, 0, 1:4, 0].set(Riemann_stst)
-        R = R.at[1:4, 0, 0, 1:4].set(- Riemann_stst)
-        R = R.at[0, 1:4, 0, 1:4].set(Riemann_stst)
-        R = R.at[0, 1:4, 1:4, 0].set(- Riemann_stst)
+        R = maths.populate_4Riemann(
+            Riemann_ssss, Riemann_ssst, Riemann_stst)
 
-        # remaining terms are all zero
         return R
                    
     def Weyl_Psi(self):
