@@ -1636,7 +1636,8 @@ class AurelCore():
             
             e0up4 = nup4
             e1up4 = jnp.array(
-                [jnp.ones(self.data_shape), v2[0], v2[1], v2[2]])
+                [jnp.zeros(self.data_shape), v2[0], v2[1], v2[2]])
+            # typo in ref paper
             e2up4 = jnp.array(
                 [jnp.zeros(self.data_shape), v3[0], v3[1], v3[2]])
             e3up4 = jnp.array(
