@@ -182,11 +182,14 @@ class FiniteDifference():
             param, 
             boundary='no boundary', 
             fd_order=4,
-            verbose=True):
+            verbose=True,
+            veryverbose=True):
         """Initialize the FiniteDifference class."""
 
         self.param = param
         self.boundary = boundary
+        self.verbose = verbose
+        self.veryverbose = veryverbose
         self.dx = self.param['dx']
         self.dy = self.param['dy']
         self.dz = self.param['dz']
@@ -232,21 +235,21 @@ class FiniteDifference():
         self.spherical_coords = jnp.array([self.r, self.phi, self.theta])
 
         if fd_order == 8:
-            if verbose:
+            if self.verbose:
                 print("8th order finite difference schemes are defined")
             self.backward = fd8_backward
             self.centered = fd8_centered
             self.forward = fd8_forward
             self.mask_len = 4
         elif fd_order == 6:
-            if verbose:
+            if self.verbose:
                 print("6th order finite difference schemes are defined")
             self.backward = fd6_backward
             self.centered = fd6_centered
             self.forward = fd6_forward
             self.mask_len = 3
         else:
-            if verbose:
+            if self.verbose:
                 print("4th order finite difference schemes are defined")
             self.backward = fd4_backward
             self.centered = fd4_centered
@@ -484,6 +487,11 @@ class FiniteDifference():
         if 'list_of_thorns' in keys:
             if 'RotatingSymmetry180' in self.param['list_of_thorns']:
                 rotate = True
+        if self.veryverbose:
+            print('input data shape:', jnp.shape(data), flush=True)
+            print('shift:', shift, flush=True)
+            print('reflect:', reflect, flush=True)
+            print('rotate:', rotate, flush=True)
 
         # === Reconstruction x direction
         if self.param['xmin'] == 0:
@@ -571,5 +579,9 @@ class FiniteDifference():
         else:
             dataz = datay
             zarray = self.zarray
-        
+
+        if self.veryverbose:
+            print('output data shape:', jnp.shape(dataz), flush=True)
+            print('len x, y, z:', len(xarray), len(yarray), len(zarray), flush=True)
+
         return (xarray, yarray, zarray), dataz

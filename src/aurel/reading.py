@@ -166,11 +166,14 @@ def parameters(simname):
     # calculate extra grid info
     for coord in ['x', 'y', 'z']:
         L = parameters[coord+'max']-parameters[coord+'min']
-        N = int(L/parameters['d'+coord])
+        N = int(L/parameters['d'+coord]) - 1 # default not include lower point
         for key in parameters.keys():
             if key in ['boundary_shiftout_'+coord+'_lower', 
                        'boundary_shiftout_'+coord+'_upper']:
                 N += parameters[key]
+        if ('boundary_shiftout_'+coord+'_lower' 
+            not in list(parameters.keys())):
+            parameters[coord+'min'] += parameters['d'+coord]
         parameters['L'+coord] = L
         parameters['N'+coord] = N
     if 'max_refinement_levels' not in parameters.keys():
