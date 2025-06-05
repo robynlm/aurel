@@ -183,7 +183,7 @@ class FiniteDifference():
             boundary='no boundary', 
             fd_order=4,
             verbose=True,
-            veryverbose=True):
+            veryverbose=False):
         """Initialize the FiniteDifference class."""
 
         self.param = param
