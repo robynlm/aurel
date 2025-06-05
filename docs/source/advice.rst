@@ -157,8 +157,8 @@ If you use aurel in your work, please cite it as::
      year      = {2025},
      url       = {https://github.com/robynlm/aurel}}
 
-This code isn't published yet, so it doesn't add to citation count, 
-so please also include::
+This code is not published yet, so to add to citation count please also
+include::
 
    @article{R.L.Munoz_M.Bruni_2023,
      title     = {EBWeyl: a Code to Invariantly Characterize Numerical Spacetimes},

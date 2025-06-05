@@ -1304,7 +1304,6 @@ class AurelCore():
             return [psi0, psi1, psi2, psi3, psi4]
         
     def Psi4_lm(self):
-        self.Psi4_lm_lmax = 8
         Ntheta = 2 * self.Psi4_lm_lmax + 1
         Nphi = 2 * self.Psi4_lm_lmax + 1
         # spinsfast assumes band-limited functions
