@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aurel"
-version = "0.0.dev0"
+version = "0.0.post4"
 description = "A Python package for general relativity calculations."
 readme = "README.md"
 license = "GPL-3.0-or-later"
