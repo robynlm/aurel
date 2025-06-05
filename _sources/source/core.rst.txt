@@ -287,7 +287,7 @@ Weyl decomposition
 
 **Weyl_Psi**: $\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$ List of Weyl scalars for an null vector base defined with AurelCore.tetrad_to_use
 
-**Psi4_lm**: $\Psi_4^{l,m}$ Dictionary of spin weighted spherical harmonic decomposition of the 4th Weyl scalar, control radius with AurelCore.Psi4_lm_radius. ``Spinsfast`` is used for the decomposition.
+**Psi4_lm**: $\Psi_4^{l,m}$ Dictionary of spin weighted spherical harmonic decomposition of the 4th Weyl scalar, with AurelCore.Psi4_lm_radius and AurelCore.Psi4_lm_lmax. ``spinsfast`` is used for the decomposition.
 
 **Weyl_invariants**: $I, \; J, \; L, \; K, \; N$ Dictionary of Weyl invariants
 

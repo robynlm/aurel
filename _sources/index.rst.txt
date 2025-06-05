@@ -62,15 +62,9 @@ and import the AurelCore class:
    
    # Define your grid parameters
    param = {
-       'Nx': 64,
-       'Ny': 64,
-       'Nz': 64,
-       'xmin': -1.0,
-       'ymin': -1.0,
-       'zmin': -1.0,
-       'dx': 0.03125,
-       'dy': 0.03125,
-       'dz': 0.03125,
+       'Nx': 64, 'Ny': 64, 'Nz': 64,
+       'xmin': -1.0, 'ymin': -1.0, 'zmin': -1.0,
+       'dx': 0.03125, 'dy': 0.03125, 'dz': 0.03125,
    }
    
    # Initialize the finite difference class

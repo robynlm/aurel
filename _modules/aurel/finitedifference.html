@@ -293,11 +293,17 @@
             <span class="n">param</span><span class="p">,</span> 
             <span class="n">boundary</span><span class="o">=</span><span class="s1">&#39;no boundary&#39;</span><span class="p">,</span> 
             <span class="n">fd_order</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-            <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">veryverbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the FiniteDifference class.&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">param</span> <span class="o">=</span> <span class="n">param</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span> <span class="o">=</span> <span class="n">boundary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">veryverbose</span> <span class="o">=</span> <span class="n">veryverbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dy&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dz&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inverse_dx</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inverse_dy</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dy&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inverse_dz</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dz&#39;</span><span class="p">]</span>
@@ -340,21 +346,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">spherical_coords</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">fd_order</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;8th order finite difference schemes are defined&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">backward</span> <span class="o">=</span> <span class="n">fd8_backward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">centered</span> <span class="o">=</span> <span class="n">fd8_centered</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="o">=</span> <span class="n">fd8_forward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="k">elif</span> <span class="n">fd_order</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;6th order finite difference schemes are defined&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">backward</span> <span class="o">=</span> <span class="n">fd6_backward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">centered</span> <span class="o">=</span> <span class="n">fd6_centered</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="o">=</span> <span class="n">fd6_forward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span> <span class="o">=</span> <span class="mi">3</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;4th order finite difference schemes are defined&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">backward</span> <span class="o">=</span> <span class="n">fd4_backward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">centered</span> <span class="o">=</span> <span class="n">fd4_centered</span>
@@ -616,6 +622,124 @@
             <span class="n">f</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">isx</span><span class="p">,</span> <span class="n">isy</span><span class="p">,</span> 
               <span class="n">isz</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="o">-</span><span class="n">b</span><span class="p">:</span> <span class="n">isz</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">f</span></div>
+
+    
+<div class="viewcode-block" id="FiniteDifference.reconstruct">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.reconstruct">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reconstruct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;If partial simulation box with symmetries, reconstruct full box&quot;&quot;&quot;</span>
+
+        <span class="c1"># If the lower boundary is shifted</span>
+        <span class="n">shift</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span>
+        <span class="n">reflect</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span>
+        <span class="n">rotate</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">keys</span> <span class="o">=</span>  <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">coord</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39;boundary_shiftout_</span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s1">_lower&#39;</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="n">shift</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;boundary_shiftout_</span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s1">_lower&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39;reflection_</span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s1">&#39;</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="n">reflect</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;reflection_</span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;list_of_thorns&#39;</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;RotatingSymmetry180&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;list_of_thorns&#39;</span><span class="p">]:</span>
+                <span class="n">rotate</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">veryverbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;input data shape:&#39;</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;shift:&#39;</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;reflect:&#39;</span><span class="p">,</span> <span class="n">reflect</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rotate:&#39;</span><span class="p">,</span> <span class="n">rotate</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># === Reconstruction x direction</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="c1"># depending on boundary conditions, rotate/flip grid</span>
+            <span class="k">if</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">rdata</span> <span class="o">=</span> <span class="n">data</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+            <span class="k">elif</span> <span class="n">rotate</span> <span class="ow">and</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">rdata</span> <span class="o">=</span> <span class="n">data</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">rotate</span> <span class="ow">and</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">rdata</span> <span class="o">=</span> <span class="n">data</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">rdata</span> <span class="o">=</span> <span class="n">data</span>
+
+            <span class="c1"># join sections together</span>
+            <span class="n">datax</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">rdata</span><span class="p">,</span> 
+                 <span class="n">data</span><span class="p">[</span><span class="n">shift</span><span class="p">[</span><span class="mi">0</span><span class="p">]:,:,:]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            
+            <span class="c1"># extend the coordinate axis</span>
+            <span class="n">xarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                <span class="p">[</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">shift</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> 
+                              <span class="p">(</span><span class="n">Nx</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">shift</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> 
+                              <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> 
+                 <span class="bp">self</span><span class="o">.</span><span class="n">xarray</span><span class="p">[</span><span class="n">shift</span><span class="p">[</span><span class="mi">0</span><span class="p">]:]])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">datax</span> <span class="o">=</span> <span class="n">data</span>
+            <span class="n">xarray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xarray</span>
+
+        <span class="c1"># === Reconstruction y direction</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">datax</span><span class="p">)</span>
+
+            <span class="c1"># depending on boundary conditions, rotate/flip grid</span>
+            <span class="k">if</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datax</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="k">elif</span> <span class="n">rotate</span> <span class="ow">and</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datax</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">rotate</span> <span class="ow">and</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datax</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datax</span>
+
+            <span class="c1"># join sections together</span>
+            <span class="n">datay</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">rdata</span><span class="p">,</span> 
+                 <span class="n">datax</span><span class="p">[:,</span> <span class="n">shift</span><span class="p">[</span><span class="mi">1</span><span class="p">]:,</span> <span class="p">:]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            
+            <span class="c1"># extend the coordinate axis</span>
+            <span class="n">yarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                <span class="p">[</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dy</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">shift</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> 
+                              <span class="p">(</span><span class="n">Ny</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">shift</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> 
+                              <span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> 
+                 <span class="bp">self</span><span class="o">.</span><span class="n">yarray</span><span class="p">[</span><span class="n">shift</span><span class="p">[</span><span class="mi">1</span><span class="p">]:]])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">datay</span> <span class="o">=</span> <span class="n">datax</span>
+            <span class="n">yarray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yarray</span>
+
+        <span class="c1"># === Reconstruction z direction</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;zmin&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">datay</span><span class="p">)</span>
+
+            <span class="c1"># depending on boundary conditions, rotate/flip grid</span>
+            <span class="k">if</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datay</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">rotate</span> <span class="ow">and</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datay</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">rotate</span> <span class="ow">and</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datay</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datay</span>
+
+            <span class="c1"># join sections together</span>
+            <span class="n">dataz</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">rdata</span><span class="p">,</span> 
+                 <span class="n">datay</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">shift</span><span class="p">[</span><span class="mi">2</span><span class="p">]:]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            
+            <span class="c1"># extend the coordinate axis</span>
+            <span class="n">zarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                <span class="p">[</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dz</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">shift</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+                              <span class="p">(</span><span class="n">Nz</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">shift</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">dz</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> 
+                 <span class="bp">self</span><span class="o">.</span><span class="n">zarray</span><span class="p">[</span><span class="n">shift</span><span class="p">[</span><span class="mi">2</span><span class="p">]:]])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dataz</span> <span class="o">=</span> <span class="n">datay</span>
+            <span class="n">zarray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zarray</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">veryverbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;output data shape:&#39;</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">dataz</span><span class="p">),</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len x, y, z:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">xarray</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">yarray</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">zarray</span><span class="p">),</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">xarray</span><span class="p">,</span> <span class="n">yarray</span><span class="p">,</span> <span class="n">zarray</span><span class="p">),</span> <span class="n">dataz</span></div>
 </div>
 
 </pre></div>
