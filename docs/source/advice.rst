@@ -157,20 +157,35 @@ If you use aurel in your work, please cite it as::
      year      = {2025},
      url       = {https://github.com/robynlm/aurel}}
 
+This code isn't published yet, so it doesn't add to citation count, 
+so please also include::
+
+   @article{R.L.Munoz_M.Bruni_2023,
+     title     = {EBWeyl: a Code to Invariantly Characterize Numerical Spacetimes},
+     author    = {Munoz, Robyn L. and Bruni, Marco},
+     journal   = {Classical and Quantum Gravity},
+     volume    = {40},
+     number    = {13},
+     pages     = {135010},
+     year      = {2023},
+     month     = {jun},
+     doi       = {10.1088/1361-6382/acd6cf},
+     archivePrefix = {arXiv},
+     eprint    = {gr-qc/2211.08133}}
+
 If you use aurel to calculate $\Psi_{4}^{l,m}$ then you ought to also cite 
 the `spinsfast package <https://github.com/moble/spinsfast>`_::
 
-   @software{Boyle_Okarin_2024,
+   @software{M.Boyle_Okarin_2024,
      title     = {moble/spinsfast: Release v2022.4.10},
      author    = {Boyle, Mike and Okarin},
      publisher = {Zenodo},
-     month     = dec,
-     year      = 2024,
+     month     = {dec},
+     year      = {2024},
      version   = {v2022.4.10},
-     doi       = {10.5281/zenodo.14522969},
-     url       = {https://doi.org/10.5281/zenodo.14522969}}
+     doi       = {10.5281/zenodo.14522969}}
 
-   @article{Huffenberger_Wandel_2010,
+   @article{K.M.Huffenberger_B.D.Wandel_2010,
      title     = {FAST AND EXACT SPIN-s SPHERICAL HARMONIC TRANSFORMS},
      author    = {Huffenberger, Kevin M. and Wandelt, Benjamin D.},
      journal   = {The Astrophysical Journal Supplement Series},
@@ -181,4 +196,5 @@ the `spinsfast package <https://github.com/moble/spinsfast>`_::
      month     = {jul},
      year      = {2010},
      doi       = {10.1088/0067-0049/189/2/255},
-     url       = {https://dx.doi.org/10.1088/0067-0049/189/2/255}}
+     archivePrefix = {astro-ph},
+     eprint    = {gr-qc/1007.3514}}

@@ -23,7 +23,9 @@ This module is the main event. It contains:
 import sys
 import scipy
 import numpy as np
+import jax
 import jax.numpy as jnp
+from collections.abc import Mapping, Sequence
 from IPython.display import display, Math, Latex
 from . import maths
 import spinsfast
@@ -240,8 +242,8 @@ descriptions = {
                  + r" with AurelCore.tetrad_to_use"),
     "Psi4_lm": (r"$\Psi_4^{l,m}$ Dictionary of spin weighted spherical"
                 + r" harmonic decomposition of the 4th Weyl scalar,"
-                + r" control radius with AurelCore.Psi4_lm_radius."
-                + r" ``Spinsfast`` is used for the decomposition."),
+                + r" with AurelCore.Psi4_lm_radius and AurelCore.Psi4_lm_lmax."
+                + r" ``spinsfast`` is used for the decomposition."),
     "Weyl_invariants": (r"$I, \; J, \; L, \; K, \; N$"
                         + r" Dictionary of Weyl invariants"),
     "eweyl_u_down4": (r"$E^{\{u\}}_{\alpha\beta}$ Electric part of the Weyl"
@@ -296,6 +298,9 @@ class AurelCore():
     tetrad_to_use : str
         (*str*) - Tetrad to use for calculations. 
         Default is "quasi-Kinnersley".
+    Psi4_lm_lmax : int
+        (*int*) - Maximum ell value used, increase this to improve convergence.
+        Default is 8.
     Psi4_lm_radius : float
         (*float*) - Radius for the Psi4_lm calculations. 
         Default is 0.9 * min(Lx, Ly, Lz).
@@ -332,10 +337,11 @@ class AurelCore():
                      + f" to 0.0, if not then redefine AurelCore.Lambda")
         self.Lambda = 0.0
         self.tetrad_to_use = "quasi-Kinnersley"
+        self.Psi4_lm_lmax = 8
         self.Psi4_lm_radius = 0.9 * min(
-            [self.param['Nx']*self.param['dx'], 
-             self.param['Ny']*self.param['dy'], 
-             self.param['Nz']*self.param['dz']])
+            [self.param['Nx']*self.param['dx'] * 0.5, 
+             self.param['Ny']*self.param['dy'] * 0.5, 
+             self.param['Nz']*self.param['dz'] * 0.5])
 
         # data dictionary where everything is stored
         self.data = {}
@@ -404,7 +410,7 @@ class AurelCore():
 
         # Call the function if it takes no additional arguments
         if func.__code__.co_argcount == 1:
-            self.data[key] = func()
+            self.data[key] = block_all(func())
             # Print the calculation description if available
             self.myprint(f"Calculated {key}: " + descriptions[key])
             self.calculation_count += 1 # Increment the calculation count
@@ -615,7 +621,6 @@ class AurelCore():
         return jnp.zeros(self.data_shape)
     
     # Shift
-    
     def betaup3(self):
         if "betax" in self.data:
             return jnp.array([
@@ -686,19 +691,23 @@ class AurelCore():
     def null_ray_exp(self):
         # outward pointing unit spatial vector
         r, phi, theta = self.fd.spherical_coords
-        xynorm = (jnp.cos(phi)**2 * self["gammadown3"][0,0] 
-              + 2 * jnp.cos(phi) * jnp.sin(phi) * self["gammadown3"][0,1]
-              + jnp.sin(phi)**2 * self["gammadown3"][1,1])
+        cosphi = jnp.cos(phi)
+        sinphi = jnp.sin(phi)
+        costheta = jnp.cos(theta)
+        sintheta = jnp.sin(theta)
+        xynorm = (cosphi**2 * self["gammadown3"][0,0] 
+              + 2 * cosphi * sinphi * self["gammadown3"][0,1]
+              + sinphi**2 * self["gammadown3"][1,1])
         xyznorm = (
-            jnp.sin(theta)**2 * xynorm 
-            + 2 * jnp.cos(theta) * jnp.sin(theta) * (
-                jnp.cos(phi) * self["gammadown3"][0,2]
-                + jnp.sin(phi) * self["gammadown3"][1,2])
-            + jnp.cos(theta)**2 * self["gammadown3"][2,2])
+            sintheta**2 * xynorm 
+            + 2 * costheta * sintheta * (
+                cosphi * self["gammadown3"][0,2]
+                + sinphi * self["gammadown3"][1,2])
+            + costheta**2 * self["gammadown3"][2,2])
         nfac = maths.safe_division(1, jnp.sqrt(xyznorm))
-        Sx = jnp.cos(phi) * jnp.sin(theta) * nfac
-        Sy = jnp.sin(phi) * jnp.sin(theta) * nfac
-        Sz = jnp.cos(theta) * nfac
+        Sx = cosphi * sintheta * nfac
+        Sy = sinphi * sintheta * nfac
+        Sz = costheta * nfac
         sup = jnp.array([Sx, Sy, Sz])
         
         # expansion
@@ -1235,6 +1244,7 @@ class AurelCore():
     # === Gravito-electromagnetism quantities
     def st_Weyl_down4(self): 
         if "st_Riemann_down4" in self.data.keys():
+            # TODO: accelerate this
             Cdown = jnp.zeros(jnp.shape(self["st_Riemann_down4"]))
             for a in range(4):
                 for b in range(4):
@@ -1294,10 +1304,10 @@ class AurelCore():
             return [psi0, psi1, psi2, psi3, psi4]
         
     def Psi4_lm(self):
-        # TODO: fix interpolation when dealing with half-grid + symmetry
-        lmax = 8
-        Ntheta = 2*lmax + 1
-        Nphi = 2*lmax + 1
+        self.Psi4_lm_lmax = 8
+        Ntheta = 2 * self.Psi4_lm_lmax + 1
+        Nphi = 2 * self.Psi4_lm_lmax + 1
+        # spinsfast assumes band-limited functions
 
         theta = jnp.linspace(0, jnp.pi, Ntheta)
         phi = jnp.linspace(0, 2*jnp.pi, Nphi, endpoint=False)
@@ -1314,27 +1324,36 @@ class AurelCore():
             axis=-1)
 
         # Psi4 on a sphere
-        # sphere around the origin with radius 1
-        interp_real = scipy.interpolate.RegularGridInterpolator(
-            (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
-            jnp.real(self["Weyl_Psi"][4]), 
-            bounds_error=False, fill_value=0)
-        interp_imag = scipy.interpolate.RegularGridInterpolator(
-            (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
-            jnp.imag(self["Weyl_Psi"][4]), 
-            bounds_error=False, fill_value=0)
+        # Reconstruct full box
+        # sphere around the origin
+        # TODO: make origin location an option
+        coord, Psi4r = self.fd.reconstruct(jnp.real(self["Weyl_Psi"][4]))
+        coord, Psi4i = self.fd.reconstruct(jnp.imag(self["Weyl_Psi"][4]))
+
+        # Interpolation functions
+        interp_real = scipy.interpolate.RegularGridInterpolator(coord, Psi4r)
+        interp_imag = scipy.interpolate.RegularGridInterpolator(coord, Psi4i)
+
+        # Interpolate on sphere locations
+        # This will error if point not in domain
         psi4_sphere = (interp_real(points_sphere) 
-                       + 1j * interp_imag(points_sphere))
+                           + 1j * interp_imag(points_sphere))
+        # reshape for spinsfast
         psi4_sphere = psi4_sphere.reshape(Ntheta, Nphi)
 
         # lm mode of Psi4
-        alm = spinsfast.map2salm(psi4_sphere, -2, lmax)
+        self.myprint("WARNING: using ``spinsfast``, outputs from this code "
+                     + "may differ from others as different codes use "
+                     + "different normalisations, integration schemes, "
+                     + "conventions...")
+        alm = spinsfast.map2salm(psi4_sphere, -2, self.Psi4_lm_lmax)
+
+        # change to a format I like better
         lm_dict = {}
-        for l in range(lmax + 1):
+        for l in range(self.Psi4_lm_lmax + 1):
             for m in range(-l, l + 1):
                 lm_dict[l, m] = alm[l**2 + m + l]
         return lm_dict
-        
     
     def Weyl_invariants(self):
         Psis = self["Weyl_Psi"]
@@ -1830,6 +1849,31 @@ class AurelCore():
                     bot = (abs(i2-i1) * abs(i3-i1) * abs(i3-i2))
                     LC = LC.at[i1-1, i2-1, i3-1, :, :, :].set(float(top/bot))
         return LC
+    
+def block_all(x):
+    """Block all JAX arrays until they are ready.
+    This is useful to ensure that all computations are completed before
+    returning results, especially in a JAX-based environment.
+
+    Parameters
+    ----------
+    x : any
+        The input can be a JAX array, a dictionary, or a sequence 
+        (like a list or tuple).
+    
+    Returns
+    -------
+    any
+        The input with all JAX arrays blocked until ready.
+    """
+    if isinstance(x, jax.Array):
+        return x.block_until_ready()
+    elif isinstance(x, Mapping):
+        return {k: block_all(v) for k, v in x.items()}
+    elif isinstance(x, Sequence) and not isinstance(x, str):
+        return type(x)(block_all(v) for v in x)
+    else:
+        return x
 
 # Update __doc__ of the functions listed in descriptions
 for func_name, doc in descriptions.items():
