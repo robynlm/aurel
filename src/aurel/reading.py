@@ -270,7 +270,7 @@ def iterations(param, skip_last=True):
             # get kuibit variables
             sim = kuibit.simdir.SimDir(datapath)
             vars_available = list(sim.gf.xyz.fields.keys())
-            print(vars_available)
+            
             # error if it didn't find anything
             if vars_available == []:
                 raise ValueError('Could not find 3D data in ' + datapath)
@@ -283,6 +283,13 @@ def iterations(param, skip_last=True):
                         aurel_vars_available += [newv]
                         for oldv in oldvs:
                             vars_available.remove(oldv)
+                # dont consider grid property things
+                for v in vars_available:
+                    if 'grid_' in v:
+                        vars_available.remove(v)
+                # everything else
+                print('NEED TO UPDATE AUREL TO INFCLUDE:', 
+                      vars_available, flush=True)
                 aurel_vars_available += vars_available
                 saveprint(it_file, '3D variables available: '
                           + str(aurel_vars_available))
@@ -356,7 +363,7 @@ def read_iterations(param):
     ----------
     param : dict
         The parameters of the simulation.
-        
+    
     Returns
     -------
     dict :
@@ -823,6 +830,8 @@ def read_ET_data_kuibit(param, var, **kwargs):
     datapath = (param['simpath']+param['simname']
                 +'/output-{:04d}/'.format(restart)
                 +param['simname']+'/')
+    if veryverbose:
+        print('Kuibit looking into: ', datapath, flush=True)
     sim = kuibit.simdir.SimDir(datapath)
     grid = kuibit.grid_data.UniformGrid(
         [param['Nx'], param['Ny'], param['Nz']], 
