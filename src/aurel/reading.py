@@ -759,15 +759,15 @@ def save_data(param, data, **kwargs):
                         del f[skey]
                     f.create_dataset(skey, data=data[key][it_index])
 
-def read_ET_data(param, var, **kwargs):
-    """Read the data from Einstein Toolkit simulation output files.
+def read_ET_data_kuibit(param, var, **kwargs):
+    """Read Einstein Toolkit simulation data using `kuibit`.
     
     Parameters
     ----------
     param : dict
         The parameters of the simulation.
     var : list
-        The variables to read from the simulation output files.
+        The variables to read from the simulation output files, in aurel format
 
     Other Parameters
     ----------------
@@ -780,142 +780,28 @@ def read_ET_data(param, var, **kwargs):
     restart : int, optional
         The restart number to save the data to.
         The default is 0.
-    veryverbose : bool, optional
-        If True, print additional information during the joining process.
+    reshape : bool, optional
+        If True, kuibit will spline interpolate to match whatever 
+        data grid you want. The default is False.
+    verbose : bool, optional
+        If True, print additional information during the reading process.
         The default is False.
-        
+    veryverbose : bool, optional
+        If True, print even more information during the reading process.
+        The default is False.
     Returns
     -------
     dict
         A dictionary containing the data from the simulation output files.
-        dict.keys() = ['it', 't', var[0], var[1], ...]
     """
-    it = np.sort(kwargs.get('it', [0]))
-    restart = kwargs.get('restart', 0)
-
-    # data to be returned
-    data = {'it':it, 't':[]}
-
-    # data directory path
-    data_path = (param['simpath']
-                 + param['simname']
-                 + '/output-{:04d}/'.format(restart)
-                 + param['simname'] + '/')
-
-    h5files = glob.glob(data_path+'*.h5')
-    if ((data_path+'gxx.h5' in h5files) 
-        or (data_path+'admbase-metric.h5' in h5files)):
-        # one file per variable
-        cmax = 'in file'
-    else:
-        # one file per chunk
-        cfiles = glob.glob(data_path + 'admbase-metric.file_*.h5')
-        cfiles += glob.glob(data_path + 'gxx.file_*.h5')
-        cmax = np.max([int(f.split('file_')[1].split('.')[0]) 
-                       for f in cfiles])
-
-    individual = np.sum(
-        [1 for file in h5files if 'admbase-metric.' in file]) == 0
-    if individual:
-        variables = {
-            'rho0':['rho.', 'HYDROBASE::rho', 0],
-            'eps':['eps.', 'HYDROBASE::eps', 0],
-            'w_lorentz':['w_lorentz.', 'HYDROBASE::w_lorentz', 0],
-            'press':['press.', 'HYDROBASE::press', 0],
-            'vel[0]':['vel[0].', 'HYDROBASE::vel[0]', 0],
-            'vel[1]':['vel[1].', 'HYDROBASE::vel[1]', 0],
-            'vel[2]':['vel[2].', 'HYDROBASE::vel[2]', 0],
-            'alpha':['alp.', 'ADMBASE::alp', 0],
-            'dtalpha':['dtalp.', 'ADMBASE::dtalp', 0],
-            'betax':['betax.', 'ADMBASE::betax', 0],
-            'betay':['betay.', 'ADMBASE::betay', 0],
-            'betaz':['betaz.', 'ADMBASE::betaz', 0],
-            'dtbetax':['dtbetax.', 'ADMBASE::dtbetax', 0],
-            'dtbetay':['dtbetay.', 'ADMBASE::dtbetay', 0],
-            'dtbetaz':['dtbetaz.', 'ADMBASE::dtbetaz', 0],
-            'tau':['tau.', 'COSMOLAPSE::tau', 0],
-            'gxx':['gxx.', 'ADMBASE::gxx', 0],
-            'gxy':['gxy.', 'ADMBASE::gxy', 0],
-            'gxz':['gxz.', 'ADMBASE::gxz', 0],
-            'gyy':['gyy.', 'ADMBASE::gyy', 0],
-            'gyz':['gyz.', 'ADMBASE::gyz', 0],
-            'gzz':['gzz.', 'ADMBASE::gzz', 0],
-            'kxx':['kxx.', 'ADMBASE::kxx', 0],
-            'kxy':['kxy.', 'ADMBASE::kxy', 0],
-            'kxz':['kxz.', 'ADMBASE::kxz', 0],
-            'kyy':['kyy.', 'ADMBASE::kyy', 0],
-            'kyz':['kyz.', 'ADMBASE::kyz', 0],
-            'kzz':['kzz.', 'ADMBASE::kzz', 0],
-            'Ktrace':['trK.', 'ML_BSSN::trK', 0],
-            'Hamiltonian':['H.', 'ML_BSSN::H', 0],
-            'M1':['M1.', 'ML_BSSN::M1', 0],
-            'M2':['M2.', 'ML_BSSN::M2', 0],
-            'M3':['M3.', 'ML_BSSN::M3', 0],
-            'Psi4r':['Psi4r.', 'WEYLSCAL4::Psi4r', 0],
-            'Psi4i':['Psi4i.', 'WEYLSCAL4::Psi4i', 0],
-        }
-        # Define replacements as a dictionary
-        replacements = {
-            'gammadown3': ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
-            'Kdown3': ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
-            'betaup3': ['betax', 'betay', 'betaz'],
-            'dtbetaup3': ['dtbetax', 'dtbetay', 'dtbetaz'],
-            'velup3': ['vel[0]', 'vel[1]', 'vel[2]'],
-            'Momentumup3': ['M1', 'M2', 'M3'],
-            'Weyl_Psi': ['Psi4r', 'Psi4i'],
-        }
-
-        # Replace variables in var according to the mapping
-        for key, new_vars in replacements.items():
-            if key in var:
-                var.remove(key)
-                var += new_vars
-    else:
-        variables = {
-            'rho0':['hydrobase-rho.', 'HYDROBASE::rho', 0],
-            'eps':['hydrobase-eps.', 'HYDROBASE::eps', 0],
-            'press':['hydrobase-press.', 'HYDROBASE::press', 0],
-            'w_lorentz':['hydrobase-w_lorentz.', 'HYDROBASE::w_lorentz', 0],
-            'velup3':['hydrobase-vel.', 'HYDROBASE::vel', 1],
-            'alpha':['admbase-lapse.', 'ADMBASE::alp', 0],
-            'dtalpha':['admbase-dtlapse.', 'ADMBASE::dtalp', 0],
-            'betaup3':['admbase-shift.', 'ADMBASE::beta', 1],
-            'dtbetaup3':['admbase-dtshift.', 'ADMBASE::dtbeta', 1],
-            'tau':['cosmolapse-propertime.', 'COSMOLAPSE::tau', 0],
-            'gammadown3':['admbase-metric.', 'ADMBASE::g', 2],
-            'Kdown3':['admbase-curv.', 'ADMBASE::k', 2],
-            'Ktrace':['ml_bssn-ml_trace_curv.', 'ML_BSSN::trK', 0],
-            'Hamiltonian':['ml_bssn-ml_ham.', 'ML_BSSN::H', 0],
-            'Momentumup3':['ml_bssn-ml_mom.', 'ML_BSSN::M', 1],
-            'Weyl_Psi4r':['weylscal4-psi4r_group.', 'WEYLSCAL4::Psi4r', 0],
-            'Weyl_Psi4i':['weylscal4-psi4i_group.', 'WEYLSCAL4::Psi4i', 0],
-        }
-        replacements = {
-            'Weyl_Psi': ['Weyl_Psi4r', 'Weyl_Psi4i'],
-        }
-        for key, new_vars in replacements.items():
-            if key in var:
-                var.remove(key)
-                var += new_vars
-
-    for v in var:
-        if v in list(variables.keys()):
-            att = variables[v]
-            data.update(read_ET_var(
-            data_path, att[0], att[1],
-            cmax, att[2], **kwargs))
-        else:
-            print('Variable {} not found'.format(v))
-
-    return data
-
-def read_ET_data_kuibit(param, var, **kwargs):
 
     # input
     it = np.sort(kwargs.get('it', [0]))
     restart = kwargs.get('restart', 0)
     rl = kwargs.get('rl', 0)
     reshape = kwargs.get('reshape', False)
+    verbose = kwargs.get('verbose', False)
+    veryverbose = kwargs.get('veryverbose', False)
 
     # aurel to ET variable names
     new_var_list = []
@@ -930,7 +816,8 @@ def read_ET_data_kuibit(param, var, **kwargs):
         else:
             raise ValueError(
                 'Variable {} not recognised'.format(v))
-    print(new_var_list)
+    if verbose:
+        print(new_var_list)
 
     # setup kuibit
     datapath = (param['simpath']+param['simname']
@@ -971,246 +858,3 @@ def read_ET_data_kuibit(param, var, **kwargs):
             data['t'] += [variable[iit].time]
     
     return data
-
-
-
-def read_ET_var(path, filename, varkey, cmax, rank, **kwargs):
-    """Read variables from Einstein Toolkit simulation output files.
-    
-    Parameters
-    ----------
-    path : str
-        The path to the simulation output files.
-    filename : str
-        Identifying part of the variable output file name.
-    varkey : str
-        Identifying part of the variable's hdf5 key.
-    cmax : int
-        The maximum number of chunks to read from the simulation output files.
-        If 'in file', it will be extracted from the file.
-    rank : int
-        The rank of the variable to read from the simulation output files.
-        0 scalar, 1 vector, 2 tensor.
-
-    Other Parameters
-    ----------------
-    it : list, optional
-        The iterations to save from the data.
-        The default is [0].
-    rl : int, optional
-        The refinement level to read from the simulation output files.
-        The default is 0.
-    veryverbose : bool, optional
-        If True, print additional information during the joining process.
-        The default is False.
-        
-    Returns
-    -------
-    dict
-        A dictionary containing the data from the simulation output files.
-
-        dict.keys() = ['it', 't', var]
-    """
-
-    it = np.sort(kwargs.get('it', [0]))
-    rl = kwargs.get('rl', 0)
-
-    # collect data files
-    if cmax == 'in file':
-        filename = path + filename +'h5'
-        files = [filename]
-    elif cmax == 0:
-        files = [path + filename + 'h5']
-    else: # a file per chunk
-        files = []
-        for c in range(cmax+1):
-            files += [path + filename + 'file_{}.h5'.format(c)]
-    
-    # dictionary to collect the chunked data at each it for each component
-    if rank==0:
-        all_components = ['']
-    if rank==1:
-        if 'HYDROBASE::vel' in varkey:
-            all_components = ['[0]', '[1]', '[2]']
-        elif 'ML_BSSN::M' in varkey:
-            all_components = ['1', '2', '3']
-        else:
-            all_components = ['x', 'y', 'z']
-    if rank==2:
-        all_components = ['xx', 'xy', 'xz', 'yy', 'yz', 'zz']
-    var_chunks = {iit:{ij:{} for ij in all_components} for iit in it} 
-    
-    # also collect time while you're at it
-    time = []
-    collect_time = True
-
-    # go through one file at a time
-    for fi, filename in enumerate(files):
-        # open the file and collect data
-        file_present = os.path.exists(filename)
-        if file_present:
-            with h5py.File(filename, 'r') as f:
-                # collect all it of that file
-                for iit in it:
-                    # key of data to collect 
-                    key_end = ' it={} tl=0 rl={}'.format(iit, rl)
-        
-                    # find the actual number of chunks
-                    if cmax == 'in file':
-                        fkeys = [k for k in f.keys() 
-                                if varkey+all_components[0]+key_end in k]
-                        if 'c=' in fkeys[0]:
-                            actual_cmax = np.max(list(set([
-                                int(k.split('c=')[1]) 
-                                for k in fkeys])))
-                        else:
-                            actual_cmax = 0
-                        crange = np.arange(actual_cmax+1)
-                    else:
-                        actual_cmax = cmax
-                        crange = [fi]
-
-                    # for each chunk
-                    for c in crange:
-                        if actual_cmax!=0: 
-                            key_end_with_c = key_end + ' c={}'.format(c)
-                        else:
-                            key_end_with_c = key_end
-
-                        # For each component
-                        for ij in all_components:
-                            # the full key to use
-                            key = varkey + ij + key_end_with_c
-                            # cut off ghost grid points
-                            ghost_x = f[key].attrs['cctk_nghostzones'][0]
-                            ghost_y = f[key].attrs['cctk_nghostzones'][1]
-                            ghost_z = f[key].attrs['cctk_nghostzones'][2]
-                            var = np.array(f[key])[
-                                ghost_z:-ghost_z, 
-                                ghost_y:-ghost_y, 
-                                ghost_x:-ghost_x]
-                            iorigin = tuple(f[key].attrs['iorigin'])
-                            var_chunks[iit][ij][iorigin] = var
-                    if collect_time:
-                        time += [f[key].attrs['time']]
-                collect_time = False # only do this in one file
-        else:
-            print('File {} not found'.format(filename), flush=True)
-            break
-
-    # rename some variables to work with AurelCore
-    varname = varkey.split('::')[1]
-    # per iteration, join the chunks together
-    # fix the indexing to be x, y, z
-    var = {}#varname+ij:[] for ij in all_components}
-    if file_present:
-        for iit in it:
-            for ij in all_components:
-                full_varname = varname+ij
-                if full_varname in list(ET_to_aurel_varnames.keys()):
-                    full_varname = ET_to_aurel_varnames[full_varname]
-                if iit == it[0]:
-                    var[full_varname] = [fixij(join_chunks(
-                        var_chunks[iit][ij], **kwargs))]
-                else:
-                    var[full_varname] += [fixij(join_chunks(
-                        var_chunks[iit][ij], **kwargs))]
-        var['t'] = time
-    else:
-        var = {}#varname+ij:[] for ij in all_components}
-        for ij in all_components:
-            full_varname = varname+ij
-            if full_varname in list(ET_to_aurel_varnames.keys()):
-                full_varname = ET_to_aurel_varnames[full_varname]
-            var[full_varname] = None
-    return var
-
-def fixij(f):
-    """Fix the x-z indexing as you read in the data."""
-    return jnp.transpose(jnp.array(f), (2, 1, 0))
-
-def join_chunks(cut_data, **kwargs):
-    """Join the chunks of data together.
-    
-    Parameters
-    ----------
-    cut_data : dict of dict
-        A dictionary containing the data from the simulation output files.
-        dict.keys() = tuple of the chunks 'iorigin' attribute 
-        which maps out how the data is to be joined together.
-
-    Other Parameters
-    ----------------
-    veryverbose : bool, optional
-        If True, print additional information during the joining process.
-        The default is False.
-    
-    Returns
-    -------
-    uncut_data : array_like
-        The data now joined together.
-    """
-    veryverbose = kwargs.get('veryverbose', False)
-
-    all_keys = list(cut_data.keys())
-    cmax = len(all_keys) - 1
-
-    if veryverbose:
-        print(cmax, all_keys)
-        for k in all_keys:
-            print(k, np.shape(cut_data[k]))
-        print()
-    # =================
-    if cmax == 0:
-        uncut_data = cut_data[all_keys[0]]
-    elif cmax == 1:
-        uncut_data = np.append(
-            cut_data[all_keys[0]], cut_data[all_keys[1]], axis=0)
-    elif cmax == 2:
-        uncut_data = np.append(
-            np.append(cut_data[all_keys[0]], cut_data[all_keys[1]], axis=1), 
-            cut_data[all_keys[2]], axis=0)
-    # =================
-    else:
-        # append along axis = 2
-        k = all_keys[0]
-        ndata = {k[1:]:cut_data[k]}
-        for k in all_keys[1:]:
-            if k[1:] in list(ndata.keys()):
-                ndata[k[1:]] = np.append(
-                    ndata[k[1:]], cut_data[k], axis=2)
-            else:
-                ndata[k[1:]] = cut_data[k]
-        all_keys = list(ndata.keys())
-        
-        if veryverbose:
-            for k in all_keys:
-                print(k, np.shape(ndata[k]), flush=True)
-            print()
-
-        # append along axis = 1
-        nndata = {}
-        for k in all_keys:
-            if k[1:] in list(nndata.keys()):
-                nndata[k[1:]] = np.append(
-                    nndata[k[1:]], ndata[k], axis=1)
-            else:
-                nndata[k[1:]] = ndata[k]
-        all_keys = list(nndata.keys())
-        
-        if veryverbose:
-            for k in all_keys:
-                print(k, np.shape(nndata[k]), flush=True)
-            print()
-                
-        # append along axis = 0
-        k = all_keys[0]
-        uncut_data = nndata[k]
-        for k in all_keys[1:]:
-            uncut_data = np.append(
-                uncut_data, nndata[k], axis=0)
-        
-        if veryverbose:
-            print(np.shape(uncut_data), flush=True)
-    return uncut_data
-

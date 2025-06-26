@@ -171,7 +171,25 @@ include::
      month     = {jun},
      doi       = {10.1088/1361-6382/acd6cf},
      archivePrefix = {arXiv},
-     eprint    = {gr-qc/2211.08133}}
+     eprint    = {2211.08133},
+     primaryClass = {gr-qc}}
+
+If you read in data from Einstein Toolkit using the `read_aurel_data` or 
+`read_ET_data_kuibit` functions, you are using `kuibit`, please cite it as::
+
+   @article{kuibit,
+     title     = {kuibit: Analyzing Einstein Toolkit simulations with Python},
+     author    = {Bozzola, Gabriele},
+     journal   = {The Journal of Open Source Software},
+     volume    = {6},
+     number    = {60},
+     pages     = {3099},
+     year      = {2021},
+     month     = {apr},
+     doi       = {10.21105/joss.03099},
+     archivePrefix = {arXiv},
+     eprint    = {2104.06376},
+     primaryClass = {gr-qc}}
 
 If you use aurel to calculate $\Psi_{4}^{l,m}$ then you ought to also cite 
 the `spinsfast package <https://github.com/moble/spinsfast>`_::
@@ -197,4 +215,5 @@ the `spinsfast package <https://github.com/moble/spinsfast>`_::
      year      = {2010},
      doi       = {10.1088/0067-0049/189/2/255},
      archivePrefix = {astro-ph},
-     eprint    = {gr-qc/1007.3514}}
+     eprint    = {1007.3514},
+     primaryClass = {gr-qc}}
