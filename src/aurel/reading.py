@@ -285,11 +285,8 @@ def iterations(param, skip_last=True):
                             vars_available.remove(oldv)
                 # dont consider grid property things
                 for v in vars_available:
-                    if 'grid_' in v:
+                    if v ['grid_structure', 'grid_coordinate']:
                         vars_available.remove(v)
-                # everything else
-                print('NEED TO UPDATE AUREL TO INFCLUDE:', 
-                      vars_available, flush=True)
                 aurel_vars_available += vars_available
                 saveprint(it_file, '3D variables available: '
                           + str(aurel_vars_available))
@@ -473,6 +470,7 @@ def read_data(param, **kwargs):
             its_available[restart]['it to do'] = it
 
         for restart in restarts_available:
+            kwargs['restart'] = restart
             # iterations available in this restart
             old_it = it.copy()
             it = its_available[restart]['it to do']
