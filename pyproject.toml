@@ -29,7 +29,7 @@ classifiers = [
 requires-python = ">=3.8"
 
 dependencies = [
-    "numpy>=1.26.0,<2.0.0",
+    "numpy",
     "matplotlib",
     "sympy",
     "h5py",
@@ -39,7 +39,8 @@ dependencies = [
     "jax",
     "jaxlib",
     "spinsfast",
-    "kuibit"
+    "jupyter",
+    "ipykernel"
 ]
 
 [project.urls]

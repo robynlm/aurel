@@ -40,7 +40,6 @@ If you want to use aurel in a jupyter notebook, add your virtual environment as 
 
 .. code-block:: bash
 
-   pip install ipykernel
    python -m ipykernel install --user --name=myenv --display-name "Python (myenv)"
 
 To have FFTW loaded in your notebook make sure to load the module before starting up your notebook. 
@@ -172,23 +171,6 @@ include::
      doi       = {10.1088/1361-6382/acd6cf},
      archivePrefix = {arXiv},
      eprint    = {2211.08133},
-     primaryClass = {gr-qc}}
-
-If you read in data from Einstein Toolkit using the `read_aurel_data` or 
-`read_ET_data_kuibit` functions, you are using `kuibit`, please cite it as::
-
-   @article{kuibit,
-     title     = {kuibit: Analyzing Einstein Toolkit simulations with Python},
-     author    = {Bozzola, Gabriele},
-     journal   = {The Journal of Open Source Software},
-     volume    = {6},
-     number    = {60},
-     pages     = {3099},
-     year      = {2021},
-     month     = {apr},
-     doi       = {10.21105/joss.03099},
-     archivePrefix = {arXiv},
-     eprint    = {2104.06376},
      primaryClass = {gr-qc}}
 
 If you use aurel to calculate $\Psi_{4}^{l,m}$ then you ought to also cite 

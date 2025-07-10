@@ -1,5 +1,5 @@
 # requirements need to be here AND in pyproject.toml
-numpy>=1.26.0,<2.0.0   # kuibit limits the version I can use
+numpy
 sympy
 matplotlib
 h5py
@@ -9,4 +9,5 @@ ipython
 jax
 jaxlib
 spinsfast
-kuibit
+jupyter
+ipykernel

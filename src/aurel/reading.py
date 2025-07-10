@@ -1,22 +1,32 @@
 """
 reading.py
 
-This module contains functions to read/write data, and has specific
-functions for using data generated from Einstein Toolkit simulations. 
-This includes:
+This module provides comprehensive functionality for reading and writing numerical 
+relativity simulation data, with specialized support for Einstein Toolkit (ET) 
+simulations. The module handles complex data structures including multiple restart 
+files, chunked data, variable groupings, and different refinement levels.
 
-- reading parameters from the simulation
-- listing available iterations of the simulation
-- reading data from the simulation output files
-- joining chunks of data together
-- fixing the x-z indexing of the data
-- saving data to files
+Key functions relevant for Aurel: ``read_data`` and ``save_data``.
+All other functions are auxiliary utilities for Einstein Toolkit data handling.
 
-Note
-----
-Users should first provide the path to their simulations:
+Core Einstein Toolkit Functionality
+-----------------------------------
+- **Parameter extraction**: Read simulation parameters from .par files
+- **Iteration management**: List and track available simulation iterations
+- **Content listing**: List available variables and their file associations
+- **Data reading**: Read 3D simulation data from HDF5 files
+- **Data chunking**: Join data chunks from distributed file systems
+- **Caching**: Save/load data in per-iteration formats for faster access
 
-**export SIMLOC="/path/to/simulations/"**
+Environment Setup
+-----------------
+Users must set the SIMLOC environment variable pointing to simulation directories:
+
+    ``export SIMLOC="/path/to/simulations/"``
+
+For multiple simulation locations, use colon separation:
+
+    ``export SIMLOC="/path1:/path2:/path3"``
 """
 
 import os
@@ -27,47 +37,640 @@ import h5py
 import re
 import subprocess
 import contextlib
-import kuibit
+import json
 
 def bash(command):
-    """Run a bash command and return the output as a string.
+    """Execute a bash command and return its output as a string.
+
+    This utility function provides a simple interface for running shell
+    commands from within Python, primarily used for file system operations and
+    parameter file reading in simulation data processing.
 
     Parameters
     ----------
     command : str
-        The bash command to run.
+        The bash command to execute.
 
     Returns
     -------
     str
-        The output of the command as a string.
+        The command output as a UTF-8 decoded string with leading/trailing
+        whitespace stripped. Empty string if command produces no output.
+
+    Notes
+    -----
+    This function uses subprocess.check_output() which will raise an exception
+    if the command fails. Consider using appropriate error handling for 
+    production code.
     """
     results = subprocess.check_output(command, shell=True)
     strresults = str(results, 'utf-8').strip()
     return strresults
 
-def parameters(simname):
-    """Read the parameters from the simulation.
+aurel_tensor_to_scalar = {
+    'gammadown3': ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
+    'Kdown3': ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
+    'betaup3': ['betax', 'betay', 'betaz'],
+    'dtbetaup3': ['dtbetax', 'dtbetay', 'dtbetaz'],
+    'velup3': ['velx', 'vely', 'velz'],
+    'Momentumup3': ['Momentumx', 'Momentumy', 'Momentumz'],
+    'Weyl_Psi': ['Weyl_Psi4r', 'Weyl_Psi4i'],
+}
+
+def transform_vars_tensor_to_scalar(var):
+    """Transform Aurel tensor variable names to their scalar component names.
+
+    This function decomposes tensor quantities into their individual scalar
+    components for detailed analysis. For example, the 3-metric 'gammadown3'
+    becomes ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'].
+
+    Parameters
+    ----------
+    var : list of str
+        List of Aurel tensor variable names to transform.
+
+    Returns
+    -------
+    list of str
+        List of scalar variable names. Tensor variables are expanded to their
+        components, while scalar variables are kept as-is.
+    """
+    var_scalars = []
+    for v in var:
+        if v in list(aurel_tensor_to_scalar.keys()):
+            var_scalars += aurel_tensor_to_scalar[v]
+        else:
+            var_scalars += [v]
+    return var_scalars
+
+def read_data(param, **kwargs):
+    """Read simulation data from Aurel or Einstein Toolkit format files.
+
+    This is the main entry point for reading numerical relativity simulation 
+    data. It automatically detects the data format and routes to the 
+    appropriate reading function. Supports both Einstein Toolkit HDF5 output 
+    and Aurel's optimized per-iteration format.
+
+    Parameters
+    ----------
+    param : dict
+        Simulation parameters dictionary containing metadata about the 
+        simulation. If 'simulation' key is present, treats as Einstein Toolkit
+        data; otherwise treats as Aurel format. In Einstein Toolkit case, you
+        can use the parameters function.
+
+    Other Parameters
+    ----------------
+    it : list of int, optional
+        Iteration numbers to read. Default [0].
+
+    vars : list of str, optional  
+        Variable names to read. Default [] (read all available).
+
+    rl : int, optional
+        Refinement level to read. Default 0 (coarsest level).
+
+    restart : int, optional
+        Specific restart number to read from. Default -1 (auto-detect).
+        Set to specific value to read from that restart only.
+
+    split_per_it : bool, optional
+        For ET data: whether to use per-iteration files. Default True.
+        When True, reads from cached files and fills missing data from ET 
+        files, then saves newly read ET data to per-iteration files.
+        When False, reads exclusively from ET files.
+
+    verbose : bool, optional
+        Print detailed progress information. Default False.
+
+    veryverbose : bool, optional
+        Print very detailed debugging information. Default False.
+
+    Returns
+    -------
+    dict
+        Dictionary containing the simulation data with keys::
+
+            {
+                'it': [iteration_numbers], # ints
+                't': [time_values],        # floats or None if not available
+                'var1': [data_arrays],     # arrays or Nones if not available
+                'var2': [data_arrays],
+                ...
+            }
+    """
+    # Determine data format and route to appropriate reader
+    # Einstein Toolkit data has 'simulation' key in parameters
+    if 'simulation' in param.keys():
+        data = read_ET_data(param, **kwargs)
+    else:
+        # Aurel format data (per-iteration HDF5 files)
+        data = read_aurel_data(param, **kwargs)
+    return data
+
+def read_aurel_data(param, **kwargs):
+    """Read data from Aurel format simulation output files.
+
+    Aurel format stores simulation data in per-iteration HDF5 files with the 
+    naming convention 'it_<iteration>.hdf5'. Each file contains variables 
+    organized by refinement level with keys like 'varname rl=0'.
+
+    This format is optimized for easy parallelization across iterations.
+
+    Parameters
+    ----------
+    param : dict
+        Simulation parameters dictionary. Must contain either:
+        - 'datapath': Direct path to directory with it_*.hdf5 files, OR
+        - 'simulation', 'simpath', 'simname': For ET-style directory structure
+
+    Other Parameters
+    ----------------
+    it : list of int, optional
+        Iteration numbers to read. Default [0].
+        
+    vars : list of str, optional
+        Variable names to read. Default [] (read all available variables).
+        
+    rl : int, optional
+        Refinement level to read. Default 0.
+        
+    restart : int, optional
+        Restart number (for ET-style directory structure). Default 0.
+        
+    verbose : bool, optional
+        Print progress information. Default False.
+        
+    veryverbose : bool, optional
+        Print detailed debugging information. Default False.
+
+    Returns
+    -------
+    dict
+        Dictionary with simulation data::
+
+            {
+                'it': [iteration_numbers], # ints
+                't': [time_values],        # floats or None if not available
+                'var1': [data_arrays],     # arrays or Nones if not available
+                'var2': [data_arrays],
+                ...
+            }
+    """
+    # Extract reading parameters with defaults
+    it = np.sort(kwargs.get('it', [0]))
+    rl = kwargs.get('rl', 0)
+    restart = kwargs.get('restart', 0)
+    var = kwargs.get('vars', [])
+    verbose = kwargs.get('verbose', False)
+    veryverbose = kwargs.get('veryverbose', False)
+
+    # Determine if we should read all variables or specific ones
+    if var == []:
+        get_them_all = True
+    else:
+        get_them_all = False
+        
+    if veryverbose:
+        print('read_aurel_data: looking for it ', it)
+        if get_them_all:
+            print('read_aurel_data: reading all variables available')
+        else:
+            print('read_aurel_data: reading variables {}'.format(var))
+
+    # Construct data directory path based on parameter structure
+    if 'simulation' in param.keys():
+        # Einstein Toolkit style directory structure
+        datapath = (param['simpath']
+                    + param['simname']
+                    + '/output-{:04d}/'.format(restart)
+                    + param['simname']
+                 + '/all_iterations/')
+    else:
+        # Direct path to Aurel format files
+        datapath = param['datapath']
+        
+    # Always include time coordinate in variables to read
+    var += ['t']
+    # Initialize data dictionary with empty lists for each variable
+    data = {'it': it, **{v: [] for v in var}}
     
-    This also counts the number of restarts, and calculates the
-    size and number of grid points in each direction 
-    of the simulation box.
+    # Read data for each requested iteration
+    for it_index, iit in enumerate(it):
+        fname = '{}it_{}.hdf5'.format(datapath, int(iit))
+        
+        # Handle missing iteration files gracefully
+        if not os.path.exists(fname):
+            # Record None values for all variables at this iteration
+            for key in var:
+                data[key].append(None)
+        else:
+            # File exists - read data from HDF5 file
+            with h5py.File(fname, 'r') as f:
+                if get_them_all:
+                    # Scan file for variables at this rl
+                    for key in f.keys():
+                        if ' rl={}'.format(rl) in key:
+                            var += [key.split(' rl')[0]]
+                    var = list(set(var))  # Remove duplicates
+                    
+                # Read each requested variable
+                for key in var:
+                    skey = key + ' rl={}'.format(rl)  # HDF5 dataset key
+                    
+                    # Ensure this variable exists in our data dictionary
+                    if key not in data.keys():
+                        data[key] = [None]*it_index # Fill iterations with None
+                        
+                    # Read data if dataset exists, otherwise store None
+                    if skey in list(f.keys()):
+                        data[key].append(jnp.array(f[skey]))
+                    else:
+                        data[key].append(None)
+    return data
+
+def save_data(param, data, **kwargs):
+    """Save simulation data to Aurel format HDF5 files.
+
+    Saves simulation data in the per-iteration format used by Aurel, where each
+    iteration is stored in a separate HDF5 file named 'it_<iteration>.hdf5'.
+    Variables are stored as datasets with keys like 'varname rl=<level>'.
+
+    This format provides several advantages:
+
+    - Fast random access to specific iterations
+    - Parallel I/O capabilities 
+    - Efficient storage for sparse temporal sampling
+
+    Parameters
+    ----------
+    param : dict
+        Simulation parameters dictionary containing path information.
+        Should include either:
+        - 'datapath': Direct path where files will be saved, OR  
+        - 'simulation' 'simpath', 'simname': For ET-style directory structure
+
+    data : dict
+        Dictionary containing simulation data to save.
+        Expected structure::
+
+            {
+                'it': [iteration_numbers],
+                't': [time_values], 
+                'var1': [data_arrays],
+                'var2': [data_arrays],
+                ...
+            }
+
+        Each variable should have one array per iteration.
+
+    Other Parameters
+    ----------------
+
+    vars : list of str, optional
+        Variables to save. Default [] (save all variables in data).
+        Note: 'it' and 't' are automatically included if present.
+
+    it : list of int, optional  
+        Iterations to save. Default [0].
+
+    rl : int, optional
+        Refinement level for saved data. Default 0.
+        Used in HDF5 dataset keys: 'varname rl=<rl>'
+        Can just represent grids of different shapes.
+
+    restart : int, optional
+        Restart number (for ET-style paths). Default 0.
+
+    Notes
+    -----
+    - Overwrites existing datasets with the same name
+    - Skips variables with None values
+    """
+    vars = kwargs.get('vars', [])
+    it = np.sort(kwargs.get('it', [0]))
+    rl = kwargs.get('rl', 0)
+    restart = kwargs.get('restart', 0)
+
+    if vars == []:
+        vars = list(data.keys())
+
+    if 'it' not in vars and 'it' in data.keys():
+        vars += ['it']
+    if 't' not in vars and 't' in data.keys():
+        vars += ['t']
+
+    # check paths
+    if 'simulation' in param.keys():
+        # ET-style directory structure
+        datapath = (param['simpath']
+                 + param['simname']
+                 + '/output-{:04d}/'.format(restart)
+                 + param['simname']
+                 + '/all_iterations/')
+        lastpart = ''
+    else:
+        datapath = param['datapath']
+        if not datapath.endswith('/'):
+            lastpart = datapath.split('/')[-1]
+            firstpart = datapath.split('/')[:-1]
+            datapath = '/'.join(firstpart) + '/'
+        else:
+            lastpart = ''
+    if not os.path.exists(datapath):
+        os.makedirs(datapath)
+    datapath += lastpart
+
+    # save the data
+    for it_index, iit in enumerate(it):
+        fname = '{}it_{}.hdf5'.format(datapath, int(iit))
+        with h5py.File(fname, 'a') as f:
+            for key in vars:
+                if data[key] is not None:
+                    skey = key + ' rl={}'.format(rl)
+                    # TODO: are you sure about overwritting?
+                    if skey in list(f.keys()):
+                        del f[skey]
+                    f.create_dataset(skey, data=data[key][it_index])
+
+###############################################################################
+###############################################################################
+#
+#                  Einstein Toolkit specific functions
+#
+###############################################################################
+###############################################################################
+
+# =============================================================================
+#                   Aurel to Einstein Toolkit variables
+# =============================================================================
+
+aurel_to_ET_varnames = {
+    'gammadown3' : ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
+    'Kdown3' : ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
+    'Ktrace' : ['trK'],
+    'alpha' : ['alp'],
+    'dtalpha' : ['dtalp'],
+    'betaup3' : ['betax', 'betay', 'betaz'],
+    'dtbetaup3' : ['dtbetax', 'dtbetay', 'dtbetaz'],
+    'rho0' : ['rho'],
+    'eps' : ['eps'],
+    'press' : ['press'],
+    'w_lorentz' : ['w_lorentz'],
+    'velup3' : ['vel[0]', 'vel[1]', 'vel[2]'],
+    'Hamiltonian' : ['H'],
+    'Momentumup3' : ['M1', 'M2', 'M3'],
+    'Weyl_Psi' : ['Psi4r', 'Psi4i']
+}
+def transform_vars_aurel_to_ET(var):
+    """Transform ET variable names to Aurel variable names.
+
+    Parameters
+    ----------
+    var : list of str
+        List of variable names to transform.
+
+    Returns
+    -------
+    list of str
+        List of transformed variable names.
+    """
+    var_ET = []
+    for v in var:
+        if v in list(aurel_to_ET_varnames.keys()):
+            var_ET += aurel_to_ET_varnames[v]
+        else:
+            var_ET += [v]
+    return var_ET
+
+def transform_vars_ET_to_aurel_groups(vars):
+    """Transform ET variable names to Aurel variable group names.
+
+    Parameters
+    ----------
+    var : list of str
+        List of variable names to transform.
+
+    Returns
+    -------
+    list of str
+        List of transformed variable names.
+    """
+    aurel_vars = []
+    for newv, oldvs in  aurel_to_ET_varnames.items():
+        if np.sum([v in vars for v in oldvs]) == len(oldvs):
+            aurel_vars += [newv]
+            for oldv in oldvs:
+                vars.remove(oldv)
+    aurel_vars += vars
+    return aurel_vars
+
+ET_to_aurel_varnames = {
+    'rho':'rho0', 'alp':'alpha', 'dtalp':'dtalpha',
+    'trK':'Ktrace', 'H':'Hamiltonian',
+    'vel[0]':'velx', 'vel[1]':'vely', 'vel[2]':'velz',
+    'M1':'Momentumx', 'M2':'Momentumy', 'M3':'Momentumz',
+    'Psi4r':'Weyl_Psi4r', 'Psi4i':'Weyl_Psi4i'
+}
+def transform_vars_ET_to_aurel(var):
+    """Transform ET variable name to Aurel variable name.
+
+    Parameters
+    ----------
+    var : str
+        String of variable name to transform.
+
+    Returns
+    -------
+    str
+        String of transformed variable name.
+    """
+    if var in list(ET_to_aurel_varnames.keys()):
+        var = ET_to_aurel_varnames[var]
+    return var
+
+# =============================================================================
+#                Reading data file names and hdf5 dataset keys
+# =============================================================================
+
+# Regex for HDF5 dataset keys
+# Example: "ADMBASE::gxx it=0 tl=0 m=0 rl=0 c=0"
+rx_key = re.compile(
+    r"([^:]+)::(\S+) it=(\d+) tl=(\d+)( m=0)?( rl=(\d+))?( c=(\d+))?")
+
+def parse_hdf5_key(key):
+    """Parse HDF5 dataset key into its components.
+    
+    Parameters
+    ----------
+    key : str
+        HDF5 dataset key in format like "admbase::gxx it=0 tl=0 m=0 rl=0 c=0"
+    
+    Returns
+    -------
+    dict or None
+        Returns None if the key doesn't match the expected format.
+        Otherwise returns dictionary with parsed components::
+
+            {
+                'thorn': str,        # e.g., 'admbase'
+                'variable': str,     # e.g., 'gxx'
+                'it': int,          # iteration number
+                'tl': int,          # time level
+                'm': int or None,   # m value (if present)
+                'rl': int or None,  # refinement level (if present) 
+                'c': int or None    # chunk number (if present)
+            }
+            
+    """
+    
+    match = rx_key.match(key)
+    if match:
+        return {
+            'thorn': match.group(1),
+            'variable': match.group(2),
+            'it': int(match.group(3)),
+            'tl': int(match.group(4)),
+            'm': 0 if match.group(5) else None,
+            'rl': int(match.group(7)) if match.group(7) else None,
+            'c': int(match.group(9)) if match.group(9) else None
+        }
+    return None
+
+# Regex for HDF5 filenames: matches both single-variable and group files
+# Examples: "rho.xyz.h5", "admbase-metric.file_123.xyz.h5"
+rx_h5file = re.compile(
+    r"^(([a-zA-Z0-9_]+)-)?([a-zA-Z0-9\[\]_]+)(.xyz)?(.file_[\d]+)?(.xyz)?.h5$")
+
+def parse_h5file(filepath):
+    """Parse HDF5 filename into its components.
+    
+    Parameters
+    ----------
+    filepath : str
+        HDF5 file path or filename. Can be either:
+
+        - Full absolute/relative path: "/path/to/admbase-metric.h5"
+        
+        - Just filename: "rho.xyz.h5"
+
+    Returns
+    -------
+    dict or None
+        Returns None if the filename doesn't match the expected format.
+        Otherwise returns dictionary with parsed components::
+
+            {
+                'thorn_group': str or None, # e.g., 'admbase-' or None
+                'thorn': str or None,       # e.g., 'admbase' or None  
+                'variable_or_group': str,   # e.g., 'metric' or 'rho'
+                'xyz_prefix': str or None,  # e.g., '.xyz' or None
+                'file_number': str or None, # e.g., '.file_123' or None
+                'xyz_suffix': str or None,  # e.g., '.xyz' or None
+                'is_group_file': bool,      # True -> is a grouped variable file
+                'chunk_number': int or None # e.g., 123 or None (from file_number)
+            }
+
+    """
+    
+    # Extract just the filename if a full path was provided
+    if os.path.sep in filepath:
+        filename = os.path.basename(filepath)
+    else:
+        filename = filepath
+    
+    match = rx_h5file.match(filename)
+    if match:
+        thorn_group_with_dash = match.group(1)  # e.g., "admbase-" or None
+        thorn_name = match.group(2)             # e.g., "admbase" or None
+        variable_or_group_name = match.group(3) # e.g., "metric" or "rho"
+        xyz_prefix = match.group(4)             # e.g., ".xyz" or None
+        file_number = match.group(5)            # e.g., ".file_123" or None
+        xyz_suffix = match.group(6)             # e.g., ".xyz" or None
+        
+        base_name = f"{thorn_group_with_dash}{variable_or_group_name}"
+
+        # Extract chunk number if present
+        chunk_number = None
+        if file_number:
+            try:
+                chunk_number = int(file_number.split('_')[1])
+            except (IndexError, ValueError):
+                pass
+        
+        return {
+            'thorn_with_dash': thorn_group_with_dash,
+            'thorn': thorn_name,
+            'variable_or_group': variable_or_group_name,
+            'base_name': base_name,
+            'xyz_prefix': xyz_prefix,
+            'file_number': file_number,
+            'xyz_suffix': xyz_suffix,
+            'group_file': thorn_group_with_dash is not None,
+            'chunk_number': chunk_number
+        }
+    return None
+
+# =============================================================================
+#           Reading parameters, iterations and list data content
+# =============================================================================
+
+def parameters(simname):
+    """Read and parse Einstein Toolkit simulation parameters.
+
+    Extracts comprehensive simulation metadata from Einstein Toolkit parameter
+    files (.par), including grid configuration, restart information, and all
+    thorn-specific parameters.
+
+    The function automatically:
+    - Locates parameter files
+    - Counts restart files to determine simulation state
+    - Calculates derived grid parameters (extents, grid points)
+    - Parses thorn parameters with proper type conversion
 
     Parameters
     ----------
     simname : str
-        The name of the simulation to read the parameters from.
-        
+        Name of the simulation directory to analyze.
+        Must exist in one of the SIMLOC directories.
+
     Returns
     -------
     dict
-        A dictionary containing the parameters of the simulation.
-    
-    Note
-    ----
-    Users should first provide the path to their simulations:
+        Comprehensive parameter dictionary containing:
 
-    **export SIMLOC="/path/to/simulations/"**
+        Core Information:
+            'simname' : str, Simulation name (input parameter)
+
+            'simulation' : str, Data format identifier ('ET')
+
+            'simpath' : str, Path to simulation root directory
+
+            'datapath' : str, Path to output-0000 data directory
+
+            'nbr_restarts' : int, Number of restart directories found
+            
+        Grid Parameters:
+            'xmin', 'xmax', 'Lx', 'Nx', 'dx' : float/int, minimum, maximum, 
+            extent, grid points and spacing. Same for Y and Z-direction 
+            parameters.
+            
+        Thorn Information:
+            'list_of_thorns' : list of str, All active thorns in the simulation
+            
+        Parameter Values:
+            All parameters from the .par file with appropriate types.
+            Conflicting parameter names include thorn prefix.
+
+    Notes
+    -----
+    The SIMLOC environment variable must be set:
+    
+        ``export SIMLOC="/path/to/simulations"``
+        
+    For multiple locations:
+    
+        ``export SIMLOC="/path1:/path2:/path3"``
     """
     parameters = {
         'simname':simname,
@@ -181,74 +784,77 @@ def parameters(simname):
         parameters['max_refinement_levels'] = 1
     return parameters
 
-aurel_tensor_to_scalar_varnames = {
-    'gammadown3': ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
-    'Kdown3': ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
-    'betaup3': ['betax', 'betay', 'betaz'],
-    'dtbetaup3': ['dtbetax', 'dtbetay', 'dtbetaz'],
-    'velup3': ['velx', 'vely', 'velz'],
-    'Momentumup3': ['Momentumx', 'Momentumy', 'Momentumz'],
-    'Weyl_Psi': ['Weyl_Psi4r', 'Weyl_Psi4i'],
-}
-
-aurel_to_ET_varnames = {
-    'gammadown3' : ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
-    'Kdown3' : ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
-    'Ktrace' : ['trK'],
-    'alpha' : ['alp'],
-    'dtalpha' : ['dtalp'],
-    'betaup3' : ['betax', 'betay', 'betaz'],
-    'dtbetaup3' : ['dtbetax', 'dtbetay', 'dtbetaz'],
-    'rho0' : ['rho'],
-    'eps' : ['eps'],
-    'press' : ['press'],
-    'w_lorentz' : ['w_lorentz'],
-    'velup3' : ['vel'],
-    'Hamiltonian' : ['H'],
-    'Momentumup3' : ['M1', 'M2', 'M3'],
-    'Weyl_Psi' : ['Psi4r', 'Psi4i']
-}
-
-ET_to_aurel_varnames = {
-    'rho':'rho0', 'alp':'alpha', 'dtalp':'dtalpha',
-    'trK':'Ktrace', 'H':'Hamiltonian',
-    'vel[0]':'velx', 'vel[1]':'vely', 'vel[2]':'velz',
-    'M1':'Momentumx', 'M2':'Momentumy', 'M3':'Momentumz',
-    'Psi4r':'Weyl_Psi4r', 'Psi4i':'Weyl_Psi4i'}
-
-def saveprint(it_file, some_str):
+def saveprint(it_file, some_str, verbose=True):
     """Save the string to the file and print it to the screen."""
-    print(some_str, flush=True)
+    if verbose:
+        print(some_str, flush=True)
     with contextlib.redirect_stdout(it_file):
         print(some_str)
 
-def iterations(param, skip_last=True):
-    """Lists available iterations of the simulation's 3D output files.
+def iterations(param, skip_last=True, verbose=True):
+    """Analyze and catalog available iterations across all simulation restarts.
 
-    Prints available iterations on screen and records this 
-    in a file called iterations.txt in the simulation directory.
-    
+    This function systematically scans Einstein Toolkit simulation output
+    to determine what data is available at each iteration and refinement level
+    across all restart files. It creates a comprehensive catalog saved to
+    iterations.txt for quick access by other analysis functions.
+
+    The analysis includes:
+
+    - Available 3D variables in each restart
+    - Iteration ranges and time stepping patterns  
+    - Refinement level coverage
+
     Parameters
     ----------
     param : dict
-        The parameters of the simulation.
+        Simulation parameters from `parameters()` function. Must contain:
+        - 'simpath': Path to simulation directory
+        - 'simname': Simulation name
+        - 'nbr_restarts': Number of restart directories
+        
     skip_last : bool, optional
-        If True, skip the last restart. The default is True.
-        This is to not mess with things in case they're still running.
+        Skip the last restart directory. Default True.
+        Useful to avoid interupting running simulations.
+        
+    verbose : bool, optional
+        Print detailed progress information. Default True.
+        Shows contents of iterations.txt file.
+
+    Notes
+    -----
+    Creates/appends to '{simpath}/{simname}/iterations.txt' with format::
+    
+        === restart 0
+        3D variables available: ['rho', 'alpha', 'gxx', ...]
+        it = 0 -> 1000
+        rl = 0 at it = np.arange(0, 1000, 2)
+        rl = 1 at it = np.arange(0, 1000, 4)
+        === restart 1
+        ...
+
+    Analysis process for each restart directory:
+
+    1. **Variable Discovery**: Scan HDF5 files to find available variables
+    2. **Variable Transformation**: Map ET variables to Aurel conventions
+    3. **Iteration Analysis**: Determine available iteration numbers
+    4. **Refinement Analysis**: Check each refinement level separately
     """
 
     nbr_restarts = param['nbr_restarts']
     if skip_last:
         nbr_restarts -= 1
 
+    # Open/create iterations catalog file
     it_filename = param['simpath']+param['simname']+'/iterations.txt'
     with open(it_filename, "a+") as it_file:
-        # print content of file
+        # Display existing content from previous runs
         it_file.seek(0)
         contents = it_file.read()
-        print(contents, flush=True)
+        if verbose:
+            print(contents, flush=True)
 
-        # restart from which to continue
+        # Determine which restarts need processing
         lines = contents.split("\n")
         restarts_done = [int(line.split("restart ")[1]) 
                          for line in lines 
@@ -258,100 +864,85 @@ def iterations(param, skip_last=True):
         else:
             first_restart = np.max(restarts_done) + 1
 
-        # for each restart
+        # Process each restart directory
         for restart in range(first_restart, nbr_restarts):
-            saveprint(it_file, ' === restart {}'.format(restart))
-            # find the data
-            datapath = (param['simpath']+param['simname']
-                        +'/output-{:04d}/'.format(restart)
-                        +param['simname']+'/')
+            saveprint(it_file, ' === restart {}'.format(restart), 
+                      verbose=verbose)
             
-            # list available variables
-            # get kuibit variables
-            sim = kuibit.simdir.SimDir(datapath)
-            vars_available = list(sim.gf.xyz.fields.keys())
+            # Analyze available variables in this restart
+            vars_and_files = get_content(param, restart=restart)
+            vars_available = []
+            for key in vars_and_files.keys():
+                vars_available += list(key)
             
-            # error if it didn't find anything
+            # Error handling for empty restart directories
             if vars_available == []:
+                # Path to this restart's output directory that was checked
+                datapath = (param['simpath']+param['simname']
+                            +'/output-{:04d}/'.format(restart)
+                            +param['simname']+'/')
                 raise ValueError('Could not find 3D data in ' + datapath)
             else:
-                # transform kuibit variables to aurel variables
-                aurel_vars_available = []
-                for newv, oldvs in  aurel_to_ET_varnames.items():
-                    if np.sum([v in vars_available 
-                               for v in oldvs]) == len(oldvs):
-                        aurel_vars_available += [newv]
-                        for oldv in oldvs:
-                            vars_available.remove(oldv)
-                # dont consider grid property things
-                for v in vars_available:
-                    if v ['grid_structure', 'grid_coordinate']:
-                        vars_available.remove(v)
-                aurel_vars_available += vars_available
-                saveprint(it_file, '3D variables available: '
-                          + str(aurel_vars_available))
+                # Select representative file for iteration analysis
+                file_for_it = vars_and_files[list(vars_and_files.keys())[0]][0]
 
-            # find a file to read the iterations from
-            h5files = glob.glob(datapath+'*.h5')
-            found3Dfile = False
-            for file in h5files:
-                if (('admbase' in file) or ('gxx' in file)):
-                    is3D = True
-                    for slice in ['.xx.', '.xy.', '.xz.', 
-                                  '.yy.', '.yz.', '.zz.']:
-                        if slice in file:
-                            is3D = False
-                            break
-                    if is3D:
-                        found3Dfile = True
-                        break
-            if not found3Dfile:
-                raise ValueError('Could not find 3D data in ' + datapath)
+                # Transform ET variable names to Aurel conventions
+                aurel_vars_available = transform_vars_ET_to_aurel_groups(
+                    vars_available)
+                saveprint(it_file, '3D variables available: '
+                          + str(aurel_vars_available), 
+                          verbose=verbose)
             
-            with h5py.File(file, 'r') as f:
+            with h5py.File(file_for_it, 'r') as f:
                 # only consider one of the variables in this file
-                varkey = list(f.keys())[0].split(' ')[0]
-                # all the keys of this varible
-                fkeys = [k for k in f.keys() if varkey in k]
+                fkeys = list(f.keys())
+                varkey = parse_hdf5_key(fkeys[0])['variable']
+                # all the keys of this variable
+                fkeys = [k for k in fkeys if varkey in k]
+                
                 # all the iterations
-                allits = np.sort([int(k.split('it=')[1].split(' tl')[0]) 
-                                  for k in fkeys])
-                saveprint(it_file, 'it = {} -> {}'.format(np.min(allits), 
-                                                          np.max(allits)))
+                allits = np.sort([parse_hdf5_key(k)['it'] for k in fkeys])
+                saveprint(
+                    it_file, 
+                    'it = {} -> {}'.format(np.min(allits), np.max(allits)), 
+                    verbose=verbose)
+                    
                 # maximum refinement level present
-                rlmax = np.max(list(set([int(k.split('rl=')[1].split(' ')[0]) 
-                                         for k in fkeys])))
+                rlmax = np.max([parse_hdf5_key(k)['rl'] for k in fkeys])
+                
                 # for each refinement level
                 for rl in range(rlmax+1):
                     # take the corresponding keys
-                    keysrl = []
-                    for k in fkeys:
-                        krl = k.split('rl=')[1].split(' ')[0]
-                        if krl == str(rl):
-                            keysrl += [k]
+                    keysrl = [k for k in fkeys 
+                              if parse_hdf5_key(k)['rl'] == rl]
+
                     if keysrl!=[]:
-                        if 'c=' in keysrl[0]:
-                            cs = [k.split('c=')[1] for k in keysrl]
-                            chosen_c = ' c=' + np.sort(list(set(cs)))[-1]
+                        # Check if there are chunk numbers
+                        if parse_hdf5_key(keysrl[0])['c'] is not None:
+                            cs = [parse_hdf5_key(k)['c'] for k in keysrl]
+                            chosen_c = ' c=' + str(np.sort(list(set(cs)))[-1])
                         else:
                             chosen_c = ''
                         keysrl = [k for k in keysrl if chosen_c in k]
                         
                         # and look at what iterations they have
-                        allits = np.sort([int(k.split('=')[1].split(' tl')[0]) 
+                        allits = np.sort([parse_hdf5_key(k)['it'] 
                                           for k in keysrl])
+
                         if len(allits)>1:
                             saveprint(
                                 it_file, 
                                 'rl = {} at it = np.arange({}, {}, {})'.format(
                                 rl, np.min(allits), np.max(allits), 
-                                np.diff(allits)[0]))
+                                np.diff(allits)[0]), 
+                                verbose=verbose)
                         else:
                             saveprint(it_file, 'rl = {} at it = {}'.format(
-                                rl, allits))
-                            
-def read_iterations(param):
-    """Read the available iterations of the simulation.
+                                rl, allits), 
+                                verbose=verbose)
+
+def get_iterations(param, skip_last = True, verbose=False):
+    """Get the available iterations of the simulation.
     
     This reads in the file the iterations function creates.
     Note that if this file does not exist, it will be created.
@@ -364,15 +955,18 @@ def read_iterations(param):
     Returns
     -------
     dict :
-        A dictionary containing the available iterations of the simulation.
-        {restart_nbr: {'var available': [...], 
-                       'its available': [itmin, itmax], 
-                       'rl = rl_nbr': [itmin, itmax, dit]}}
+        A dictionary containing the available iterations of the simulation::
+
+        {
+            restart_nbr: {'var available': [...], 
+                          'its available': [itmin, itmax],
+                          'rl = rl_nbr': [itmin, itmax, dit]}
+        }
     """
     it_filename = param['simpath']+param['simname']+'/iterations.txt'
     # if file does not exist, create it
     if not os.path.isfile(it_filename):
-        iterations(param)
+        iterations(param, verbose=verbose)
     
     # read the file
     with open(it_filename, "r") as it_file:
@@ -394,7 +988,8 @@ def read_iterations(param):
                 its_available[restart_nbr]['var available'] = vars
             # iterations available (inclusive interval)
             elif '->' in l:
-                its_available[restart_nbr]['its available'] = [int(l.split(' ')[2]), int(l.split(' ')[4])]
+                its_available[restart_nbr]['its available'] = [
+                    int(l.split(' ')[2]), int(l.split(' ')[4])]
             # iterations available for said refinement level
             elif 'rl = ' in l:
                 rl = l.split('rl = ')[1].split(' ')[0]
@@ -403,136 +998,379 @@ def read_iterations(param):
                 dit = int(l.split(', ')[2].split(')')[0])
                 its_available[restart_nbr]['rl = '+rl] = [itmin, itmax, dit]
     return its_available
-                            
-def read_data(param, **kwargs):
-    """Read the data from the simulation output files.
+
+known_groups = {
+    'hydrobase-rho': ['rho'],
+    'hydrobase-eps': ['eps'],
+    'hydrobase-press': ['press'],
+    'hydrobase-w_lorentz': ['w_lorentz'],
+    'hydrobase-vel': ['vel[0]', 'vel[1]', 'vel[2]'],
+    'admbase-lapse': ['alp'],
+    'admbase-dtlapse': ['dtalp'],
+    'admbase-shift': ['betax', 'betay', 'betaz'],
+    'admbase-dtshift': ['dtbetax', 'dtbetay', 'dtbetaz'],
+    'admbase-metric': ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
+    'admbase-curv': ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
+    'ml_bssn-ml_trace_curv': ['trK'],
+    'ml_bssn-ml_ham': ['H'],
+    'ml_bssn-ml_mom': ['M1', 'M2', 'M3'],
+    'weylscal4-psi4r_group': ['Psi4r'],
+    'weylscal4-psi4i_group': ['Psi4i'],
+    }
+def get_content(param, restart=0, verbose=True):
+    """Analyze Einstein Toolkit output directory and map variables to files.
+
+    This function creates a comprehensive mapping between simulation variables
+    and their corresponding HDF5 files, handling both single-variable and
+    grouped-variable file organizations. It implements intelligent caching
+    to avoid expensive file scanning on repeated calls.
+
+    The function performs several key operations:
+    1. Scans all HDF5 files in the directory
+    2. Determines file organization (single vs. grouped variables)
+    3. Maps each variable to its containing files
+    4. Groups variables that share the same file sets
+    5. Caches results for faster subsequent access
+
+    Parameters
+    ---------- 
+    param : dict
+        Simulation parameters dictionary containing:
+        
+        - 'simpath': Path to simulation root directory
+        - 'simname': Simulation name
+    restart : int, optional
+        Restart number to analyze. Default 0.
+        Used to construct the path to the ET output directory containing .h5 files.
+        Example: "/simulations/BHB/output-0000/BHB/"
+        
+    verbose : bool, optional
+        Print progress information during processing. Default True.
+        Shows file scanning progress and caching status.
+
+    Returns
+    -------
+    dict
+        Dictionary mapping variable groups to their file lists::
+
+        {
+            ('var1', 'var2'): ['path/to/file1.h5', 'path/to/file2.h5'],
+            ('var3',): ['path/to/file3.h5', 'path/to/file4.h5'],
+            ...
+        }
+
+    Notes
+    -----
+    - Cache file 'content.txt' created in the target directory
+    - Variable names follow Einstein Toolkit conventions
+    - If variables are grouped in files and are not in the known_groups, 
+      the variable names will be retrieved from the keys in the file. 
+      Depending on the file size, this may take some time.
+    """
+    path = (param['simpath']
+            + param['simname']
+            + '/output-{:04d}/'.format(restart)
+            + param['simname'] + '/')
+    content_file = path+'content.txt'
+    # Try to load existing content file
+    try:
+        if verbose:
+            print(f"Loading existing content from {content_file}...")
+        with open(content_file, 'r') as f:
+            content_data = json.load(f)
+            # Convert keys back to tuples of variable names
+            vars_and_files = {}
+            for key_str, files in content_data.items():
+                # Convert key string back to tuple of variable names
+                key_tuple = tuple(key_str.split(','))
+                vars_and_files[key_tuple] = files
+        if verbose:
+            print(f"Loaded {len(vars_and_files)} variables from cache.")
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("No existing content file found or invalid format."
+              + " Calculating from scratch...")
+        
+        vars_and_files = {}
+        processed_groups = {}  # Track which groups we've already read
+        h5files = glob.glob(path+'*.h5')
+        for filepath in h5files:
+            file_info = parse_h5file(filepath)
+            if file_info is not None:
+
+                # If the file is a single variable file
+                if not file_info['group_file']:
+                    files = vars_and_files.setdefault(
+                        file_info['variable_or_group'], set())
+                    files.add(filepath)
+                # Else the file is a group of variables
+                else:
+                    base_name = file_info['base_name']
+                    if base_name not in processed_groups:
+                        # If it's a known group I can skip reading the file
+                        if base_name in known_groups:
+                            varnames = known_groups[base_name]
+                        else:
+                            # First time seeing this group 
+                            # - read the file to get variable names
+                            if verbose:
+                                print('Reading variables in file:', 
+                                      filepath, flush=True)
+                            with h5py.File(filepath, "r") as h5f:
+                                variables = {parse_hdf5_key(k)['variable'] 
+                                             for k in h5f.keys() 
+                                             if parse_hdf5_key(k) is not None}
+                                processed_groups[base_name] = varnames
+                    else:
+                        # We've already processed this group 
+                        # - reuse the variable names
+                        varnames = processed_groups[base_name]
+                    
+                    # Add this file to all variables in the group
+                    for variable_name in varnames:
+                        files = vars_and_files.setdefault(variable_name, set())
+                        files.add(filepath)
+        # Convert sets to lists
+        vars_and_files = {var: list(files) 
+                          for var, files in vars_and_files.items()}
+        
+        # ==== Group variables by shared file paths ====
+        # Create a mapping from file paths 
+        # (as tuples for hashability) to variables
+        files_to_vars = {}
+        for var, file_list in vars_and_files.items():
+            # Convert list to tuple so it can be used as a dictionary key
+            file_tuple = tuple(sorted(file_list))
+            
+            if file_tuple not in files_to_vars:
+                files_to_vars[file_tuple] = []
+            files_to_vars[file_tuple].append(var)
+        
+        # Invert the mapping: group variables by their shared file paths
+        vars_and_files = {}
+        for file_tuple, var_list in files_to_vars.items():
+            # Sort variables for consistent ordering
+            var_tuple = tuple(sorted(var_list))
+            # Convert file tuple back to list
+            file_list = list(file_tuple)
+            vars_and_files[var_tuple] = file_list
+
+        # ==== Save results ====
+        # Always save the results (whether calculated 
+        # or loaded and potentially updated)
+        if verbose:
+            print(f"Saving content to {content_file}...")
+        with open(content_file, 'w') as f:
+            # convert keys to strings for JSON serialization
+            content_data = {}
+            for key, value in vars_and_files.items():
+                content_data[','.join(key)] = value
+            json.dump(content_data, f, indent=2)
+        if verbose:
+            print(f"Saved {len(vars_and_files)} variables to content file.")
+    return vars_and_files
+
+
+# =============================================================================
+#                             Reading in the data
+# =============================================================================
+
+def read_ET_data(param, **kwargs):
+    """Read Einstein Toolkit simulation data with intelligent restart handling.
+
+    This is the main Einstein Toolkit data reading function that handles the
+    complexity of multi-restart simulations, variable groupings, and chunking.
+    It provides a unified interface for accessing ET simulation data
+    regardless of the underlying file organization.
+
+    Key Features:
+
+    - **Restart Management**: Automatically finds iterations across restarts
+    - **Hybrid Reading**: Combines cached per-iteration files with ET files
+    - **Missing Data Handling**: Fills gaps by reading from original ET files
+    - **Variable Mapping**: Handles Aurel to Einstein Toolkit name conversions
+    - **Caching Strategy**: Saves data in optimized format for future access
 
     Parameters
     ----------
     param : dict
-        The parameters of the simulation.
+        Simulation parameters from `parameters()` function.
 
     Other Parameters
     ----------------
-    it : list, optional
-        The iterations to read from the simulation output files.
-        The default is [0].
-    vars : list, optional
-        The variables to read from the simulation output files.
-        The default is [], all available variables will be read.
-    rl : int, optional
-        The refinement level to read from the simulation output files.
-        The default is 0.
-    restart : int, optional
-        The restart number to read and save the data to.
-        The default is -1, meaning it'll find the restart of the it you want.
-    split_per_it : bool, optional
-        Default True, if possible read the data from the split iterations.
-        Complete request with ET files and save variables 
-        in individual files per iteration.
-        Else just read ET files.
-    verbose : bool, optional
-        If True, print additional information during the reading process.
-    veryverbose : bool, optional
-        If True, print even more information during the reading process.
+    it : list of int, optional
+        Iterations to read. Default [0].
     
+    vars : list of str, optional.
+        Variables in Aurel format. Default [] (all available). 
+        Examples: ['rho', 'Kdown3'], ['gammadown3', 'alpha']
+            
+    restart : int, optional
+        Specific restart to read from. 
+        Default -1 (auto-detect).
+            
+    split_per_it : bool, optional
+        Use cached per-iteration files when available and save read data
+        in per-iteration files. Default True.
+            
+    verbose : bool, optional
+        Print progress information. Default False.
+            
+    veryverbose : bool, optional
+        Print detailed debugging information. Default False.
+
     Returns
     -------
     dict
-        A dictionary containing the data from the simulation output files.
-        dict.keys() = ['it', 't', var[0], var[1], ...]
+        Simulation data dictionary with structure::
+
+            {
+                'it': [iteration_numbers],
+                't': [time_values],
+                'var1': [data_arrays],
+                'var2': [data_arrays],
+                ...
+            }
+
+    Notes
+    -----
+    Processing Workflow:
+
+    1. **Iteration Location**: Determines which restart contains each iteration
+    2. **Cache Reading**: Loads available data from per-iteration files  
+    3. **Gap Detection**: Identifies missing iterations/variables
+    4. **ET Reading**: Fills gaps by reading original Einstein Toolkit files
+    5. **Data Integration**: Combines cached and newly-read data
+    6. **Cache Update**: Saves newly-read data for future access
     """
+    # reading kwargs
     it = np.sort(kwargs.get('it', [0]))
+    var = kwargs.get('vars', [])
+    restart = kwargs.get('restart', -1)
     split_per_it = kwargs.get('split_per_it', True)
     verbose = kwargs.get('verbose', False)
     veryverbose = kwargs.get('veryverbose', False)
-    restart = kwargs.get('restart', -1)
-    var = kwargs.get('vars', [])
 
-    if 'simulation' in param.keys():
-        its_available = read_iterations(param)
-        if restart == -1:
-            restarts_available = list(its_available.keys())
+    # =========================================================================
+    # ======== set up iterations to get and which restart it's in
+    # Overall information
+    its_available = get_iterations(param, verbose=veryverbose)
+    # use user provided restart
+    if restart >= 0:
+        restarts_available = [restart]
+        its_available[restart]['it to do'] = list(it)
+    # find restart myself
+    elif restart == -1:
+        restarts_available = list(its_available.keys())
 
-            # create new element containing iterations to do
-            for restart in list(its_available.keys()):
-                    its_available[restart]['it to do'] = []
+        # create new element containing iterations to do
+        for restart in list(its_available.keys()):
+                its_available[restart]['it to do'] = []
 
-            # reverse order so that I'm always taking the most recent iteration
-            for iit in it[::-1]:
-                for restart in list(its_available.keys())[::-1]:
-                    itmin, itmax = its_available[restart]['its available']
-                    if ((itmin < iit) and (iit < itmax)):
-                        its_available[restart]['it to do'] += [iit]
-                        break
+        # reverse order so that I'm always taking the most recent iteration
+        for iit in it[::-1]:
+            for restart in list(its_available.keys())[::-1]:
+                # is this iteration available within this restart?
+                itmin, itmax = its_available[restart]['its available']
+                if ((itmin <= iit) and (iit <= itmax)):
+                    its_available[restart]['it to do'] += [iit]
+                    # I found it, so break to not go through the other restart
+                    break
+
+        # sort iterations
+        for restart in list(its_available.keys()):
+                its_available[restart]['it to do'] = list(np.sort(
+                    its_available[restart]['it to do']))
+    # can't read restart value
+    else:
+        raise ValueError(
+            "Don't know what to do with restart={}".format(restart))
+
+    # =========================================================================
+    # ======== go collect data in each restart
+    # big dictionary to save data and to be flattened
+    datar = {}
+    old_it = it.copy()
+    for restart in restarts_available:
+        # iterations available in this restart
+        it = its_available[restart]['it to do']
+        # skip this restart if it doesn't have the it we want
+        if it == []:
+            pass
+        # go collect data
         else:
-            restarts_available = [restart]
-            its_available[restart]['it to do'] = it
-
-        for restart in restarts_available:
-            kwargs['restart'] = restart
-            # iterations available in this restart
-            old_it = it.copy()
-            it = its_available[restart]['it to do']
+            # ====== set things up
             kwargs['it'] = it
+
+            # restart
+            kwargs['restart'] = restart
+            vars_and_files = get_content(
+                param, restart=restart, verbose=veryverbose)
+            
             # if no variable is specified, take all available
             if var==[]:
                 var = its_available[restart]['var available']
-            # big dictionary to save data and to be flattened
-            datar = {}
+            if veryverbose:
+                print(' =========== Restart {}:'.format(restart), 
+                        flush=True)
+                print('vars to get {}:'.format(var), flush=True)
+                print('its to get {}:'.format(it), flush=True)
             
-            # combination of variables already split per iteration and new ones
-            if split_per_it:
-                # change variable names to scalar elements
-                avar = var.copy()
-                for key, new_vars in aurel_tensor_to_scalar_varnames.items():
-                    if key in avar:
-                        avar.remove(key)
-                        avar += new_vars
-                if veryverbose:
-                    print('Restart {}:'.format(restart), flush=True)
-                    print('vars to get {}:'.format(avar), flush=True)
-
-                # First get variables from split iterations
+            # ====== directly read and provide the data
+            if not split_per_it:
+                datar[restart] = read_ET_variables(
+                    param, var, vars_and_files, **kwargs)
+                
+            # ====== combination of Einstein Toolkit data and aurel data
+            # + save into it files for quicker reading next time
+            else:
+                # ====== change variable names to scalar elements
+                avar = transform_vars_tensor_to_scalar(var)
                 kwargs['vars'] = avar
+
+                # =============================================================
+                # ======= Get variables from split iterations files
+                # Read in data
                 datar[restart] = read_aurel_data(param, **kwargs)
                 if veryverbose:
-                    print('keys in data restart {}'.format(restart),
-                          ' read from split data:',
-                          list(datar[restart].keys()), flush=True)
-                    cleaned_dict = {k: v for k, v in datar[restart].items() 
-                                    if (not (isinstance(v, list) 
-                                            and all(x is None for x in v))
-                                        and k!='it')}
+                    verbose_cleaned_dict = {
+                        k: v for k, v in datar[restart].items() 
+                        if (not (isinstance(v, list) 
+                                    and all(x is None for x in v))
+                            and k!='it')}
                     print('Data read from split iterations:', 
-                            list(cleaned_dict.keys()), flush=True)
-                # find those that are missing
-                its_missing = {v: [] for v in avar}
+                            list(verbose_cleaned_dict.keys()), flush=True)
+                    
+                # Find iterations missing
                 avart = avar + ['t']
+                its_missing = {v: [] for v in avart}
                 for it_idx, iit in enumerate(it):
                     for av in avart:
                         if datar[restart][av][it_idx] is None:
                             its_missing[av] += [iit]
-                # if some are missing, read them from the ET data
+                        its_missing[av] = list(set(its_missing[av]))
+                if veryverbose:
+                    verbose_clean_its_missing = {
+                        k:v for k, v in its_missing.items() if v!= []}
+                    print('Iterations missing:', 
+                            verbose_clean_its_missing, flush=True)
+                            
+
+                # =============================================================
+                # ======== Collect missing data from ET data
                 ETread_vars = []
-                saved_vars = []
+                verbose_saved_vars = []
                 for v in var:
                     # collect missing iterations
-                    if v in list(aurel_tensor_to_scalar_varnames.keys()):
-                        avar = aurel_tensor_to_scalar_varnames[v]
-                        its_temp = []
-                        for av in avar:
-                            its_temp += its_missing[av]
-                        its_temp = list(set(its_temp))
-                    else:
-                        avar = [v]
-                        its_temp = its_missing[v]
+                    avar = transform_vars_tensor_to_scalar([v])
+                    its_temp = [item for av in avar 
+                                for item in its_missing[av]]
+                    its_temp = list(set(its_temp))
                     # if there are missing iterations
                     if its_temp != []:
                         kwargs['it'] = its_temp
                         # retrieve missing iterations
-                        data_temp = read_ET_data_kuibit(
-                            param, [v], **kwargs)
+                        data_temp = read_ET_variables(
+                                param, [v], vars_and_files, **kwargs)
                         # verbose update
                         ETread_vars += list(data_temp.keys())
                         if veryverbose:
@@ -549,16 +1387,16 @@ def read_data(param, **kwargs):
                                         datar[restart][av][iidx] = (
                                             data_temp[av][iidxtem])
                                         # don't save this iteration
-                                        if ((data_temp[av][iidxtem] is None)
-                                            or (av == 't')):
+                                        if (data_temp[av][iidxtem] is None
+                                            or av == 't'):
                                             its_missing[av].remove(iit)
                                             
                                 if its_missing[av] != []:
-                                    # save the data for the missing iterations
+                                    # save the missing iterations
                                     # and save them individually
                                     kwargs['it'] = its_missing[av]
                                     kwargs['vars'] = [av]
-                                    saved_vars += [av]
+                                    verbose_saved_vars += [av]
                                     if veryverbose:
                                         print(
                                             'Saving data for {}'.format(av)
@@ -570,209 +1408,40 @@ def read_data(param, **kwargs):
                                         **kwargs)
                 if verbose:
                     ETread_vars = list(set(ETread_vars))
-                    saved_vars = list(set(saved_vars))
+                    verbose_saved_vars = list(set(verbose_saved_vars))
                     if ETread_vars != []:
                         print('Variables read from ET files:', 
                             ETread_vars, flush=True)
-                    if saved_vars != []:
-                        print('Variables saved to split iterations files:', 
-                            saved_vars, flush=True)
-            else:
-                if veryverbose:
-                    print('Restart {}:'.format(restart), flush=True)
-                    print('vars to get {}:'.format(var), flush=True)
-                datar[restart] = read_ET_data_kuibit(param, var, **kwargs)
-        
-        # create ultimate data dictionary (flattening datar)
-        restart = list(datar.keys())[0]
-        data = {}
-        for key in datar[restart].keys():
-            data[key] = []
-        
-        # copy over everything from datar
-        for iit in old_it:
-            for restart in datar.keys():
-                if iit in datar[restart]['it']:
-                    it_index = np.argmin(abs(datar[restart]['it'] - iit))
-                    for key in datar[restart].keys():
-                        data[key] += [datar[restart][key][it_index]]
-    else:
-        data = read_aurel_data(param, **kwargs)
-    return data
-
-def read_aurel_data(param, **kwargs):
-    """Read the data from AurelCore simulation output files.
-
-    Parameters
-    ----------
-    param : dict
-        The parameters of the simulation.
-
-    Other Parameters
-    ----------------
-    it : list, optional
-        The iterations to read from the simulation output files.
-        The default is [0].
-    vars : list, optional
-        The variables to read from the simulation output files.
-        The default is [], all available variables will be read.
-    rl : int, optional
-        The refinement level to read from the simulation output files.
-        The default is 0.
-    restart : int, optional
-        The restart number to read from the simulation output files.
-        The default is 0.
-    verbose : bool, optional
-        If True, print additional information during the reading process.
-        The default is False.
-
-    Returns
-    -------
-    dict
-        A dictionary containing the data from the simulation output files.
-        dict.keys() = ['it', 't', var[0], var[1], ...]
-    """
-    it = np.sort(kwargs.get('it', [0]))
-    rl = kwargs.get('rl', 0)
-    restart = kwargs.get('restart', 0)
-    var = kwargs.get('vars', [])
-    verbose = kwargs.get('verbose', False)
-    veryverbose = kwargs.get('veryverbose', False)
-
-    if var == []:
-        get_them_all= True
-    else:
-        get_them_all = False
-
+                    if verbose_saved_vars != []:
+                        print('Variables saved to split iterations files:',
+                            verbose_saved_vars, flush=True)
+    
+    # create ultimate data dictionary (flattening datar)
     if veryverbose:
-        if get_them_all:
-            print('read_aurel_data: reading all variables available')
-        else:
-            print('read_aurel_data: reading variables {}'.format(var))
-
-    if 'simulation' in param.keys():
-        datapath = (param['simpath']
-                    + param['simname']
-                    + '/output-{:04d}/'.format(restart)
-                    + param['simname']
-                 + '/all_iterations/')
-    else:
-        datapath = param['datapath']
-    var += ['t']
-    data = {'it': it, **{v: [] for v in var}}
-    for it_index, iit in enumerate(it):
-        fname = '{}it_{}.hdf5'.format(datapath, int(iit))
-        if os.path.exists(fname):
-            with h5py.File(fname, 'r') as f:
-                if get_them_all:
-                    # get all variables in the file, 
-                    # if it's the right refinement level
-                    for key in f.keys():
-                        if ' rl={}'.format(rl) in key:
-                            var += [key.split(' rl')[0]]
-                    var = list(set(var))  # remove duplicates
-                for key in var:
-                    skey = key + ' rl={}'.format(rl)
-                    # include this key into the data dictionary
-                    if key not in data.keys():
-                        data[key] = [None]*it_index
-                    #save the data
-                    if skey in list(f.keys()):
-                        data[key].append(jnp.array(f[skey]))
-                    else:
-                        data[key].append(None)
-        else:
-            for key in var:
-                skey = key + ' rl={}'.format(rl)
-                data[key].append(None)
+        print(' =========== Joining the data from the different restarts')
+    restart = list(datar.keys())[0]
+    data = {}
+    for key in datar[restart].keys():
+        data[key] = []
+    
+    # copy over everything from datar
+    for iit in old_it:
+        for restart in datar.keys():
+            if iit in datar[restart]['it']:
+                it_index = np.argmin(abs(datar[restart]['it'] - iit))
+                for key in datar[restart].keys():
+                    data[key] += [datar[restart][key][it_index]]
     return data
 
-def save_data(param, data, **kwargs):
-    """Save the data to a file
-    
-    Parameters
-    ----------
-    param : dict
-        The parameters of the simulation.
-        Needs to contain the key 'datapath', 
-        this is where the data will be saved.
-    data : dict
-        The data to be saved.
-        dict.keys() = ['it', 't', var[0], var[1], ...]
-
-    Other Parameters
-    ----------------
-    vars : list, optional
-        The variables to save from the data.
-        If not provided, all variables in data will be saved.
-        The default is [].
-    it : list, optional
-        The iterations to save from the data.
-        The default is [0].
-    rl : int, optional
-        The refinement level to save from the data.
-        The default is 0.
-    restart : int, optional
-        The restart number to save the data to.
-        The default is 0.
-    
-    Note
-    ----
-    The data will be saved in the format:
-    datapath/it_<iteration>.hdf5
-    where <iteration> is the iteration number.
-    The variables will be saved as datasets in the file, 
-    with keys '<variable_name> rl=<refinement_level>'
-    """
-    vars = kwargs.get('vars', [])
-    it = np.sort(kwargs.get('it', [0]))
-    rl = kwargs.get('rl', 0)
-    restart = kwargs.get('restart', 0)
-
-    if vars == []:
-        vars = list(data.keys())
-
-    # check paths
-    if 'simulation' in param.keys():
-        datapath = (param['simpath']
-                 + param['simname']
-                 + '/output-{:04d}/'.format(restart)
-                 + param['simname']
-                 + '/all_iterations/')
-        lastpart = ''
-    else:
-        datapath = param['datapath']
-        if not datapath.endswith('/'):
-            lastpart = datapath.split('/')[-1]
-            firstpart = datapath.split('/')[:-1]
-            datapath = '/'.join(firstpart) + '/'
-        else:
-            lastpart = ''
-    if not os.path.exists(datapath):
-        os.makedirs(datapath)
-    datapath += lastpart
-
-    # save the data
-    for it_index, iit in enumerate(it):
-        fname = '{}it_{}.hdf5'.format(datapath, int(iit))
-        with h5py.File(fname, 'a') as f:
-            for key in vars:
-                if data[key] is not None:
-                    skey = key + ' rl={}'.format(rl)
-                    # TODO: are you sure about overwritting?
-                    if skey in list(f.keys()):
-                        del f[skey]
-                    f.create_dataset(skey, data=data[key][it_index])
-
-def read_ET_data_kuibit(param, var, **kwargs):
-    """Read Einstein Toolkit simulation data using `kuibit`.
+def read_ET_variables(param, var, vars_and_files, **kwargs):
+    """Read the data from Einstein Toolkit simulation output files.
     
     Parameters
     ----------
     param : dict
         The parameters of the simulation.
     var : list
-        The variables to read from the simulation output files, in aurel format
+        The variables to read from the simulation output files.
 
     Other Parameters
     ----------------
@@ -785,83 +1454,277 @@ def read_ET_data_kuibit(param, var, **kwargs):
     restart : int, optional
         The restart number to save the data to.
         The default is 0.
-    reshape : bool, optional
-        If True, kuibit will spline interpolate to match whatever 
-        data grid you want. The default is False.
-    verbose : bool, optional
-        If True, print additional information during the reading process.
-        The default is False.
     veryverbose : bool, optional
-        If True, print even more information during the reading process.
+        If True, print additional information during the joining process.
         The default is False.
+        
     Returns
     -------
     dict
         A dictionary containing the data from the simulation output files.
+        dict.keys() = ['it', 't', var[0], var[1], ...]
     """
-
-    # input
     it = np.sort(kwargs.get('it', [0]))
-    restart = kwargs.get('restart', 0)
-    rl = kwargs.get('rl', 0)
-    reshape = kwargs.get('reshape', False)
-    verbose = kwargs.get('verbose', False)
     veryverbose = kwargs.get('veryverbose', False)
 
-    # aurel to ET variable names
-    new_var_list = []
-    for v in var:
-        if v in list(aurel_to_ET_varnames.keys()):
-            if v in ['velup3']:
-                new_var_list += [aurel_to_ET_varnames[v][0] + '[0]', 
-                                 aurel_to_ET_varnames[v][0] + '[1]', 
-                                 aurel_to_ET_varnames[v][0] + '[2]']
-            else:
-                new_var_list += aurel_to_ET_varnames[v]
-        else:
-            raise ValueError(
-                'Variable {} not recognised'.format(v))
-    if verbose:
-        print(new_var_list)
-
-    # setup kuibit
-    datapath = (param['simpath']+param['simname']
-                +'/output-{:04d}/'.format(restart)
-                +param['simname']+'/')
     if veryverbose:
-        print('Kuibit looking into: ', datapath, flush=True)
-    sim = kuibit.simdir.SimDir(datapath)
-    grid = kuibit.grid_data.UniformGrid(
-        [param['Nx'], param['Ny'], param['Nz']], 
-        x0=[param['xmin'], param['ymin'], param['zmin']], 
-        dx=[param['dx'], param['dy'], param['dz']])
-
-    # data to be returned
-    data = {'it':it, 't':[]}    
-    for v in new_var_list:
-        # setup the data as OneGridFunctionH5
-        if '[' in v:
-            vnew = v.split('[')[0]
-            index = int(v.split(']')[0].split('[')[1])
-            variable = getattr(sim.gf.xyz.fields, vnew)[index]
-        else:
-            variable = getattr(sim.gf.xyz.fields, v)
-
-        # aurel varnames to save data with
-        if v in list(ET_to_aurel_varnames.keys()):
-            v = ET_to_aurel_varnames[v]
-        data[v] = []
-
-        # for each iteration
-        for iit in it:
-            # read in the data
-            if reshape: # interpolation
-                data_at_it = variable.read_on_grid(iit, grid).data_xyz
-            else:
-                data_at_it = variable[iit].get_level(rl).data_xyz
-
-            # save that to my big dictionary
-            data[v] += [data_at_it]
-            data['t'] += [variable[iit].time]
+        print('read_ET_variables was given the vars:', var, flush=True)
     
+    # data to be returned
+    data = {'it':it, 't':[]}
+    
+    # are the chunks together in one file or one file per chunk?
+    first_var = list(vars_and_files.keys())[0]
+    first_file_of_first_var = vars_and_files[first_var][0]
+    if 'file_' in first_file_of_first_var:
+        # one file per chunk
+        cmax = np.max([parse_h5file(fp)['chunk_number'] 
+                       for fp in vars_and_files[first_var]])
+    else:
+        cmax = 'in file'
+
+    # Transalte var names from aurel to ET
+    var_ET = transform_vars_aurel_to_ET(var)
+    if veryverbose:
+        print('In read_ET_variables looking for variables:', var_ET, flush=True)
+
+    # Create a dictionary to hold the wanted variables and their files
+    vars_wanted = {}
+    for v in var_ET:
+        var_found = False
+        # have I already copied it over?
+        for v_want in vars_wanted.keys():
+            if v in v_want:
+                var_found = True
+                break
+        # copy it over if I haven't found it yet
+        if not var_found:
+            for v_avail in vars_and_files.keys():
+                if v in v_avail:
+                    vars_wanted[v_avail] = vars_and_files[v_avail]
+                    var_found = True
+                    break
+        # if I still haven't found it, print a warning
+        # and don't read it
+        if not var_found:
+            print('Variable {} not found'.format(v))
+
+    # Get all the data
+    for v in vars_wanted.keys():
+        data.update(read_ET_group_or_var(v, vars_wanted[v], cmax, **kwargs))
+
+    if veryverbose:
+        print('In read_ET_variables we found:', list(data.keys()), flush=True)
     return data
+
+def read_ET_group_or_var(variables, files, cmax, **kwargs):
+    """Read variables from Einstein Toolkit simulation output files.
+    
+    Parameters
+    ----------
+    variables : list
+        The variables to read from the simulation output files.
+        Each variable is a string that identifies the variable.
+        These should all be found in the same files.
+    files : list
+        The list of files to read the variables from.
+        Each file is a string that identifies the file.
+        These should all contain the same variables just at different chunks.
+    cmax : int
+        The maximum number of chunks to read from the simulation output files.
+        If 'in file', it will be extracted from the file.
+
+    Other Parameters
+    ----------------
+    it : list, optional
+        The iterations to save from the data.
+        The default is [0].
+    rl : int, optional
+        The refinement level to read from the simulation output files.
+        The default is 0.
+        
+    Returns
+    -------
+    dict
+        A dictionary containing the data from the simulation output files.
+
+        dict.keys() = ['it', 't', var]
+    """
+
+    it = np.sort(kwargs.get('it', [0]))
+    rl = kwargs.get('rl', 0)
+    
+    var_chunks = {iit:{v:{} for v in variables} for iit in it}
+    
+    # also collect time while you're at it
+    time = []
+    collect_time = True
+
+    # go through one file at a time
+    for filepath in files:
+        # open the file and collect data
+        file_present = os.path.exists(filepath)
+        if file_present:
+            with h5py.File(filepath, 'r') as f:
+                # collect all it of that file
+                for iit in it:
+                    relevant_keys = [k for k in f.keys() 
+                                     if parse_hdf5_key(k) is not None]
+                    relevant_keys = [k for k in relevant_keys 
+                                     if ((parse_hdf5_key(k)['it'] == iit)
+                                     and (parse_hdf5_key(k)['rl'] == rl))]
+                     
+                    # find the actual number of chunks
+                    if cmax == 'in file':
+                        if 'c=' in relevant_keys[0]:
+                            actual_cmax = np.max(
+                                [parse_hdf5_key(k)['c'] 
+                                 for k in relevant_keys])
+                        else:
+                            actual_cmax = 0
+                        crange = np.arange(actual_cmax+1)
+                    else:
+                        actual_cmax = cmax
+                        crange = [parse_h5file(filepath)['chunk_number']]
+                            
+                    # for each chunk
+                    for c in crange:
+                        if actual_cmax!=0: 
+                            relevant_keys_with_c = [k for k in relevant_keys 
+                                     if ((parse_hdf5_key(k)['c'] == c))]
+                             
+                        # For each component
+                        for v in variables:
+                            # the full key to use
+                            key = [k for k in relevant_keys_with_c
+                                   if ((parse_hdf5_key(k)['variable'] == v))]
+                            # should be only one key
+                            if len(key) != 1:
+                                print('Error: {} keys found:'.format(len(key)),
+                                      key, flush=True)
+                            else:
+                                key = key[0]
+                            
+                            # cut off ghost grid points
+                            ghost_x = f[key].attrs['cctk_nghostzones'][0]
+                            ghost_y = f[key].attrs['cctk_nghostzones'][1]
+                            ghost_z = f[key].attrs['cctk_nghostzones'][2]
+                            var = np.array(f[key])[
+                                ghost_z:-ghost_z, 
+                                ghost_y:-ghost_y, 
+                                ghost_x:-ghost_x]
+                            iorigin = tuple(f[key].attrs['iorigin'])
+                            var_chunks[iit][v][iorigin] = var
+                            del var
+                    if collect_time:
+                        time += [f[key].attrs['time']]
+                collect_time = False # only do this in one file
+        else:
+            print('File {} not found'.format(filepath), flush=True)
+            break
+
+    # per iteration
+    # join the chunks together + fix the indexing to be x, y, z
+    var = {}#v:[] for v in variables}
+    for iit in it:
+        for v in variables:
+            aurel_v = transform_vars_ET_to_aurel(v)
+            varlist = var.setdefault(aurel_v, [])
+            varlist += [fixij(join_chunks(
+                var_chunks[iit][v], **kwargs))]
+        var['t'] = time
+        
+    return var
+
+def fixij(f):
+    """Fix the x-z indexing as you read in the data."""
+    return jnp.transpose(jnp.array(f), (2, 1, 0))
+
+def join_chunks(cut_data, **kwargs):
+    """Join the chunks of data together.
+    
+    Parameters
+    ----------
+    cut_data : dict of dict
+        A dictionary containing the data from the simulation output files.
+        dict.keys() = tuple of the chunks 'iorigin' attribute 
+        which maps out how the data is to be joined together.
+
+    Other Parameters
+    ----------------
+    veryextraverbose : bool, optional
+        If True, print additional information during the joining process.
+        The default is False.
+    
+    Returns
+    -------
+    uncut_data : array_like
+        The data now joined together.
+    """
+    veryextraverbose = kwargs.get('veryextraverbose', False)
+
+    all_keys = list(cut_data.keys())
+    cmax = len(all_keys) - 1
+
+    if veryextraverbose:
+        print(cmax, all_keys)
+        for k in all_keys:
+            print(k, np.shape(cut_data[k]))
+        print()
+    # =================
+    if cmax == 0:
+        uncut_data = cut_data[all_keys[0]]
+    elif cmax == 1:
+        uncut_data = np.append(
+            cut_data[all_keys[0]], cut_data[all_keys[1]], axis=0)
+    elif cmax == 2:
+        uncut_data = np.append(
+            np.append(cut_data[all_keys[0]], cut_data[all_keys[1]], axis=1), 
+            cut_data[all_keys[2]], axis=0)
+    # =================
+    else:
+        # append along axis = 2
+        k = all_keys[0]
+        ndata = {k[1:]:cut_data[k]}
+        for k in all_keys[1:]:
+            if k[1:] in list(ndata.keys()):
+                ndata[k[1:]] = np.append(
+                    ndata[k[1:]], cut_data[k], axis=2)
+            else:
+                ndata[k[1:]] = cut_data[k]
+        all_keys = list(ndata.keys())
+        del cut_data
+        
+        if veryextraverbose:
+            for k in all_keys:
+                print(k, np.shape(ndata[k]), flush=True)
+            print()
+
+        # append along axis = 1
+        nndata = {}
+        for k in all_keys:
+            if k[1:] in list(nndata.keys()):
+                nndata[k[1:]] = np.append(
+                    nndata[k[1:]], ndata[k], axis=1)
+            else:
+                nndata[k[1:]] = ndata[k]
+        all_keys = list(nndata.keys())
+        del ndata
+        
+        if veryextraverbose:
+            for k in all_keys:
+                print(k, np.shape(nndata[k]), flush=True)
+            print()
+                
+        # append along axis = 0
+        k = all_keys[0]
+        uncut_data = nndata[k]
+        for k in all_keys[1:]:
+            uncut_data = np.append(
+                uncut_data, nndata[k], axis=0)
+        del nndata
+        
+        if veryextraverbose:
+            print(np.shape(uncut_data), flush=True)
+    return uncut_data
+
