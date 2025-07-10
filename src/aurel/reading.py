@@ -1036,7 +1036,7 @@ def get_content(param, restart=0, verbose=True):
     ---------- 
     param : dict
         Simulation parameters dictionary containing:
-        
+
         - 'simpath': Path to simulation root directory
         - 'simname': Simulation name
     restart : int, optional
@@ -1582,6 +1582,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                  for k in relevant_keys])
                         else:
                             actual_cmax = 0
+                            relevant_keys_with_c = relevant_keys
                         crange = np.arange(actual_cmax+1)
                     else:
                         actual_cmax = cmax
