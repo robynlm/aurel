@@ -88,5 +88,4 @@ def data(t, x, y, z):
     """Returns dictionary of Collins Stewart data"""
     return {'gammadown3': gammadown3(t, x, y, z),
             'alpha': alpha(t, x, y, z),
-            'Kdown3': Kdown3(t, x, y, z),
             'Tdown4': Tdown4(t, x, y, z)}

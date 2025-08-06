@@ -16,9 +16,8 @@ Welcome to aurel's documentation!
 
    <p>Aurel is an open source Python package for numerical relativity analysis.
    Designed with ease of use in mind, it will 
-   <span style="font-weight: bold;">au</span>tomatically calculate any 
-   <span style="font-weight: bold;">rel</span>ativistic term 
-   your heart desires. 
+   <span style="font-weight: bold;">au</span>tomatically calculate 
+   <span style="font-weight: bold;">rel</span>ativistic terms. 
    </p>
 
 (As long as it is in the list of available entities, 
@@ -74,7 +73,7 @@ and import the AurelCore class:
    rel = aurel.AurelCore(fd)
 
 At this point you need to provide the spacetime metric, extrinsic curvature
-and matter fields, see :ref:`required_quantities`.
+and matter fields, see :ref:`assumed_quantities`.
 These are passed as numpy arrays to aurel in the following way:
 
 .. code-block:: python
@@ -87,10 +86,6 @@ In this example $g_{xx} = 1$, but you can pass any numpy array;
 it can be of numerical relativity simulation data, 
 or an array generated from an analytical expression.
 
-Assumptions are made for other core quantities, 
-if these are not valid they should be overwritten at this point, 
-see :ref:`assumed_quantities`.
-
 With everything defined, you can call any entity listed in the 
 :ref:`descriptions_list` list. Just call it as:
 
@@ -100,13 +95,6 @@ With everything defined, you can call any entity listed in the
 
 **Aurel will automatically do its best to calculate 
 any relativistic term you ask for.**
-
-For further examples on how to use aurel see:
-
-- the `Example notebook <https://github.com/robynlm/aurel/blob/main/notebooks/Example.ipynb>`_, 
-  for an in depth description with tips and tricks,
-- the `tov_ET notebook <https://github.com/robynlm/aurel/blob/main/notebooks/tov_ET.ipynb>`_, 
-  for an example of how to load in data from an Einstein Toolkit simulation.
 
 .. toctree::
    :maxdepth: 1
@@ -119,7 +107,22 @@ For further examples on how to use aurel see:
    source/numerical
    source/reading
    source/solutions
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Advice:
+
    source/advice
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Examples:
+
+   notebooks/Example
+   notebooks/tov_ET
+   notebooks/ICPertFLRW
+   notebooks/Schwarzschild_check
+   notebooks/Analytic_check
 
 Links
 -----

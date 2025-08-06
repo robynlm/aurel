@@ -9,41 +9,12 @@ aurel.core
 descriptions
 ************
 
-.. _required_quantities:
-
-Required quantities
-===================
-
-**gxx**: $g_{xx}$ Metric with xx indices down (need to input)
-
-**gxy**: $g_{xy}$ Metric with xy indices down (need to input)
-
-**gxz**: $g_{xz}$ Metric with xz indices down (need to input)
-
-**gyy**: $g_{yy}$ Metric with yy indices down (need to input)
-
-**gyz**: $g_{yz}$ Metric with yz indices down (need to input)
-
-**gzz**: $g_{zz}$ Metric with zz indices down (need to input)
-
-**kxx**: $K_{xx}$ Extrinsic curvature with xx indices down (need to input)
-
-**kxy**: $K_{xy}$ Extrinsic curvature with xy indices down (need to input)
-
-**kxz**: $K_{xz}$ Extrinsic curvature with xz indices down (need to input)
-
-**kyy**: $K_{yy}$ Extrinsic curvature with yy indices down (need to input)
-
-**kyz**: $K_{yz}$ Extrinsic curvature with yz indices down (need to input)
-
-**kzz**: $K_{zz}$ Extrinsic curvature with zz indices down (need to input)
-
-**rho0**: $\rho_0$ Rest mass energy density (need to input)
-
 .. _assumed_quantities:
 
 Assumed quantities
 ==================
+
+If not defined, vacuum Minkowski is assumed for the definition of the following quantities:
 
 $\Lambda = 0$, the Cosmological constant, to change this do **AurelCore.Lambda = ...** before running calculations
 
@@ -51,9 +22,15 @@ $\Lambda = 0$, the Cosmological constant, to change this do **AurelCore.Lambda =
 
 **dtalpha**: $\partial_t \alpha = 0$, the time derivative of the lapse
 
-**betaup3**: $\beta^i = 0$, the shift vector with spatial indices up
+**betax, betay, betaz**: $\beta^i = 0$, the shift vector with spatial indices up
 
-**dtbetaup3**: $\partial_t \beta^i = 0$, the time derivative of the shift vector with spatial indices up
+**dtbetax, dtbetay, dtbetaz**: $\partial_t \beta^i = 0$, the time derivative of the shift vector with spatial indices up
+
+**gxx, gxy, gxz, gyy, gyz, gzz**: $g_{ij} = \delta_{ij}$, the spatial components of the spacetime metric with indices down
+
+**kxx, kxy, kxz, kyy, kyz, kzz**: $K_{ij} = 0$, the spatial components of the extrinsic curvature with indices down
+
+**rho0**: $\rho_0 = 0$, the rest-mass energy density
 
 **press**: $p = 0$, the fluid pressure
 
@@ -68,6 +45,18 @@ Metric quantities
 
 Spatial metric
 --------------
+
+**gxx**: $g_{xx}$ Metric with xx indices down. I assume $g_{xx}=1$, if not then please define AurelCore.data['gxx'] = ... 
+
+**gxy**: $g_{xy}$ Metric with xy indices down. I assume $g_{xy}=0$, if not then please define AurelCore.data['gxy'] = ... 
+
+**gxz**: $g_{xz}$ Metric with xz indices down. I assume $g_{xz}=0$, if not then please define AurelCore.data['gxz'] = ... 
+
+**gyy**: $g_{yy}$ Metric with yy indices down. I assume $g_{yy}=1$, if not then please define AurelCore.data['gyy'] = ... 
+
+**gyz**: $g_{yz}$ Metric with yz indices down. I assume $g_{yz}=0$, if not then please define AurelCore.data['gyz'] = ... 
+
+**gzz**: $g_{zz}$ Metric with zz indices down. I assume $g_{zz}=1$, if not then please define AurelCore.data['gzz'] = ... 
 
 **gammadown3**: $\gamma_{ij}$ Spatial metric with spatial indices down
 
@@ -84,6 +73,18 @@ Spatial metric
 Extrinsic curvature
 -------------------
 
+**kxx**: $K_{xx}$ Extrinsic curvature with xx indices down. I assume $K_{xx}=0$, if not then please define AurelCore.data['kxx'] = ... 
+
+**kxy**: $K_{xy}$ Extrinsic curvature with xy indices down. I assume $K_{xy}=0$, if not then please define AurelCore.data['kxy'] = ... 
+
+**kxz**: $K_{xz}$ Extrinsic curvature with xz indices down. I assume $K_{xz}=0$, if not then please define AurelCore.data['kxz'] = ... 
+
+**kyy**: $K_{yy}$ Extrinsic curvature with yy indices down. I assume $K_{yy}=0$, if not then please define AurelCore.data['kyy'] = ... 
+
+**kyz**: $K_{yz}$ Extrinsic curvature with yz indices down. I assume $K_{yz}=0$, if not then please define AurelCore.data['kyz'] = ... 
+
+**kzz**: $K_{zz}$ Extrinsic curvature with zz indices down. I assume $K_{zz}=0$, if not then please define AurelCore.data['kzz'] = ... 
+
 **Kdown3**: $K_{ij}$ Extrinsic curvature with spatial indices down
 
 **Kup3**: $K^{ij}$ Extrinsic curvature with spatial indices up
@@ -99,22 +100,34 @@ Extrinsic curvature
 Lapse
 -----
 
-**alpha**: $\alpha$ Lapse (need to input or I assume =1)
+**alpha**: $\alpha$ Lapse. I assume $\alpha=1$, if not then please define AurelCore.data['alpha'] = ... 
 
-**dtalpha**: $\partial_t \alpha$ Coordinate time derivative of the lapse (need to input or I assume =0)
+**dtalpha**: $\partial_t \alpha$ Coordinate time derivative of the lapse. I assume $\partial_t \alpha=0$, if not then please define AurelCore.data['dtalpha'] = ... 
 
 Shift
 -----
 
-**betaup3**: $\beta^{i}$ Shift vector with spatial indices up (need to input or I assume =0)
+**betax**: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data['betax'] = ... 
 
-**dtbetaup3**: $\partial_t\beta^{i}$ Coordinate time derivative of the shift vector with spatial indices up (need to input or I assume =0)
+**betay**: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data['betay'] = ... 
+
+**betaz**: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data['betaz'] = ... 
+
+**betaup3**: $\beta^{i}$ Shift vector with spatial indices up
+
+**dtbetax**: $\partial_t\beta^{x}$ Coordinate time derivative of the x component of the shift vector with indices up. I assume $\partial_t\beta^{x}=0$, if not then please define AurelCore.data['dtbetax'] = ... 
+
+**dtbetay**: $\partial_t\beta^{y}$ Coordinate time derivative of the y component of the shift vector with indices up. I assume $\partial_t\beta^{y}=0$, if not then please define AurelCore.data['dtbetay'] = ... 
+
+**dtbetaz**: $\partial_t\beta^{z}$ Coordinate time derivative of the z component of the shift vector with indices up. I assume $\partial_t\beta^{z}=0$, if not then please define AurelCore.data['dtbetaz'] = ... 
+
+**dtbetaup3**: $\partial_t\beta^{i}$ Coordinate time derivative of the shift vector with spatial indices up
 
 **betadown3**: $\beta_{i}$ Shift vector with spatial indices down
 
 **betamag**: $\beta_{i}\beta^{i}$ Magnitude of shift vector
 
-Timeline normal vector
+Timelike normal vector
 ----------------------
 
 **nup4**: $n^{\mu}$ Timelike vector normal to the spatial metric with spacetime indices up
@@ -140,9 +153,11 @@ Lagrangian observer follows $u^\mu$
 Lagrangian matter variables
 ---------------------------
 
-**press**: $p$ Pressure (need to input or I assume =0)
+**rho0**: $\rho_0$ Rest mass energy density. I assume $\rho_0=0$, if not then please define AurelCore.data['rho0'] = ... 
 
-**eps**: $\epsilon$ Specific internal energy (need to input or I assume =0)
+**press**: $p$ Pressure. I assume $p=0$, if not then please define AurelCore.data['press'] = ... 
+
+**eps**: $\epsilon$ Specific internal energy. I assume $\epsilon=0$, if not then please define AurelCore.data['eps'] = ... 
 
 **rho**: $\rho$ Energy density
 
@@ -151,9 +166,15 @@ Lagrangian matter variables
 Fluid velocity
 --------------
 
-**w_lorentz**: $W$ Lorentz factor (need to input or I assume =1)
+**w_lorentz**: $W$ Lorentz factor. I assume $W=1$, if not then please define AurelCore.data['w_lorentz'] = ... 
 
-**velup3**: $v^i$ Eulerian fluid three velocity with spatial indices up (need to input or I assume =0)
+**velx**: $v^x$ x component of Eulerian fluid three velocity with indice up. I assume $v^x=0$, if not then please define AurelCore.data['velx'] = ... 
+
+**vely**: $v^y$ y component of Eulerian fluid three velocity with indice up. I assume $v^y=0$, if not then please define AurelCore.data['vely'] = ... 
+
+**velz**: $v^z$ z component of Eulerian fluid three velocity with indice up. I assume $v^z=0$, if not then please define AurelCore.data['velz'] = ... 
+
+**velup3**: $v^i$ Eulerian fluid three velocity with spatial indices up.
 
 **uup0**: $u^t$ Lagrangian fluid four velocity with time indice up
 
@@ -175,6 +196,10 @@ Energy-stress tensor
 --------------------
 
 **Tdown4**: $T_{\mu\nu}$ Energy-stress tensor with spacetime indices down
+
+**Tup4**: $T^{\mu\nu}$ Energy-stress tensor with spacetime indices up
+
+**Ttrace**: $T$ Trace of the energy-stress tensor
 
 Eulerian matter variables
 -------------------------
@@ -277,6 +302,8 @@ Spacetime curvature
 **st_Ricci_down3**: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 
 **st_RicciS**: ${}^{(4)}R$ Ricci scalar of spacetime metric
+
+**Einsteindown4**: $G_{\alpha\beta}$ Einstein tensor with spacetime indices down
 
 **Kretschmann**: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
 

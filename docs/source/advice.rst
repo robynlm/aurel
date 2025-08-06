@@ -1,6 +1,3 @@
-Advice
-======
-
 Working on an HPC
 -----------------
 

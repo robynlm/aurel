@@ -885,6 +885,7 @@ def iterations(param, skip_last=True, verbose=True):
             else:
                 # Select representative file for iteration analysis
                 file_for_it = vars_and_files[list(vars_and_files.keys())[0]][0]
+                # TODO pick the lightest file to read
 
                 # Transform ET variable names to Aurel conventions
                 aurel_vars_available = transform_vars_ET_to_aurel_groups(
@@ -993,10 +994,13 @@ def get_iterations(param, skip_last = True, verbose=False):
             # iterations available for said refinement level
             elif 'rl = ' in l:
                 rl = l.split('rl = ')[1].split(' ')[0]
-                itmin = int(l.split('(')[1].split(',')[0])
-                itmax = int(l.split(', ')[1])
-                dit = int(l.split(', ')[2].split(')')[0])
-                its_available[restart_nbr]['rl = '+rl] = [itmin, itmax, dit]
+                if 'arange' in l:
+                    itmin = int(l.split('(')[1].split(',')[0])
+                    itmax = int(l.split(', ')[1])
+                    dit = int(l.split(', ')[2].split(')')[0])
+                    its_available[restart_nbr]['rl = '+rl] = [itmin, itmax, dit]
+                else:
+                    its_available[restart_nbr]['rl = '+rl] = [int(l.split('[')[1].split(']')[0])]
     return its_available
 
 known_groups = {
@@ -1017,7 +1021,8 @@ known_groups = {
     'weylscal4-psi4r_group': ['Psi4r'],
     'weylscal4-psi4i_group': ['Psi4i'],
     }
-def get_content(param, restart=0, verbose=True):
+def get_content(param, restart=0, overwrite=False, 
+                verbose=True, veryverbose=False):
     """Analyze Einstein Toolkit output directory and map variables to files.
 
     This function creates a comprehensive mapping between simulation variables
@@ -1043,10 +1048,16 @@ def get_content(param, restart=0, verbose=True):
         Restart number to analyze. Default 0.
         Used to construct the path to the ET output directory containing .h5 files.
         Example: "/simulations/BHB/output-0000/BHB/"
+
+    overwrite : bool, optional
+        Overwrite existing content file. Default False.
         
     verbose : bool, optional
         Print progress information during processing. Default True.
         Shows file scanning progress and caching status.
+        
+    veryverbose : bool, optional
+        Print extra progress information during processing. Default False.
 
     Returns
     -------
@@ -1072,6 +1083,12 @@ def get_content(param, restart=0, verbose=True):
             + '/output-{:04d}/'.format(restart)
             + param['simname'] + '/')
     content_file = path+'content.txt'
+
+    if overwrite:
+        if verbose:
+            print(f"Removing content file from {content_file}...")
+        bash("rm "+content_file)
+    
     # Try to load existing content file
     try:
         if verbose:
@@ -1096,14 +1113,20 @@ def get_content(param, restart=0, verbose=True):
         for filepath in h5files:
             file_info = parse_h5file(filepath)
             if file_info is not None:
+                if veryverbose:
+                    print('Processing: ', filepath, flush=True)
 
                 # If the file is a single variable file
                 if not file_info['group_file']:
+                    if veryverbose:
+                        print('Single variable file', flush=True)
                     files = vars_and_files.setdefault(
                         file_info['variable_or_group'], set())
                     files.add(filepath)
                 # Else the file is a group of variables
                 else:
+                    if veryverbose:
+                        print('Grouped variable file', flush=True)
                     base_name = file_info['base_name']
                     if base_name not in processed_groups:
                         # If it's a known group I can skip reading the file
@@ -1119,12 +1142,16 @@ def get_content(param, restart=0, verbose=True):
                                 variables = {parse_hdf5_key(k)['variable'] 
                                              for k in h5f.keys() 
                                              if parse_hdf5_key(k) is not None}
+                                varnames = list(variables)
                                 processed_groups[base_name] = varnames
+                            #varnames = processed_groups[base_name]   #???
                     else:
                         # We've already processed this group 
                         # - reuse the variable names
                         varnames = processed_groups[base_name]
                     
+                    if veryverbose:
+                        print('Found the variables:', varnames, flush=True)
                     # Add this file to all variables in the group
                     for variable_name in varnames:
                         files = vars_and_files.setdefault(variable_name, set())
@@ -1270,8 +1297,13 @@ def read_ET_data(param, **kwargs):
         for iit in it[::-1]:
             for restart in list(its_available.keys())[::-1]:
                 # is this iteration available within this restart?
-                itmin, itmax = its_available[restart]['its available']
-                if ((itmin <= iit) and (iit <= itmax)):
+                if len(its_available[restart]['its available']) ==1:
+                    it_in_restart = (
+                        iit == its_available[restart]['its available'][0])
+                else:
+                    itmin, itmax = its_available[restart]['its available']
+                    it_in_restart = ((itmin <= iit) and (iit <= itmax))
+                if it_in_restart:
                     its_available[restart]['it to do'] += [iit]
                     # I found it, so break to not go through the other restart
                     break
@@ -1486,7 +1518,8 @@ def read_ET_variables(param, var, vars_and_files, **kwargs):
     # Transalte var names from aurel to ET
     var_ET = transform_vars_aurel_to_ET(var)
     if veryverbose:
-        print('In read_ET_variables looking for variables:', var_ET, flush=True)
+        print('In read_ET_variables looking for variables:', 
+              var_ET, flush=True)
 
     # Create a dictionary to hold the wanted variables and their files
     vars_wanted = {}
@@ -1553,6 +1586,11 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
 
     it = np.sort(kwargs.get('it', [0]))
     rl = kwargs.get('rl', 0)
+    veryextraverbose = kwargs.get('veryextraverbose', False)
+
+    if veryextraverbose:
+        print('read_ET_group_or_var(variables, files, cmax) activated with:', 
+              variables, files, cmax, flush=True)
     
     var_chunks = {iit:{v:{} for v in variables} for iit in it}
     
@@ -1668,9 +1706,9 @@ def join_chunks(cut_data, **kwargs):
     cmax = len(all_keys) - 1
 
     if veryextraverbose:
-        print(cmax, all_keys)
-        for k in all_keys:
-            print(k, np.shape(cut_data[k]))
+        print(f'There are {cmax} chunks, here are their keys and shape', flush=True)
+        for i, k in enumerate(all_keys):
+            print(i, k, np.shape(cut_data[k]))
         print()
     # =================
     if cmax == 0:
@@ -1684,40 +1722,60 @@ def join_chunks(cut_data, **kwargs):
             cut_data[all_keys[2]], axis=0)
     # =================
     else:
-        # append along axis = 2
-        k = all_keys[0]
-        ndata = {k[1:]:cut_data[k]}
-        for k in all_keys[1:]:
-            if k[1:] in list(ndata.keys()):
-                ndata[k[1:]] = np.append(
-                    ndata[k[1:]], cut_data[k], axis=2)
+        # --- Append along axis = 2
+        # First make groups to be appended together
+        ndata_groups = {}
+        for k in all_keys:
+            if k[1:] in list(ndata_groups.keys()):
+                ndata_groups[k[1:]][k[0]] = cut_data[k]
             else:
-                ndata[k[1:]] = cut_data[k]
+                ndata_groups[k[1:]] = {k[0]:cut_data[k]}
+        # Then append them together
+        ndata = {}
+        for k12 in ndata_groups.keys():
+            all_k0 = np.sort(list(ndata_groups[k12].keys()))
+            ndata[k12] = ndata_groups[k12][all_k0[0]]
+            for k0 in all_k0[1:]:
+                ndata[k12] = np.append(
+                    ndata[k12], ndata_groups[k12][k0], axis=2)
+                
         all_keys = list(ndata.keys())
-        del cut_data
-        
+        del cut_data, ndata_groups
+
         if veryextraverbose:
-            for k in all_keys:
-                print(k, np.shape(ndata[k]), flush=True)
+            print('Key and shape after 1st append', flush=True)
+            for i, k in enumerate(all_keys):
+                print(i, k, np.shape(ndata[k]), flush=True)
             print()
 
-        # append along axis = 1
-        nndata = {}
+        # --- Append along axis = 1
+        # First make groups to be appended together
+        nndata_groups = {}
         for k in all_keys:
-            if k[1:] in list(nndata.keys()):
-                nndata[k[1:]] = np.append(
-                    nndata[k[1:]], ndata[k], axis=1)
+            if k[1] in list(nndata_groups.keys()):
+                nndata_groups[k[1]][k[0]] = ndata[k]
             else:
-                nndata[k[1:]] = ndata[k]
+                nndata_groups[k[1]] = {k[0]:ndata[k]}
+        # Then append them together
+        nndata = {}
+        for k2 in nndata_groups.keys():
+            all_k1 = np.sort(list(nndata_groups[k2].keys()))
+            nndata[k2] = nndata_groups[k2][all_k1[0]]
+            for k1 in all_k1[1:]:
+                nndata[k2] = np.append(
+                    nndata[k2], nndata_groups[k2][k1], axis=1)
+        
         all_keys = list(nndata.keys())
-        del ndata
+        del ndata, nndata_groups
         
         if veryextraverbose:
-            for k in all_keys:
-                print(k, np.shape(nndata[k]), flush=True)
+            print('Key and shape after 2nd append', flush=True)
+            for i, k in enumerate(all_keys):
+                print(i, k, np.shape(nndata[k]), flush=True)
             print()
                 
-        # append along axis = 0
+        # --- Append along axis = 0
+        all_keys = np.sort(all_keys)
         k = all_keys[0]
         uncut_data = nndata[k]
         for k in all_keys[1:]:
@@ -1726,6 +1784,7 @@ def join_chunks(cut_data, **kwargs):
         del nndata
         
         if veryextraverbose:
+            print('Final shape after 3rd append', flush=True)
             print(np.shape(uncut_data), flush=True)
     return uncut_data
 

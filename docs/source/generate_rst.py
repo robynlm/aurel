@@ -15,19 +15,25 @@ os.makedirs(output_dir, exist_ok=True)
 # File to write the documentation
 output_file = os.path.join(output_dir, "source/core.rst")
 
-gamma = ['gammadown3', 'gammaup3', 'dtgammaup3', 
-         'gammadet', 'gammadown4', 'gammaup4']
-extcurv = ['Kdown3', 'Kup3', 'Ktrace', 'Adown3', 
-           'Aup3', 'A2']
+gamma = ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz', 
+         'gammadown3', 'gammaup3', 'gammadown3_bssnok', 'gammaup3_bssnok', 
+         'dtgammaup3', 
+         'gammadet', 'psi_bssnok', 'phi_bssnok', 
+         'gammadown4', 'gammaup4']
+extcurv = ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz', 
+           'Kdown3', 'Kup3', 'Ktrace', 
+           'Adown3', 'Aup3', 'A2', 'Adown3_bssnok', 'Aup3_bssnok']
 lapse = ['alpha', 'dtalpha']
-shift = ['betaup3', 'dtbetaup3', 'betadown3', 'betamag']
+shift = ['betax', 'betay', 'betaz',
+         'dtbetax', 'dtbetay', 'dtbetaz',
+         'betaup3', 'dtbetaup3', 'betadown3', 'betamag']
 enne = ['nup4', 'ndown4']
 gee = ['gdown4', 'gup4', 'gdet']
 nullrayexp = ['null_ray_exp']
-matter = ['press', 'eps', 'rho', 'enthalpy']
-vel = ['w_lorentz', 'velup3', 'uup0', 'uup3', 'uup4', 
+matter = ['rho0', 'press', 'eps', 'rho', 'enthalpy']
+vel = ['w_lorentz', 'velx', 'vely', 'velz', 'velup3', 'uup0', 'uup3', 'uup4', 
        'udown3', 'udown4', 'hdown4', 'hmixed4', 'hup4']
-est = ['Tdown4']
+est = ['Tdown4', 'Tup4', 'Ttrace']
 fluid = ['rho_n', 'fluxup3_n', 'fluxdown3_n', 'angmomup3_n', 
          'angmomdown3_n', 'Stressup3_n', 
          'Stressdown3_n', 'Stresstrace_n', 'press_n', 
@@ -38,12 +44,12 @@ conserv = ['conserved_D', 'conserved_E', 'conserved_Sdown4',
 kinema = ['st_covd_udown4', 'accelerationdown4', 'accelerationup4', 
           's_covd_udown4', 'thetadown4', 'theta', 'sheardown4', 'shear2',
           'omegadown4', 'omega2']
-s_curv = ['s_RicciS_u', 's_Gamma_udd3', 's_Riemann_uddd3', 
+s_curv = ['s_RicciS_u', 's_Gamma_udd3', 's_Gamma_bssnok', 's_Riemann_uddd3', 
     's_Riemann_down3', 's_Ricci_down3', 's_RicciS']
 st_curv = ['st_Gamma_udd4', 'st_Riemann_uddd4',
     'st_Riemann_down4', 'st_Riemann_uudd4',
     'st_Ricci_down4', 'st_Ricci_down3',
-    'st_RicciS', 'Kretschmann']
+    'st_RicciS', 'Einsteindown4', 'Kretschmann']
 constraints = ['Hamiltonian', 'Hamiltonian_Escale',
     'Momentumup3', 'Momentum_Escale']
 gravimag = ['st_Weyl_down4', 'Weyl_Psi', 'Psi4_lm', 'Weyl_invariants',
@@ -79,24 +85,18 @@ with open(output_file, "w") as f:
     for name, func in inspect.getmembers(core.AurelCore, inspect.isfunction):
         allfunctions.append(name)
 
-    f.write(".. _required_quantities:\n\n")
-    f.write("Required quantities\n")
-    f.write("===================\n\n")
-    for name in list(core.descriptions.keys()):
-        if ((name not in allfunctions)
-            and (name not in varsdone)):
-            # Check if the function is in `allfunctions`
-            f.write(f"**{name}**: {core.descriptions[name]}\n\n")
-            varsdone.append(name)
-
     f.write(".. _assumed_quantities:\n\n")
     f.write("Assumed quantities\n")
     f.write("==================\n\n")
+    f.write('If not defined, vacuum Minkowski is assumed for the definition of the following quantities:\n\n')
     f.write(r"$\Lambda = 0$, the Cosmological constant, to change this do **AurelCore.Lambda = ...** before running calculations"+"\n\n")
     f.write(r'**alpha**: $\alpha = 1$, the lapse, to change this do **AurelCore.data["alpha"] = ...** before running calculations'+"\n\n")
     f.write(r"**dtalpha**: $\partial_t \alpha = 0$, the time derivative of the lapse"+"\n\n")
-    f.write(r"**betaup3**: $\beta^i = 0$, the shift vector with spatial indices up"+"\n\n")
-    f.write(r"**dtbetaup3**: $\partial_t \beta^i = 0$, the time derivative of the shift vector with spatial indices up"+"\n\n")
+    f.write(r"**betax, betay, betaz**: $\beta^i = 0$, the shift vector with spatial indices up"+"\n\n")
+    f.write(r"**dtbetax, dtbetay, dtbetaz**: $\partial_t \beta^i = 0$, the time derivative of the shift vector with spatial indices up"+"\n\n")
+    f.write(r"**gxx, gxy, gxz, gyy, gyz, gzz**: $g_{ij} = \delta_{ij}$, the spatial components of the spacetime metric with indices down"+"\n\n")
+    f.write(r"**kxx, kxy, kxz, kyy, kyz, kzz**: $K_{ij} = 0$, the spatial components of the extrinsic curvature with indices down"+"\n\n")
+    f.write(r"**rho0**: $\rho_0 = 0$, the rest-mass energy density"+"\n\n")
     f.write(r"**press**: $p = 0$, the fluid pressure"+"\n\n")
     f.write(r"**eps**: $\epsilon = 0$, the fluid specific internal energy"+"\n\n")
     f.write(r"**w_lorentz**: $W = 1$, the Lorentz factor"+"\n\n")
@@ -108,7 +108,7 @@ with open(output_file, "w") as f:
     print_subsec("Extrinsic curvature", extcurv, allfunctions, varsdone)
     print_subsec("Lapse", lapse, allfunctions, varsdone)
     print_subsec("Shift", shift, allfunctions, varsdone)
-    print_subsec("Timeline normal vector", enne, allfunctions, varsdone)
+    print_subsec("Timelike normal vector", enne, allfunctions, varsdone)
     print_subsec("Spacetime metric", gee, allfunctions, varsdone)
 
     f.write("Matter quantities\n")

@@ -339,6 +339,21 @@ class FiniteDifference():
              jax.vmap(self.d3y)(f), 
              jax.vmap(self.d3z)(f)], axis=0)
     
+    def d3x_rank1tensor(self, f):
+        r"""Spatial derivatives of a spatial rank 1 tensor: 
+        $\partial_x (f_{j})$ or $\partial_x (f^{j})$."""
+        return jax.vmap(self.d3x)(f)
+    
+    def d3y_rank1tensor(self, f):
+        r"""Spatial derivatives of a spatial rank 1 tensor: 
+        $\partial_y (f_{j})$ or $\partial_y (f^{j})$."""
+        return jax.vmap(self.d3y)(f)
+    
+    def d3z_rank1tensor(self, f):
+        r"""Spatial derivatives of a spatial rank 1 tensor: 
+        $\partial_z (f_{j})$ or $\partial_z (f^{j})$."""
+        return jax.vmap(self.d3z)(f)
+    
     def d3_rank2tensor(self, f):
         r"""Spatial derivatives of a spatial rank 2 tensor: 
         $\partial_i (f_{kj})$ or $\partial_i (f^{kj})$ 

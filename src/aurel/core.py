@@ -32,54 +32,90 @@ import spinsfast
 
 # Descriptions for each AurelCore.data entry and function
 # assumed variables need to be listed in docs/source/source/generate_rst.py
+def assumption(keyname, assumption):
+    """Print assumption message."""
+    message = (" I assume " + assumption + ", "
+               + "if not then please define "
+               + "AurelCore.data['"+keyname+"'] = ... ")
+    return message
 descriptions = {
     # === Metric quantities
     # Spatial metric
-    "gxx": r"$g_{xx}$ Metric with xx indices down (need to input)",
-    "gxy": r"$g_{xy}$ Metric with xy indices down (need to input)",
-    "gxz": r"$g_{xz}$ Metric with xz indices down (need to input)",
-    "gyy": r"$g_{yy}$ Metric with yy indices down (need to input)",
-    "gyz": r"$g_{yz}$ Metric with yz indices down (need to input)",
-    "gzz": r"$g_{zz}$ Metric with zz indices down (need to input)",
+    "gxx": (r"$g_{xx}$ Metric with xx indices down." 
+            + assumption('gxx', r"$g_{xx}=1$")),
+    "gxy": (r"$g_{xy}$ Metric with xy indices down." 
+            + assumption('gxy', r"$g_{xy}=0$")),
+    "gxz": (r"$g_{xz}$ Metric with xz indices down." 
+            + assumption('gxz', r"$g_{xz}=0$")),
+    "gyy": (r"$g_{yy}$ Metric with yy indices down." 
+            + assumption('gyy', r"$g_{yy}=1$")),
+    "gyz": (r"$g_{yz}$ Metric with yz indices down." 
+            + assumption('gyz', r"$g_{yz}=0$")),
+    "gzz": (r"$g_{zz}$ Metric with zz indices down." 
+            + assumption('gzz', r"$g_{zz}=1$")),
     "gammadown3": r"$\gamma_{ij}$ Spatial metric with spatial indices down",
+    "gammadown3_bssnok": (r"$\tilde{\gamma}_{ij}$ Conformal spatial metric"
+                          + " with spatial indices down"),
     "gammaup3": r"$\gamma^{ij}$ Spatial metric with spatial indices up",
+    "gammaup3_bssnok": (r"$\tilde{\gamma}^{ij}$ Conformal spatial metric"
+                        + " with spatial indices up"),
     "dtgammaup3": (r"$\partial_t \gamma^{ij}$ Coordinate time derivative of"
                     + r" spatial metric with spatial indices up"),
     "gammadet": r"$\gamma$ Determinant of spatial metric",
+    "psi_bssnok": r"$\psi = \gamma^{1/12}$ BSSNOK conformal factor",
+    "phi_bssnok": r"$\phi = \ln(\gamma^{1/12})$ BSSNOK conformal factor",
     "gammadown4": (r"$\gamma_{\mu\nu}$ Spatial metric with spacetime indices"
                    + r" down"),
     "gammaup4": r"$\gamma^{\mu\nu}$ Spatial metric with spacetime indices up",
     # Extrinsic curvature
-    "kxx": (r"$K_{xx}$ Extrinsic curvature with xx indices down"
-            + r" (need to input)"),
-    "kxy": (r"$K_{xy}$ Extrinsic curvature with xy indices down"
-            + r" (need to input)"),
-    "kxz": (r"$K_{xz}$ Extrinsic curvature with xz indices down"
-            + r" (need to input)"),
-    "kyy": (r"$K_{yy}$ Extrinsic curvature with yy indices down"
-            + r" (need to input)"),
-    "kyz": (r"$K_{yz}$ Extrinsic curvature with yz indices down"
-            + r" (need to input)"),
-    "kzz": (r"$K_{zz}$ Extrinsic curvature with zz indices down"
-            + r" (need to input)"),
+    "kxx": (r"$K_{xx}$ Extrinsic curvature with xx indices down." 
+            + assumption('kxx', r"$K_{xx}=0$")),
+    "kxy": (r"$K_{xy}$ Extrinsic curvature with xy indices down." 
+            + assumption('kxy', r"$K_{xy}=0$")),
+    "kxz": (r"$K_{xz}$ Extrinsic curvature with xz indices down." 
+            + assumption('kxz', r"$K_{xz}=0$")),
+    "kyy": (r"$K_{yy}$ Extrinsic curvature with yy indices down." 
+            + assumption('kyy', r"$K_{yy}=0$")),
+    "kyz": (r"$K_{yz}$ Extrinsic curvature with yz indices down." 
+            + assumption('kyz', r"$K_{yz}=0$")),
+    "kzz": (r"$K_{zz}$ Extrinsic curvature with zz indices down." 
+            + assumption('kzz', r"$K_{zz}=0$")),
     "Kdown3": r"$K_{ij}$ Extrinsic curvature with spatial indices down",
     "Kup3": r"$K^{ij}$ Extrinsic curvature with spatial indices up",
     "Ktrace": r"$K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature",
     "Adown3": (r"$A_{ij}$ Traceless part of the extrinsic curvature"
                + r" with spatial indices down"),
+    "Adown3_bssnok": (r"$\tilde{A}_{ij}$ Conformal traceless part of the"
+                      + " extrinsic curvature with spatial indices down"),
     "Aup3": (r"$A^{ij}$ Traceless part of the extrinsic curvature"
              + r" with spatial indices up"),
+    "Aup3_bssnok": (r"$\tilde{A}^{ij}$ Conformal traceless part of the"
+                    + " extrinsic curvature with spatial indices up"),
     "A2": r"$A^2$ Magnitude of traceless part of the extrinsic curvature",
     # Lapse
-    "alpha": r"$\alpha$ Lapse (need to input or I assume =1)",
+    "alpha": r"$\alpha$ Lapse." + assumption('alpha', r"$\alpha=1$"),
     "dtalpha": (r"$\partial_t \alpha$ Coordinate time derivative"
-                + r" of the lapse (need to input or I assume =0)"),
+                + r" of the lapse." 
+                + assumption('dtalpha', r"$\partial_t \alpha=0$")),
     # Shift
-    "betaup3": (r"$\beta^{i}$ Shift vector with spatial indices up"
-                + r" (need to input or I assume =0)"),
+    "betax": (r"$\beta^{x}$ x component of the shift vector with indices up." 
+              + assumption('betax', r"$\beta^{x}=0$")),
+    "betay": (r"$\beta^{y}$ y component of the shift vector with indices up." 
+              + assumption('betay', r"$\beta^{y}=0$")),
+    "betaz": (r"$\beta^{z}$ z component of the shift vector with indices up." 
+              + assumption('betaz', r"$\beta^{z}=0$")),
+    "betaup3": r"$\beta^{i}$ Shift vector with spatial indices up",
+    "dtbetax": (r"$\partial_t\beta^{x}$ Coordinate time derivative of the"
+                + r" x component of the shift vector with indices up." 
+                + assumption('dtbetax', r"$\partial_t\beta^{x}=0$")),
+    "dtbetay": (r"$\partial_t\beta^{y}$ Coordinate time derivative of the"
+                + r" y component of the shift vector with indices up." 
+                + assumption('dtbetay', r"$\partial_t\beta^{y}=0$")),
+    "dtbetaz": (r"$\partial_t\beta^{z}$ Coordinate time derivative of the"
+                + r" z component of the shift vector with indices up." 
+                + assumption('dtbetaz', r"$\partial_t\beta^{z}=0$")),
     "dtbetaup3": (r"$\partial_t\beta^{i}$ Coordinate time derivative"
-                  + r" of the shift vector with spatial indices up"
-                  + r" (need to input or I assume =0)"),
+                  + r" of the shift vector with spatial indices up"),
     "betadown3": r"$\beta_{i}$ Shift vector with spatial indices down",
     "betamag": r"$\beta_{i}\beta^{i}$ Magnitude of shift vector",
     # Timelike normal vector
@@ -98,16 +134,24 @@ descriptions = {
     # === Matter quantities
     # Eulerian observer follows n^mu
     # Lagrangian observer follows u^mu
-    "rho0": r"$\rho_0$ Rest mass energy density (need to input)",
-    "press": r"$p$ Pressure (need to input or I assume =0)",
-    "eps": (r"$\epsilon$ Specific internal energy"
-            + r" (need to input or I assume =0)"),
+    "rho0": (r"$\rho_0$ Rest mass energy density."
+             + assumption('rho0', r"$\rho_0=0$")),
+    "press": (r"$p$ Pressure."
+              + assumption('press', r"$p=0$")),
+    "eps": (r"$\epsilon$ Specific internal energy."
+              + assumption('eps', r"$\epsilon=0$")),
     "rho": r"$\rho$ Energy density",
     "enthalpy": r"$h$ Specific enthalpy of the fluid",
     # Fluid velocity
-    "w_lorentz": r"$W$ Lorentz factor (need to input or I assume =1)",
-    "velup3": (r"$v^i$ Eulerian fluid three velocity with spatial indices up"
-               + r" (need to input or I assume =0)"),
+    "w_lorentz": (r"$W$ Lorentz factor."
+                  + assumption('w_lorentz', r"$W=1$")),
+    "velx": (r"$v^x$ x component of Eulerian fluid three velocity"
+             + " with indice up."+ assumption('velx', r"$v^x=0$")),
+    "vely": (r"$v^y$ y component of Eulerian fluid three velocity"
+             + " with indice up."+ assumption('vely', r"$v^y=0$")),
+    "velz": (r"$v^z$ z component of Eulerian fluid three velocity"
+             + " with indice up."+ assumption('velz', r"$v^z=0$")),
+    "velup3": r"$v^i$ Eulerian fluid three velocity with spatial indices up.",
     "uup0": r"$u^t$ Lagrangian fluid four velocity with time indice up",
     "uup3": r"$u^i$ Lagrangian fluid four velocity with spatial indices up",
     "uup4": (r"$u^\mu$ Lagrangian fluid four velocity"
@@ -124,6 +168,8 @@ descriptions = {
              + r" with spacetime indices up"),
     # Energy-stress tensor
     "Tdown4": r"$T_{\mu\nu}$ Energy-stress tensor with spacetime indices down",
+    "Tup4": r"$T^{\mu\nu}$ Energy-stress tensor with spacetime indices up",
+    "Ttrace": r"$T$ Trace of the energy-stress tensor",
     # Fluid quantities in Eulerian frame
     "rho_n": r"$\rho^{\{n\}}$ Energy density in the $n^\mu$ frame",
     "fluxup3_n": (r"$S^{\{n\}i}$ Energy flux (or momentum density) in the"
@@ -197,6 +243,8 @@ descriptions = {
     # of spatial metric
     "s_Gamma_udd3": (r"${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of"
                      + r" spatial metric with mixed spatial indices"),
+    "s_Gamma_bssnok": (r"$\tilde{\Gamma}^i$ Conformal connection functions"
+                       + " with spatial indice up"),
     "s_Riemann_uddd3": (r"${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of"
                         + r" spatial metric with mixed spatial indices"),
     "s_Riemann_down3": (r"${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric"
@@ -222,6 +270,8 @@ descriptions = {
     "st_Ricci_down3": (r"${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric"
                        + r" with spatial indices down"),
     "st_RicciS": r"${}^{(4)}R$ Ricci scalar of spacetime metric",
+    "Einsteindown4": (r"$G_{\alpha\beta}$ Einstein tensor"
+                      + " with spacetime indices down"),
     "Kretschmann": (r"$K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$"
                     + r" Kretschmann scalar"),
 
@@ -282,14 +332,6 @@ class AurelCore():
         (*dict*) - Dictionary where all the variables are stored.
     data_shape : tuple
         (*tuple*) - Shape of the data arrays: (Nx, Ny, Nz)
-    required_vars : set
-        (*set*) - Set of required variables that must be defined by the user.
-
-        "gxx", "gxy", "gxz", "gyy", "gyz", "gzz",
-
-        "kxx", "kxy", "kxz", "kyy", "kyz", "kzz",
-        
-        "rho0"
     fancy_print : bool
         (*bool*) - If True, display messages in a fancy ipython format, 
         else normal print is used. Default is True.
@@ -345,15 +387,6 @@ class AurelCore():
 
         # data dictionary where everything is stored
         self.data = {}
-        
-        # List of required parameters 
-        # (the user must define these in the data dictionary)
-        # these will never be removed from the cache
-        self.required_vars = {
-            "gxx", "gxy", "gxz", "gyy", "gyz", "gzz",
-            "kxx", "kxy", "kxz", "kyy", "kyz", "kzz",
-            "rho0", 
-        }
 
         # To clean up cache
         self.calculation_count = 0
@@ -363,8 +396,6 @@ class AurelCore():
 
         # Importance of each variable for cache cleanup
         self.var_importance = {key:1.0 for key in descriptions.keys()}
-        for key in list(self.required_vars):
-            self.var_importance[key] = 0.0
         self.var_importance["s_Gamma_udd3"] = 0.002
         self.var_importance["s_RicciS"] = 0.1
 
@@ -380,14 +411,6 @@ class AurelCore():
             else:
                 print(message, flush=True)
 
-    def assumption(self, keyname, assumption):
-        """Print assumption message."""
-        if self.verbose:
-            message = ("I assume " + assumption + ", "
-                    + "if not then please define "
-                    + "AurelCore.data['"+keyname+"'] = ... ")
-            self.myprint(message)
-
     def __getitem__(self, key):
         """Get data[key] or compute it if not present."""
         # First check if the key is already cached
@@ -395,15 +418,6 @@ class AurelCore():
             # Update the last accessed time
             self.last_accessed[key] = self.calculation_count
             return self.data[key]
-
-        # If the key is not in the data dictionary, check if it is required
-        if key in self.required_vars:
-            # Raise an error asking the user to define the variable
-            self.myprint(f"I need {key}: {descriptions[key]}")
-            raise ValueError(
-                f"'{key}' is not defined. "
-                + f"Please define AurelCore.data['{key}'] = ..."
-                + f" in the data dictionary. ")
         
         # Dynamically get the function by name
         func = getattr(self, key)
@@ -545,13 +559,37 @@ class AurelCore():
         
     # === Metric quantities
     # Spatial metric
+    def gxx(self):
+        return jnp.ones(self.data_shape)
+    
+    def gxy(self):
+        return jnp.zeros(self.data_shape)
+    
+    def gxz(self):
+        return jnp.zeros(self.data_shape)
+    
+    def gyy(self):
+        return jnp.ones(self.data_shape)
+    
+    def gyz(self):
+        return jnp.zeros(self.data_shape)
+    
+    def gzz(self):
+        return jnp.ones(self.data_shape)
+
     def gammadown3(self):
         return maths.format_rank2_3(
             [self["gxx"], self["gxy"], self["gxz"],
              self["gyy"], self["gyz"], self["gzz"]])
+    
+    def gammadown3_bssnok(self):
+        return self["psi_bssnok"]**(-4) * self["gammadown3"]
 
     def gammaup3(self):
         return maths.inverse3(self["gammadown3"])
+    
+    def gammaup3_bssnok(self):
+        return self["psi_bssnok"]**(4) * self["gammaup3"]
     
     def dtgammaup3(self):
         dbetaup = self.fd.d3_rank1tensor(self["betaup3"])
@@ -564,6 +602,12 @@ class AurelCore():
 
     def gammadet(self):
         return maths.determinant3(self["gammadown3"])
+    
+    def psi_bssnok(self):
+        return self["gammadet"]**(1/12)
+    
+    def phi_bssnok(self):
+        return jnp.log(self["psi_bssnok"])
     
     def gammadown4(self):
         return jnp.array(
@@ -588,6 +632,24 @@ class AurelCore():
                   self["gammaup3"][2,1], self["gammaup3"][2,2]]])
     
     # Extrinsic curvature
+    def kxx(self):
+        return jnp.zeros(self.data_shape)
+    
+    def kxy(self):
+        return jnp.zeros(self.data_shape)
+    
+    def kxz(self):
+        return jnp.zeros(self.data_shape)
+    
+    def kyy(self):
+        return jnp.zeros(self.data_shape)
+    
+    def kyz(self):
+        return jnp.zeros(self.data_shape)
+    
+    def kzz(self):
+        return jnp.zeros(self.data_shape)
+    
     def Kdown3(self):
         return maths.format_rank2_3(
             [self["kxx"], self["kxy"], self["kxz"],
@@ -604,40 +666,50 @@ class AurelCore():
     def Adown3(self):
         return self["Kdown3"] - (1/3)*self["gammadown3"]*self["Ktrace"]
     
+    def Adown3_bssnok(self):
+        return self["psi_bssnok"]**(-4) * self["Adown3"]
+    
     def Aup3(self):
         return jnp.einsum('ia..., jb..., ab... -> ij...',
                          self["gammaup3"], self["gammaup3"], self["Adown3"])
+    
+    def Aup3_bssnok(self):
+        return self["psi_bssnok"]**(4) * self["Aup3"]
     
     def A2(self):
         return self.magnitude3(self["Adown3"])
     
     # Lapse
     def alpha(self):
-        self.assumption('alpha', r"$\alpha=1$")
         return jnp.ones(self.data_shape)
     
     def dtalpha(self):
-        self.assumption('dtalpha', r"$\partial_t \alpha=0$")
         return jnp.zeros(self.data_shape)
     
     # Shift
+    def betax(self):
+        return jnp.zeros(self.data_shape)
+    
+    def betay(self):
+        return jnp.zeros(self.data_shape)
+    
+    def betaz(self):
+        return jnp.zeros(self.data_shape)
+
     def betaup3(self):
-        if "betax" in self.data:
-            return jnp.array([
-                self["betax"], self["betay"], self["betaz"]])
-        else:
-            self.assumption('betaup3', r"$\beta^i=0$")
-            return jnp.zeros(
-                (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
+        return jnp.array([self["betax"], self["betay"], self["betaz"]])
+        
+    def dtbetax(self):
+        return jnp.zeros(self.data_shape)
+    
+    def dtbetay(self):
+        return jnp.zeros(self.data_shape)
+    
+    def dtbetaz(self):
+        return jnp.zeros(self.data_shape)
     
     def dtbetaup3(self):
-        if "dtbetax" in self.data:
-            return jnp.array([
-                self["dtbetax"], self["dtbetay"], self["dtbetaz"]])
-        else:
-            self.assumption('dtbetaup3', r"$\partial_t \beta^i=0$")
-            return jnp.zeros(
-                (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
+        return jnp.array([self["dtbetax"], self["dtbetay"], self["dtbetaz"]])
     
     def betadown3(self):
         return jnp.einsum(
@@ -720,12 +792,14 @@ class AurelCore():
     # === Matter quantities
     # Eulerian observer follows n^mu
     # Lagrangian observer follows u^mu
+
+    def rho0(self):
+        return jnp.zeros(self.data_shape)
+    
     def press(self):
-        self.assumption('press', r"$p=0$")
         return jnp.zeros(self.data_shape)
     
     def eps(self):
-        self.assumption('eps', r"$\epsilon=0$")
         return jnp.zeros(self.data_shape)
     
     def rho(self):
@@ -738,17 +812,19 @@ class AurelCore():
     
     # Fluid velocity
     def w_lorentz(self):
-        self.assumption('w_lorentz', r"$W=1$")
         return jnp.ones(self.data_shape)
     
+    def velx(self):
+        return jnp.zeros(self.data_shape)
+    
+    def vely(self):
+        return jnp.zeros(self.data_shape)
+    
+    def velz(self):
+        return jnp.zeros(self.data_shape)
+    
     def velup3(self):
-        if "velx" in self.data:
-            return jnp.array([
-                self["velx"], self["vely"], self["velz"]])
-        else:
-            self.assumption('velup3', r"$v^i=0$")
-            return jnp.zeros(
-                (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
+        return jnp.array([self["velx"], self["vely"], self["velz"]])
     
     def uup0(self):
         return maths.safe_division(self["w_lorentz"], self["alpha"])
@@ -773,7 +849,7 @@ class AurelCore():
                                           self["udown4"], self["udown4"])
     
     def hmixed4(self):
-        return jnp.einsum('ac...,cb...->ab...', 
+        return jnp.einsum('ac..., cb... -> ab...', 
                          self["gup4"], self["hdown4"])
     
     def hup4(self):
@@ -785,6 +861,16 @@ class AurelCore():
         return (self["rho"] * jnp.einsum('a..., b... -> ab...', 
                                         self["uup4"], self["uup4"])
                 + self["press"] * self["hdown4"])
+    
+    def Tup4(self):
+        return jnp.einsum('ac..., bd..., ab... -> cd...', 
+                          self["gup4"], self["gup4"], self["Tdown4"])
+    
+    def Ttrace(self):
+        if "Tdown4" not in self.data:
+            return 3 * self["press_n"] - self["rho_n"]
+        else:
+            return self.trace4(self["Tdown4"])
     
     # Fluid quantities in Eulerian frame
     def rho_n(self):
@@ -1034,6 +1120,10 @@ class AurelCore():
         # Spatial Christoffel symbols with indices: Gamma^{i}_{kl}.
         return jnp.einsum('ij..., jkl... -> ikl...', self["gammaup3"], Gddd)
     
+    def s_Gamma_bssnok(self):
+        return - np.einsum('jij... -> i...', 
+                           self.fd.d3_rank2tensor(self["gammaup3_bssnok"]))
+    
     def s_Riemann_uddd3(self):
         dGudd3 = jnp.array([
             [self.fd.d3x_rank2tensor(self["s_Gamma_udd3"][j]) 
@@ -1177,7 +1267,7 @@ class AurelCore():
             self.Lambda * self["gdown4"]
             + self.kappa * (
                self["Tdown4"]
-                - 0.5 * self.trace4(self["Tdown4"]) * self["gdown4"]))
+                - 0.5 * self["Ttrace"] * self["gdown4"]))
         else:
             return jnp.einsum('abad... -> bd...', self["st_Riemann_uddd4"])
     
@@ -1193,6 +1283,10 @@ class AurelCore():
     
     def st_RicciS(self):
         return self.trace4(self["st_Ricci_down4"])
+    
+    def Einsteindown4(self):
+        return (self["st_Ricci_down4"] 
+                - 0.5 * self["st_RicciS"] * self["gdown4"])
     
     def Kretschmann(self):
         return jnp.einsum(
