@@ -12,7 +12,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
@@ -31,12 +31,16 @@ jobs:
         pip install -r requirements.txt
         pip install build twine
         pip install -r docs/requirements.txt
+        pip install .[test]
 
     - name: Build the package
-      env:
-        SETUPTOOLS_SCM_PRETEND_VERSION: "0.0.0"
       run: python -m build
-
+        pytest
+    
+    - name: Run the tests
+      run: 
+        pytest
+    
     - name: Build documentation
       run: |
         cd docs

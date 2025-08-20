@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=77.0", "wheel", "setuptools_scm"]
+requires = ["setuptools>=77.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -47,3 +47,11 @@ dependencies = [
 [project.urls]
 Source = "https://github.com/robynlm/aurel"
 Documentation = "https://robynlm.github.io/aurel/"
+
+[project.optional-dependencies]
+test = ["pytest"]
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "--verbose"
+]

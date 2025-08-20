@@ -14,9 +14,37 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Extract version from tag
+      id: get_version
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/v}
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Extracted version: $VERSION"
+
+    - name: Update pyproject.toml version
+      run: |
+        sed -i 's/version = ".*"/version = "${{ steps.get_version.outputs.version }}"/' pyproject.toml
+
+    - name: Update __init__.py version
+      run: |
+        sed -i 's/__version__ = ".*"/__version__ = "${{ steps.get_version.outputs.version }}"/' src/aurel/__init__.py
+
+    - name: Commit version updates
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add pyproject.toml src/aurel/__init__.py
+        if git diff --staged --quiet; then
+          echo "No version changes to commit"
+        else
+          git commit -m "Auto-update version to ${{ steps.get_version.outputs.version }}"
+          git push
+        fi
 
     - name: Install system dependencies (FFTW)
       run: |
