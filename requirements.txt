@@ -11,4 +11,4 @@ jaxlib
 spinsfast
 jupyter
 ipykernel
-"dask[complete]"
+dask[complete]
