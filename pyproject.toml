@@ -40,7 +40,8 @@ dependencies = [
     "jaxlib",
     "spinsfast",
     "jupyter",
-    "ipykernel"
+    "ipykernel",
+    "dask[complete]"
 ]
 
 [project.urls]
