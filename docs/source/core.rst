@@ -60,11 +60,19 @@ Spatial metric
 
 **gammadown3**: $\gamma_{ij}$ Spatial metric with spatial indices down
 
+**gammadown3_bssnok**: $\tilde{\gamma}_{ij}$ Conformal spatial metric with spatial indices down
+
 **gammaup3**: $\gamma^{ij}$ Spatial metric with spatial indices up
+
+**gammaup3_bssnok**: $\tilde{\gamma}^{ij}$ Conformal spatial metric with spatial indices up
 
 **dtgammaup3**: $\partial_t \gamma^{ij}$ Coordinate time derivative of spatial metric with spatial indices up
 
 **gammadet**: $\gamma$ Determinant of spatial metric
+
+**psi_bssnok**: $\psi = \gamma^{1/12}$ BSSNOK conformal factor
+
+**phi_bssnok**: $\phi = \ln(\gamma^{1/12})$ BSSNOK conformal factor
 
 **gammadown4**: $\gamma_{\mu\nu}$ Spatial metric with spacetime indices down
 
@@ -93,7 +101,11 @@ Extrinsic curvature
 
 **Adown3**: $A_{ij}$ Traceless part of the extrinsic curvature with spatial indices down
 
+**Adown3_bssnok**: $\tilde{A}_{ij}$ Conformal traceless part of the extrinsic curvature with spatial indices down
+
 **Aup3**: $A^{ij}$ Traceless part of the extrinsic curvature with spatial indices up
+
+**Aup3_bssnok**: $\tilde{A}^{ij}$ Conformal traceless part of the extrinsic curvature with spatial indices up
 
 **A2**: $A^2$ Magnitude of traceless part of the extrinsic curvature
 
@@ -277,6 +289,8 @@ Spatial curvature
 **s_RicciS_u**: ${}^{(3)}R^{\{u\}}$ Ricci scalar of the spatial metric orthonormal to fluid flow
 
 **s_Gamma_udd3**: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
+
+**s_Gamma_bssnok**: $\tilde{\Gamma}^i$ Conformal connection functions with spatial indice up
 
 **s_Riemann_uddd3**: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
 
