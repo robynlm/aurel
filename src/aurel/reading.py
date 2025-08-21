@@ -218,10 +218,10 @@ def read_aurel_data(param, **kwargs):
             }
     """
     # Extract reading parameters with defaults
-    it = np.sort(kwargs.get('it', [0]))
+    it = np.sort(list(set(kwargs.get('it', [0]))))
     rl = kwargs.get('rl', 0)
     restart = kwargs.get('restart', 0)
-    var = kwargs.get('vars', [])
+    var = list(set(kwargs.get('vars', [])))
     verbose = kwargs.get('verbose', False)
     veryverbose = kwargs.get('veryverbose', False)
 
@@ -647,8 +647,6 @@ def parameters(simname):
             'simpath' : str, Path to simulation root directory
 
             'datapath' : str, Path to output-0000 data directory
-
-            'nbr_restarts' : int, Number of restart directories found
             
         Grid Parameters:
             'xmin', 'xmax', 'Lx', 'Nx', 'dx' : float/int, minimum, maximum, 
@@ -696,12 +694,6 @@ def parameters(simname):
                                       + parameters['simname'] 
                                       + '/output-0000/' 
                                       + parameters['simname'] + '/')
-            # number of restarts
-            files = bash('ls ' + parameters['simpath'] 
-                            + parameters['simname']).split('\n')
-            parameters['nbr_restarts'] = len(
-                [fl for fl in files 
-                 if 'output' in fl and 'active' not in fl])
             break
     if not founddata:
         raise ValueError('Could not find simulation: ' + simname)
@@ -797,29 +789,45 @@ def iterations(param, skip_last=True, verbose=True):
     This function systematically scans Einstein Toolkit simulation output
     to determine what data is available at each iteration and refinement level
     across all restart files. It creates a comprehensive catalog saved to
-    iterations.txt for quick access by other analysis functions.
-
-    The analysis includes:
-
-    - Available 3D variables in each restart
-    - Iteration ranges and time stepping patterns  
-    - Refinement level coverage
+    simpath/simname/iterations.txt for quick access by other analysis 
+    functions.
 
     Parameters
     ----------
     param : dict
         Simulation parameters from `parameters()` function. Must contain:
-        - 'simpath': Path to simulation directory
+
+        - 'simpath': Path to simulation directory (with trailing slash)
         - 'simname': Simulation name
-        - 'nbr_restarts': Number of restart directories
         
     skip_last : bool, optional
         Skip the last restart directory. Default True.
-        Useful to avoid interupting running simulations.
+        Useful to avoid interrupting running simulations.
         
     verbose : bool, optional
         Print detailed progress information. Default True.
-        Shows contents of iterations.txt file.
+        Shows contents of iterations.txt file and overall summary.
+
+    Returns
+    -------
+    dict
+        Dictionary containing iteration information for all restarts::
+        
+            {
+                restart_number: {
+                    'var available': [variable names],
+                    'its available': [itmin, itmax], 
+                    'rl = 0': [itmin, itmax, dit],
+                    'rl = 1': [itmin, itmax, dit],
+                    ...
+                },
+                ...
+                'overall': {
+                    'rl = 0': [[itmin, itmax, dit], ...],
+                    'rl = 1': [[itmin, itmax, dit], ...],
+                    ...
+                }
+            }
 
     Notes
     -----
@@ -829,24 +837,22 @@ def iterations(param, skip_last=True, verbose=True):
         3D variables available: ['rho', 'alpha', 'gxx', ...]
         it = 0 -> 1000
         rl = 0 at it = np.arange(0, 1000, 2)
-        rl = 1 at it = np.arange(0, 1000, 4)
+        rl = 1 at it = np.arange(0, 1000, 1)
         === restart 1
         ...
 
-    Analysis process for each restart directory:
+    Also with verbose=True, prints the above and overall iterations from 
+    collect_overall_iterations ::
 
-    1. **Variable Discovery**: Scan HDF5 files to find available variables
-    2. **Variable Transformation**: Map ET variables to Aurel conventions
-    3. **Iteration Analysis**: Determine available iteration numbers
-    4. **Refinement Analysis**: Check each refinement level separately
+        === Overall iterations
+        rl = 0 at it = [np.arange(0, 2000, 2)]
+        rl = 1 at it = [np.arange(0, 2000, 1)]
     """
-
-    nbr_restarts = param['nbr_restarts']
-    if skip_last:
-        nbr_restarts -= 1
-
+    
     # Open/create iterations catalog file
     it_filename = param['simpath']+param['simname']+'/iterations.txt'
+    file_existed_before = os.path.isfile(it_filename)
+    
     with open(it_filename, "a+") as it_file:
         # Display existing content from previous runs
         it_file.seek(0)
@@ -854,20 +860,39 @@ def iterations(param, skip_last=True, verbose=True):
         if verbose:
             print(contents, flush=True)
 
+        # Create its_available dictionary to store iteration data
+        if file_existed_before:
+            its_available = read_iterations(
+                param, skip_last=skip_last, verbose=verbose)
+        else:
+            its_available = {}
+
+        # Determine all restarts available
+        files = os.listdir(param['simpath'] + param['simname'])
+        output_pattern = re.compile(r'^output-(\d+)$')
+        relevant_files = [file for file in files 
+                          if output_pattern.match(file)]
+        all_restarts = np.sort([int(fl.split('-')[1]) 
+                                for fl in relevant_files])
+
         # Determine which restarts need processing
+        # Cut off the active one
+        if skip_last:
+            all_restarts = all_restarts[:-1]
+
+        # Cut off what has already been processed
         lines = contents.split("\n")
         restarts_done = [int(line.split("restart ")[1]) 
                          for line in lines 
                          if 'restart' in line]
-        if len(restarts_done) == 0:
-            first_restart = 0
-        else:
-            first_restart = np.max(restarts_done) + 1
+        all_restarts = [rnbr for rnbr in all_restarts 
+                        if rnbr not in restarts_done]
 
         # Process each restart directory
-        for restart in range(first_restart, nbr_restarts):
+        for restart in all_restarts:
             saveprint(it_file, ' === restart {}'.format(restart), 
                       verbose=verbose)
+            its_available[restart] = {}
             
             # Analyze available variables in this restart
             vars_and_files = get_content(param, restart=restart)
@@ -881,126 +906,298 @@ def iterations(param, skip_last=True, verbose=True):
                 datapath = (param['simpath']+param['simname']
                             +'/output-{:04d}/'.format(restart)
                             +param['simname']+'/')
-                raise ValueError('Could not find 3D data in ' + datapath)
+                saveprint(it_file, 'Could not find 3D data in ' + datapath)
             else:
-                # Select representative file for iteration analysis
-                file_for_it = vars_and_files[list(vars_and_files.keys())[0]][0]
-                # TODO pick the lightest file to read
-
                 # Transform ET variable names to Aurel conventions
                 aurel_vars_available = transform_vars_ET_to_aurel_groups(
                     vars_available)
                 saveprint(it_file, '3D variables available: '
                           + str(aurel_vars_available), 
                           verbose=verbose)
-            
-            with h5py.File(file_for_it, 'r') as f:
-                # only consider one of the variables in this file
-                fkeys = list(f.keys())
-                varkey = parse_hdf5_key(fkeys[0])['variable']
-                # all the keys of this variable
-                fkeys = [k for k in fkeys if varkey in k]
+                its_available[restart]['var available'] = aurel_vars_available
                 
-                # all the iterations
-                allits = np.sort([parse_hdf5_key(k)['it'] for k in fkeys])
-                saveprint(
-                    it_file, 
-                    'it = {} -> {}'.format(np.min(allits), np.max(allits)), 
-                    verbose=verbose)
+                # Select representative file for iteration analysis
+                # Preferably a light file that only has one variable
+                files_with_single_var = [var for var in list(vars_and_files.keys())
+                                        if len(var)==1]
+                if files_with_single_var == []:
+                    var_to_read = list(vars_and_files.keys())[0]
+                else:
+                    for var in files_with_single_var:
+                        if 'NaNmask' not in var:
+                            var_to_read = var
+                            break
+                file_for_it = vars_and_files[var_to_read][0]
+                saveprint(it_file, 'Reading iterations in: '
+                         + file_for_it, verbose=verbose)
+                with h5py.File(file_for_it, 'r') as f:
                     
-                # maximum refinement level present
-                rlmax = np.max([parse_hdf5_key(k)['rl'] for k in fkeys])
-                
-                # for each refinement level
-                for rl in range(rlmax+1):
-                    # take the corresponding keys
-                    keysrl = [k for k in fkeys 
-                              if parse_hdf5_key(k)['rl'] == rl]
-
-                    if keysrl!=[]:
-                        # Check if there are chunk numbers
-                        if parse_hdf5_key(keysrl[0])['c'] is not None:
-                            cs = [parse_hdf5_key(k)['c'] for k in keysrl]
-                            chosen_c = ' c=' + str(np.sort(list(set(cs)))[-1])
-                        else:
-                            chosen_c = ''
-                        keysrl = [k for k in keysrl if chosen_c in k]
+                    # only consider one of the variables in this file
+                    fkeys = list(f.keys())
+                    varkey = parse_hdf5_key(fkeys[0])['variable']
+                    if verbose: print(f'Checking variable {varkey}')
                         
-                        # and look at what iterations they have
-                        allits = np.sort([parse_hdf5_key(k)['it'] 
-                                          for k in keysrl])
-
-                        if len(allits)>1:
-                            saveprint(
-                                it_file, 
-                                'rl = {} at it = np.arange({}, {}, {})'.format(
-                                rl, np.min(allits), np.max(allits), 
-                                np.diff(allits)[0]), 
-                                verbose=verbose)
-                        else:
-                            saveprint(it_file, 'rl = {} at it = {}'.format(
-                                rl, allits), 
-                                verbose=verbose)
-
-def get_iterations(param, skip_last = True, verbose=False):
-    """Get the available iterations of the simulation.
+                    # all the keys of this variable
+                    fkeys = [k for k in fkeys if varkey in k]
+                    
+                    # all the iterations
+                    allits = np.sort([parse_hdf5_key(k)['it'] for k in fkeys])
+                    saveprint(
+                        it_file, 
+                        'it = {} -> {}'.format(np.min(allits), np.max(allits)), 
+                        verbose=verbose)
+                    its_available[restart]['its available'] = [
+                        np.min(allits), np.max(allits)]
+                        
+                    # maximum refinement level present
+                    rlmax = np.max([parse_hdf5_key(k)['rl'] for k in fkeys])
+                    
+                    # for each refinement level
+                    for rl in range(rlmax+1):
+                        # take the corresponding keys
+                        keysrl = [k for k in fkeys 
+                                  if parse_hdf5_key(k)['rl'] == rl]
     
-    This reads in the file the iterations function creates.
-    Note that if this file does not exist, it will be created.
+                        if keysrl!=[]:
+                            # Check if there are chunk numbers
+                            if parse_hdf5_key(keysrl[0])['c'] is not None:
+                                cs = [parse_hdf5_key(k)['c'] for k in keysrl]
+                                chosen_c = ' c=' + str(np.sort(list(set(cs)))[-1])
+                            else:
+                                chosen_c = ''
+                            keysrl = [k for k in keysrl if chosen_c in k]
+                            
+                            # and look at what iterations they have
+                            allits = np.sort([parse_hdf5_key(k)['it'] 
+                                              for k in keysrl])
     
+                            if len(allits)>1:
+                                saveprint(
+                                    it_file, 
+                                    'rl = {} at it = np.arange({}, {}, {})'.format(
+                                    rl, np.min(allits), np.max(allits), 
+                                    np.diff(allits)[0]), 
+                                    verbose=verbose)
+                                its_available[restart]['rl = {}'.format(rl)] = [
+                                    np.min(allits), np.max(allits), 
+                                    np.diff(allits)[0]]
+                            else:
+                                saveprint(it_file, 'rl = {} at it = {}'.format(
+                                    rl, allits), 
+                                    verbose=verbose)
+                                its_available[restart]['rl = {}'.format(rl)] = allits
+                                
+        # Overall iterations
+        its_available = collect_overall_iterations(its_available, verbose)
+        return its_available
+
+def read_iterations(param, skip_last = True, verbose=False):
+    """Read and parse the iterations.txt file to extract iteration information.
+
+    This is a helper function for `iterations()`.
+
+    This function loads the iterations catalog created by `iterations()` and
+    parses it into a structured dictionary format for programmatic access.
+    If the iterations.txt file doesn't exist, then the `iterations()` function
+    is called instead.
+
     Parameters
     ----------
     param : dict
-        The parameters of the simulation.
-    
+        Simulation parameters from `parameters()` function. Must contain:
+
+        - 'simpath': Path to simulation directory
+        - 'simname': Simulation name
+        
+    skip_last : bool, optional
+        Skip the last restart directory when creating iterations.txt.
+        Default True. This is passed to `iterations()`.
+        
+    verbose : bool, optional
+        Print detailed parsing information. Default False. 
+        Also passed to `iterations()`.
+
     Returns
     -------
-    dict :
-        A dictionary containing the available iterations of the simulation::
-
-        {
-            restart_nbr: {'var available': [...], 
-                          'its available': [itmin, itmax],
-                          'rl = rl_nbr': [itmin, itmax, dit]}
-        }
+    dict
+        Dictionary containing iteration information for all restarts::
+        
+            {
+                restart_number: {
+                    'var available': [variable names],
+                    'its available': [itmin, itmax], 
+                    'rl = 0': [itmin, itmax, dit],
+                    'rl = 1': [itmin, itmax, dit],
+                    ...
+                },
+                ...
+            }
     """
     it_filename = param['simpath']+param['simname']+'/iterations.txt'
+    file_existed_before = os.path.isfile(it_filename)
+
     # if file does not exist, create it
-    if not os.path.isfile(it_filename):
-        iterations(param, verbose=verbose)
+    if not file_existed_before:
+        return iterations(param, skip_last=skip_last, verbose=verbose)
+    else:
+        # read the file
+        if verbose:
+            print(f'Reading iterations in {it_filename}', flush=True)
+        with open(it_filename, "r") as it_file:
+            it_file.seek(0)
+            contents = it_file.read()
+            lines = contents.split("\n")
+            # each line is a dictionary entry
+            its_available = {}
+            for l in lines:
+                # higher level key is the restart number
+                if ' === restart ' in l:
+                    restart_nbr = int(l.split(' === restart ')[1])
+                    its_available[restart_nbr] = {}
+                # lower level keys
+                # variables available
+                elif '3D variables available' in l:
+                    vars = l.split('3D variables available: [')[1].split(', ')
+                    vars = [v.split("'")[1] for v in vars]
+                    its_available[restart_nbr]['var available'] = vars
+                # iterations available (inclusive interval)
+                elif '->' in l:
+                    its_available[restart_nbr]['its available'] = [
+                        int(l.split(' ')[2]), int(l.split(' ')[4])]
+                # iterations available for said refinement level
+                elif 'rl = ' in l:
+                    rl = l.split('rl = ')[1].split(' ')[0]
+                    if 'arange' in l:
+                        itmin = int(l.split('(')[1].split(',')[0])
+                        itmax = int(l.split(', ')[1])
+                        dit = int(l.split(', ')[2].split(')')[0])
+                        its_available[restart_nbr]['rl = '+rl] = [itmin, itmax, dit]
+                    else:
+                        its_available[restart_nbr]['rl = '+rl] = [int(l.split('[')[1].split(']')[0])]
+        return its_available
+
+def collect_overall_iterations(its_available, verbose):
+    """Merge iteration data across all restarts into overall summary.
+
+    This is a helper function for `iterations()`.
     
-    # read the file
-    with open(it_filename, "r") as it_file:
-        it_file.seek(0)
-        contents = it_file.read()
-        lines = contents.split("\n")
-        # each line is a dictionary entry
-        its_available = {}
-        for l in lines:
-            # higher level key is the restart number
-            if ' === restart ' in l:
-                restart_nbr = int(l.split(' === restart ')[1])
-                its_available[restart_nbr] = {}
-            # lower level keys
-            # variables available
-            elif '3D variables available' in l:
-                vars = l.split('3D variables available: [')[1].split(', ')
-                vars = [v.split("'")[1] for v in vars]
-                its_available[restart_nbr]['var available'] = vars
-            # iterations available (inclusive interval)
-            elif '->' in l:
-                its_available[restart_nbr]['its available'] = [
-                    int(l.split(' ')[2]), int(l.split(' ')[4])]
-            # iterations available for said refinement level
-            elif 'rl = ' in l:
-                rl = l.split('rl = ')[1].split(' ')[0]
-                if 'arange' in l:
-                    itmin = int(l.split('(')[1].split(',')[0])
-                    itmax = int(l.split(', ')[1])
-                    dit = int(l.split(', ')[2].split(')')[0])
-                    its_available[restart_nbr]['rl = '+rl] = [itmin, itmax, dit]
+    This function analyzes the iteration information from individual restart
+    and merges them into a comprehensive overview of what iterations are 
+    available across the entire simulation. It handles multiple refinement 
+    levels and various iteration patterns: overlapping iteration ranges, 
+    different time stepping patterns, single iterations. These are merged when
+    possible, otherwise they are kept as separate entries.
+
+    Parameters
+    ----------
+    its_available : dict
+        Dictionary with iterations available for each restart, typically
+        from `read_iterations()` or `iterations()`.
+        
+    verbose : bool
+        If True, print the overall iterations summary to stdout.
+
+    Returns
+    -------
+    dict
+        The input dictionary with an added 'overall' key containing merged
+        iteration information across all restarts::
+        
+            {
+                restart_number: {...},  # Original restart data preserved
+                'overall': {
+                    'rl = 0': [[itmin, itmax, dit], ...],
+                    'rl = 1': [[itmin, itmax, dit], ...],
+                    ...
+                }
+            }
+    """
+    # First collect all the iterations, gradually merging them together
+    # Start with base level then gradually increment by one to consider them all
+    rl = 0
+    its_available['overall'] = {}
+    if verbose:
+        print(' === Overall iterations', flush=True)
+    rl_to_do = True
+    while rl_to_do:
+        it_situation = []
+        rl_to_do = False 
+        # If current rl isn't found then while loop is broken
+        for restart in list(its_available.keys()):
+            rlkey = 'rl = {}'.format(rl)
+            if rlkey in list(its_available[restart].keys()):
+                # rl has been found, so the while loop will be continued afterwards
+                rl_to_do = True
+                rl_it_situation = its_available[restart][rlkey]
+                if it_situation == []:
+                    # This is the first iteration segment found
+                    it_situation += [rl_it_situation]
                 else:
-                    its_available[restart_nbr]['rl = '+rl] = [int(l.split('[')[1].split(']')[0])]
+                    prev_rl_it_situation = it_situation[-1]
+                    if len(prev_rl_it_situation)>1:
+                        # Previous restart had an array
+                        if len(rl_it_situation)>1:
+                            # Current restart has an array
+                            if prev_rl_it_situation[2] == rl_it_situation[2]:
+                                # They have the same dit so just update itmax
+                                it_situation[-1][1] = rl_it_situation[1]
+                            else:
+                                it_situation += [rl_it_situation]
+                        else:
+                            # Current restart has just one iteration
+                            if rl_it_situation[0] in np.linspace(
+                                prev_rl_it_situation[0], 
+                                prev_rl_it_situation[1], 
+                                prev_rl_it_situation[2]):
+                                pass
+                            else:
+                                it_situation += [rl_it_situation]
+                    else:
+                        # Previous restart has just one iteration
+                        if len(rl_it_situation)>1:
+                            # Current restart has an array
+                            if prev_rl_it_situation[0] in np.linspace(
+                                rl_it_situation[0], 
+                                rl_it_situation[1], 
+                                rl_it_situation[2]):
+                                pass
+                            else:
+                                it_situation += [rl_it_situation]
+                        else:
+                            # Current restart has just one iteration
+                            if prev_rl_it_situation[0] == rl_it_situation[0]:
+                                pass
+                            else:
+                                it_situation += [rl_it_situation]
+        
+        if rl_to_do:
+            its_available['overall'][rlkey] = it_situation
+            if verbose:
+                # Create a nice string to present them to the user
+                # Start the string
+                if len(it_situation) == 1:
+                    it_situation_string = ''
+                else:
+                    it_situation_string = '['
+                # Add each iteration segment
+                for iit_situation in it_situation:
+                    if len(iit_situation)>1:
+                        # If it's an array, print np.arange
+                        it_situation_string += 'np.arange({}, {}, {})'.format(
+                            iit_situation[0], iit_situation[1], iit_situation[2])
+                    else:
+                        # If it's just one then give it directly
+                        it_situation_string += '{}'.format(iit_situation[0])
+                    # End string or prepare for next segment
+                    if iit_situation == it_situation[-1]:
+                        if len(it_situation) != 1:
+                            it_situation_string += ']'
+                    else:
+                        it_situation_string += ', '
+                
+                # Print overall iterations of said refinement level
+                print(rlkey, 'at it =', it_situation_string, flush=True)
+        rl += 1
     return its_available
 
 known_groups = {
@@ -1020,6 +1217,8 @@ known_groups = {
     'ml_bssn-ml_mom': ['M1', 'M2', 'M3'],
     'weylscal4-psi4r_group': ['Psi4r'],
     'weylscal4-psi4i_group': ['Psi4i'],
+    'cosmolapse-kthreshold': ['Ktransition'],
+    'cosmolapse-propertime': ['tau']
     }
 def get_content(param, restart=0, overwrite=False, 
                 verbose=True, veryverbose=False):
@@ -1280,7 +1479,7 @@ def read_ET_data(param, **kwargs):
     # =========================================================================
     # ======== set up iterations to get and which restart it's in
     # Overall information
-    its_available = get_iterations(param, verbose=veryverbose)
+    its_available = read_iterations(param, verbose=veryverbose)
     # use user provided restart
     if restart >= 0:
         restarts_available = [restart]
@@ -1296,13 +1495,16 @@ def read_ET_data(param, **kwargs):
         # reverse order so that I'm always taking the most recent iteration
         for iit in it[::-1]:
             for restart in list(its_available.keys())[::-1]:
-                # is this iteration available within this restart?
-                if len(its_available[restart]['its available']) ==1:
-                    it_in_restart = (
-                        iit == its_available[restart]['its available'][0])
+                if 'its available' not in list(its_available[restart]):
+                    it_in_restart = False
                 else:
-                    itmin, itmax = its_available[restart]['its available']
-                    it_in_restart = ((itmin <= iit) and (iit <= itmax))
+                    # is this iteration available within this restart?
+                    if len(its_available[restart]['its available']) ==1:
+                        it_in_restart = (
+                            iit == its_available[restart]['its available'][0])
+                    else:
+                        itmin, itmax = its_available[restart]['its available']
+                        it_in_restart = ((itmin <= iit) and (iit <= itmax))
                 if it_in_restart:
                     its_available[restart]['it to do'] += [iit]
                     # I found it, so break to not go through the other restart
@@ -1377,9 +1579,16 @@ def read_ET_data(param, **kwargs):
                 its_missing = {v: [] for v in avart}
                 for it_idx, iit in enumerate(it):
                     for av in avart:
+                        # Include it if it's not present
                         if datar[restart][av][it_idx] is None:
                             its_missing[av] += [iit]
+                        # Do a set to not have repeats
                         its_missing[av] = list(set(its_missing[av]))
+                # Need to sort because of the set
+                for av in avart:
+                    its_missing[av] = list(np.sort(its_missing[av]))
+
+                # Verbose update
                 if veryverbose:
                     verbose_clean_its_missing = {
                         k:v for k, v in its_missing.items() if v!= []}
@@ -1604,14 +1813,17 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
         file_present = os.path.exists(filepath)
         if file_present:
             with h5py.File(filepath, 'r') as f:
+                file_keys = [k for k in f.keys() 
+                             if parse_hdf5_key(k) is not None]
                 # collect all it of that file
                 for iit in it:
-                    relevant_keys = [k for k in f.keys() 
-                                     if parse_hdf5_key(k) is not None]
-                    relevant_keys = [k for k in relevant_keys 
+                    relevant_keys = [k for k in file_keys 
                                      if ((parse_hdf5_key(k)['it'] == iit)
                                      and (parse_hdf5_key(k)['rl'] == rl))]
-                     
+                    if not relevant_keys:
+                        raise ValueError(
+                            f"Could not find {variables} for it {iit} and rl {rl} in file: {filepath}")
+                        
                     # find the actual number of chunks
                     if cmax == 'in file':
                         if 'c=' in relevant_keys[0]:
