@@ -162,6 +162,8 @@ class FiniteDifference():
     ----------
     xarray, yarray, zarray : jax.numpy.ndarray
         (*jax.numpy.ndarray*) - 1D arrays of x, y, and z coordinates.
+    Nx, Ny, Nz : int
+        (*int*) - Number of data points in x, y, and z directions.
     ixcenter, iycenter, izcenter : int
         (*int*) - Indexes of the x, y, and z coordinates closest to zero.
     x, y, z : jax.numpy.ndarray
@@ -209,6 +211,10 @@ class FiniteDifference():
             self.param['zmin'], 
             self.param['zmin'] + self.param['Nz'] * self.param['dz'], 
             self.param['dz'])
+        
+        self.Nx = len(self.xarray)
+        self.Ny = len(self.yarray)
+        self.Nz = len(self.zarray)
         
         self.ixcenter = jnp.argmin(abs(self.xarray))
         self.iycenter = jnp.argmin(abs(self.yarray))

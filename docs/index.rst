@@ -106,6 +106,7 @@ any relativistic term you ask for.**
    source/maths
    source/numerical
    source/reading
+   source/time
    source/solutions
 
 .. toctree::

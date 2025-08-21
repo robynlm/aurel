@@ -5,21 +5,42 @@ This module provides a function to calculate variables over time series data
 and applying statistical estimation functions to 3D arrays.
 """
 
+#TODO: I got the warning:
+"""
+/its/home/rlm36/myenv/lib64/python3.9/site-packages/distributed/client.py:3362: UserWarning: Sending large graph of size 22.06 MiB.
+This may cause some slowdown.
+Consider loading the data with Dask directly
+ or using futures or delayed objects to embed the data into the graph without repetition.
+See also https://docs.dask.org/en/stable/best-practices.html#load-data-with-dask for more information.
+"""
+
 import jax.numpy as jnp
 from . import core
+import inspect
+import dask
 from dask.distributed import Client
 
 # Dictionary of available estimation functions for 3D arrays
 est_functions = {
-    'max': jnp.max,                         # Maximum value across entire array
-    'mean': jnp.mean,                       # Mean value across entire array
-    'median': jnp.median,                   # Median value across entire array
-    'min': jnp.min,                         # Minimum value across entire array
-    'OD': lambda array: array[0, 0, 0],     # Origin value
-    'UD': lambda array: array[-1, -1, -1],  # Upper diagonal value
+    'max': jnp.max,
+    'mean': jnp.mean,
+    'median': jnp.median,
+    'min': jnp.min,
+    'sum': jnp.sum,
+    'std': jnp.std,
+    'var': jnp.var,
+    'maxabs': lambda array: jnp.max(jnp.abs(array)),
+    'minabs': lambda array: jnp.min(jnp.abs(array)),
+    'meanabs': lambda array: jnp.mean(jnp.abs(array)),
+    'medianabs': lambda array: jnp.median(jnp.abs(array)),
+    'sumabs': lambda array: jnp.sum(jnp.abs(array)),
+    'stdabs': lambda array: jnp.std(jnp.abs(array)),
+    'varabs': lambda array: jnp.var(jnp.abs(array)),
+    'OD': lambda array: array[0, 0, 0],
+    'UD': lambda array: array[-1, -1, -1],
 }
 
-def over_time(data, fd, vars=[], estimate=[], 
+def over_time(data, fd, vars=[], estimates=[], 
               nbr_processes=1, verbose=True, veryverbose=False):
     """Calculate variables from the data and store them in the data dictionary.
     
@@ -39,7 +60,7 @@ def over_time(data, fd, vars=[], estimate=[],
         List of variable names to calculate. These variables will be computed
         using the AurelCore instance at each time step. If empty, no variable
         calculations are performed. Default is an empty list.
-    estimate : list of str or dict, optional
+    estimates : list of str or dict, optional
         List containing estimation functions to apply to all 3D scalar arrays.
         Elements can be:
         - str: Names of predefined functions from est_functions 
@@ -59,7 +80,7 @@ def over_time(data, fd, vars=[], estimate=[],
         Updated data dictionary with calculated variables. 
         If `vars` is provided, a new key is added containing a list of 
         values for each time step. 
-        If `estimate` is provided, additional keys are added with format 
+        If `estimates` is provided, additional keys are added with format 
         '{variable}_{estimation_func}'.
     """
     
@@ -67,27 +88,76 @@ def over_time(data, fd, vars=[], estimate=[],
     cleaned_vars = []
     for v in vars:
         if v not in data:
-            cleaned_vars += [v]
+            if v in list(core.descriptions.keys()):
+                cleaned_vars += [v]
+            else:
+                print(f"Error: Variable '{v}' not in core.descriptions,"
+                      +" skipping.", flush=True)
     vars = cleaned_vars
     
     # Clean estimate list to remove any estimations that are already in data
-    cleaned_estimate = []
-    estimates_done = []
-    for v in list(data.keys()):
-        if '_' in v:
-            estimates_done += [v.split('_')[-1]]
-    for est_item in estimate:
-         if isinstance(est_item, str):
-            if est_item not in estimates_done:
-                cleaned_estimate += [est_item]
+    cleaned_estimates = []
+    if vars != []:
+        # Then apply all estimates again
+        for est_item in estimates:
+            if isinstance(est_item, str):
+                # If the estime is a string, check if it is in est_functions
+                # and add it to cleaned_estimates
+                if est_item in list(est_functions.keys()):
+                    cleaned_estimates += [est_item]
+                else:
+                    print(f"Error: Estimation function '{est_item}' not "
+                        + "in est_functions, skipping.", flush=True)
+                    print(f"Available functions: {list(est_functions.keys())}",
+                        flush=True)
+                    print("You can add custom functions"
+                        + " estimates=[{'function_name':"
+                        + " user_defined_function}].", flush=True)
             elif isinstance(est_item, dict):
-                for func_name in est_item.keys():
+                # If the estimate is a dict, validate each function
+                for func_name, function in est_item.items():
+                    try:
+                        validate_estimation_function(
+                            function, func_name, fd, verbose=verbose)
+                        cleaned_estimates += [{func_name: function}]
+                    except ValueError as e:
+                        print(f"Error: {e}")
+                        print(f"Skipping function '{func_name}'")
+                        continue
+    else:
+        # Only apply estimates that are not already in data
+        estimates_done = []
+        for v in list(data.keys()):
+            if '_' in v:
+                estimates_done += [v.split('_')[-1]]
+        for est_item in estimates:
+            if isinstance(est_item, str):
+                if est_item not in estimates_done:
+                    if est_item in list(est_functions.keys()):
+                        cleaned_estimates += [est_item]
+                    else:
+                        print(f"Error: Estimation function '{est_item}' not "
+                            + "in est_functions, skipping.", flush=True)
+                        print(f"Available functions: {list(est_functions.keys())}",
+                            flush=True)
+                        print("You can add custom functions"
+                            + " estimates=[{'function_name':"
+                            + " user_defined_function}].", flush=True)
+            elif isinstance(est_item, dict):
+                for func_name, function in est_item.items():
                     if func_name not in estimates_done:
-                        cleaned_estimate += [est_item]
-    estimate = cleaned_estimate
+                        try:
+                            validate_estimation_function(
+                                function, func_name, fd, verbose=verbose)
+                            cleaned_estimates += [{func_name: function}]
+                        except ValueError as e:
+                            print(f"Error: {e}")
+                            print(f"Skipping function '{func_name}'")
+                            continue
+    estimates = cleaned_estimates
     
     # Only perform variable calculations if vars list is not empty
-    if vars or estimate:
+    if vars or estimates:
         
         # Transform dict of lists to a list of dicts
         keys = data.keys()
@@ -95,24 +165,24 @@ def over_time(data, fd, vars=[], estimate=[],
         
         # Calculate first instance)
         data_list_i0, scalarkeys = process_single_timestep(
-            data_list[0], fd, vars, estimate, verbose, None)
+            data_list[0], fd, vars, estimates, verbose, None)
         
         # Calculate all the other
         if len(data_list) > 1:
             if verbose:
                 print("Now doing the same, processing time steps in parallel "
-                      +f"with Dask client and nbr_processes = {nbr_processes}", 
+                      +f"with Dask client and nbr_processes = {nbr_processes}",
                       flush=True)
             # Create a wrapper function that captures the fixed parameters
             def process_wrapper(data_dict):
                 return process_single_timestep(
-                    data_dict, fd, vars, estimate, veryverbose, scalarkeys)
+                    data_dict, fd, vars, estimates, veryverbose, scalarkeys)
             # Iterate in parallel through each time step in the data
-            client = Client(threads_per_worker=1, n_workers=nbr_processes)
-            futures = [client.submit(process_wrapper, item) 
-                       for item in data_list[1:]]
-            results = client.gather(futures)
-            # Combine and sort the results by 'it' key 
+            with Client(threads_per_worker=1, n_workers=nbr_processes) as client:
+                futures = [client.submit(process_wrapper, item)
+                           for item in data_list[1:]]
+                results = client.gather(futures)
+            # Combine and sort the results by 'it' key
             sorted_results = sorted(results, key=lambda x: x['it'])
             data_list = [data_list_i0] + sorted_results
         else:
@@ -134,7 +204,7 @@ def over_time(data, fd, vars=[], estimate=[],
                + " returning original data.", flush=True)
         return data
 
-def process_single_timestep(data, fd, vars, estimate, 
+def process_single_timestep(data, fd, vars, estimates, 
                             verbose, scalarkeys):
     """Process a single time step for variable calculation and estimation.
     
@@ -154,7 +224,7 @@ def process_single_timestep(data, fd, vars, estimate,
         List of variable names to calculate. These variables will be computed
         using the AurelCore instance at this time step. If empty, no variable
         calculations are performed.
-    estimate : list of str or dict
+    estimates : list of str or dict
         List containing estimation functions to apply to all 3D scalar arrays.
         Elements can be:
         - str: Names of predefined functions from est_functions
@@ -174,7 +244,7 @@ def process_single_timestep(data, fd, vars, estimate,
         Updated data dictionary with calculated variables.
         If `vars` is provided, a new key is added containing a list of
         values for this time step.
-        If `estimate` is provided, additional keys are added with format
+        If `estimates` is provided, additional keys are added with format
         '{variable}_{estimation_func}'.
     list of str
         List of scalar keys if `scalarkeys` is None, otherwise returns None."""
@@ -197,42 +267,111 @@ def process_single_timestep(data, fd, vars, estimate,
         
         # Clean up AurelCore instance to free memory
         del rel
+
+    # ====== Find all keys that contain 3D scalar arrays
+    # (shape that has 3 dimensions)
+    if scalarkeys is None:
+        scalarkeys = []
+        for key in data.keys():
+            if len(jnp.shape(data[key])) == 3:
+                scalarkeys += [key]
+        return_scalarkeys = True
+    else:
+        return_scalarkeys = False
     
     # ====== Apply estimation functions if requested
-    if estimate:
-        # Find all keys that contain 3D scalar arrays
-        # (shape that has 3 dimensions)
-        if scalarkeys is None:
-            scalarkeys = []
-            for key in data.keys():
-                if len(jnp.shape(data[key])) == 3:
-                    scalarkeys += [key]
-            return_scalarkeys = True
-        else:
-            return_scalarkeys = False
+    if estimates:
         
-        # For each scalar key, process the estimation functions
-        for key in scalarkeys:
-            # Process each item in the estimate list
-            for est_item in estimate:
+        # Process each item in the estimates list
+        for est_item in estimates:
+            if verbose:
                 if isinstance(est_item, str):
-                    # Handle predefined estimation from est_functions
-                    if est_item in est_functions.keys():
+                    print(f"Processing estimation item: {est_item}", 
+                          flush=True)
+                elif isinstance(est_item, dict):
+                    for func_name, func in est_item.items():
+                        print(f"Processing estimation item: {func_name}", 
+                            flush=True)
+            # For each scalar key, process the estimation functions
+            for key in scalarkeys:
+                if isinstance(est_item, str):
+                    if key+'_'+est_item not in list(data.keys()):
+                        # Handle predefined estimation from est_functions
                         # Apply estimation function and store the result
                         func = est_functions[est_item]
                         data[key+'_'+est_item] = func(data[key])
-                    else:
-                        ValueError(
-                            "Help, unknown estimation function:",
-                            est_item)
                 elif isinstance(est_item, dict):
                     # Handle custom estimation functions from dictionary
                     for func_name, func in est_item.items():
-                        # Apply the custom estimation function and store 
-                        data[key+'_'+func_name] = func(data[key])
+                        if key+'_'+func_name not in list(data.keys()):
+                            # Apply the custom estimation function and store 
+                            data[key+'_'+func_name] = func(data[key])
     
     # Return the updated data and scalar keys if new information requested
     if return_scalarkeys:
         return data, scalarkeys
     else:
         return data
+    
+def validate_estimation_function(func, func_name, fd, verbose=True):
+    """Validate that an estimation function has correct signature and behavior.
+    
+    Parameters
+    ----------
+    func : callable
+        Function to validate
+    func_name : str
+        Name of the function for error messages
+    fd : FiniteDifference
+        Finite difference object to get grid dimensions
+    verbose : bool, optional
+        If True, prints debug information about the validation process.
+        
+    Returns
+    -------
+    bool
+        True if function is valid
+    """
+    if verbose:
+        print(f"Validating estimation function '{func_name}'...", flush=True)
+    
+    # Check if it's callable
+    if not callable(func):
+        raise ValueError(f"Estimation function '{func_name}' must be callable")
+    
+    # Check function signature
+    sig = inspect.signature(func)
+    params = list(sig.parameters.keys())
+    
+    if len(params) != 1:
+        raise ValueError(
+            f"Estimation function '{func_name}' must take exactly 1 parameter, "
+            f"got {len(params)}: {params}"
+        )
+    
+    # Test with dummy array
+    test_array = jnp.ones((fd.Nx, fd.Ny, fd.Nz))
+    
+    try:
+        result = func(test_array)
+    except Exception as e:
+        raise ValueError(
+            f"Estimation function '{func_name}' failed when called with "
+            f"array of shape ({fd.Nx}, {fd.Ny}, {fd.Nz}): {e}"
+        )
+    
+    # Check return type and shape
+    if not isinstance(result, (int, float, jnp.number)):
+        if hasattr(result, 'shape') and result.shape != ():
+            raise ValueError(
+                f"Estimation function '{func_name}' must return a scalar "
+                f"(int or float), got shape {result.shape}"
+            )
+        if not jnp.isscalar(result):
+            raise ValueError(
+                f"Estimation function '{func_name}' must return a scalar "
+                f"(int or float), got type {type(result)}"
+            )
+    if verbose:
+        print(f"✓ Custom function '{func_name}' validated successfully")
+    return True
