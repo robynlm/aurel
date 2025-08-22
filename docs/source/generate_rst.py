@@ -23,7 +23,7 @@ gamma = ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz',
 extcurv = ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz', 
            'Kdown3', 'Kup3', 'Ktrace', 
            'Adown3', 'Aup3', 'A2', 'Adown3_bssnok', 'Aup3_bssnok']
-lapse = ['alpha', 'dtalpha']
+lapse = ['alpha', 'dtalpha', 's_covd_s_covd_alpha', 's_covd_s_covd_alpha_mag']
 shift = ['betax', 'betay', 'betaz',
          'dtbetax', 'dtbetay', 'dtbetaz',
          'betaup3', 'dtbetaup3', 'betadown3', 'betamag']

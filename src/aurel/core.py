@@ -97,6 +97,11 @@ descriptions = {
     "dtalpha": (r"$\partial_t \alpha$ Coordinate time derivative"
                 + r" of the lapse." 
                 + assumption('dtalpha', r"$\partial_t \alpha=0$")),
+    "s_covd_s_covd_alpha": (r"D_iD_j\alpha$ Spatial covariant second"
+                            + " derivative of the lapse with spatial indices"
+                            + " down"),
+    "s_covd_s_covd_alpha_mag": (r"D_iD_j\alpha$ Contracted spatial covariant"
+                                + " second derivative of the lapse"),
     # Shift
     "betax": (r"$\beta^{x}$ x component of the shift vector with indices up." 
               + assumption('betax', r"$\beta^{x}=0$")),
@@ -685,6 +690,13 @@ class AurelCore():
     
     def dtalpha(self):
         return jnp.zeros(self.data_shape)
+    
+    def s_covd_s_covd_alpha(self):
+        return self.s_covd(self.s_covd(self["alpha"], ''), 'd')
+    
+    def s_covd_s_covd_alpha_mag(self):
+        return jnp.einsum('ij..., ij... -> ...', 
+                          self["gammaup3"], self["s_covd_s_covd_alpha"])
     
     # Shift
     def betax(self):
