@@ -5,19 +5,9 @@ This module provides a function to calculate variables over time series data
 and applying statistical estimation functions to 3D arrays.
 """
 
-#TODO: I got the warning:
-"""
-/its/home/rlm36/myenv/lib64/python3.9/site-packages/distributed/client.py:3362: UserWarning: Sending large graph of size 22.06 MiB.
-This may cause some slowdown.
-Consider loading the data with Dask directly
- or using futures or delayed objects to embed the data into the graph without repetition.
-See also https://docs.dask.org/en/stable/best-practices.html#load-data-with-dask for more information.
-"""
-
 import jax.numpy as jnp
 from . import core
 import inspect
-import dask
 from dask.distributed import Client
 
 # Dictionary of available estimation functions for 3D arrays
@@ -63,11 +53,13 @@ def over_time(data, fd, vars=[], estimates=[],
     estimates : list of str or dict, optional
         List containing estimation functions to apply to all 3D scalar arrays.
         Elements can be:
+
         - str: Names of predefined functions from est_functions 
           ('max', 'mean', 'median', 'min', 'OD', 'UD')
         - dict: Custom estimation functions with string keys (function names) 
           and functions that take a 3D array of shape (fd.Nx, fd.Ny, fd.Nz) 
           and return a scalar value.
+        
         Default is an empty list (no estimation applied).
     verbose : bool, optional
         If True, prints debug information about the calculation process.
@@ -227,10 +219,12 @@ def process_single_timestep(data, fd, vars, estimates,
     estimates : list of str or dict
         List containing estimation functions to apply to all 3D scalar arrays.
         Elements can be:
+
         - str: Names of predefined functions from est_functions
         - dict: Custom estimation functions with string keys (function names)
           and functions that take a 3D array of shape (fd.Nx, fd.Ny, fd.Nz) 
           and return a scalar value.
+        
         If empty, no estimation applied.
     verbose : bool
         Passed to AurelCore for debug information and calculation process.
@@ -248,6 +242,14 @@ def process_single_timestep(data, fd, vars, estimates,
         '{variable}_{estimation_func}'.
     list of str
         List of scalar keys if `scalarkeys` is None, otherwise returns None."""
+    
+    if verbose:
+        for temp in ['it', 'iteration', 't', 'time']:
+            if temp in list(data.keys()):
+                print(f"Processing {temp} = {data[temp]}", 
+                      flush=True)
+                break
+    
     # ====== Calculate vars if requested
     if vars:
         # Create a new AurelCore instance for this time step
