@@ -1,14 +1,14 @@
 # requirements need to be here AND in pyproject.toml
-numpy
-sympy
-matplotlib
-h5py
-scipy
-glob2
-ipython
-jax
-jaxlib
-spinsfast
-jupyter
-ipykernel
-dask[complete]
+numpy          # for numerical computing
+scipy          # for scientific computing
+sympy          # for analytical calculations and checks
+spinsfast      # for fast spherical harmonic transforms
+matplotlib     # for plotting
+h5py           # for reading/writing hdf5 files
+glob2          # for recursive file searching
+ipython        # for interactive use
+jupyter        # for notebooks
+ipykernel      # for notebooks
+jax            # for vectorized numerical computing
+jaxlib         # for vectorized numerical computing
+dask[complete] # for parallel computing
