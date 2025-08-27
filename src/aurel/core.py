@@ -20,6 +20,9 @@ This module is the main event. It contains:
 
 """
 
+#TODO: check textbook, vel is 3 or 4 velocity?
+#TODO: add hdeterminant of spatial metric orthonormal to fluid flow
+
 import sys
 import scipy
 import numpy as np
@@ -42,135 +45,149 @@ descriptions = {
     # === Metric quantities
     # Spatial metric
     "gxx": (r"$g_{xx}$ Metric with xx indices down." 
-            + assumption('gxx', r"$g_{xx}=1$")),
+        + assumption('gxx', r"$g_{xx}=1$")),
     "gxy": (r"$g_{xy}$ Metric with xy indices down." 
-            + assumption('gxy', r"$g_{xy}=0$")),
+        + assumption('gxy', r"$g_{xy}=0$")),
     "gxz": (r"$g_{xz}$ Metric with xz indices down." 
-            + assumption('gxz', r"$g_{xz}=0$")),
+        + assumption('gxz', r"$g_{xz}=0$")),
     "gyy": (r"$g_{yy}$ Metric with yy indices down." 
-            + assumption('gyy', r"$g_{yy}=1$")),
+        + assumption('gyy', r"$g_{yy}=1$")),
     "gyz": (r"$g_{yz}$ Metric with yz indices down." 
-            + assumption('gyz', r"$g_{yz}=0$")),
+        + assumption('gyz', r"$g_{yz}=0$")),
     "gzz": (r"$g_{zz}$ Metric with zz indices down." 
-            + assumption('gzz', r"$g_{zz}=1$")),
+        + assumption('gzz', r"$g_{zz}=1$")),
     "gammadown3": r"$\gamma_{ij}$ Spatial metric with spatial indices down",
     "gammadown3_bssnok": (r"$\tilde{\gamma}_{ij}$ Conformal spatial metric"
-                          + " with spatial indices down"),
+        + r" with spatial indices down"),
+    "dtgammadown3_bssnok": (r"$\partial_t \tilde{\gamma}_{ij}$ Coordinate"
+        + r" time derivative of conformal spatial metric with spatial"
+        + r" indices down"),
     "gammaup3": r"$\gamma^{ij}$ Spatial metric with spatial indices up",
-    "gammaup3_bssnok": (r"$\tilde{\gamma}^{ij}$ Conformal spatial metric"
-                        + " with spatial indices up"),
     "dtgammaup3": (r"$\partial_t \gamma^{ij}$ Coordinate time derivative of"
-                    + r" spatial metric with spatial indices up"),
+        + r" spatial metric with spatial indices up"),
+    "gammaup3_bssnok": (r"$\tilde{\gamma}^{ij}$ Conformal spatial metric"
+        + r" with spatial indices up"),
     "gammadet": r"$\gamma$ Determinant of spatial metric",
     "psi_bssnok": r"$\psi = \gamma^{1/12}$ BSSNOK conformal factor",
     "phi_bssnok": r"$\phi = \ln(\gamma^{1/12})$ BSSNOK conformal factor",
+    "dtphi_bssnok": (r"$\partial_t \phi$ Coordinate time derivative of BSSNOK"
+        + r" $\phi$ conformal factor"),
     "gammadown4": (r"$\gamma_{\mu\nu}$ Spatial metric with spacetime indices"
-                   + r" down"),
+        + r" down"),
     "gammaup4": r"$\gamma^{\mu\nu}$ Spatial metric with spacetime indices up",
     # Extrinsic curvature
     "kxx": (r"$K_{xx}$ Extrinsic curvature with xx indices down." 
-            + assumption('kxx', r"$K_{xx}=0$")),
+        + assumption('kxx', r"$K_{xx}=0$")),
     "kxy": (r"$K_{xy}$ Extrinsic curvature with xy indices down." 
-            + assumption('kxy', r"$K_{xy}=0$")),
+        + assumption('kxy', r"$K_{xy}=0$")),
     "kxz": (r"$K_{xz}$ Extrinsic curvature with xz indices down." 
-            + assumption('kxz', r"$K_{xz}=0$")),
+        + assumption('kxz', r"$K_{xz}=0$")),
     "kyy": (r"$K_{yy}$ Extrinsic curvature with yy indices down." 
-            + assumption('kyy', r"$K_{yy}=0$")),
+        + assumption('kyy', r"$K_{yy}=0$")),
     "kyz": (r"$K_{yz}$ Extrinsic curvature with yz indices down." 
-            + assumption('kyz', r"$K_{yz}=0$")),
+        + assumption('kyz', r"$K_{yz}=0$")),
     "kzz": (r"$K_{zz}$ Extrinsic curvature with zz indices down." 
-            + assumption('kzz', r"$K_{zz}=0$")),
+        + assumption('kzz', r"$K_{zz}=0$")),
     "Kdown3": r"$K_{ij}$ Extrinsic curvature with spatial indices down",
     "Kup3": r"$K^{ij}$ Extrinsic curvature with spatial indices up",
     "Ktrace": r"$K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature",
+    "dtKtrace": (r"$\partial_t K$ Coordinate time derivative of the"
+        + r" trace of extrinsic curvature"),
     "Adown3": (r"$A_{ij}$ Traceless part of the extrinsic curvature"
-               + r" with spatial indices down"),
-    "Adown3_bssnok": (r"$\tilde{A}_{ij}$ Conformal traceless part of the"
-                      + " extrinsic curvature with spatial indices down"),
+        + r" with spatial indices down"),
     "Aup3": (r"$A^{ij}$ Traceless part of the extrinsic curvature"
-             + r" with spatial indices up"),
-    "Aup3_bssnok": (r"$\tilde{A}^{ij}$ Conformal traceless part of the"
-                    + " extrinsic curvature with spatial indices up"),
+        + r" with spatial indices up"),
     "A2": r"$A^2$ Magnitude of traceless part of the extrinsic curvature",
+    "Adown3_bssnok": (r"$\tilde{A}_{ij}$ Conformal traceless part of the"
+        + r" extrinsic curvature with spatial indices down"),
+    "dtAdown3_bssnok": (r"$\partial_t \tilde{A}_{ij}$ Coordinate time"
+        + r" derivative of conformal traceless part of the extrinsic"
+        + r" curvature with spatial indices down"),
+    "Aup3_bssnok": (r"$\tilde{A}^{ij}$ Conformal traceless part of the"
+        + r" extrinsic curvature with spatial indices up"),
+    "A2_bssnok": (r"$\tilde{A}^2$ Magnitude of conformal traceless"
+        + r" part of the extrinsic curvature"),
     # Lapse
     "alpha": r"$\alpha$ Lapse." + assumption('alpha', r"$\alpha=1$"),
     "dtalpha": (r"$\partial_t \alpha$ Coordinate time derivative"
-                + r" of the lapse." 
-                + assumption('dtalpha', r"$\partial_t \alpha=0$")),
-    "s_covd_s_covd_alpha": (r"D_iD_j\alpha$ Spatial covariant second"
-                            + " derivative of the lapse with spatial indices"
-                            + " down"),
-    "s_covd_s_covd_alpha_mag": (r"D_iD_j\alpha$ Contracted spatial covariant"
-                                + " second derivative of the lapse"),
+        + r" of the lapse." + assumption('dtalpha', r"$\partial_t \alpha=0$")),
+    "DDalpha": (r"D_iD_j\alpha$ Spatial covariant second"
+        + r" derivative of the lapse with spatial indices down"),
     # Shift
     "betax": (r"$\beta^{x}$ x component of the shift vector with indices up." 
-              + assumption('betax', r"$\beta^{x}=0$")),
+        + assumption('betax', r"$\beta^{x}=0$")),
     "betay": (r"$\beta^{y}$ y component of the shift vector with indices up." 
-              + assumption('betay', r"$\beta^{y}=0$")),
+        + assumption('betay', r"$\beta^{y}=0$")),
     "betaz": (r"$\beta^{z}$ z component of the shift vector with indices up." 
-              + assumption('betaz', r"$\beta^{z}=0$")),
+        + assumption('betaz', r"$\beta^{z}=0$")),
     "betaup3": r"$\beta^{i}$ Shift vector with spatial indices up",
     "dtbetax": (r"$\partial_t\beta^{x}$ Coordinate time derivative of the"
-                + r" x component of the shift vector with indices up." 
-                + assumption('dtbetax', r"$\partial_t\beta^{x}=0$")),
+        + r" x component of the shift vector with indices up." 
+        + assumption('dtbetax', r"$\partial_t\beta^{x}=0$")),
     "dtbetay": (r"$\partial_t\beta^{y}$ Coordinate time derivative of the"
-                + r" y component of the shift vector with indices up." 
-                + assumption('dtbetay', r"$\partial_t\beta^{y}=0$")),
+        + r" y component of the shift vector with indices up." 
+        + assumption('dtbetay', r"$\partial_t\beta^{y}=0$")),
     "dtbetaz": (r"$\partial_t\beta^{z}$ Coordinate time derivative of the"
-                + r" z component of the shift vector with indices up." 
-                + assumption('dtbetaz', r"$\partial_t\beta^{z}=0$")),
+        + r" z component of the shift vector with indices up." 
+        + assumption('dtbetaz', r"$\partial_t\beta^{z}=0$")),
     "dtbetaup3": (r"$\partial_t\beta^{i}$ Coordinate time derivative"
-                  + r" of the shift vector with spatial indices up"),
+        + r" of the shift vector with spatial indices up"),
     "betadown3": r"$\beta_{i}$ Shift vector with spatial indices down",
     "betamag": r"$\beta_{i}\beta^{i}$ Magnitude of shift vector",
     # Timelike normal vector
     "nup4": (r"$n^{\mu}$ Timelike vector normal to the spatial metric"
-                + r" with spacetime indices up"),
+        + r" with spacetime indices up"),
     "ndown4": (r"$n_{\mu}$ Timelike vector normal to the spatial metric"
-                + r" with spacetime indices down"),
+        + r" with spacetime indices down"),
     # Spacetime metric
     "gdown4": r"$g_{\mu\nu}$ Spacetime metric with spacetime indices down",
     "gup4": r"$g^{\mu\nu}$ Spacetime metric with spacetime indices up",
     "gdet": r"$g$ Determinant of spacetime metric",
     # Null ray expansion
     "null_ray_exp": (r"$\Theta_{out}, \; \Theta_{in}$ List of expansion of"
-                     + r" null rays radially going out and in respectively"),
+        + r" null rays radially going out and in respectively"),
 
     # === Matter quantities
     # Eulerian observer follows n^mu
     # Lagrangian observer follows u^mu
     "rho0": (r"$\rho_0$ Rest mass energy density."
-             + assumption('rho0', r"$\rho_0=0$")),
-    "press": (r"$p$ Pressure."
-              + assumption('press', r"$p=0$")),
+        + assumption('rho0', r"$\rho_0=0$")),
+    "press": (r"$p$ Pressure." + assumption('press', r"$p=0$")),
     "eps": (r"$\epsilon$ Specific internal energy."
-              + assumption('eps', r"$\epsilon=0$")),
+        + assumption('eps', r"$\epsilon=0$")),
     "rho": r"$\rho$ Energy density",
     "enthalpy": r"$h$ Specific enthalpy of the fluid",
     # Fluid velocity
-    "w_lorentz": (r"$W$ Lorentz factor."
-                  + assumption('w_lorentz', r"$W=1$")),
+    "w_lorentz": (r"$W$ Lorentz factor." + assumption('w_lorentz', r"$W=1$")),
     "velx": (r"$v^x$ x component of Eulerian fluid three velocity"
-             + " with indice up."+ assumption('velx', r"$v^x=0$")),
+        + r" with indice up."+ assumption('velx', r"$v^x=0$")),
     "vely": (r"$v^y$ y component of Eulerian fluid three velocity"
-             + " with indice up."+ assumption('vely', r"$v^y=0$")),
+        + r" with indice up."+ assumption('vely', r"$v^y=0$")),
     "velz": (r"$v^z$ z component of Eulerian fluid three velocity"
-             + " with indice up."+ assumption('velz', r"$v^z=0$")),
+        + r" with indice up."+ assumption('velz', r"$v^z=0$")),
     "velup3": r"$v^i$ Eulerian fluid three velocity with spatial indices up.",
+    "velup4": (r"$v^\mu$ Eulerian fluid three velocity"
+        + r" with spacetime indices up."),
+    "veldown3": (r"$v_i$ Eulerian fluid three velocity"
+        + r" with spatial indices down"),
+    "veldown4": (r"$v_\mu$ Eulerian fluid three velocity"
+        + r" with spacetime indices down"),
     "uup0": r"$u^t$ Lagrangian fluid four velocity with time indice up",
     "uup3": r"$u^i$ Lagrangian fluid four velocity with spatial indices up",
     "uup4": (r"$u^\mu$ Lagrangian fluid four velocity"
-             + r" with spacetime indices up"),
+        + r" with spacetime indices up"),
     "udown3": (r"$u_\mu$ Lagrangian fluid four velocity"
-               + r" with spatial indices down"),
+        + r" with spatial indices down"),
     "udown4": (r"$u_\mu$ Lagrangian fluid four velocity"
-               + r" with spacetime indices down"),
+        + r" with spacetime indices down"),
     "hdown4": (r"$h_{\mu\nu}$ Spatial metric orthonomal to fluid flow"
-               + r" with spacetime indices down"),
+        + r" with spacetime indices down"),
+    "hdet": (r"$h$ Determinant of spatial part of spatial metric orthonormal"
+        + r" to fluid flow"),
     "hmixed4": (r"${h^{\mu}}_{\nu}$ Spatial metric orthonomal to fluid flow"
-                + r" with mixed spacetime indices"),
+        + r" with mixed spacetime indices"),
     "hup4": (r"$h^{\mu\nu}$ Spatial metric orthonomal to fluid flow"
-             + r" with spacetime indices up"),
+        + r" with spacetime indices up"),
     # Energy-stress tensor
     "Tdown4": r"$T_{\mu\nu}$ Energy-stress tensor with spacetime indices down",
     "Tup4": r"$T^{\mu\nu}$ Energy-stress tensor with spacetime indices up",
@@ -178,141 +195,133 @@ descriptions = {
     # Fluid quantities in Eulerian frame
     "rho_n": r"$\rho^{\{n\}}$ Energy density in the $n^\mu$ frame",
     "fluxup3_n": (r"$S^{\{n\}i}$ Energy flux (or momentum density) in the"
-                  + r" $n^\mu$ frame with spatial indices up"),
+        + r" $n^\mu$ frame with spatial indices up"),
     "fluxdown3_n": (r"$S^{\{n\}}_{i}$ Energy flux (or momentum density) in"
-                    + r" the $n^\mu$ frame with spatial indices down"),
+        + r" the $n^\mu$ frame with spatial indices down"),
     "angmomup3_n": (r"$J^{\{n\}i}$ Angular momentum density"
-                    + r" in the $n^\mu$ frame with spatial indices up"),
+        + r" in the $n^\mu$ frame with spatial indices up"),
     "angmomdown3_n": (r"$J^{\{n\}}_{i}$ Angular momentum density"
-                    + r" in the $n^\mu$ frame with spatial indices down"),
+        + r" in the $n^\mu$ frame with spatial indices down"),
     "Stressup3_n": (r"$S^{\{n\}ij}$ Stress tensor in the $n^\mu$ frame"
-                    + r" with spatial indices up"),
+        + r" with spatial indices up"),
     "Stressdown3_n": (r"$S^{\{n\}}_{ij}$ Stress tensor in the $n^\mu$ frame"
-                      + r" with spatial indices down"),
+        + r" with spatial indices down"),
     "Stresstrace_n": (r"$S^{\{n\}}$ Trace of Stress tensor"
-                      + r" in the $n^\mu$ frame"),
+        + r" in the $n^\mu$ frame"),
     "press_n": r"$p^{\{n\}}$ Pressure in the $n^\mu$ frame",
     "anisotropic_press_down3_n": (r"$\pi^{\{n\}_{ij}}$ Anisotropic pressure"
-                                  + r" in the $n^\mu$ frame"
-                                  + r" with spatial indices down"),
+        + r" in the $n^\mu$ frame with spatial indices down"),
     "rho_n_fromHam": (r"$\rho^{\{n\}}$ Energy density in the $n^\mu$ frame"
-                    + r" computed from the Hamiltonian constraint"),
+        + r" computed from the Hamiltonian constraint"),
     "fluxup3_n_fromMom": (r"$S^{\{n\}i}$ Energy flux (or momentum density) in"
-                          + r" the $n^\mu$ frame with spatial indices up"
-                          + r" computed from the Momentum constraint"),
+        + r" the $n^\mu$ frame with spatial indices up computed from"
+        + r" the Momentum constraint"),
     # Conserved quantities
     "conserved_D": r"$D$ Conserved mass-energy density in Wilson's formalism",
     "conserved_E": (r"$E$ Conserved internal energy density"
-                    + r" in Wilson's formalism"),
+        + r" in Wilson's formalism"),
     "conserved_Sdown4": (r"$S_{\mu}$ Conserved energy flux"
-                         + r" (or momentum density) in Wilson's formalism"
-                         + r" with spacetime indices down"),
+        + r" (or momentum density) in Wilson's formalism"
+        + r" with spacetime indices down"),
     "conserved_Sdown3": (r"$S_{i}$ Conserved energy flux (or momentum density)"
-                         + r" in Wilson's formalism"
-                         + r" with spatial indices down"),
+        + r" in Wilson's formalism with spatial indices down"),
     "conserved_Sup4": (r"$S^{\mu}$ Conserved energy flux (or momentum density)"
-                       + r" in Wilson's formalism with spacetime indices up"),
+        + r" in Wilson's formalism with spacetime indices up"),
     "conserved_Sup3": (r"$S^{i}$ Conserved energy flux (or momentum density)"
-                       + r" in Wilson's formalism with spatial indices up"),
+        + r" in Wilson's formalism with spatial indices up"),
     "dtconserved": (r"$\partial_t D, \; \partial_t E, \partial_t S_{i}$"
-                    + r" List of coordinate time derivatives of conserved"
-                    + r" rest mass-energy density, internal energy density"
-                    + r" and energy flux (or momentum density)"
-                    + r" with spatial indices down in Wilson's formalism"),
+        + r" List of coordinate time derivatives of conserved"
+        + r" rest mass-energy density, internal energy density"
+        + r" and energy flux (or momentum density)"
+        + r" with spatial indices down in Wilson's formalism"),
     # Kinematics
     "st_covd_udown4": (r"$\nabla_{\mu} u_{\nu}$ Spacetime covariant derivative"
-                       + r" of Lagrangian fluid four velocity"
-                       + r" with spacetime indices down"),
+        + r" of Lagrangian fluid four velocity with spacetime indices down"),
     "accelerationdown4": (r"$a_{\mu}$ Acceleration of the fluid"
-                          + r" with spacetime indices down"),
+        + r" with spacetime indices down"),
     "accelerationup4": (r"$a^{\mu}$ Acceleration of the fluid"
-                          + r" with spacetime indices up"),
+        + r" with spacetime indices up"),
     "s_covd_udown4": (r"$\mathcal{D}^{\{u\}}_{\mu} u_{\nu}$ Spatial covariant"
-                      + r" derivative of Lagrangian fluid four velocity"
-                      + r" with spacetime indices down, with respect to"
-                      + r" spatial hypersurfaces orthonormal to"
-                      + r" the fluid flow"),
+        + r" derivative of Lagrangian fluid four velocity with spacetime"
+        + r" indices down, with respect to spatial hypersurfaces orthonormal"
+        + r" to the fluid flow"),
     "thetadown4": (r"$\Theta_{\mu\nu}$ Fluid expansion tensor"
-                   + r" with spacetime indices down"),
+        + r" with spacetime indices down"),
     "theta": r"$\Theta$ Fluid expansion scalar",
     "sheardown4": (r"$\sigma_{\mu\nu}$ Fluid shear tensor"
-                   + r" with spacetime indices down"),
+        + r" with spacetime indices down"),
     "shear2": r"$\sigma^2$ Magnitude of fluid shear",
     "omegadown4": (r"$\omega_{\mu\nu}$ Fluid vorticity tensor"
-                   + r" with spacetime indices down"),
+        + r" with spacetime indices down"),
     "omega2": r"$\omega^2$ Magnitude of fluid vorticity",
     "s_RicciS_u": (r"${}^{(3)}R^{\{u\}}$ Ricci scalar of the spatial metric"
-                   + r" orthonormal to fluid flow"),
+        + r" orthonormal to fluid flow"),
 
     # === Curvature quantities
     # of spatial metric
     "s_Gamma_udd3": (r"${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of"
-                     + r" spatial metric with mixed spatial indices"),
+        + r" spatial metric with mixed spatial indices"),
     "s_Gamma_bssnok": (r"$\tilde{\Gamma}^i$ Conformal connection functions"
-                       + " with spatial indice up"),
+        + " with spatial indice up"),
     "s_Riemann_uddd3": (r"${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of"
-                        + r" spatial metric with mixed spatial indices"),
+        + r" spatial metric with mixed spatial indices"),
     "s_Riemann_down3": (r"${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric"
-                        + r" with all spatial indices down"),
+        + r" with all spatial indices down"),
     "s_Ricci_down3": (r"${}^{(3)}R_{ij}$ Ricci tensor of spatial metric"
-                        + r" with spatial indices down"),
+        + r" with spatial indices down"),
     "s_RicciS": r"${}^{(3)}R$ Ricci scalar of spatial metric",
     # of spacetime metric
-    "st_Gamma_udd4": (r"${}^{(4)}{\Gamma^{\alpha}}_{\mu\nu}$"
-                      + r" Christoffel symbols of spacetime metric"
-                      + r" with mixed spacetime indices"),
-    "st_Riemann_uddd4": (r"${}^{(4)}{R^{\alpha}}_{\beta\mu\nu}$"
-                         + r" Riemann tensor of spacetime metric"
-                         + r" with mixed spacetime indices"),
-    "st_Riemann_down4": (r"${}^{(4)}R_{\alpha\beta\mu\nu}$"
-                         + r" Riemann tensor of spacetime metric"
-                         + r" with spacetime indices down"),
-    "st_Riemann_uudd4": (r"${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$"
-                         + r" Riemann tensor of spacetime metric"
-                         + r" with mixed spacetime indices"),
+    "st_Gamma_udd4": (r"${}^{(4)}{\Gamma^{\alpha}}_{\mu\nu}$ Christoffel"
+        + r" symbols of spacetime metric with mixed spacetime indices"),
+    "st_Riemann_uddd4": (r"${}^{(4)}{R^{\alpha}}_{\beta\mu\nu}$ Riemann"
+        + r" tensor of spacetime metric with mixed spacetime indices"),
+    "st_Riemann_down4": (r"${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor"
+        + r" of spacetime metric with spacetime indices down"),
+    "st_Riemann_uudd4": (r"${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann"
+        + r" tensor of spacetime metric with mixed spacetime indices"),
     "st_Ricci_down4": (r"${}^{(4)}R_{\alpha\beta}$ Ricci tensor of spacetime"
-                       + r" metric with spacetime indices down"),
+        + r" metric with spacetime indices down"),
     "st_Ricci_down3": (r"${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric"
-                       + r" with spatial indices down"),
+        + r" with spatial indices down"),
     "st_RicciS": r"${}^{(4)}R$ Ricci scalar of spacetime metric",
-    "Einsteindown4": (r"$G_{\alpha\beta}$ Einstein tensor"
-                      + " with spacetime indices down"),
+    "Einsteindown4": (r"$G_{\alpha\beta}$ Einstein tensor with spacetime"
+        + r" indices down"),
     "Kretschmann": (r"$K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$"
-                    + r" Kretschmann scalar"),
+        + r" Kretschmann scalar"),
 
     # Constraints
     "Hamiltonian": r"$\mathcal{H}$ Hamilonian constraint",
     "Hamiltonian_Escale": (r"[$\mathcal{H}$] Hamilonian constraint"
-                           + r" energy scale"),
+        + r" energy scale"),
     "Momentumup3": (r"$\mathcal{M}^i$ Momentum constraint"
-                    + r" with spatial indices up"),
+        + r" with spatial indices up"),
     "Momentum_Escale": (r"[$\mathcal{M}$] Momentum constraint"
-                        + r" energy scale"),
+        + r" energy scale"),
 
     # === Gravito-electromagnetism quantities
     "st_Weyl_down4": (r"$C_{\alpha\beta\mu\nu}$ Weyl tensor of spacetime"
-                      + r" metric with spacetime indices down"),
+        + r" metric with spacetime indices down"),
     "Weyl_Psi": (r"$\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$"
-                 + r" List of Weyl scalars for an null vector base defined"
-                 + r" with AurelCore.tetrad_to_use"),
+        + r" List of Weyl scalars for an null vector base defined"
+        + r" with AurelCore.tetrad_to_use"),
     "Psi4_lm": (r"$\Psi_4^{l,m}$ Dictionary of spin weighted spherical"
-                + r" harmonic decomposition of the 4th Weyl scalar,"
-                + r" with AurelCore.Psi4_lm_radius and AurelCore.Psi4_lm_lmax."
-                + r" ``spinsfast`` is used for the decomposition."),
+        + r" harmonic decomposition of the 4th Weyl scalar,"
+        + r" with AurelCore.Psi4_lm_radius and AurelCore.Psi4_lm_lmax."
+        + r" ``spinsfast`` is used for the decomposition."),
     "Weyl_invariants": (r"$I, \; J, \; L, \; K, \; N$"
-                        + r" Dictionary of Weyl invariants"),
+        + r" Dictionary of Weyl invariants"),
     "eweyl_u_down4": (r"$E^{\{u\}}_{\alpha\beta}$ Electric part of the Weyl"
-                      + r" tensor on the hypersurface orthogonal to $u^{\mu}$"
-                      + r" with spacetime indices down"),
+        + r" tensor on the hypersurface orthogonal to $u^{\mu}$"
+        + r" with spacetime indices down"),
     "eweyl_n_down3": (r"$E^{\{n\}}_{ij}$ Electric part of the Weyl"
-                      + r" tensor on the hypersurface orthogonal to $n^{\mu}$"
-                      + r" with spatial indices down"),
+        + r" tensor on the hypersurface orthogonal to $n^{\mu}$"
+        + r" with spatial indices down"),
     "bweyl_u_down4": (r"$B^{\{u\}}_{\alpha\beta}$ Magnetic part of the Weyl"
-                      + r" tensor on the hypersurface orthogonal to $u^{\mu}$"
-                      + r" with spacetime indices down"),
+        + r" tensor on the hypersurface orthogonal to $u^{\mu}$"
+        + r" with spacetime indices down"),
     "bweyl_n_down3": (r"$B^{\{n\}}_{ij}$ Magnetic part of the Weyl"
-                      + r" tensor on the hypersurface orthogonal to $n^{\mu}$"
-                      + r" with spatial indices down"),
+        + r" tensor on the hypersurface orthogonal to $n^{\mu}$"
+        + r" with spatial indices down"),
 }
     
 ###############################################################################
@@ -382,7 +391,7 @@ class AurelCore():
         self.myprint(f"Setting Cosmological constant "
                      + r'$\Lambda$'
                      + f" to 0.0, if not then redefine AurelCore.Lambda")
-        self.Lambda = 0.0
+        self.Lambda = 0.0 # TODO: include this in time derivatives
         self.tetrad_to_use = "quasi-Kinnersley"
         self.Psi4_lm_lmax = 8
         self.Psi4_lm_radius = 0.9 * min(
@@ -589,6 +598,10 @@ class AurelCore():
     
     def gammadown3_bssnok(self):
         return self["psi_bssnok"]**(-4) * self["gammadown3"]
+    
+    def dtgammadown3_bssnok(self):
+        return (self.Lie_beta(self["gammadown3_bssnok"], 's_dd', weight=-2/3) 
+                -2 * self["alpha"] * self["Adown3_bssnok"])
 
     def gammaup3(self):
         return maths.inverse3(self["gammadown3"])
@@ -597,13 +610,8 @@ class AurelCore():
         return self["psi_bssnok"]**(4) * self["gammaup3"]
     
     def dtgammaup3(self):
-        dbetaup = self.fd.d3_rank1tensor(self["betaup3"])
-        Lbgup = (jnp.einsum(
-            's..., sij... -> ij...', 
-            self["betaup3"], self.fd.d3_rank2tensor(self["gammaup3"]))
-            - jnp.einsum('si..., sj... -> ij...', dbetaup, self["gammaup3"])
-            - jnp.einsum('sj..., is... -> ij...', dbetaup, self["gammaup3"]))
-        return Lbgup - 2 * self["alpha"] * self["Kup3"]
+        return (self.Lie_beta(self["gammaup3"], 's_uu') 
+                - 2 * self["alpha"] * self["Kup3"])
 
     def gammadet(self):
         return maths.determinant3(self["gammadown3"])
@@ -613,6 +621,10 @@ class AurelCore():
     
     def phi_bssnok(self):
         return jnp.log(self["psi_bssnok"])
+    
+    def dtphi_bssnok(self):
+        return (self.Lie_beta(self["phi_bssnok"], '', weight=1/6)
+                - (1/6) * self["alpha"] * self["Ktrace"])
     
     def gammadown4(self):
         return jnp.array(
@@ -668,21 +680,53 @@ class AurelCore():
     def Ktrace(self):
         return self.trace3(self["Kdown3"])
     
-    def Adown3(self):
-        return self["Kdown3"] - (1/3)*self["gammadown3"]*self["Ktrace"]
+    # TODO: include cosmological constant
+    def dtKtrace(self):
+        return (
+            self.Lie_beta(self["Ktrace"], '')
+            - jnp.einsum('ij..., ij... -> ...', 
+                         self["gammaup3"], self["DDalpha"])
+            + self["alpha"] * (
+                2 * self["A2_bssnok"]
+                + (1/3) * self["Ktrace"]**2)
+            + 0.5 * self.kappa * self["alpha"] * (
+                self["rho_n"] + self["Stresstrace_n"]))
     
-    def Adown3_bssnok(self):
-        return self["psi_bssnok"]**(-4) * self["Adown3"]
+    def Adown3(self):
+        return self.tracefree3(self["Kdown3"])
     
     def Aup3(self):
         return jnp.einsum('ia..., jb..., ab... -> ij...',
                          self["gammaup3"], self["gammaup3"], self["Adown3"])
     
+    def A2(self):
+        return self.magnitude3(self["Adown3"])
+    
+    def Adown3_bssnok(self):
+        return self["psi_bssnok"]**(-4) * self["Adown3"]
+    
+    def dtAdown3_bssnok(self):
+        innerterm = (
+            - self.tracefree3(self["DDalpha"])
+            + self["alpha"] * self.tracefree3(self["s_Ricci_down3"])
+            - self["alpha"] * self.kappa 
+                * self.tracefree3(self["Stressdown3_n"]))
+        AAterm = jnp.einsum(
+            'ia..., bj..., ab... -> ij...',
+            self["Adown3_bssnok"], self["Adown3_bssnok"], 
+            self["gammaup3_bssnok"])
+        return (self.Lie_beta(self["Adown3_bssnok"], 's_dd', weight=-2/3)
+                + jnp.exp(-4 * self["phi_bssnok"]) * innerterm
+                + self["alpha"] * (
+                    self["Ktrace"] * self["Adown3_bssnok"]
+                    - 2 * AAterm))
+    
     def Aup3_bssnok(self):
         return self["psi_bssnok"]**(4) * self["Aup3"]
     
-    def A2(self):
-        return self.magnitude3(self["Adown3"])
+    def A2_bssnok(self):
+        return jnp.einsum('ij..., ij... -> ...', 
+                          self["Adown3_bssnok"], self["Aup3_bssnok"])
     
     # Lapse
     def alpha(self):
@@ -691,12 +735,8 @@ class AurelCore():
     def dtalpha(self):
         return jnp.zeros(self.data_shape)
     
-    def s_covd_s_covd_alpha(self):
+    def DDalpha(self):
         return self.s_covd(self.s_covd(self["alpha"], ''), 'd')
-    
-    def s_covd_s_covd_alpha_mag(self):
-        return jnp.einsum('ij..., ij... -> ...', 
-                          self["gammaup3"], self["s_covd_s_covd_alpha"])
     
     # Shift
     def betax(self):
@@ -838,6 +878,18 @@ class AurelCore():
     def velup3(self):
         return jnp.array([self["velx"], self["vely"], self["velz"]])
     
+    def velup4(self):
+        return jnp.array([jnp.zeros(self.data_shape), 
+                          self["velx"], self["vely"], self["velz"]])
+    
+    def veldown3(self):
+        return self["veldown4"][1:]
+    
+    def veldown4(self):
+        return jnp.einsum(
+            'i..., ij... -> j...', 
+            self["velup4"], self["gammadown4"])
+    
     def uup0(self):
         return maths.safe_division(self["w_lorentz"], self["alpha"])
     
@@ -859,6 +911,9 @@ class AurelCore():
     def hdown4(self):
         return self["gdown4"] + jnp.einsum('a..., b... -> ab...', 
                                           self["udown4"], self["udown4"])
+    
+    def hdet(self):
+        return maths.determinant3(self["hdown4"][1:,1:])
     
     def hmixed4(self):
         return jnp.einsum('ac..., cb... -> ab...', 
@@ -1484,35 +1539,14 @@ class AurelCore():
             self["uup4"], self["uup4"], self["st_Weyl_down4"])
     
     def eweyl_n_down3(self):
-        # 1st compute K terms
-        Kmixed3 = jnp.einsum('ij..., jk... -> ik...', 
-                            self["gammaup3"], self["Kdown3"])
-        KKterm = jnp.einsum('im..., mj... -> ij...', self["Kdown3"], Kmixed3)
-        KKtermH = jnp.einsum('ij..., ji... -> ...', Kmixed3, Kmixed3)
-        del Kmixed3
-            
-        # 2nd compute S terrms
-        # TODO: make this more efficient
-        gmixed4 = jnp.einsum('ab..., bc... -> ac...', 
-                            self["gup4"], self["gdown4"])
-        gammamixed4 = gmixed4 + jnp.einsum('a..., c... -> ac...',
-                                        self["ndown4"], self["nup4"])
-        Sdown3 = jnp.einsum('ca..., db..., cd... -> ab...', 
-                        gammamixed4, gammamixed4, self["Tdown4"])[1:,1:]
-        del gmixed4, gammamixed4
-            
-        # Now find E
+        KKterm = jnp.einsum(
+            'ia..., bj..., ab... -> ij...', 
+            self["Kdown3"], self["Kdown3"], self["gammaup3"])
         return (
-            self["s_Ricci_down3"] 
-            + self["Ktrace"]*self["Kdown3"] 
-            - KKterm 
-            - (1/3) * self["gammadown3"] * (
-                self["s_RicciS"] 
-                + self["Ktrace"] * self["Ktrace"] 
-                - KKtermH) 
-            - 0.5 * self.kappa * (
-                Sdown3 
-                - (1/3) * self["gammadown3"] * self["Stresstrace_n"]))
+            self.tracefree3(self["s_Ricci_down3"])
+            + self.tracefree3(self["Ktrace"]*self["Kdown3"])
+            - self.tracefree3(KKterm)
+            - 0.5 * self.kappa * self.tracefree3(self["Stressdown3_n"]))
     
     def bweyl_u_down4(self):
         LCuudd4 = jnp.einsum(
@@ -1657,9 +1691,9 @@ class AurelCore():
         return e0up4, e1up4, e2up4, e3up4
     
     ###########################################################################
-    # Covariant derivatives
+    # Derivatives
     ###########################################################################
-        
+    
     def s_covd(self, f, indexing):
         """Spatial covariant derivative of a 3D tensor of rank 0, 1 or 2.
         
@@ -1823,6 +1857,133 @@ class AurelCore():
                              + f" with indices {indexing}")
         return curl
     
+    def Lie_beta(self, f, indexing, weight=0):
+        """Compute the Lie derivative along the shift vector.
+
+        Parameters
+        ----------
+        f : array_like
+            The field to differentiate. Can be a scalar, vector, or rank-2 
+            tensor, with shape corresponding to `indexing`.
+        indexing : str
+            String describing the type and index structure of `f`. 
+            Must be one of::
+                
+                - ''     : scalar
+                - 's_u'  : spatial vector, upper index
+                - 'st_u' : spacetime vector, upper index
+                - 's_d'  : spatial vector, lower index
+                - 'st_d' : spacetime vector, lower index
+                - 's_uu' : spatial rank-2 tensor, both indices up
+                - 's_ud' : spatial rank-2 tensor, first up, second down
+                - 's_du' : spatial rank-2 tensor, first down, second up
+                - 's_dd' : spatial rank-2 tensor, both indices down
+
+        weight : int or float, optional
+            Weight for the density correction term (default: 0). 
+            If nonzero, adds `weight * div(beta) * f` to the result, 
+            where `div(beta)` is the divergence of the shift vector.
+
+        Returns
+        -------
+        Lie : array_like
+            The Lie derivative of `f` along β^i, with the same shape as `f`.
+
+        """
+
+        # Input checks
+        if indexing == '':
+            rank = 0
+        else:
+            if ((('s_' in indexing) or ('st_' in indexing)) 
+                and (indexing.count('_') == 1)):
+                s_or_st = indexing.split('_')[0]
+                indices = indexing.split('_')[1]
+                rank = len(indices)
+                if rank>2:
+                    raise NotImplementedError(
+                        f"Haven't implemented Lie derivative along beta"
+                        + f" for tensor of rank {rank}")
+                for i in indices:
+                    if i not in ['u', 'd']:
+                        raise ValueError(
+                            f"indexing must be 'u' or 'd' not {i}")
+                if rank ==2 and s_or_st == 'st':
+                    raise NotImplementedError(
+                        "Haven't implemented Lie derivative along beta"
+                        + " for rank 2 spacetime tensor")
+            else:
+                raise ValueError(
+                    f"indexing must be '' or contain 's_' or 'st_'")
+            
+            # Check shape of f
+            dim = {'s':3, 'st':4}
+            for i in range(rank):
+                if jnp.shape(f)[i] != dim[s_or_st]:
+                    raise ValueError(
+                        f"In Lie derivative along beta, you say f is"
+                        + f" {indexing}, so rank {rank} with dim"
+                        + f" {dim[s_or_st]}, but f is of shape {jnp.shape(f)}")
+        
+        if rank == 0:
+            Lie = jnp.einsum('a..., a... -> ...', 
+                            self["betaup3"], self.fd.d3_scalar(f))
+        elif rank == 1:
+            betaupdf = jnp.einsum('i..., ij... -> j...', 
+                                  self["betaup3"], self.fd.d3_rank1tensor(f))
+            dbetaup = self.fd.d3_rank1tensor(self["betaup3"])
+            if indexing == 's_u':
+                Lie = betaupdf - jnp.einsum('ij..., i... -> j...', dbetaup, f)
+            elif indexing == 'st_u':
+                Lie_t = (betaupdf[0])  # Bcs beta^t = 0
+                Lie_s = (betaupdf[1:] - self["dtbetaup3"] * f[0]
+                          - jnp.einsum('ij..., i... -> j...', dbetaup, f[1:]))
+                Lie = jnp.array([Lie_t, Lie_s[0], Lie_s[1], Lie_s[2]])
+            elif indexing == 's_d':
+                Lie = betaupdf + jnp.einsum('ij..., j... -> i...', dbetaup, f)
+            else: # 'st_d'
+                Lie_t = (betaupdf[0] + jnp.einsum(
+                    'j..., j... -> ...', self["dtbetaup3"], f[1:]))
+                Lie_s = (betaupdf[1:] + jnp.einsum(
+                    'ij..., j... -> i...', dbetaup, f[1:]))
+                Lie = jnp.array([Lie_t, Lie_s[0], Lie_s[1], Lie_s[2]])
+        else:
+            betaupdf = jnp.einsum('s..., sjk... -> jk...', 
+                             self["betaup3"], self.fd.d3_rank2tensor(f))
+            dbetaup = self.fd.d3_rank1tensor(self["betaup3"])
+            if indexing == 's_uu':
+                Lie = (betaupdf 
+                       - jnp.einsum('sj..., sk... -> jk...', dbetaup, f)
+                       - jnp.einsum('sk..., js... -> jk...', dbetaup, f))
+            #elif indexing == 'st_uu':
+            #    Lie = (betaupdf - ... - ...)
+            elif indexing == 's_ud':
+                Lie = (betaupdf 
+                       - jnp.einsum('sj..., sk... -> jk...', dbetaup, f)
+                       + jnp.einsum('ks..., js... -> jk...', dbetaup, f))
+            #elif indexing == 'st_ud':
+            #    Lie = (betaupdf - ... + ...)
+            elif indexing == 's_du':
+                Lie = (betaupdf 
+                       + jnp.einsum('js..., sk... -> jk...', dbetaup, f)
+                       - jnp.einsum('sk..., js... -> jk...', dbetaup, f))
+            #elif indexing == 'st_du':
+            #    Lie = (betaupdf + ... - ...)
+            elif indexing == 's_dd':
+                Lie = (betaupdf 
+                       + jnp.einsum('js..., sk... -> jk...', dbetaup, f)
+                       + jnp.einsum('ks..., js... -> jk...', dbetaup, f))
+            #else: # 'st_dd'
+            #    Lie = (betaupdf + ... + ...)
+
+        if weight != 0:
+            divb = (self.fd.d3x(self["betaup3"][0])
+                    + self.fd.d3y(self["betaup3"][1])
+                    + self.fd.d3z(self["betaup3"][2]))
+            Lie += weight * divb * f
+        
+        return Lie
+    
     ###########################################################################
     # Tensorial operations
     ###########################################################################
@@ -1877,6 +2038,10 @@ class AurelCore():
         """Compute trace of a 3D rank 2 tensor."""
         return jnp.einsum('jk..., jk... -> ...', 
                          self["gammaup3"], fdown3)
+    
+    def tracefree3(self, fdown3):
+        """Compute tracefree part of a 3D rank 2 tensor."""
+        return fdown3 - (1/3) * self["gammadown3"] * self.trace3(fdown3)
     
     def magnitude4(self, fdown):
         """Compute magnitude of a 4D rank 2 tensor."""

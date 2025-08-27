@@ -29,6 +29,17 @@ For multiple simulation locations, use colon separation:
     ``export SIMLOC="/path1:/path2:/path3"``
 """
 
+#TODO: fo 'flatg_maxKKdec_withb_075_0_lv4' I got vvv but not the 2nd time I ran it
+#File ~/myenv/lib64/python3.9/site-packages/aurel/reading.py:1192, in collect_overall_iterations(its_available, verbose)
+#   1190     it_situation_string += '{}'.format(iit_situation[0])
+#   1191 # End string or prepare for next segment
+#-> 1192 if iit_situation == it_situation[-1]:
+#   1193     if len(it_situation) != 1:
+#   1194         it_situation_string += ']'
+
+#ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+
 import os
 import jax.numpy as jnp
 import numpy as np

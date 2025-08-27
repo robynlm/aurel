@@ -16,14 +16,17 @@ os.makedirs(output_dir, exist_ok=True)
 output_file = os.path.join(output_dir, "source/core.rst")
 
 gamma = ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz', 
-         'gammadown3', 'gammaup3', 'gammadown3_bssnok', 'gammaup3_bssnok', 
+         'gammadown3', 'gammaup3', 
+         'gammadown3_bssnok', 'dtgammadown3_bssnok', 
          'dtgammaup3', 
-         'gammadet', 'psi_bssnok', 'phi_bssnok', 
+         'gammaup3_bssnok', 
+         'gammadet', 'psi_bssnok', 'dtphi_bssnok', 'phi_bssnok', 
          'gammadown4', 'gammaup4']
 extcurv = ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz', 
-           'Kdown3', 'Kup3', 'Ktrace', 
-           'Adown3', 'Aup3', 'A2', 'Adown3_bssnok', 'Aup3_bssnok']
-lapse = ['alpha', 'dtalpha', 's_covd_s_covd_alpha', 's_covd_s_covd_alpha_mag']
+           'Kdown3', 'Kup3', 'Ktrace', 'dtKtrace',
+           'Adown3', 'Aup3', 'A2', 'A2_bssnok',
+           'Adown3_bssnok', 'dtAdown3_bssnok', 'Aup3_bssnok']
+lapse = ['alpha', 'dtalpha', 'DDalpha']
 shift = ['betax', 'betay', 'betaz',
          'dtbetax', 'dtbetay', 'dtbetaz',
          'betaup3', 'dtbetaup3', 'betadown3', 'betamag']
@@ -31,8 +34,10 @@ enne = ['nup4', 'ndown4']
 gee = ['gdown4', 'gup4', 'gdet']
 nullrayexp = ['null_ray_exp']
 matter = ['rho0', 'press', 'eps', 'rho', 'enthalpy']
-vel = ['w_lorentz', 'velx', 'vely', 'velz', 'velup3', 'uup0', 'uup3', 'uup4', 
-       'udown3', 'udown4', 'hdown4', 'hmixed4', 'hup4']
+vel = ['w_lorentz', 'velx', 'vely', 'velz', 
+       'velup3', 'velup4', 'veldown3', 'veldown4', 
+       'uup0', 'uup3', 'uup4', 
+       'udown3', 'udown4', 'hdown4', 'hmixed4', 'hup4', 'hdet']
 est = ['Tdown4', 'Tup4', 'Ttrace']
 fluid = ['rho_n', 'fluxup3_n', 'fluxdown3_n', 'angmomup3_n', 
          'angmomdown3_n', 'Stressup3_n', 

@@ -62,17 +62,21 @@ Spatial metric
 
 **gammadown3_bssnok**: $\tilde{\gamma}_{ij}$ Conformal spatial metric with spatial indices down
 
+**dtgammadown3_bssnok**: $\partial_t \tilde{\gamma}_{ij}$ Coordinate time derivative of conformal spatial metric with spatial indices down
+
 **gammaup3**: $\gamma^{ij}$ Spatial metric with spatial indices up
 
-**gammaup3_bssnok**: $\tilde{\gamma}^{ij}$ Conformal spatial metric with spatial indices up
-
 **dtgammaup3**: $\partial_t \gamma^{ij}$ Coordinate time derivative of spatial metric with spatial indices up
+
+**gammaup3_bssnok**: $\tilde{\gamma}^{ij}$ Conformal spatial metric with spatial indices up
 
 **gammadet**: $\gamma$ Determinant of spatial metric
 
 **psi_bssnok**: $\psi = \gamma^{1/12}$ BSSNOK conformal factor
 
 **phi_bssnok**: $\phi = \ln(\gamma^{1/12})$ BSSNOK conformal factor
+
+**dtphi_bssnok**: $\partial_t \phi$ Coordinate time derivative of BSSNOK $\phi$ conformal factor
 
 **gammadown4**: $\gamma_{\mu\nu}$ Spatial metric with spacetime indices down
 
@@ -99,15 +103,21 @@ Extrinsic curvature
 
 **Ktrace**: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
 
-**Adown3**: $A_{ij}$ Traceless part of the extrinsic curvature with spatial indices down
+**dtKtrace**: $\partial_t K$ Coordinate time derivative of the trace of extrinsic curvature
 
-**Adown3_bssnok**: $\tilde{A}_{ij}$ Conformal traceless part of the extrinsic curvature with spatial indices down
+**Adown3**: $A_{ij}$ Traceless part of the extrinsic curvature with spatial indices down
 
 **Aup3**: $A^{ij}$ Traceless part of the extrinsic curvature with spatial indices up
 
+**A2**: $A^2$ Magnitude of traceless part of the extrinsic curvature
+
+**Adown3_bssnok**: $\tilde{A}_{ij}$ Conformal traceless part of the extrinsic curvature with spatial indices down
+
+**dtAdown3_bssnok**: $\partial_t \tilde{A}_{ij}$ Coordinate time derivative of conformal traceless part of the extrinsic curvature with spatial indices down
+
 **Aup3_bssnok**: $\tilde{A}^{ij}$ Conformal traceless part of the extrinsic curvature with spatial indices up
 
-**A2**: $A^2$ Magnitude of traceless part of the extrinsic curvature
+**A2_bssnok**: $\tilde{A}^2$ Magnitude of conformal traceless part of the extrinsic curvature
 
 Lapse
 -----
@@ -115,6 +125,8 @@ Lapse
 **alpha**: $\alpha$ Lapse. I assume $\alpha=1$, if not then please define AurelCore.data['alpha'] = ... 
 
 **dtalpha**: $\partial_t \alpha$ Coordinate time derivative of the lapse. I assume $\partial_t \alpha=0$, if not then please define AurelCore.data['dtalpha'] = ... 
+
+**DDalpha**: D_iD_j\alpha$ Spatial covariant second derivative of the lapse with spatial indices down
 
 Shift
 -----
@@ -188,6 +200,12 @@ Fluid velocity
 
 **velup3**: $v^i$ Eulerian fluid three velocity with spatial indices up.
 
+**velup4**: $v^\mu$ Eulerian fluid three velocity with spacetime indices up.
+
+**veldown3**: $v_i$ Eulerian fluid three velocity with spatial indices down
+
+**veldown4**: $v_\mu$ Eulerian fluid three velocity with spacetime indices down
+
 **uup0**: $u^t$ Lagrangian fluid four velocity with time indice up
 
 **uup3**: $u^i$ Lagrangian fluid four velocity with spatial indices up
@@ -199,6 +217,8 @@ Fluid velocity
 **udown4**: $u_\mu$ Lagrangian fluid four velocity with spacetime indices down
 
 **hdown4**: $h_{\mu\nu}$ Spatial metric orthonomal to fluid flow with spacetime indices down
+
+**hdet**: $h$ Determinant of spatial part of spatial metric orthonormal to fluid flow
 
 **hmixed4**: ${h^{\mu}}_{\nu}$ Spatial metric orthonomal to fluid flow with mixed spacetime indices
 

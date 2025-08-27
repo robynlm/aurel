@@ -362,18 +362,29 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
             f"array of shape ({fd.Nx}, {fd.Ny}, {fd.Nz}): {e}"
         )
     
-    # Check return type and shape
-    if not isinstance(result, (int, float, jnp.number)):
-        if hasattr(result, 'shape') and result.shape != ():
-            raise ValueError(
-                f"Estimation function '{func_name}' must return a scalar "
-                f"(int or float), got shape {result.shape}"
-            )
-        if not jnp.isscalar(result):
-            raise ValueError(
-                f"Estimation function '{func_name}' must return a scalar "
-                f"(int or float), got type {type(result)}"
-            )
+    # Check return type and shape - must be scalar-like
+    # Force evaluation for lazy libraries like JAX
+    try:
+        # Convert to Python scalar if possible (forces JAX evaluation)
+        if hasattr(result, 'item') and callable(result.item):
+            result_value = result.item()
+        else:
+            result_value = result
+    except:
+        result_value = result
+    
+    # Check if result is scalar-like: Python scalar or 0-dimensional array
+    is_scalar = (
+        isinstance(result_value, (int, float, complex)) or  # Python scalars
+        (hasattr(result, 'shape') and result.shape == ()) or  # 0-d arrays
+        (hasattr(result, 'ndim') and result.ndim == 0)        # NumPy scalars
+    )
+    
+    if not is_scalar:
+        raise ValueError(
+            f"Estimation function '{func_name}' must return a scalar, "
+            f"got type {type(result)}"
+        )
     if verbose:
         print(f"✓ Custom function '{func_name}' validated successfully")
     return True
