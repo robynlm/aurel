@@ -29,17 +29,6 @@ For multiple simulation locations, use colon separation:
     ``export SIMLOC="/path1:/path2:/path3"``
 """
 
-#TODO: fo 'flatg_maxKKdec_withb_075_0_lv4' I got vvv but not the 2nd time I ran it
-#File ~/myenv/lib64/python3.9/site-packages/aurel/reading.py:1192, in collect_overall_iterations(its_available, verbose)
-#   1190     it_situation_string += '{}'.format(iit_situation[0])
-#   1191 # End string or prepare for next segment
-#-> 1192 if iit_situation == it_situation[-1]:
-#   1193     if len(it_situation) != 1:
-#   1194         it_situation_string += ']'
-
-#ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
-
-
 import os
 import jax.numpy as jnp
 import numpy as np
@@ -1142,7 +1131,7 @@ def collect_overall_iterations(its_available, verbose):
                 rl_it_situation = its_available[restart][rlkey]
                 if it_situation == []:
                     # This is the first iteration segment found
-                    it_situation += [rl_it_situation]
+                    it_situation += [list(rl_it_situation)]
                 else:
                     prev_rl_it_situation = it_situation[-1]
                     if len(prev_rl_it_situation)>1:
@@ -1153,7 +1142,7 @@ def collect_overall_iterations(its_available, verbose):
                                 # They have the same dit so just update itmax
                                 it_situation[-1][1] = rl_it_situation[1]
                             else:
-                                it_situation += [rl_it_situation]
+                                it_situation += [list(rl_it_situation)]
                         else:
                             # Current restart has just one iteration
                             if rl_it_situation[0] in np.linspace(
@@ -1162,7 +1151,7 @@ def collect_overall_iterations(its_available, verbose):
                                 prev_rl_it_situation[2]):
                                 pass
                             else:
-                                it_situation += [rl_it_situation]
+                                it_situation += [list(rl_it_situation)]
                     else:
                         # Previous restart has just one iteration
                         if len(rl_it_situation)>1:
@@ -1171,15 +1160,15 @@ def collect_overall_iterations(its_available, verbose):
                                 rl_it_situation[0], 
                                 rl_it_situation[1], 
                                 rl_it_situation[2]):
-                                pass
+                                pass   # TODO: FIX this!
                             else:
-                                it_situation += [rl_it_situation]
+                                it_situation += [list(rl_it_situation)]
                         else:
                             # Current restart has just one iteration
                             if prev_rl_it_situation[0] == rl_it_situation[0]:
                                 pass
                             else:
-                                it_situation += [rl_it_situation]
+                                it_situation += [list(rl_it_situation)]
         
         if rl_to_do:
             its_available['overall'][rlkey] = it_situation
