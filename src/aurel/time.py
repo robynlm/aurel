@@ -8,7 +8,7 @@ and applying statistical estimation functions to 3D arrays.
 import jax.numpy as jnp
 from . import core
 import inspect
-from dask.distributed import Client
+import dask.bag as db
 
 # Dictionary of available estimation functions for 3D arrays
 est_functions = {
@@ -130,8 +130,9 @@ def over_time(data, fd, vars=[], estimates=[],
                     else:
                         print(f"Error: Estimation function '{est_item}' not "
                             + "in est_functions, skipping.", flush=True)
-                        print(f"Available functions: {list(est_functions.keys())}",
-                            flush=True)
+                        print("Available functions: "
+                              + f"{list(est_functions.keys())}",
+                              flush=True)
                         print("You can add custom functions"
                             + " estimates=[{'function_name':"
                             + " user_defined_function}].", flush=True)
@@ -162,7 +163,7 @@ def over_time(data, fd, vars=[], estimates=[],
         # Calculate all the other
         if len(data_list) > 1:
             if verbose:
-                print("Now doing the same, processing time steps in parallel "
+                print("Now processing time steps in parallel "
                       +f"with Dask client and nbr_processes = {nbr_processes}",
                       flush=True)
             # Create a wrapper function that captures the fixed parameters
@@ -170,10 +171,8 @@ def over_time(data, fd, vars=[], estimates=[],
                 return process_single_timestep(
                     data_dict, fd, vars, estimates, veryverbose, scalarkeys)
             # Iterate in parallel through each time step in the data
-            with Client(threads_per_worker=1, n_workers=nbr_processes) as client:
-                futures = [client.submit(process_wrapper, item)
-                           for item in data_list[1:]]
-                results = client.gather(futures)
+            bag = db.from_sequence(data_list[1:], npartitions=nbr_processes)
+            results = bag.map(process_wrapper).compute()
             # Combine and sort the results by 'it' key
             sorted_results = sorted(results, key=lambda x: x['it'])
             data_list = [data_list_i0] + sorted_results
@@ -201,8 +200,8 @@ def process_single_timestep(data, fd, vars, estimates,
     """Process a single time step for variable calculation and estimation.
     
     This function creates an AurelCore instance for the specified time step,
-    calculates requested variables, and applies statistical estimation functions
-    to 3D arrays if specified.
+    calculates requested variables, and applies statistical estimation 
+    functions to 3D arrays if specified.
     
     Parameters
     ----------
@@ -347,8 +346,8 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
     
     if len(params) != 1:
         raise ValueError(
-            f"Estimation function '{func_name}' must take exactly 1 parameter, "
-            f"got {len(params)}: {params}"
+            f"Estimation function '{func_name}' must take exactly 1 parameter,"
+            f" got {len(params)}: {params}"
         )
     
     # Test with dummy array
