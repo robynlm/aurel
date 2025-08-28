@@ -1133,7 +1133,7 @@ def collect_overall_iterations(its_available, verbose):
                     # This is the first iteration segment found
                     it_situation += [list(rl_it_situation)]
                 else:
-                    prev_rl_it_situation = it_situation[-1]
+                    prev_rl_it_situation = np.copy(it_situation[-1])
                     if len(prev_rl_it_situation)>1:
                         # Previous restart had an array
                         if len(rl_it_situation)>1:
@@ -1150,6 +1150,12 @@ def collect_overall_iterations(its_available, verbose):
                                 prev_rl_it_situation[1], 
                                 prev_rl_it_situation[2]):
                                 pass
+                            elif (abs(rl_it_situation[0]
+                                      - prev_rl_it_situation[1])
+                                  == prev_rl_it_situation[2]):
+                                it_situation[-1] = [prev_rl_it_situation[0], 
+                                                    rl_it_situation[0], 
+                                                    prev_rl_it_situation[2]]
                             else:
                                 it_situation += [list(rl_it_situation)]
                     else:
@@ -1160,7 +1166,12 @@ def collect_overall_iterations(its_available, verbose):
                                 rl_it_situation[0], 
                                 rl_it_situation[1], 
                                 rl_it_situation[2]):
-                                pass   # TODO: FIX this!
+                                it_situation[-1] = list(rl_it_situation)
+                            elif (abs(rl_it_situation[0] - prev_rl_it_situation[0]) 
+                                  == rl_it_situation[2]):
+                                it_situation[-1] = [prev_rl_it_situation[0], 
+                                                    rl_it_situation[1], 
+                                                    rl_it_situation[2]]
                             else:
                                 it_situation += [list(rl_it_situation)]
                         else:
@@ -1999,4 +2010,3 @@ def join_chunks(cut_data, **kwargs):
             print('Final shape after 3rd append', flush=True)
             print(np.shape(uncut_data), flush=True)
     return uncut_data
-
