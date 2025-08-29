@@ -902,16 +902,19 @@ def iterations(param, **kwargs):
         all_restarts = [rnbr for rnbr in all_restarts 
                         if rnbr not in restarts_done]
         if all_restarts == [] and restarts_done == []:
-            raise ImportError(
-                'Nothing to process. Consider running with'
-                + ' skip_last=False to analyse the last restart'
-                + ' (if it is not active).')
+            if skip_last:
+                raise ImportError(
+                    'Nothing to process. Consider running with'
+                    + ' skip_last=False to analyse the last restart'
+                    + ' (if it is not an active restart).')
+            else:
+                raise ImportError('Nothing to process.')
         if verbose:
             print('Restarts to process: ' + str(all_restarts), flush=True)
             if all_restarts == [] and skip_last:
                 print('Nothing new to process. Consider running with'
                       + ' skip_last=False to analyse the last restart'
-                      + ' (if it is not active).', flush=True)
+                      + ' (if it is not an active restart).', flush=True)
 
         # Process each restart directory
         for restart in all_restarts:
@@ -2008,6 +2011,12 @@ def join_chunks(cut_data, **kwargs):
                 ndata_groups[k[1:]][k[0]] = cut_data[k]
             else:
                 ndata_groups[k[1:]] = {k[0]:cut_data[k]}
+        if veryextraverbose:
+            for k in ndata_groups.keys():
+                shapes = {key:np.shape(item) 
+                          for key, item in ndata_groups[k].items()}
+                print('Group ', k, ' has elements with shapes: ', shapes, 
+                      flush=True)
         
         # Then append them together
         ndata = {}
@@ -2041,6 +2050,12 @@ def join_chunks(cut_data, **kwargs):
                 nndata_groups[k[1]][k[0]] = ndata[k]
             else:
                 nndata_groups[k[1]] = {k[0]:ndata[k]}
+        if veryextraverbose:
+            for k in nndata_groups.keys():
+                shapes = {key:np.shape(item) 
+                          for key, item in nndata_groups[k].items()}
+                print('Group ', k, ' has elements with shapes: ', shapes, 
+                      flush=True)
         # Then append them together
         nndata = {}
         for k2 in nndata_groups.keys():
