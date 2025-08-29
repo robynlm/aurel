@@ -1453,7 +1453,7 @@ def read_ET_data(param, **kwargs):
         in per-iteration files. Default True.
             
     verbose : bool, optional
-        Print progress information. Default False.
+        Print progress information. Default True.
             
     veryverbose : bool, optional
         Print detailed debugging information. Default False.
@@ -1487,13 +1487,13 @@ def read_ET_data(param, **kwargs):
     var = kwargs.get('vars', [])
     restart = kwargs.get('restart', -1)
     split_per_it = kwargs.get('split_per_it', True)
-    verbose = kwargs.get('verbose', False)
+    verbose = kwargs.get('verbose', True)
     veryverbose = kwargs.get('veryverbose', False)
 
     # =========================================================================
     # ======== set up iterations to get and which restart it's in
     # Overall information
-    its_available = read_iterations(param, verbose=veryverbose)
+    its_available = read_iterations(param, verbose=verbose)
     # use user provided restart
     if restart >= 0:
         restarts_available = [restart]
@@ -1552,7 +1552,7 @@ def read_ET_data(param, **kwargs):
             # restart
             kwargs['restart'] = restart
             vars_and_files = get_content(
-                param, restart=restart, verbose=veryverbose)
+                param, restart=restart, verbose=verbose)
             
             # if no variable is specified, take all available
             if var==[]:
