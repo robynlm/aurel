@@ -853,6 +853,10 @@ def iterations(param, skip_last=True, verbose=True, verbose_file=True):
     # Open/create iterations catalog file
     it_filename = param['simpath']+param['simname']+'/iterations.txt'
     file_existed_before = os.path.isfile(it_filename)
+
+    if not verbose and verbose_file:
+        verbose_file = False
+
     if verbose:
         if not file_existed_before:
             print('Creating new iterations file: ' + it_filename, 
@@ -892,13 +896,17 @@ def iterations(param, skip_last=True, verbose=True, verbose_file=True):
                          if 'restart' in line]
         all_restarts = [rnbr for rnbr in all_restarts 
                         if rnbr not in restarts_done]
-        if verbose:
-            print('Restarts to process: ' + str(all_restarts), flush=True)
-        if all_restarts == []:
+        if all_restarts == [] and restarts_done == []:
             raise ImportError(
-                'No new restarts to process. Consider running with'
+                'Nothing to process. Consider running with'
                 + ' skip_last=False to analyse the last restart'
                 + ' (if it is not active).')
+        if verbose:
+            print('Restarts to process: ' + str(all_restarts), flush=True)
+            if all_restarts == []:
+                print('Nothing new to process. Consider running with'
+                      + ' skip_last=False to analyse the last restart'
+                      + ' (if it is not active).', flush=True)
 
         # Process each restart directory
         for restart in all_restarts:
@@ -1373,6 +1381,9 @@ def get_content(param, restart=0, overwrite=False,
                             if verbose:
                                 print('Reading variables in file:', 
                                       filepath, flush=True)
+                                print(f"Consider adding {base_name} to"
+                                      + " known_groups in reading.py for"
+                                      + " faster processing.", flush=True)
                             with h5py.File(filepath, "r") as h5f:
                                 variables = {parse_hdf5_key(k)['variable'] 
                                              for k in h5f.keys() 
