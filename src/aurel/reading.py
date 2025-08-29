@@ -1060,8 +1060,9 @@ def read_iterations(param, skip_last = True, verbose=False):
         # Empty file handling
         if contents == '':
             if verbose:
-                print('File is empty, running iterations() to write it.',
-                        flush=True)
+                print('File is empty, removing it and running iterations()'
+                      + ' to write it.', flush=True)
+            os.remove(it_filename)
             return iterations(param, skip_last=skip_last, verbose=verbose)
         else:
             lines = contents.split("\n")
