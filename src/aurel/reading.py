@@ -866,8 +866,6 @@ def iterations(param, skip_last=True, verbose=True, verbose_file=True):
         # Display existing content from previous runs
         it_file.seek(0)
         contents = it_file.read()
-        if verbose_file:
-            print(contents, flush=True)
 
         # Create its_available dictionary to store iteration data
         if file_existed_before:
@@ -875,6 +873,10 @@ def iterations(param, skip_last=True, verbose=True, verbose_file=True):
                 param, skip_last=skip_last, verbose=verbose)
         else:
             its_available = {}
+
+        # Print existing contents if verbose_file
+        if verbose_file:
+            print(contents, flush=True)
 
         # Determine all restarts available
         files = os.listdir(param['simpath'] + param['simname'])
@@ -903,7 +905,7 @@ def iterations(param, skip_last=True, verbose=True, verbose_file=True):
                 + ' (if it is not active).')
         if verbose:
             print('Restarts to process: ' + str(all_restarts), flush=True)
-            if all_restarts == []:
+            if all_restarts == [] and skip_last:
                 print('Nothing new to process. Consider running with'
                       + ' skip_last=False to analyse the last restart'
                       + ' (if it is not active).', flush=True)
