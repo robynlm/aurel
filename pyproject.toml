@@ -38,6 +38,7 @@ dependencies = [
     "ipython",
     "jax",
     "jaxlib",
+    "tqdm",
     "spinsfast",
     "jupyter",
     "ipykernel",

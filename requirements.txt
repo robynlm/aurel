@@ -9,6 +9,7 @@ glob2          # for recursive file searching
 ipython        # for interactive use
 jupyter        # for notebooks
 ipykernel      # for notebooks
+tqdm           # for progress bars
 jax            # for vectorized numerical computing
 jaxlib         # for vectorized numerical computing
 dask[complete] # for parallel computing
