@@ -9,6 +9,10 @@ import jax.numpy as jnp
 from . import core
 import inspect
 import dask.bag as db
+try:
+    from tqdm.notebook import tqdm
+except ImportError:
+    from tqdm import tqdm
 
 # Dictionary of available estimation functions for 3D arrays
 est_functions = {
@@ -46,10 +50,17 @@ def over_time(data, fd, vars=[], estimates=[],
         to this dictionary.
     fd : str
         Finite difference class used to initialize AurelCore instances.
-    vars : list of str, optional
+    vars : list of str or dict, optional
         List of variable names to calculate. These variables will be computed
-        using the AurelCore instance at each time step. If empty, no variable
-        calculations are performed. Default is an empty list.
+        using the AurelCore instance at each time step.
+        Eelements can be:
+
+        - str: Names of predefined variables from core.descriptions
+        - dict: Custom variable definitions with string keys (variable names)
+          and functions that take an AurelCore instance and return the variable
+          value.
+
+        Default is an empty list, no variable calculations are performed.
     estimates : list of str or dict, optional
         List containing estimation functions to apply to all 3D scalar arrays.
         Elements can be:
@@ -79,12 +90,26 @@ def over_time(data, fd, vars=[], estimates=[],
     # Clean vars list to remove any variables that are already in data
     cleaned_vars = []
     for v in vars:
-        if v not in data:
-            if v in list(core.descriptions.keys()):
-                cleaned_vars += [v]
-            else:
-                print(f"Error: Variable '{v}' not in core.descriptions,"
-                      +" skipping.", flush=True)
+        if isinstance(v, str):
+            if v not in data:
+                if v in list(core.descriptions.keys()):
+                    cleaned_vars += [v]
+                else:
+                    print(f"Error: Variable '{v}' not in core.descriptions,"
+                        +" skipping.", flush=True)
+        elif isinstance(v, dict):
+            # If the variable is a dict, validate each function
+            for func_name, function in v.items():
+                if func_name not in data:
+                    try:
+                        validate_variable_function(
+                            function, func_name, fd, 
+                            verbose=verbose, veryverbose=False)
+                        cleaned_vars += [{func_name: function}]
+                    except ValueError as e:
+                        print(f"Error: {e}")
+                        print(f"Skipping function '{func_name}'")
+                        continue
     vars = cleaned_vars
     
     # Clean estimate list to remove any estimations that are already in data
@@ -172,7 +197,10 @@ def over_time(data, fd, vars=[], estimates=[],
                     data_dict, fd, vars, estimates, veryverbose, scalarkeys)
             # Iterate in parallel through each time step in the data
             bag = db.from_sequence(data_list[1:], npartitions=nbr_processes)
-            results = bag.map(process_wrapper).compute()
+            parts = bag.map(process_wrapper).to_delayed()
+            results = []
+            for part in tqdm(parts):
+                results.extend(part.compute())
             # Combine and sort the results by 'it' key
             sorted_results = sorted(results, key=lambda x: x['it'])
             data_list = [data_list_i0] + sorted_results
@@ -189,6 +217,8 @@ def over_time(data, fd, vars=[], estimates=[],
             data[key] = jnp.array(data[key])
         del data_list
     
+        if verbose:
+            print("Done!", flush=True)
         return data
     else:
         print("No new variables or estimations requested,"
@@ -347,7 +377,7 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
     if len(params) != 1:
         raise ValueError(
             f"Estimation function '{func_name}' must take exactly 1 parameter,"
-            f" got {len(params)}: {params}"
+            f" a scalar array, instead got {len(params)}: {params}"
         )
     
     # Test with dummy array
@@ -386,4 +416,34 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
         )
     if verbose:
         print(f"✓ Custom function '{func_name}' validated successfully")
+    return True
+
+def validate_variable_function(func, func_name, fd, verbose=True, veryverbose=False):
+    """Validate that a variable function has correct signature and behavior."""
+    if verbose:
+        print(f"Validating variable function '{func_name}'...", flush=True)
+
+    # Check if it's callable
+    if not callable(func):
+        raise ValueError(f"Variable function '{func_name}' must be callable")
+    
+    # Check function signature
+    sig = inspect.signature(func)
+    params = list(sig.parameters.keys())
+    if len(params) != 1:
+        raise ValueError(
+            f"Variable function '{func_name}' must take exactly 1 parameter,"
+            f" the AurelCore class, instead got {len(params)}: {params}"
+        )
+    
+    # Test with dummy AurelCore instance
+    rel = core.AurelCore(fd, verbose=veryverbose)
+    try:
+        result = func(rel)
+    except Exception as e:
+        raise ValueError(
+            f"Variable function '{func_name}' failed when called with "
+            f"AurelCore instance: {e}"
+        )
+    
     return True
