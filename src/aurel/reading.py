@@ -894,11 +894,10 @@ def iterations(param, skip_last=True, verbose=True):
         if verbose:
             print('Restarts to process: ' + str(all_restarts), flush=True)
         if all_restarts == []:
-            if verbose:
-                raise ImportError(
-                    'No new restarts to process. Consider running with'
-                    + ' skip_last=False to analyse the last restart'
-                    + ' (if it is not active).')
+            raise ImportError(
+                'No new restarts to process. Consider running with'
+                + ' skip_last=False to analyse the last restart'
+                + ' (if it is not active).')
 
         # Process each restart directory
         for restart in all_restarts:
@@ -1058,6 +1057,13 @@ def read_iterations(param, skip_last = True, verbose=False):
         with open(it_filename, "r") as it_file:
             it_file.seek(0)
             contents = it_file.read()
+        # Empty file handling
+        if contents == '':
+            if verbose:
+                print('File is empty, running iterations() to write it.',
+                        flush=True)
+            return iterations(param, skip_last=skip_last, verbose=verbose)
+        else:
             lines = contents.split("\n")
             # each line is a dictionary entry
             its_available = {}
@@ -1086,7 +1092,7 @@ def read_iterations(param, skip_last = True, verbose=False):
                         its_available[restart_nbr]['rl = '+rl] = [itmin, itmax, dit]
                     else:
                         its_available[restart_nbr]['rl = '+rl] = [int(l.split('[')[1].split(']')[0])]
-        return its_available
+            return its_available
 
 def collect_overall_iterations(its_available, verbose):
     """Merge iteration data across all restarts into overall summary.
