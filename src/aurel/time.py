@@ -53,7 +53,7 @@ def over_time(data, fd, vars=[], estimates=[],
     vars : list of str or dict, optional
         List of variable names to calculate. These variables will be computed
         using the AurelCore instance at each time step.
-        Eelements can be:
+        Elements can be:
 
         - str: Names of predefined variables from core.descriptions
         - dict: Custom variable definitions with string keys (variable names)
@@ -181,7 +181,7 @@ def over_time(data, fd, vars=[], estimates=[],
         keys = data.keys()
         data_list = [dict(zip(keys, values)) for values in zip(*data.values())]
         
-        # Calculate first instance)
+        # Calculate first instance
         data_list_i0, scalarkeys = process_single_timestep(
             data_list[0], fd, vars, estimates, verbose, None)
         
@@ -241,10 +241,17 @@ def process_single_timestep(data, fd, vars, estimates,
         to this dictionary.
     fd : str
         Finite difference class used to initialize AurelCore instances.
-    vars : list of str
+    vars : list of str or dict
         List of variable names to calculate. These variables will be computed
-        using the AurelCore instance at this time step. If empty, no variable
-        calculations are performed.
+        using the AurelCore instance at each time step.
+        Elements can be:
+
+        - str: Names of predefined variables from core.descriptions
+        - dict: Custom variable definitions with string keys (variable names)
+          and functions that take an AurelCore instance and return the variable
+          value.
+
+        If empty, no variable calculations are performed.
     estimates : list of str or dict
         List containing estimation functions to apply to all 3D scalar arrays.
         Elements can be:
@@ -291,10 +298,23 @@ def process_single_timestep(data, fd, vars, estimates,
                 rel.data[key] = values
         # Freeze the data for cache management
         rel.freeze_data()
+
+        # Implement custom variables if requested
+        for v in vars:
+            if isinstance(v, str):
+                pass
+            elif isinstance(v, dict):
+                for func_name, function in v.items():
+                    rel.data[func_name] = core.block_all(function(rel))
+                    rel.var_importance[func_name] = 0 # Freeze this in
         
         # Calculate and store each requested variable
         for v in vars:
-            data[v] = rel[v]
+            if isinstance(v, str):
+                data[v] = rel[v]
+            elif isinstance(v, dict):
+                for func_name, function in v.items():
+                    data[func_name] = rel[v]
         
         # Clean up AurelCore instance to free memory
         del rel
@@ -418,8 +438,29 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
         print(f"✓ Custom function '{func_name}' validated successfully")
     return True
 
-def validate_variable_function(func, func_name, fd, verbose=True, veryverbose=False):
-    """Validate that a variable function has correct signature and behavior."""
+def validate_variable_function(func, func_name, fd, 
+                               verbose=True, veryverbose=False):
+    """Validate that a variable function has correct signature and behavior.
+    
+    Parameters
+    ----------
+    func : callable
+        Function to validate
+    func_name : str
+        Name of the function for error messages
+    fd : FiniteDifference
+        Finite difference object to get grid dimensions
+    verbose : bool, optional
+        If True, prints debug information about the validation process. 
+        Default Ture.
+    veryverbose : bool, optional
+        If True, prints aurelcore verbose information. Default False.
+        
+    Returns
+    -------
+    bool
+        True if function is valid
+    """
     if verbose:
         print(f"Validating variable function '{func_name}'...", flush=True)
 
@@ -439,11 +480,14 @@ def validate_variable_function(func, func_name, fd, verbose=True, veryverbose=Fa
     # Test with dummy AurelCore instance
     rel = core.AurelCore(fd, verbose=veryverbose)
     try:
-        result = func(rel)
+        # Block all to force execution of lazy JAX
+        rel.data[func_name] = core.block_all(func(rel))
     except Exception as e:
         raise ValueError(
             f"Variable function '{func_name}' failed when called with "
             f"AurelCore instance: {e}"
         )
     
+    if verbose:
+        print(f"✓ Custom function '{func_name}' validated successfully")
     return True
