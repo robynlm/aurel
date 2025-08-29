@@ -852,6 +852,10 @@ def iterations(param, skip_last=True, verbose=True):
     # Open/create iterations catalog file
     it_filename = param['simpath']+param['simname']+'/iterations.txt'
     file_existed_before = os.path.isfile(it_filename)
+    if verbose:
+        if not file_existed_before:
+            print('Creating new iterations file: ' + it_filename, 
+                  flush=True)
     
     with open(it_filename, "a+") as it_file:
         # Display existing content from previous runs
@@ -887,6 +891,14 @@ def iterations(param, skip_last=True, verbose=True):
                          if 'restart' in line]
         all_restarts = [rnbr for rnbr in all_restarts 
                         if rnbr not in restarts_done]
+        if verbose:
+            print('Restarts to process: ' + str(all_restarts), flush=True)
+        if all_restarts == []:
+            if verbose:
+                raise ImportError(
+                    'No new restarts to process. Consider running with'
+                    + ' skip_last=False to analyse the last restart'
+                    + ' (if it is not active).')
 
         # Process each restart directory
         for restart in all_restarts:
