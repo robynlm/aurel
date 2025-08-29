@@ -784,7 +784,7 @@ def saveprint(it_file, some_str, verbose=True):
     with contextlib.redirect_stdout(it_file):
         print(some_str)
 
-def iterations(param, skip_last=True, verbose=True, verbose_file=True):
+def iterations(param, **kwargs):
     """Analyze and catalog available iterations across all simulation restarts.
 
     This function systematically scans Einstein Toolkit simulation output
@@ -849,6 +849,9 @@ def iterations(param, skip_last=True, verbose=True, verbose_file=True):
         rl = 0 at it = [np.arange(0, 2000, 2)]
         rl = 1 at it = [np.arange(0, 2000, 1)]
     """
+    skip_last = kwargs.get('skip_last', True)
+    verbose = kwargs.get('verbose', True)
+    verbose_file = kwargs.get('verbose_file', True)
     
     # Open/create iterations catalog file
     it_filename = param['simpath']+param['simname']+'/iterations.txt'
@@ -917,7 +920,8 @@ def iterations(param, skip_last=True, verbose=True, verbose_file=True):
             its_available[restart] = {}
             
             # Analyze available variables in this restart
-            vars_and_files = get_content(param, restart=restart)
+            vars_and_files = get_content(param, 
+                                         verbose=verbose, restart=restart)
             vars_available = []
             for key in vars_and_files.keys():
                 vars_available += list(key)
@@ -1013,7 +1017,7 @@ def iterations(param, skip_last=True, verbose=True, verbose_file=True):
         its_available = collect_overall_iterations(its_available, verbose_file)
         return its_available
 
-def read_iterations(param, skip_last = True, verbose=False):
+def read_iterations(param, **kwargs):
     """Read and parse the iterations.txt file to extract iteration information.
 
     This is a helper function for `iterations()`.
@@ -1055,6 +1059,9 @@ def read_iterations(param, skip_last = True, verbose=False):
                 ...
             }
     """
+    skip_last = kwargs.get('skip_last', True)
+    verbose = kwargs.get('verbose', False)
+
     it_filename = param['simpath']+param['simname']+'/iterations.txt'
     file_existed_before = os.path.isfile(it_filename)
 
@@ -1266,8 +1273,7 @@ known_groups = {
     'cosmolapse-propertime': ['tau'],
     'carpetreduce-weight': ['weight']
     }
-def get_content(param, restart=0, overwrite=False, 
-                verbose=True, veryverbose=False):
+def get_content(param, **kwargs):
     """Analyze Einstein Toolkit output directory and map variables to files.
 
     This function creates a comprehensive mapping between simulation variables
@@ -1323,6 +1329,11 @@ def get_content(param, restart=0, overwrite=False,
       the variable names will be retrieved from the keys in the file. 
       Depending on the file size, this may take some time.
     """
+    restart = kwargs.get('restart', 0)
+    overwrite = kwargs.get('overwrite', False)
+    verbose = kwargs.get('verbose', True)
+    veryverbose = kwargs.get('veryverbose', False)
+
     path = (param['simpath']
             + param['simname']
             + '/output-{:04d}/'.format(restart)

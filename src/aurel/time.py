@@ -305,8 +305,14 @@ def process_single_timestep(data, fd, vars, estimates,
                 pass
             elif isinstance(v, dict):
                 for func_name, function in v.items():
+                    if verbose:
+                        print(f"Calculating custom variable '{func_name}'...",
+                              flush=True)
                     rel.data[func_name] = core.block_all(function(rel))
                     rel.var_importance[func_name] = 0 # Freeze this in
+                    if verbose:
+                        print(f"Calculated and freezed variable '{func_name}'"
+                              + f" in AurelCore", flush=True)
         
         # Calculate and store each requested variable
         for v in vars:
