@@ -1225,11 +1225,14 @@ known_groups = {
     'admbase-curv': ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
     'ml_bssn-ml_trace_curv': ['trK'],
     'ml_bssn-ml_ham': ['H'],
+    'ml_admconstraints-ml_ham': ['H'],
     'ml_bssn-ml_mom': ['M1', 'M2', 'M3'],
+    'ml_admconstraints-ml_mom': ['M1', 'M2', 'M3'],
     'weylscal4-psi4r_group': ['Psi4r'],
     'weylscal4-psi4i_group': ['Psi4i'],
     'cosmolapse-kthreshold': ['Ktransition'],
-    'cosmolapse-propertime': ['tau']
+    'cosmolapse-propertime': ['tau'],
+    'carpetreduce-weight': ['weight']
     }
 def get_content(param, restart=0, overwrite=False, 
                 verbose=True, veryverbose=False):
@@ -1554,10 +1557,11 @@ def read_ET_data(param, **kwargs):
             # if no variable is specified, take all available
             if var==[]:
                 var = its_available[restart]['var available']
-            if veryverbose:
+            if verbose:
                 print(' =========== Restart {}:'.format(restart), 
                         flush=True)
                 print('vars to get {}:'.format(var), flush=True)
+            if veryverbose:
                 print('its to get {}:'.format(it), flush=True)
             
             # ====== directly read and provide the data
@@ -1576,7 +1580,7 @@ def read_ET_data(param, **kwargs):
                 # ======= Get variables from split iterations files
                 # Read in data
                 datar[restart] = read_aurel_data(param, **kwargs)
-                if veryverbose:
+                if verbose:
                     verbose_cleaned_dict = {
                         k: v for k, v in datar[restart].items() 
                         if (not (isinstance(v, list) 
@@ -1946,6 +1950,8 @@ def join_chunks(cut_data, **kwargs):
     # =================
     else:
         # --- Append along axis = 2
+        if veryextraverbose:
+            print('Appending along axis = 2', flush=True)
         # First make groups to be appended together
         ndata_groups = {}
         for k in all_keys:
@@ -1953,12 +1959,17 @@ def join_chunks(cut_data, **kwargs):
                 ndata_groups[k[1:]][k[0]] = cut_data[k]
             else:
                 ndata_groups[k[1:]] = {k[0]:cut_data[k]}
+        
         # Then append them together
         ndata = {}
         for k12 in ndata_groups.keys():
             all_k0 = np.sort(list(ndata_groups[k12].keys()))
             ndata[k12] = ndata_groups[k12][all_k0[0]]
             for k0 in all_k0[1:]:
+                if veryextraverbose:
+                    print(f"Appending shape {np.shape(ndata[k12])}"
+                          + f" with shape {np.shape(ndata_groups[k12][k0])}", 
+                          flush=True)
                 ndata[k12] = np.append(
                     ndata[k12], ndata_groups[k12][k0], axis=2)
                 
@@ -1966,12 +1977,14 @@ def join_chunks(cut_data, **kwargs):
         del cut_data, ndata_groups
 
         if veryextraverbose:
-            print('Key and shape after 1st append', flush=True)
+            print(' === Key and shape after 1st append', flush=True)
             for i, k in enumerate(all_keys):
                 print(i, k, np.shape(ndata[k]), flush=True)
             print()
 
         # --- Append along axis = 1
+        if veryextraverbose:
+            print('Appending along axis = 1', flush=True)
         # First make groups to be appended together
         nndata_groups = {}
         for k in all_keys:
@@ -1985,6 +1998,10 @@ def join_chunks(cut_data, **kwargs):
             all_k1 = np.sort(list(nndata_groups[k2].keys()))
             nndata[k2] = nndata_groups[k2][all_k1[0]]
             for k1 in all_k1[1:]:
+                if veryextraverbose:
+                    print(f"Appending shape {np.shape(nndata[k2])}"
+                          + f" with shape {np.shape(nndata_groups[k2][k1])}", 
+                          flush=True)
                 nndata[k2] = np.append(
                     nndata[k2], nndata_groups[k2][k1], axis=1)
         
@@ -1992,21 +2009,27 @@ def join_chunks(cut_data, **kwargs):
         del ndata, nndata_groups
         
         if veryextraverbose:
-            print('Key and shape after 2nd append', flush=True)
+            print(' === Key and shape after 2nd append', flush=True)
             for i, k in enumerate(all_keys):
                 print(i, k, np.shape(nndata[k]), flush=True)
             print()
                 
         # --- Append along axis = 0
+        if veryextraverbose:
+            print('Appending along axis = 0', flush=True)
         all_keys = np.sort(all_keys)
         k = all_keys[0]
         uncut_data = nndata[k]
         for k in all_keys[1:]:
+            if veryextraverbose:
+                print(f"Appending shape {np.shape(uncut_data)}"
+                        + f" with shape {np.shape(nndata[k])}", 
+                        flush=True)
             uncut_data = np.append(
                 uncut_data, nndata[k], axis=0)
         del nndata
         
         if veryextraverbose:
-            print('Final shape after 3rd append', flush=True)
+            print(' === Final shape after 3rd append', flush=True)
             print(np.shape(uncut_data), flush=True)
     return uncut_data
