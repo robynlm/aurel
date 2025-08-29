@@ -1,10 +1,11 @@
 """
 reading.py
 
-This module provides comprehensive functionality for reading and writing numerical 
-relativity simulation data, with specialized support for Einstein Toolkit (ET) 
-simulations. The module handles complex data structures including multiple restart 
-files, chunked data, variable groupings, and different refinement levels.
+This module provides comprehensive functionality for reading and writing 
+numerical relativity simulation data, with specialized support for 
+Einstein Toolkit (ET) simulations. The module handles complex data structures 
+including multiple restart files, chunked data, variable groupings, and 
+different refinement levels.
 
 Key functions relevant for Aurel: ``read_data`` and ``save_data``.
 All other functions are auxiliary utilities for Einstein Toolkit data handling.
@@ -20,7 +21,7 @@ Core Einstein Toolkit Functionality
 
 Environment Setup
 -----------------
-Users must set the SIMLOC environment variable pointing to simulation directories:
+Users must set the SIMLOC environment variable to the simulation directories:
 
     ``export SIMLOC="/path/to/simulations/"``
 
@@ -567,8 +568,8 @@ def parse_h5file(filepath):
                 'xyz_prefix': str or None,  # e.g., '.xyz' or None
                 'file_number': str or None, # e.g., '.file_123' or None
                 'xyz_suffix': str or None,  # e.g., '.xyz' or None
-                'is_group_file': bool,      # True -> is a grouped variable file
-                'chunk_number': int or None # e.g., 123 or None (from file_number)
+                'is_group_file': bool,      # True -> a grouped variable file
+                'chunk_number': int or None # e.g., 123 or None (from file_nbr)
             }
 
     """
@@ -783,7 +784,7 @@ def saveprint(it_file, some_str, verbose=True):
     with contextlib.redirect_stdout(it_file):
         print(some_str)
 
-def iterations(param, skip_last=True, verbose=True):
+def iterations(param, skip_last=True, verbose=True, verbose_file=True):
     """Analyze and catalog available iterations across all simulation restarts.
 
     This function systematically scans Einstein Toolkit simulation output
@@ -861,7 +862,7 @@ def iterations(param, skip_last=True, verbose=True):
         # Display existing content from previous runs
         it_file.seek(0)
         contents = it_file.read()
-        if verbose:
+        if verbose_file:
             print(contents, flush=True)
 
         # Create its_available dictionary to store iteration data
@@ -902,7 +903,7 @@ def iterations(param, skip_last=True, verbose=True):
         # Process each restart directory
         for restart in all_restarts:
             saveprint(it_file, ' === restart {}'.format(restart), 
-                      verbose=verbose)
+                      verbose=verbose_file)
             its_available[restart] = {}
             
             # Analyze available variables in this restart
@@ -924,13 +925,14 @@ def iterations(param, skip_last=True, verbose=True):
                     vars_available)
                 saveprint(it_file, '3D variables available: '
                           + str(aurel_vars_available), 
-                          verbose=verbose)
+                          verbose=verbose_file)
                 its_available[restart]['var available'] = aurel_vars_available
                 
                 # Select representative file for iteration analysis
                 # Preferably a light file that only has one variable
-                files_with_single_var = [var for var in list(vars_and_files.keys())
-                                        if len(var)==1]
+                files_with_single_var = [
+                    var for var in list(vars_and_files.keys()) 
+                    if len(var)==1]
                 if files_with_single_var == []:
                     var_to_read = list(vars_and_files.keys())[0]
                 else:
@@ -940,7 +942,7 @@ def iterations(param, skip_last=True, verbose=True):
                             break
                 file_for_it = vars_and_files[var_to_read][0]
                 saveprint(it_file, 'Reading iterations in: '
-                         + file_for_it, verbose=verbose)
+                         + file_for_it, verbose=verbose_file)
                 with h5py.File(file_for_it, 'r') as f:
                     
                     # only consider one of the variables in this file
@@ -956,7 +958,7 @@ def iterations(param, skip_last=True, verbose=True):
                     saveprint(
                         it_file, 
                         'it = {} -> {}'.format(np.min(allits), np.max(allits)), 
-                        verbose=verbose)
+                        verbose=verbose_file)
                     its_available[restart]['its available'] = [
                         np.min(allits), np.max(allits)]
                         
@@ -972,8 +974,9 @@ def iterations(param, skip_last=True, verbose=True):
                         if keysrl!=[]:
                             # Check if there are chunk numbers
                             if parse_hdf5_key(keysrl[0])['c'] is not None:
-                                cs = [parse_hdf5_key(k)['c'] for k in keysrl]
-                                chosen_c = ' c=' + str(np.sort(list(set(cs)))[-1])
+                                cs = list(set([parse_hdf5_key(k)['c'] 
+                                               for k in keysrl]))
+                                chosen_c = ' c=' + str(np.sort(cs)[-1])
                             else:
                                 chosen_c = ''
                             keysrl = [k for k in keysrl if chosen_c in k]
@@ -981,25 +984,23 @@ def iterations(param, skip_last=True, verbose=True):
                             # and look at what iterations they have
                             allits = np.sort([parse_hdf5_key(k)['it'] 
                                               for k in keysrl])
-    
+
+                            rlkey = 'rl = {}'.format(rl)
                             if len(allits)>1:
-                                saveprint(
-                                    it_file, 
-                                    'rl = {} at it = np.arange({}, {}, {})'.format(
-                                    rl, np.min(allits), np.max(allits), 
-                                    np.diff(allits)[0]), 
-                                    verbose=verbose)
-                                its_available[restart]['rl = {}'.format(rl)] = [
+                                itkey = 'it = np.arange({}, {}, {})'.format(
+                                    np.min(allits), np.max(allits), 
+                                    np.diff(allits)[0])
+                                its_available[restart][rlkey] = [
                                     np.min(allits), np.max(allits), 
                                     np.diff(allits)[0]]
                             else:
-                                saveprint(it_file, 'rl = {} at it = {}'.format(
-                                    rl, allits), 
-                                    verbose=verbose)
-                                its_available[restart]['rl = {}'.format(rl)] = allits
+                                itkey = 'it = {}'.format(allits)
+                                its_available[restart][rlkey] = allits
+                            saveprint(it_file, rlkey+' at '+itkey, 
+                                      verbose=verbose_file)
                                 
         # Overall iterations
-        its_available = collect_overall_iterations(its_available, verbose)
+        its_available = collect_overall_iterations(its_available, verbose_file)
         return its_available
 
 def read_iterations(param, skip_last = True, verbose=False):
@@ -1060,10 +1061,8 @@ def read_iterations(param, skip_last = True, verbose=False):
         # Empty file handling
         if contents == '':
             if verbose:
-                print('File is empty, removing it and running iterations()'
-                      + ' to write it.', flush=True)
-            os.remove(it_filename)
-            return iterations(param, skip_last=skip_last, verbose=verbose)
+                print('File is empty', flush=True)
+            return {}
         else:
             lines = contents.split("\n")
             # each line is a dictionary entry
@@ -1086,13 +1085,15 @@ def read_iterations(param, skip_last = True, verbose=False):
                 # iterations available for said refinement level
                 elif 'rl = ' in l:
                     rl = l.split('rl = ')[1].split(' ')[0]
+                    rlkey = 'rl = ' + rl
                     if 'arange' in l:
-                        itmin = int(l.split('(')[1].split(',')[0])
-                        itmax = int(l.split(', ')[1])
-                        dit = int(l.split(', ')[2].split(')')[0])
-                        its_available[restart_nbr]['rl = '+rl] = [itmin, itmax, dit]
+                        it_list = [int(l.split('(')[1].split(',')[0]), 
+                                   int(l.split(', ')[1]), 
+                                   int(l.split(', ')[2].split(')')[0])]
+                        its_available[restart_nbr][rlkey] = it_list
                     else:
-                        its_available[restart_nbr]['rl = '+rl] = [int(l.split('[')[1].split(']')[0])]
+                        it_list = [int(l.split('[')[1].split(']')[0])]
+                        its_available[restart_nbr][rlkey] = it_list
             return its_available
 
 def collect_overall_iterations(its_available, verbose):
@@ -1132,7 +1133,7 @@ def collect_overall_iterations(its_available, verbose):
             }
     """
     # First collect all the iterations, gradually merging them together
-    # Start with base level then gradually increment by one to consider them all
+    # Start with base level then gradually increment to consider them all
     rl = 0
     its_available['overall'] = {}
     if verbose:
@@ -1145,7 +1146,7 @@ def collect_overall_iterations(its_available, verbose):
         for restart in list(its_available.keys()):
             rlkey = 'rl = {}'.format(rl)
             if rlkey in list(its_available[restart].keys()):
-                # rl has been found, so the while loop will be continued afterwards
+                # rl found, so the while loop will be continued afterwards
                 rl_to_do = True
                 rl_it_situation = its_available[restart][rlkey]
                 if it_situation == []:
@@ -1186,7 +1187,8 @@ def collect_overall_iterations(its_available, verbose):
                                 rl_it_situation[1], 
                                 rl_it_situation[2]):
                                 it_situation[-1] = list(rl_it_situation)
-                            elif (abs(rl_it_situation[0] - prev_rl_it_situation[0]) 
+                            elif (abs(rl_it_situation[0] 
+                                      - prev_rl_it_situation[0]) 
                                   == rl_it_situation[2]):
                                 it_situation[-1] = [prev_rl_it_situation[0], 
                                                     rl_it_situation[1], 
@@ -1214,7 +1216,8 @@ def collect_overall_iterations(its_available, verbose):
                     if len(iit_situation)>1:
                         # If it's an array, print np.arange
                         it_situation_string += 'np.arange({}, {}, {})'.format(
-                            iit_situation[0], iit_situation[1], iit_situation[2])
+                            iit_situation[0], iit_situation[1], 
+                            iit_situation[2])
                     else:
                         # If it's just one then give it directly
                         it_situation_string += '{}'.format(iit_situation[0])
@@ -1277,8 +1280,8 @@ def get_content(param, restart=0, overwrite=False,
         - 'simpath': Path to simulation root directory
         - 'simname': Simulation name
     restart : int, optional
-        Restart number to analyze. Default 0.
-        Used to construct the path to the ET output directory containing .h5 files.
+        Restart number to analyze. Default 0. Used to construct the path to 
+        the ET output directory containing .h5 files.
         Example: "/simulations/BHB/output-0000/BHB/"
 
     overwrite : bool, optional
@@ -1512,7 +1515,8 @@ def read_ET_data(param, **kwargs):
     # =========================================================================
     # ======== set up iterations to get and which restart it's in
     # Overall information
-    its_available = read_iterations(param, verbose=verbose)
+    kwargs['verbose_file'] = False
+    its_available = iterations(param, **kwargs)
     # use user provided restart
     if restart >= 0:
         restarts_available = [restart]
@@ -1856,7 +1860,8 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                      and (parse_hdf5_key(k)['rl'] == rl))]
                     if not relevant_keys:
                         raise ValueError(
-                            f"Could not find {variables} for it {iit} and rl {rl} in file: {filepath}")
+                            f"Could not find {variables} for it {iit}"
+                            + f" and rl {rl} in file: {filepath}")
                         
                     # find the actual number of chunks
                     if cmax == 'in file':
@@ -1952,7 +1957,8 @@ def join_chunks(cut_data, **kwargs):
     cmax = len(all_keys) - 1
 
     if veryextraverbose:
-        print(f'There are {cmax} chunks, here are their keys and shape', flush=True)
+        print(f'There are {cmax} chunks, here are their keys and shape', 
+              flush=True)
         for i, k in enumerate(all_keys):
             print(i, k, np.shape(cut_data[k]))
         print()
