@@ -42,7 +42,7 @@ est_functions = {
 }
 
 def over_time(data, fd, vars=[], estimates=[], 
-              nbr_processes=1, verbose=True, veryverbose=False):
+              nbr_processes=1, verbose=True, veryverbose=False, **kwargs):
     """Calculate variables from the data and store them in the data dictionary.
     
     This function processes time series data by creating AurelCore instances 
@@ -83,6 +83,13 @@ def over_time(data, fd, vars=[], estimates=[],
         If True, prints debug information about the calculation process.
     veryverbose : bool, optional
         If True, provides more detailed debug information. Defaults to False.
+    **kwargs : dict, optional
+        Additional parameters passed to AurelCore initialization, such as:
+        
+        - Lambda : float, cosmological constant
+        - tetrad_to_use : str, tetrad choice for Weyl calculations
+        - Psi4_lm_lmax : int, maximum l-mode for Psi4 decomposition
+        - Psi4_lm_radius : float, radius for Psi4 extraction
     
     Returns
     -------
@@ -201,7 +208,7 @@ def over_time(data, fd, vars=[], estimates=[],
         
         # Calculate first instance
         data_list_i0, scalarkeys = process_single_timestep(
-            input_data_list[0], fd, vars, estimates, verbose, None)
+            input_data_list[0], fd, vars, estimates, verbose, None, **kwargs)
         data_list = [data_list_i0]
         del data_list_i0
         
@@ -214,7 +221,7 @@ def over_time(data, fd, vars=[], estimates=[],
                         flush=True)
                     
                 results = [process_single_timestep(item, fd, vars, estimates, 
-                                                   veryverbose, scalarkeys)
+                                                   veryverbose, scalarkeys, **kwargs)
                            for item in input_data_list[1:]]
             else:
                 # Parallel processing with Pool
@@ -237,7 +244,7 @@ def over_time(data, fd, vars=[], estimates=[],
                 client = Client(n_workers=1, threads_per_worker=nbr_processes)
                 def process_wrapper(item):
                     return process_single_timestep(
-                        item, fd, vars, estimates, veryverbose, scalarkeys)
+                        item, fd, vars, estimates, veryverbose, scalarkeys, **kwargs)
                 with ProgressBar(), Profiler() as prof, ResourceProfiler() as rprof:
                     #delayed_tasks = [delayed(process_wrapper)(chunk) for chunk in chunks]
                     delayed_tasks = [delayed(process_wrapper)(chunk) for chunk in input_data_list[1:]]
@@ -269,7 +276,7 @@ def over_time(data, fd, vars=[], estimates=[],
         return data
 
 def process_single_timestep(data, fd, vars, estimates, 
-                            verbose, scalarkeys):
+                            verbose, scalarkeys, **kwargs):
     """Process a single time step for variable calculation and estimation.
     
     This function creates an AurelCore instance for the specified time step,
@@ -310,6 +317,8 @@ def process_single_timestep(data, fd, vars, estimates,
     scalarkeys : list of str
         List of keys in `data` that contain 3D scalar arrays. If None,
         the function will determine these keys automatically.
+    **kwargs : dict, optional
+        Additional parameters passed to AurelCore initialization.
     
     Returns
     -------
@@ -332,7 +341,7 @@ def process_single_timestep(data, fd, vars, estimates,
     # ====== Calculate vars if requested
     if vars:
         # Create a new AurelCore instance for this time step
-        rel = core.AurelCore(fd, verbose=verbose)
+        rel = core.AurelCore(fd, verbose=verbose, **kwargs)
         
         # Set all existing data values for this time step 
         # (except variables to be calculated)

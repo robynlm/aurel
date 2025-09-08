@@ -31,7 +31,6 @@ import jax.numpy as jnp
 from collections.abc import Mapping, Sequence
 from IPython.display import display, Math, Latex
 from . import maths
-from . import parameters
 import spinsfast
 
 # Descriptions for each AurelCore.data entry and function
@@ -338,6 +337,17 @@ class AurelCore():
         aurel.finitedifference.FiniteDifference
     verbose : bool
         If True, display messages about the calculations.
+    Lambda : float, optional, also attribute
+        Cosmological constant. Default is 0.0.
+    tetrad_to_use : str, optional, also attribute
+        Tetrad choice for Weyl scalar calculations.
+        Default is "quasi-Kinnersley". Any other value provides ...
+    Psi4_lm_lmax : int, optional, also attribute
+        Maximum l-mode for Psi4 spherical harmonic decomposition.
+        Default is 8.
+    Psi4_lm_radius : float, optional, also attribute
+        Radius for Psi4 extraction in code units. 
+        Default is 0.9 * min(Lx, Ly, Lz).
 
     Attributes
     ----------
@@ -350,17 +360,6 @@ class AurelCore():
     fancy_print : bool
         (*bool*) - If True, display messages in a fancy ipython format, 
         else normal print is used. Default is True.
-    Lambda : float
-        (*float*) - Cosmological constant. Default is 0.0.
-    tetrad_to_use : str
-        (*str*) - Tetrad to use for calculations. 
-        Default is "quasi-Kinnersley".
-    Psi4_lm_lmax : int
-        (*int*) - Maximum ell value used, increase this to improve convergence.
-        Default is 8.
-    Psi4_lm_radius : float
-        (*float*) - Radius for the Psi4_lm calculations. 
-        Default is 0.9 * min(Lx, Ly, Lz).
     kappa : float
         (*float*) - Einstein's constant with G = c = 1. Default is 8 * pi.
     calculation_count : int
@@ -376,7 +375,8 @@ class AurelCore():
         (*dict*) - Dictionary to keep track of the importance of each variable
         for cache cleanup. To never delete a variable, set its importance to 0.
     """
-    def __init__(self, fd, verbose=True):
+    
+    def __init__(self, fd, verbose=True, **kwargs):
         """Initialize the AurelCore class."""
 
         self.param = fd.param
@@ -387,10 +387,20 @@ class AurelCore():
         self.verbose = verbose
         self.fancy_print = True
 
+        # Kwargs or use defaults
+        self.Lambda = kwargs.get('Lambda', 0.0)
+        self.tetrad_to_use = kwargs.get('tetrad_to_use', "quasi-Kinnersley")
+        self.Psi4_lm_lmax = kwargs.get('Psi4_lm_lmax', 8)
+        self.Psi4_lm_radius = kwargs.get(
+            'Psi4_lm_radius', 
+            0.9 * min(self.param['Nx']*self.param['dx'] * 0.5, 
+                       self.param['Ny']*self.param['dy'] * 0.5,
+                       self.param['Nz']*self.param['dz'] * 0.5))
+        
         # Physics variables
         self.kappa = 8*jnp.pi  # Einstein's constant with G = c = 1
-        self.myprint(f"Cosmological constant is set to aurel.Lambda"
-                     + f" = {parameters.Lambda}")
+        self.myprint(f"Cosmological constant set to AurelCore.Lambda"
+                     + f" = {self.Lambda:.2e}")
 
         # data dictionary where everything is stored
         self.data = {}
@@ -984,7 +994,7 @@ class AurelCore():
                 + self["Ktrace"]**2 
                 - jnp.einsum('ij..., ij... -> ...', 
                             self["Kdown3"], self["Kup3"])
-                - 2 * parameters.Lambda) / (2 * self.kappa)
+                - 2 * self.Lambda) / (2 * self.kappa)
     
     def fluxup3_n_fromMom(self):
         CovD_term = self.s_covd(
@@ -1141,7 +1151,7 @@ class AurelCore():
         return 2 * (
             self["shear2"]
             - (1/3) * self["theta"]**2
-            + parameters.Lambda
+            + self.Lambda
             + self.kappa * self["rho"]
         )
 
@@ -1324,7 +1334,7 @@ class AurelCore():
     def st_Ricci_down4(self):
         if "Tdown4" in self.data.keys():
             return (
-            parameters.Lambda * self["gdown4"]
+            self.Lambda * self["gdown4"]
             + self.kappa * (
                self["Tdown4"]
                 - 0.5 * self["Ttrace"] * self["gdown4"]))
@@ -1336,7 +1346,7 @@ class AurelCore():
             return self["st_Ricci_down4"][1:,1:]
         else:
             return (
-                parameters.Lambda * self["gammadown3"]
+                self.Lambda * self["gammadown3"]
                 + self.kappa * (
                     self["Tdown4"][1:,1:]
                     - 0.5 * self.trace4(self["Tdown4"]) * self["gammadown3"]))
@@ -1360,7 +1370,7 @@ class AurelCore():
                 - jnp.einsum('ij..., ij... -> ...', 
                             self["Kdown3"], self["Kup3"])
                 - 2 * self.kappa * self["rho_n"] 
-                - 2 * parameters.Lambda)
+                - 2 * self.Lambda)
     
     def Hamiltonian_Escale(self):
         return jnp.sqrt(abs(
@@ -1369,7 +1379,7 @@ class AurelCore():
             + jnp.einsum('ij..., ij... -> ...', 
                         self["Kdown3"], self["Kup3"])**2 
             + (2 * self.kappa * self["rho_n"])**2 
-            + (2 * parameters.Lambda)**2))
+            + (2 * self.Lambda)**2))
     
     def Momentumup3(self):
         if "Momentumx" in self.data.keys():
@@ -1458,23 +1468,23 @@ class AurelCore():
             return [psi0, psi1, psi2, psi3, psi4]
         
     def Psi4_lm(self):
-        self.myprint(f"Maximum l-mode is set to aurel.Psi4_lm_lmax"
-                     + f" = {parameters.Psi4_lm_lmax}")
-        self.myprint(f"Radius is set to aurel.Psi4_lm_radius"
-                     + f" = {parameters.Psi4_lm_radius}")
-        Ntheta = 2 * parameters.Psi4_lm_lmax + 1
-        Nphi = 2 * parameters.Psi4_lm_lmax + 1
+        self.myprint(f"Maximum l-mode is set to AurelCore.Psi4_lm_lmax"
+                     + f" = {self.Psi4_lm_lmax}")
+        self.myprint(f"Radius is set to AurelCore.Psi4_lm_radius"
+                     + f" = {self.Psi4_lm_radius:.2e}")
+        Ntheta = 2 * self.Psi4_lm_lmax + 1
+        Nphi = 2 * self.Psi4_lm_lmax + 1
         # spinsfast assumes band-limited functions
 
         theta = jnp.linspace(0, jnp.pi, Ntheta)
         phi = jnp.linspace(0, 2*jnp.pi, Nphi, endpoint=False)
         theta_sphere, phi_sphere = jnp.meshgrid(theta, phi, indexing='ij')
 
-        x_sphere = (parameters.Psi4_lm_radius 
+        x_sphere = (self.Psi4_lm_radius 
                     * jnp.sin(theta_sphere) * jnp.cos(phi_sphere))
-        y_sphere = (parameters.Psi4_lm_radius 
+        y_sphere = (self.Psi4_lm_radius 
                     * jnp.sin(theta_sphere) * jnp.sin(phi_sphere))
-        z_sphere = (parameters.Psi4_lm_radius 
+        z_sphere = (self.Psi4_lm_radius 
                     * jnp.cos(theta_sphere))
         points_sphere = jnp.stack(
             (x_sphere.flatten(), y_sphere.flatten(), z_sphere.flatten()), 
@@ -1503,11 +1513,11 @@ class AurelCore():
                      + "may differ from others as different codes use "
                      + "different normalisations, integration schemes, "
                      + "conventions...")
-        alm = spinsfast.map2salm(psi4_sphere, -2, parameters.Psi4_lm_lmax)
+        alm = spinsfast.map2salm(psi4_sphere, -2, self.Psi4_lm_lmax)
 
         # change to a format I like better
         lm_dict = {}
-        for l in range(parameters.Psi4_lm_lmax + 1):
+        for l in range(self.Psi4_lm_lmax + 1):
             for m in range(-l, l + 1):
                 lm_dict[l, m] = alm[l**2 + m + l]
         return lm_dict
@@ -1627,9 +1637,9 @@ class AurelCore():
 
         """
 
-        self.myprint(f"Tetrad is set to aurel.tetrad_to_use"
-                     + f" = {parameters.tetrad_to_use}")
-        if parameters.tetrad_to_use == "quasi-Kinnersley":
+        self.myprint(f"Tetrad is set to AurelCore.tetrad_to_use"
+                     + f" = {self.tetrad_to_use}")
+        if self.tetrad_to_use == "quasi-Kinnersley":
             nup4 = jnp.array(
                 [jnp.ones(self.data_shape), 
                  jnp.zeros(self.data_shape),

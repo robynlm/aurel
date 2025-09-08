@@ -13,7 +13,7 @@ Omega_l_today = 1 - Omega_m_today # dark energy density parameter today
 Hprop_today = (h * c) / 2997.9 # Hubble constant
 t_today_EdS = 2 / (3 * Hprop_today) # time today in EdS universe
 Lambda = (Omega_l_today * 3 * (Hprop_today ** 2) 
-                       / (c ** 2)) # cosmological constant
+                  / (c ** 2)) # cosmological constant
 
 def a(t, analytical=False):
     """Scale factor"""

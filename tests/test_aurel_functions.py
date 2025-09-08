@@ -6,7 +6,7 @@ class TestAurelCoreFunctions:
     
     @pytest.fixture(autouse=True)
     def setup(self):
-        L = 3
+        L = 30.0
         N = 39
         param = { 'Nx': N, 'Ny': N, 'Nz': N, 
                 'xmin': -L/2, 'ymin': -L/2, 'zmin': -L/2, 
