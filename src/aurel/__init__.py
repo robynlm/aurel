@@ -4,5 +4,6 @@ from .core import *
 from .finitedifference import *
 from .maths import *
 from .numerical import *
+from .parameters import *
 from .reading import *
 from .time import *
