@@ -421,7 +421,9 @@ aurel_to_ET_varnames = {
     'velup3' : ['vel[0]', 'vel[1]', 'vel[2]'],
     'Hamiltonian' : ['H'],
     'Momentumup3' : ['M1', 'M2', 'M3'],
-    'Weyl_Psi' : ['Psi4r', 'Psi4i']
+    'Weyl_Psi' : ['Psi4r', 'Psi4i'],
+    'Weyl_Psi4r' : ['Psi4r'],
+    'Weyl_Psi4i' : ['Psi4i']
 }
 def transform_vars_aurel_to_ET(var):
     """Transform ET variable names to Aurel variable names.
@@ -1878,9 +1880,12 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
         file_present = os.path.exists(filepath)
         if file_present:
             with h5py.File(filepath, 'r') as f:
+                if veryextraverbose:
+                    print('Reading file: {}'.format(filepath), flush=True)
+                # Find all keys that are valid
                 file_keys = [k for k in f.keys() 
                              if parse_hdf5_key(k) is not None]
-                # collect all it of that file
+                # Collect all it of that file
                 for iit in it:
                     relevant_keys = [k for k in file_keys 
                                      if ((parse_hdf5_key(k)['it'] == iit)
@@ -1922,14 +1927,18 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                             else:
                                 key = key[0]
                             
-                            # cut off ghost grid points
+                            # Read in the variable
+                            if veryextraverbose:
+                                print('Reading key = {}'.format(key), 
+                                      flush=True)
+                            var = np.array(f[key])
+                            # Cut off ghost grid points
                             ghost_x = f[key].attrs['cctk_nghostzones'][0]
                             ghost_y = f[key].attrs['cctk_nghostzones'][1]
                             ghost_z = f[key].attrs['cctk_nghostzones'][2]
-                            var = np.array(f[key])[
-                                ghost_z:-ghost_z, 
-                                ghost_y:-ghost_y, 
-                                ghost_x:-ghost_x]
+                            var = var[ghost_z:-ghost_z, 
+                                      ghost_y:-ghost_y, 
+                                      ghost_x:-ghost_x]
                             iorigin = tuple(f[key].attrs['iorigin'])
                             var_chunks[iit][v][iorigin] = var
                             del var
@@ -1942,7 +1951,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
 
     # per iteration
     # join the chunks together + fix the indexing to be x, y, z
-    var = {}#v:[] for v in variables}
+    var = {}
     for iit in it:
         for v in variables:
             aurel_v = transform_vars_ET_to_aurel(v)
@@ -2015,7 +2024,7 @@ def join_chunks(cut_data, **kwargs):
             for k in ndata_groups.keys():
                 shapes = {key:np.shape(item) 
                           for key, item in ndata_groups[k].items()}
-                print('Group ', k, ' has elements with shapes: ', shapes, 
+                print(f"Group {k} has elements with shapes: {shapes}", 
                       flush=True)
         
         # Then append them together
@@ -2054,7 +2063,7 @@ def join_chunks(cut_data, **kwargs):
             for k in nndata_groups.keys():
                 shapes = {key:np.shape(item) 
                           for key, item in nndata_groups[k].items()}
-                print('Group ', k, ' has elements with shapes: ', shapes, 
+                print(f"Group {k} has elements with shapes: {shapes}", 
                       flush=True)
         # Then append them together
         nndata = {}
