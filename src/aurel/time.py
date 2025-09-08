@@ -8,11 +8,18 @@ and applying statistical estimation functions to 3D arrays.
 import jax.numpy as jnp
 from . import core
 import inspect
-import dask.bag as db
+import itertools
+import multiprocessing as mp
+import dask
+from dask import delayed
+from functools import partial
 try:
     from tqdm.notebook import tqdm
 except ImportError:
     from tqdm import tqdm
+from dask.diagnostics import ProgressBar, Profiler, ResourceProfiler
+from dask.diagnostics import visualize
+from dask.distributed import Client, progress
 
 # Dictionary of available estimation functions for 3D arrays
 est_functions = {
@@ -86,6 +93,15 @@ def over_time(data, fd, vars=[], estimates=[],
         If `estimates` is provided, additional keys are added with format 
         '{variable}_{estimation_func}'.
     """
+
+    # Check/define temporal key
+    temporal_key = None
+    for temp in ['it', 'iteration', 't', 'time']:
+        if temp in list(data.keys()):
+            temporal_key = temp
+    if temporal_key is None:
+        raise ValueError("Data dictionary must contain a temporal key: "
+                         "'it', 'iteration', 't', or 'time'.")
     
     # Clean vars list to remove any variables that are already in data
     cleaned_vars = []
@@ -174,48 +190,75 @@ def over_time(data, fd, vars=[], estimates=[],
                             continue
     estimates = cleaned_estimates
     
-    # Only perform variable calculations if vars list is not empty
+    # Only perform variable calculations if lists are not empty
     if vars or estimates:
         
         # Transform dict of lists to a list of dicts
         keys = data.keys()
-        data_list = [dict(zip(keys, values)) for values in zip(*data.values())]
+        input_data_list = [dict(zip(keys, values)) 
+                           for values in zip(*data.values())]
+        del data
         
         # Calculate first instance
         data_list_i0, scalarkeys = process_single_timestep(
-            data_list[0], fd, vars, estimates, verbose, None)
+            input_data_list[0], fd, vars, estimates, verbose, None)
+        data_list = [data_list_i0]
+        del data_list_i0
         
         # Calculate all the other
-        if len(data_list) > 1:
-            if verbose:
-                print("Now processing time steps in parallel "
-                      +f"with Dask client and nbr_processes = {nbr_processes}",
-                      flush=True)
-            # Create a wrapper function that captures the fixed parameters
-            def process_wrapper(data_dict):
-                return process_single_timestep(
-                    data_dict, fd, vars, estimates, veryverbose, scalarkeys)
-            # Iterate in parallel through each time step in the data
-            bag = db.from_sequence(data_list[1:], npartitions=nbr_processes)
-            parts = bag.map(process_wrapper).to_delayed()
-            results = []
-            for part in tqdm(parts):
-                results.extend(part.compute())
-            # Combine and sort the results by 'it' key
-            sorted_results = sorted(results, key=lambda x: x['it'])
-            data_list = [data_list_i0] + sorted_results
-        else:
-            data_list = [data_list_i0]
+        if len(input_data_list) > 1:
+            if nbr_processes == 1:
+                # Sequential processing
+                if verbose:
+                    print("Now processing remaining time steps sequentially",
+                        flush=True)
+                    
+                results = [process_single_timestep(item, fd, vars, estimates, 
+                                                   veryverbose, scalarkeys)
+                           for item in input_data_list[1:]]
+            else:
+                # Parallel processing with Pool
+                #chunk_size = max(1, (len(input_data_list)-1) // (nbr_processes * 4))
+                #chunks = [input_data_list[i:i + chunk_size] 
+                #          for i in range(1, len(input_data_list), chunk_size)]
+                if verbose:
+                    print("Now processing remaining time steps in parallel"
+                        + f" with nbr_processes = {nbr_processes}", flush=True)
+                        #+ f" and nbr chunks = {len(chunks)}",
+                        #flush=True)
+                    #chunk_sizes = [len(chunk) for chunk in chunks]
+                    #print(f"Chunk sizes: {chunk_sizes}", flush=True)
+                #def process_wrapper(chunk):
+                #    results = []
+                #    for item in chunk:
+                #        results.append(process_single_timestep(
+                #        item, fd, vars, estimates, veryverbose, scalarkeys))
+                #    return results
+                client = Client(n_workers=1, threads_per_worker=nbr_processes)
+                def process_wrapper(item):
+                    return process_single_timestep(
+                        item, fd, vars, estimates, veryverbose, scalarkeys)
+                with ProgressBar(), Profiler() as prof, ResourceProfiler() as rprof:
+                    #delayed_tasks = [delayed(process_wrapper)(chunk) for chunk in chunks]
+                    delayed_tasks = [delayed(process_wrapper)(chunk) for chunk in input_data_list[1:]]
+                    results = dask.compute(*delayed_tasks, scheduler='threads', num_workers=nbr_processes)
+                visualize([prof, rprof])
+                #results = list(itertools.chain.from_iterable(chunked_results))
+            # Combine and sort the results by temporal_key key
+            data_list += results
+        del input_data_list
+        data_list_sorted = sorted(data_list, key=lambda x: x[temporal_key])
+        del data_list
         
         # Transform list of dicts to a dict of lists
-        keys = data_list[0].keys()
+        keys = data_list_sorted[0].keys()
         data = {key: [] for key in keys}
-        for i in range(len(data_list)):
+        for i in range(len(data_list_sorted)):
             for key in keys:
-                data[key].append(data_list[i][key])
+                data[key].append(data_list_sorted[i][key])
         for key in keys:
             data[key] = jnp.array(data[key])
-        del data_list
+        del data_list_sorted
     
         if verbose:
             print("Done!", flush=True)
