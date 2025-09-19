@@ -31,7 +31,6 @@ import jax.numpy as jnp
 from collections.abc import Mapping, Sequence
 from IPython.display import display, Math, Latex
 from . import maths
-import s2fft
 
 # Descriptions for each AurelCore.data entry and function
 # assumed variables need to be listed in docs/source/source/generate_rst.py
@@ -304,10 +303,10 @@ descriptions = {
     "Weyl_Psi": (r"$\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$"
         + r" List of Weyl scalars for an null vector base defined"
         + r" with AurelCore.tetrad_to_use"),
-    "Psi4_lm": (r"$\Psi_4^{l,m}$ Dictionary of spin weighted spherical"
-        + r" harmonic decomposition of the 4th Weyl scalar,"
-        + r" with AurelCore.Psi4_lm_radius."
-        + r" ``s2fft`` is used for the decomposition."),
+    #"Psi4_lm": (r"$\Psi_4^{l,m}$ Dictionary of spin weighted spherical"
+    #    + r" harmonic decomposition of the 4th Weyl scalar,"
+    #    + r" with AurelCore.Psi4_lm_radius."
+    #    + r" ``s2fft`` is used for the decomposition."),
     "Weyl_invariants": (r"$I, \; J, \; L, \; K, \; N$"
         + r" Dictionary of Weyl invariants"),
     "eweyl_u_down4": (r"$E^{\{u\}}_{\alpha\beta}$ Electric part of the Weyl"
@@ -1463,6 +1462,7 @@ class AurelCore():
                             self["st_Weyl_down4"], lup4, mbup4, lup4, mbup4)
             return [psi0, psi1, psi2, psi3, psi4]
         
+    """
     def Psi4_lm(self):
         # TODO: make list of radius
         self.myprint(f"Radius is set to AurelCore.Psi4_lm_radius"
@@ -1514,6 +1514,7 @@ class AurelCore():
             for m in range(-l, l + 1):
                 lm_dict[l, m] = alm[l, m + L - 1]
         return lm_dict
+    """
     
     def Weyl_invariants(self):
         Psis = self["Weyl_Psi"]

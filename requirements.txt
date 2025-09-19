@@ -2,7 +2,6 @@
 numpy          # for numerical computing
 scipy          # for scientific computing
 sympy          # for analytical calculations and checks
-s2fft[all]     # for fast spherical harmonic transforms
 matplotlib     # for plotting
 h5py           # for reading/writing hdf5 files
 glob2          # for recursive file searching
