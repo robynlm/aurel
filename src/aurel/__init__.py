@@ -8,4 +8,5 @@ from .reading import *
 from .time import *
 
 def helloworld():
+    """A simple function that prints a welcome message."""
     print("Hello! Welcome to Aurel!", flush=True)
