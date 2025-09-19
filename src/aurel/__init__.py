@@ -6,3 +6,6 @@ from .maths import *
 from .numerical import *
 from .reading import *
 from .time import *
+
+def helloworld():
+    print("Hello! Welcome to Aurel!", flush=True)

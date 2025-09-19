@@ -7,15 +7,7 @@ You just need to create a virtual environment and install aurel there.
 Create a virtual environment
 ++++++++++++++++++++++++++++
 
-You need to install FFTW, typically on an HPC this is one of the modules available, so find its name (replace fftw_name below), load it and check its paths
-
-.. code-block:: bash
-
-   module avail
-   module load fftw_name
-   module show fftw_name
-
-Now create a virtual environment and activate it.
+Create a virtual environment and activate it.
 
 .. code-block:: bash
 
@@ -39,32 +31,6 @@ If you want to use aurel in a jupyter notebook, add your virtual environment as 
 
    python -m ipykernel install --user --name=myenv --display-name "Python (myenv)"
 
-To have FFTW loaded in your notebook make sure to load the module before starting up your notebook. 
-
-To do this automatically, in the paths listed previously 
-(with `module show fftw_name`) you should see: 
-`prepend_path("LD_LIBRARY_PATH","/path/to/fftw/lib")`, 
-this needs to be added to the kernel configuration file. So,
-``vim ~/.local/share/jupyter/kernels/myenv/kernel.json`` and edit this to 
-include the path to the FFTW library in the `env` section, 
-so it looks like this (change the path below):
-
-.. code-block:: bash
-   
-   {
-   "argv": [lots of things here, keep them as they are],
-   "env": {
-   "LD_LIBRARY_PATH": "/path/to/fftw/lib:$LD_LIBRARY_PATH"
-   },
-   "display_name": "Python (myenv)",
-   "language": "python",
-   "metadata": {
-   "debugger": true
-   }
-
-In vim, press `i` to enter insert mode, modify/include the `env` section, 
-then press `Esc` to exit insert mode, and type `:wq` to save and quit.
-
 Now you can load your jupyter notebook, select the kernel you just created 
 `Python (myenv)` and type in your notebook:
 
@@ -79,7 +45,6 @@ If you want to use aurel in a python script, before running it, activate the env
 
 .. code-block:: bash
 
-   module load fftw_name
    source ~/myenv/bin/activate
    python myscript.py
 

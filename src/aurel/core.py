@@ -31,7 +31,7 @@ import jax.numpy as jnp
 from collections.abc import Mapping, Sequence
 from IPython.display import display, Math, Latex
 from . import maths
-import spinsfast
+import s2fft
 
 # Descriptions for each AurelCore.data entry and function
 # assumed variables need to be listed in docs/source/source/generate_rst.py
@@ -306,8 +306,8 @@ descriptions = {
         + r" with AurelCore.tetrad_to_use"),
     "Psi4_lm": (r"$\Psi_4^{l,m}$ Dictionary of spin weighted spherical"
         + r" harmonic decomposition of the 4th Weyl scalar,"
-        + r" with AurelCore.Psi4_lm_radius and AurelCore.Psi4_lm_lmax."
-        + r" ``spinsfast`` is used for the decomposition."),
+        + r" with AurelCore.Psi4_lm_radius."
+        + r" ``s2fft`` is used for the decomposition."),
     "Weyl_invariants": (r"$I, \; J, \; L, \; K, \; N$"
         + r" Dictionary of Weyl invariants"),
     "eweyl_u_down4": (r"$E^{\{u\}}_{\alpha\beta}$ Electric part of the Weyl"
@@ -342,9 +342,6 @@ class AurelCore():
     tetrad_to_use : str, optional, also attribute
         Tetrad choice for Weyl scalar calculations.
         Default is "quasi-Kinnersley". Any other value provides ...
-    Psi4_lm_lmax : int, optional, also attribute
-        Maximum l-mode for Psi4 spherical harmonic decomposition.
-        Default is 8.
     Psi4_lm_radius : float, optional, also attribute
         Radius for Psi4 extraction in code units. 
         Default is 0.9 * min(Lx, Ly, Lz).
@@ -390,7 +387,6 @@ class AurelCore():
         # Kwargs or use defaults
         self.Lambda = kwargs.get('Lambda', 0.0)
         self.tetrad_to_use = kwargs.get('tetrad_to_use', "quasi-Kinnersley")
-        self.Psi4_lm_lmax = kwargs.get('Psi4_lm_lmax', 8)
         self.Psi4_lm_radius = kwargs.get(
             'Psi4_lm_radius', 
             0.9 * min(self.param['Nx']*self.param['dx'] * 0.5, 
@@ -1468,16 +1464,13 @@ class AurelCore():
             return [psi0, psi1, psi2, psi3, psi4]
         
     def Psi4_lm(self):
-        self.myprint(f"Maximum l-mode is set to AurelCore.Psi4_lm_lmax"
-                     + f" = {self.Psi4_lm_lmax}")
+        # TODO: make list of radius
         self.myprint(f"Radius is set to AurelCore.Psi4_lm_radius"
                      + f" = {self.Psi4_lm_radius:.2e}")
-        Ntheta = 2 * self.Psi4_lm_lmax + 1
-        Nphi = 2 * self.Psi4_lm_lmax + 1
-        # spinsfast assumes band-limited functions
-
-        theta = jnp.linspace(0, jnp.pi, Ntheta)
-        phi = jnp.linspace(0, 2*jnp.pi, Nphi, endpoint=False)
+        L = np.min([self.fd.Nx, self.fd.Ny, self.fd.Nz])
+        sampling = "mw"
+        theta = s2fft.sampling.s2_samples.thetas(L=L, sampling=sampling)
+        phi = s2fft.sampling.s2_samples.phis_equiang(L=L, sampling=sampling)
         theta_sphere, phi_sphere = jnp.meshgrid(theta, phi, indexing='ij')
 
         x_sphere = (self.Psi4_lm_radius 
@@ -1505,21 +1498,21 @@ class AurelCore():
         # This will error if point not in domain
         psi4_sphere = (interp_real(points_sphere) 
                            + 1j * interp_imag(points_sphere))
-        # reshape for spinsfast
-        psi4_sphere = psi4_sphere.reshape(Ntheta, Nphi)
+        psi4_sphere = psi4_sphere.reshape(theta_sphere.shape)
 
         # lm mode of Psi4
-        self.myprint("WARNING: using ``spinsfast``, outputs from this code "
+        self.myprint("WARNING: using ``s2fft``, outputs from this code "
                      + "may differ from others as different codes use "
                      + "different normalisations, integration schemes, "
                      + "conventions...")
-        alm = spinsfast.map2salm(psi4_sphere, -2, self.Psi4_lm_lmax)
+        alm = s2fft.forward(psi4_sphere, L=L, spin=-2, 
+                            sampling=sampling, method="jax")
 
         # change to a format I like better
         lm_dict = {}
-        for l in range(self.Psi4_lm_lmax + 1):
+        for l in range(L):
             for m in range(-l, l + 1):
-                lm_dict[l, m] = alm[l**2 + m + l]
+                lm_dict[l, m] = alm[l, m + L - 1]
         return lm_dict
     
     def Weyl_invariants(self):

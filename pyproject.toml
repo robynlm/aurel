@@ -39,7 +39,7 @@ dependencies = [
     "jax",
     "jaxlib",
     "tqdm",
-    "spinsfast",
+    "s2fft",
     "jupyter",
     "ipykernel",
     "dask[complete]"

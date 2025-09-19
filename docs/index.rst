@@ -34,13 +34,6 @@ advanced numerical computations, including:
 Installation
 ------------
 
-Install FFTW, depending on your operating system, 
-
- * on Ubuntu/Debian you can run: ``sudo apt install libfftw3-dev``
- * on macOS you can run: ``brew install fftw`` or ``sudo port install fftw-3`` depending on your package manager.
-
-This is needed for the `spinsfast package <https://github.com/moble/spinsfast>`_.
-
 Install aurel using `pip <https://pip.pypa.io/en/stable/installation/>`_:
 
 .. code-block:: bash
