@@ -953,13 +953,36 @@ def iterations(param, **kwargs):
                     var for var in list(vars_and_files.keys()) 
                     if len(var)==1]
                 if files_with_single_var == []:
-                    var_to_read = list(vars_and_files.keys())[0]
-                else:
-                    for var in files_with_single_var:
-                        if 'NaNmask' not in var:
-                            var_to_read = var
+                    for var_to_read in list(vars_and_files.keys()):
+                        file_for_it = vars_and_files[var_to_read][0]
+                        try:
+                            if verbose:
+                                print('Checking if ' + file_for_it
+                                      + ' can be read', flush=True)
+                            with h5py.File(file_for_it, 'r') as f:
+                                fkeys = list(f.keys())
                             break
-                file_for_it = vars_and_files[var_to_read][0]
+                        except OSError:
+                            if verbose:
+                                print('ERROR: Could not read ' 
+                                      + file_for_it, flush=True)
+                            continue
+                else:
+                    for var_to_read in files_with_single_var:
+                        if 'NaNmask' not in var_to_read:
+                            file_for_it = vars_and_files[var_to_read][0]
+                            try:
+                                if verbose:
+                                    print('Checking if ' + file_for_it
+                                        + ' can be read', flush=True)
+                                with h5py.File(file_for_it, 'r') as f:
+                                    fkeys = list(f.keys())
+                                break
+                            except OSError:
+                                if verbose:
+                                    print('ERROR: Could not read ' 
+                                        + file_for_it, flush=True)
+                            continue
                 saveprint(it_file, 'Reading iterations in: '
                          + file_for_it, verbose=verbose_file)
                 with h5py.File(file_for_it, 'r') as f:
