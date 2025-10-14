@@ -31,7 +31,6 @@ For multiple simulation locations, use colon separation:
 """
 
 import os
-import jax.numpy as jnp
 import numpy as np
 import glob
 import h5py
@@ -285,7 +284,7 @@ def read_aurel_data(param, **kwargs):
                         
                     # Read data if dataset exists, otherwise store None
                     if skey in list(f.keys()):
-                        data[key].append(jnp.array(f[skey]))
+                        data[key].append(np.array(f[skey]))
                     else:
                         data[key].append(None)
     return data
@@ -1987,7 +1986,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
 
 def fixij(f):
     """Fix the x-z indexing as you read in the data."""
-    return jnp.transpose(jnp.array(f), (2, 1, 0))
+    return np.transpose(np.array(f), (2, 1, 0))
 
 def join_chunks(cut_data, **kwargs):
     """Join the chunks of data together.

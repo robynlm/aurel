@@ -54,36 +54,6 @@ then in your python script you can have
 
    import aurel
 
-Parallelisation
----------------
-
-Aurel uses JAX for vectorisation, JIT compilation and parallelisation.
-See the `JAX documentation <https://docs.jax.dev/en/latest/user_guides.html#user-guides>`_ for more information on how to use it.
-
-To accelerate things, make sure anything you pass to aurel is a JAX array.
-
-* In a **jupyter notebook**
-
-.. code-block:: python
-
-   import jax
-   jax.config.update('jax_num_cpu_devices', N)
-   # Replace N with the number of threads you want to use
-   print(jax.devices()) # check the number of devices visible to jax
-   import aurel 
-
-All jax configuration options need to be set before importing aurel.
-
-* In a **python script**
-
-You can put the above in your python script, or before calling the script, put in the terminal or your executable:
-
-.. code-block:: bash
-
-   export XLA_FLAGS="--xla_cpu_multi_thread_eigen=true intra_op_parallelism_threads=N"
-
-Replace N with the number of threads you want to use.
-
 Convergence
 -----------
 
@@ -96,15 +66,6 @@ See `Schwarzschild_check notebook <https://github.com/robynlm/aurel/blob/main/no
 
 * Increase the grid resolution in your simulation, or reduce the grid spacing 
   for generated data.
-
-* Increase float precision, default for jax is float32, you can increase 
-  this by configuring jax before importing aurel:
-
-.. code-block:: python
-
-   import jax
-   jax.config.update("jax_enable_x64", True)
-   import aurel
 
 Citation
 --------
@@ -133,31 +94,4 @@ include::
      doi       = {10.1088/1361-6382/acd6cf},
      archivePrefix = {arXiv},
      eprint    = {2211.08133},
-     primaryClass = {gr-qc}}
-
-If you use aurel to calculate $\Psi_{4}^{l,m}$ then you ought to also cite 
-the `spinsfast package <https://github.com/moble/spinsfast>`_::
-
-   @software{M.Boyle_Okarin_2024,
-     title     = {moble/spinsfast: Release v2022.4.10},
-     author    = {Boyle, Mike and Okarin},
-     publisher = {Zenodo},
-     month     = {dec},
-     year      = {2024},
-     version   = {v2022.4.10},
-     doi       = {10.5281/zenodo.14522969}}
-
-   @article{K.M.Huffenberger_B.D.Wandel_2010,
-     title     = {FAST AND EXACT SPIN-s SPHERICAL HARMONIC TRANSFORMS},
-     author    = {Huffenberger, Kevin M. and Wandelt, Benjamin D.},
-     journal   = {The Astrophysical Journal Supplement Series},
-     publisher = {The American Astronomical Society},
-     volume    = {189},
-     number    = {2},
-     pages     = {255},
-     month     = {jul},
-     year      = {2010},
-     doi       = {10.1088/0067-0049/189/2/255},
-     archivePrefix = {astro-ph},
-     eprint    = {1007.3514},
      primaryClass = {gr-qc}}

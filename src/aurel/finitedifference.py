@@ -19,8 +19,6 @@ It contains the following classes and functions:
 """
 
 import numpy as np
-import jax
-import jax.numpy as jnp
 from . import maths
 
 ###############################################################################
@@ -28,7 +26,6 @@ from . import maths
 ###############################################################################
 
 # 4th order
-@jax.jit
 def fd4_backward(f, i, inverse_dx):
     """4th order backward finite difference scheme."""
     return ((25/12) * f[i]
@@ -37,7 +34,6 @@ def fd4_backward(f, i, inverse_dx):
             + (-4/3) * f[i-3]
             + (1/4) * f[i-4]) * inverse_dx
 
-@jax.jit
 def fd4_centered(f, i, inverse_dx):
     """4th order centered finite difference scheme."""
     return ((1/12) * f[i-2]
@@ -45,7 +41,6 @@ def fd4_centered(f, i, inverse_dx):
             + (2/3) * f[i+1]
             + (-1/12) * f[i+2]) * inverse_dx
 
-@jax.jit
 def fd4_forward(f, i, inverse_dx):
     """4th order forward finite difference scheme."""
     return ((-25/12) * f[i]
@@ -55,7 +50,6 @@ def fd4_forward(f, i, inverse_dx):
             + (-1/4) * f[i+4]) * inverse_dx
     
 # 6th order
-@jax.jit
 def fd6_backward(f, i, inverse_dx):
     """6th order backward finite difference scheme."""
     return ((49/20) * f[i]
@@ -66,7 +60,6 @@ def fd6_backward(f, i, inverse_dx):
             + (-6/5) * f[i-5]
             + (1/6) * f[i-6]) * inverse_dx
 
-@jax.jit
 def fd6_centered(f, i, inverse_dx):
     """6th order centered finite difference scheme."""
     return ((-1/60) * f[i-3]
@@ -75,8 +68,7 @@ def fd6_centered(f, i, inverse_dx):
             + (3/4) * f[i+1]
             + (-3/20) * f[i+2]
             + (1/60) * f[i+3]) * inverse_dx
-    
-@jax.jit
+
 def fd6_forward(f, i, inverse_dx):
     """6th order forward finite difference scheme."""
     return ((-49/20) * f[i]
@@ -86,9 +78,8 @@ def fd6_forward(f, i, inverse_dx):
             + (-15/4) * f[i+4]
             + (6/5) * f[i+5]
             + (-1/6) * f[i+6]) * inverse_dx
-    
-# 8th order 
-@jax.jit
+
+# 8th order
 def fd8_backward(f, i, inverse_dx):
     """8th order backward finite difference scheme."""
     return ((761/280) * f[i]
@@ -100,8 +91,7 @@ def fd8_backward(f, i, inverse_dx):
             + (14/3) * f[i-6]
             + (-8/7) * f[i-7]
             + (1/8) * f[i-8]) * inverse_dx
-    
-@jax.jit
+
 def fd8_centered(f, i, inverse_dx):
     """8th order centered finite difference scheme."""
     return ((1/280) * f[i-4]
@@ -112,8 +102,7 @@ def fd8_centered(f, i, inverse_dx):
             + (-1/5) * f[i+2]
             + (4/105) * f[i+3]
             + (-1/280) * f[i+4]) * inverse_dx
-    
-@jax.jit
+
 def fd8_forward(f, i, inverse_dx):
     """8th order forward finite difference scheme."""
     return ((-761/280) * f[i]
@@ -128,9 +117,20 @@ def fd8_forward(f, i, inverse_dx):
 
 def fd_map(func, farray, idx, imin, imax):
     """Map the finite difference function over the grid."""
-    return jax.vmap(
-        lambda i: func(farray, i, idx))(
-            jnp.arange(imin, imax))
+    return np.array([func(farray, i, idx) for i in np.arange(imin, imax)])
+    
+def map1(func, f):
+    """Map a function over the indice of a rank 1 tensor."""
+    dimj = np.shape(f)[0]
+    return np.array([func(f[j]) for j in range(dimj)])
+
+def map2(func, f):
+    """Map a function over the two indices of a rank 2 tensor."""
+    dimk = np.shape(f)[0]
+    dimj = np.shape(f)[1]
+    return np.array([[func(f[k, j]) 
+                      for j in range(dimj)] 
+                      for k in range(dimk)])
 
 ###############################################################################
 # Finite differencing class applying the schemes to data grid.
@@ -160,21 +160,21 @@ class FiniteDifference():
 
     Attributes
     ----------
-    xarray, yarray, zarray : jax.numpy.ndarray
-        (*jax.numpy.ndarray*) - 1D arrays of x, y, and z coordinates.
+    xarray, yarray, zarray : numpy.ndarray
+        (*numpy.ndarray*) - 1D arrays of x, y, and z coordinates.
     Nx, Ny, Nz : int
         (*int*) - Number of data points in x, y, and z directions.
     ixcenter, iycenter, izcenter : int
         (*int*) - Indexes of the x, y, and z coordinates closest to zero.
-    x, y, z : jax.numpy.ndarray
-        (*jax.numpy.ndarray*) - 3D arrays of x, y, and z coordinates.
-    cartesian_coords : jax.numpy.ndarray
-        (*jax.numpy.ndarray*) - 3D array of x, y, and z coordinates.
-    r, phi, theta : jax.numpy.ndarray
-        (*jax.numpy.ndarray*) - 3D arrays of radius, azimuth, and inclination 
+    x, y, z : numpy.ndarray
+        (*numpy.ndarray*) - 3D arrays of x, y, and z coordinates.
+    cartesian_coords : numpy.ndarray
+        (*numpy.ndarray*) - 3D array of x, y, and z coordinates.
+    r, phi, theta : numpy.ndarray
+        (*numpy.ndarray*) - 3D arrays of radius, azimuth, and inclination 
         coordinates.
-    spherical_coords : jax.numpy.ndarray
-        (*jax.numpy.ndarray*) - 3D array of radius, azimuth, and inclination 
+    spherical_coords : numpy.ndarray
+        (*numpy.ndarray*) - 3D array of radius, azimuth, and inclination 
         coordinates.
     mask_len : int
         (*int*) - Length of the finite difference mask.
@@ -190,8 +190,10 @@ class FiniteDifference():
 
         self.param = param
         self.boundary = boundary
+        self.fd_order = fd_order
         self.verbose = verbose
         self.veryverbose = veryverbose
+        
         self.dx = self.param['dx']
         self.dy = self.param['dy']
         self.dz = self.param['dz']
@@ -199,15 +201,15 @@ class FiniteDifference():
         self.inverse_dy = 1 / self.param['dy']
         self.inverse_dz = 1 / self.param['dz']
 
-        self.xarray = jnp.arange(
+        self.xarray = np.arange(
             self.param['xmin'], 
             self.param['xmin'] + self.param['Nx'] * self.param['dx'], 
             self.param['dx'])
-        self.yarray = jnp.arange(
+        self.yarray = np.arange(
             self.param['ymin'], 
             self.param['ymin'] + self.param['Ny'] * self.param['dy'], 
             self.param['dy'])
-        self.zarray = jnp.arange(
+        self.zarray = np.arange(
             self.param['zmin'], 
             self.param['zmin'] + self.param['Nz'] * self.param['dz'], 
             self.param['dz'])
@@ -216,38 +218,38 @@ class FiniteDifference():
         self.Ny = len(self.yarray)
         self.Nz = len(self.zarray)
         
-        self.ixcenter = jnp.argmin(abs(self.xarray))
-        self.iycenter = jnp.argmin(abs(self.yarray))
-        self.izcenter = jnp.argmin(abs(self.zarray))
+        self.ixcenter = np.argmin(abs(self.xarray))
+        self.iycenter = np.argmin(abs(self.yarray))
+        self.izcenter = np.argmin(abs(self.zarray))
         
-        self.x, self.y, self.z = jnp.meshgrid(
+        self.x, self.y, self.z = np.meshgrid(
             self.xarray, self.yarray, self.zarray, 
             indexing='ij')
-        self.cartesian_coords = jnp.array([self.x, self.y, self.z])
+        self.cartesian_coords = np.array([self.x, self.y, self.z])
 
         # radius
-        self.r = jnp.sqrt(self.x*self.x + self.y*self.y + self.z*self.z)
+        self.r = np.sqrt(self.x*self.x + self.y*self.y + self.z*self.z)
 
         # azimuth
-        self.phi = jnp.sign(self.y) * jnp.arccos(
+        self.phi = np.sign(self.y) * np.arccos(
             maths.safe_division(
-                self.x, jnp.sqrt(self.x*self.x + self.y*self.y)))
-        mask = jnp.logical_and(jnp.sign(self.y) == 0.0, 
-                               jnp.sign(self.x)<0)
-        self.phi = self.phi.at[mask].set(jnp.pi)
+                self.x, np.sqrt(self.x*self.x + self.y*self.y)))
+        mask = np.logical_and(np.sign(self.y) == 0.0, 
+                               np.sign(self.x)<0)
+        self.phi[mask] = np.pi
 
         # inclination
-        self.theta = jnp.arccos(maths.safe_division(self.z, self.r))
-        self.spherical_coords = jnp.array([self.r, self.phi, self.theta])
+        self.theta = np.arccos(maths.safe_division(self.z, self.r))
+        self.spherical_coords = np.array([self.r, self.phi, self.theta])
 
-        if fd_order == 8:
+        if self.fd_order == 8:
             if self.verbose:
                 print("8th order finite difference schemes are defined")
             self.backward = fd8_backward
             self.centered = fd8_centered
             self.forward = fd8_forward
             self.mask_len = 4
-        elif fd_order == 6:
+        elif self.fd_order == 6:
             if self.verbose:
                 print("6th order finite difference schemes are defined")
             self.backward = fd6_backward
@@ -263,12 +265,12 @@ class FiniteDifference():
             self.mask_len = 2
 
     def d3(self, f, idx, N):
-        """Apply the finite difference scheme to the data grid."""
+        """Apply the finite difference scheme to the whole data grid."""
         if self.boundary == 'periodic':
             # Periodic boundaries are used.
             # The grid is extended along the x direction by the 
             # FD mask number of points from the opposite edge.
-            flong = jnp.concatenate((
+            flong = np.concatenate((
                 f[-self.mask_len:, :, :], 
                 f, 
                 f[:self.mask_len, :, :]), 
@@ -283,7 +285,7 @@ class FiniteDifference():
             # The grid is extended along the x direction by the 
             # FD mask number of points from the opposite edge.
             iend = N - 1
-            flong = jnp.concatenate((
+            flong = np.concatenate((
                 f[1:1+self.mask_len, :, :][::-1, :, :], 
                 f, 
                 f[iend-self.mask_len:iend, :, :][::-1, :, :]), 
@@ -310,7 +312,7 @@ class FiniteDifference():
                 self.backward, f, idx, 
                 N - self.mask_len, N)
             # Concatenate all the points together
-            return jnp.concatenate((lhs, central_part, rhs), axis=0)
+            return np.concatenate((lhs, central_part, rhs), axis=0)
     
     def d3x(self, f): 
         r"""Derivative along x of a scalar: $\partial_x (f)$."""
@@ -320,51 +322,51 @@ class FiniteDifference():
         r"""Derivative along y of a scalar: $\partial_y (f)$."""
         # Same as D3x but as we apply the FD schemes in the y direction 
         # we transpose
-        f = jnp.transpose(f, (1, 0, 2))
+        f = np.transpose(f, (1, 0, 2))
         dyf = self.d3(f, self.inverse_dy, self.param['Ny'])
-        return jnp.transpose(dyf, (1, 0, 2))
+        return np.transpose(dyf, (1, 0, 2))
     
     def d3z(self, f):  
         r"""Derivative along z of a scalar: $\partial_z (f)$."""
         # Same as D3x but as we apply the FD schemes in the z direction 
         # we transpose
-        f = jnp.transpose(f, (2, 1, 0))
+        f = np.transpose(f, (2, 1, 0))
         dzf = self.d3(f, self.inverse_dz, self.param['Nz'])
-        return jnp.transpose(dzf, (2, 1, 0))
+        return np.transpose(dzf, (2, 1, 0))
     
     def d3_scalar(self, f):
         r"""Spatial derivatives of a scalar: 
         $\partial_i (f)$."""
-        return jnp.array([self.d3x(f), self.d3y(f), self.d3z(f)])
+        return np.array([self.d3x(f), self.d3y(f), self.d3z(f)])
     
     def d3_rank1tensor(self, f):
         r"""Spatial derivatives of a spatial rank 1 tensor: 
         $\partial_i (f_{j})$ or $\partial_i (f^{j})$."""
-        return jnp.stack(
-            [jax.vmap(self.d3x)(f), 
-             jax.vmap(self.d3y)(f), 
-             jax.vmap(self.d3z)(f)], axis=0)
+        return np.stack(
+            [map1(self.d3x, f), 
+             map1(self.d3y, f), 
+             map1(self.d3z, f)], axis=0)
     
     def d3x_rank1tensor(self, f):
         r"""Spatial derivatives of a spatial rank 1 tensor: 
         $\partial_x (f_{j})$ or $\partial_x (f^{j})$."""
-        return jax.vmap(self.d3x)(f)
+        return map1(self.d3x, f)
     
     def d3y_rank1tensor(self, f):
         r"""Spatial derivatives of a spatial rank 1 tensor: 
         $\partial_y (f_{j})$ or $\partial_y (f^{j})$."""
-        return jax.vmap(self.d3y)(f)
+        return map1(self.d3y, f)
     
     def d3z_rank1tensor(self, f):
         r"""Spatial derivatives of a spatial rank 1 tensor: 
         $\partial_z (f_{j})$ or $\partial_z (f^{j})$."""
-        return jax.vmap(self.d3z)(f)
+        return map1(self.d3z, f)
     
     def d3_rank2tensor(self, f):
         r"""Spatial derivatives of a spatial rank 2 tensor: 
         $\partial_i (f_{kj})$ or $\partial_i (f^{kj})$ 
         or $\partial_i (f^{k}_{j})$."""
-        return jnp.array(
+        return np.array(
             [self.d3x_rank2tensor(f),
              self.d3y_rank2tensor(f),
              self.d3z_rank2tensor(f)])
@@ -373,25 +375,19 @@ class FiniteDifference():
         r"""Spatial derivatives along x of a spatial rank 2 tensor: 
         $\partial_x (f_{kj})$ or $\partial_x (f^{kj})$ 
         or $\partial_x (f^{k}_{j})$."""
-        return jax.vmap(
-            jax.vmap(self.d3x, in_axes=0),
-            in_axes=0)(f)
+        return map2(self.d3x, f)
     
     def d3y_rank2tensor(self, f):
         r"""Spatial derivatives along y of a spatial rank 2 tensor: 
         $\partial_y (f_{kj})$ or $\partial_y (f^{kj})$ 
         or $\partial_y (f^{k}_{j})$."""
-        return jax.vmap(
-            jax.vmap(self.d3y, in_axes=0),
-            in_axes=0)(f)
+        return map2(self.d3y, f)
     
     def d3z_rank2tensor(self, f):
         r"""Spatial derivatives along z of a spatial rank 2 tensor: 
         $\partial_z (f_{kj})$ or $\partial_z (f^{kj})$ 
         or $\partial_z (f^{k}_{j})$."""
-        return jax.vmap(
-            jax.vmap(self.d3z, in_axes=0),
-            in_axes=0)(f)
+        return map2(self.d3z, f)
     
     def cutoffmask(self, f):
         """Remove boundary points, for when FDs were applied once."""
@@ -419,77 +415,77 @@ class FiniteDifference():
     
     def excision(self, finput, isingularity='find'):
         """Excision of the singularity, for when FDs were applied once."""
-        f = jnp.copy(finput)
+        f = np.copy(finput)
         if isingularity == 'find':
             isx, isy, isz = self.ixcenter, self.iycenter, self.izcenter
         else:
             isx, isy, isz = isingularity
         b = 1 # b for buffer
         if isx is not None:
-            f = f.at[
+            f[
                 isx-self.mask_len-b: isx+self.mask_len+1+b, 
-                isy, isz].set(jnp.nan)
+                isy, isz] = np.nan
         if isy is not None:
-            f = f.at[
+            f[
                 isx, isy-self.mask_len-b: isy+self.mask_len+1+b, 
-                isz].set(jnp.nan)
+                isz] = np.nan
         if isz is not None:
-            f = f.at[
+            f[
                 isx, isy, 
-                isz-self.mask_len-b: isz+self.mask_len+1+b].set(jnp.nan)
+                isz-self.mask_len-b: isz+self.mask_len+1+b] = np.nan
         return f
     
     def excision2(self, finput, isingularity='find'):
         """Double singularity excision, for when FDs were applied twice."""
-        f = jnp.copy(finput)
+        f = np.copy(finput)
         if isingularity == 'find':
             isx, isy, isz = self.ixcenter, self.iycenter, self.izcenter
         else:
             isx, isy, isz = isingularity
         b = 1 # b for buffer
         if (isx is not None) and (isy is not None) and (isz is not None):
-            f = f.at[isx-self.mask_len-b: isx+self.mask_len+1+b, 
+            f[isx-self.mask_len-b: isx+self.mask_len+1+b, 
               isy-self.mask_len-b: isy+self.mask_len+1+b, 
-              isz-self.mask_len-b: isz+self.mask_len+1+b].set(jnp.nan)
-            f = f.at[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b, 
+              isz-self.mask_len-b: isz+self.mask_len+1+b] = np.nan
+            f[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b, 
               isy-self.mask_len-b: isy+self.mask_len+1+b, 
-              isz-self.mask_len-b: isz+self.mask_len+1+b].set(jnp.nan)
-            f = f.at[isx-self.mask_len-b: isx+self.mask_len+1+b, 
+              isz-self.mask_len-b: isz+self.mask_len+1+b] = np.nan
+            f[isx-self.mask_len-b: isx+self.mask_len+1+b, 
               isy-2*self.mask_len-b: isy+2*self.mask_len+1+b, 
-              isz-self.mask_len-b: isz+self.mask_len+1+b].set(jnp.nan)
-            f = f.at[isx-self.mask_len-b: isx+self.mask_len+1+b, 
+              isz-self.mask_len-b: isz+self.mask_len+1+b] = np.nan
+            f[isx-self.mask_len-b: isx+self.mask_len+1+b, 
               isy-self.mask_len-b: isy+self.mask_len+1+b, 
-              isz-2*self.mask_len-b: isz+2*self.mask_len+1+b].set(jnp.nan)
+              isz-2*self.mask_len-b: isz+2*self.mask_len+1+b] = np.nan
         elif (isx is not None) and (isy is not None):
-            f = f.at[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b, 
+            f[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b, 
               isy-self.mask_len-b: isy+self.mask_len+1+b, 
-              isz].set(jnp.nan)
-            f = f.at[isx-self.mask_len-b: isx+self.mask_len+1+b, 
+              isz] = np.nan
+            f[isx-self.mask_len-b: isx+self.mask_len+1+b, 
               isy-2*self.mask_len-b: isy+2*self.mask_len+1+b, 
-              isz].set(jnp.nan)
+              isz] = np.nan
         elif (isx is not None) and (isz is not None):
-            f = f.at[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b, 
+            f[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b, 
               isy, 
-              isz-self.mask_len-b: isz+self.mask_len+1+b].set(jnp.nan)
-            f = f.at[isx-self.mask_len-b: isx+self.mask_len+1+b, 
+              isz-self.mask_len-b: isz+self.mask_len+1+b] = np.nan
+            f[isx-self.mask_len-b: isx+self.mask_len+1+b, 
               isy, 
-              isz-2*self.mask_len-b: isz+2*self.mask_len+1+b].set(jnp.nan)
+              isz-2*self.mask_len-b: isz+2*self.mask_len+1+b] = np.nan
         elif (isy is not None) and (isz is not None):
-            f = f.at[isx, 
+            f[isx, 
               isy-2*self.mask_len-b: isy+2*self.mask_len+1+b, 
-              isz-self.mask_len-b: isz+self.mask_len+1+b].set(jnp.nan)
-            f = f.at[isx, 
+              isz-self.mask_len-b: isz+self.mask_len+1+b] = np.nan
+            f[isx, 
               isy-self.mask_len-b: isy+self.mask_len+1+b, 
-              isz-2*self.mask_len-b: isz+2*self.mask_len+1+b].set(jnp.nan)
+              isz-2*self.mask_len-b: isz+2*self.mask_len+1+b] = np.nan
         elif (isx is not None):
-            f = f.at[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b, 
-              isy, isz].set(jnp.nan)
+            f[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b, 
+              isy, isz] = np.nan
         elif (isy is not None):
-            f = f.at[isx, isy-2*self.mask_len-b: isy+2*self.mask_len+1+b, 
-              isz].set(jnp.nan)
+            f[isx, isy-2*self.mask_len-b: isy+2*self.mask_len+1+b, 
+              isz] = np.nan
         elif (isz is not None):
-            f = f.at[isx, isy, 
-              isz-2*self.mask_len-b: isz+2*self.mask_len+1+b].set(jnp.nan)
+            f[isx, isy, 
+              isz-2*self.mask_len-b: isz+2*self.mask_len+1+b] = np.nan
         return f
     
     def reconstruct(self, data):
@@ -509,7 +505,7 @@ class FiniteDifference():
             if 'RotatingSymmetry180' in self.param['list_of_thorns']:
                 rotate = True
         if self.veryverbose:
-            print('input data shape:', jnp.shape(data), flush=True)
+            print('input data shape:', np.shape(data), flush=True)
             print('shift:', shift, flush=True)
             print('reflect:', reflect, flush=True)
             print('rotate:', rotate, flush=True)
@@ -529,7 +525,7 @@ class FiniteDifference():
                 rdata = data
 
             # join sections together
-            datax = jnp.concatenate(
+            datax = np.concatenate(
                 [rdata, 
                  data[shift[0]:,:,:]], axis=0)
             
@@ -558,7 +554,7 @@ class FiniteDifference():
                 rdata = datax
 
             # join sections together
-            datay = jnp.concatenate(
+            datay = np.concatenate(
                 [rdata, 
                  datax[:, shift[1]:, :]], axis=1)
             
@@ -587,7 +583,7 @@ class FiniteDifference():
                 rdata = datay
 
             # join sections together
-            dataz = jnp.concatenate(
+            dataz = np.concatenate(
                 [rdata, 
                  datay[:, :, shift[2]:]], axis=2)
             
@@ -602,7 +598,7 @@ class FiniteDifference():
             zarray = self.zarray
 
         if self.veryverbose:
-            print('output data shape:', jnp.shape(dataz), flush=True)
+            print('output data shape:', np.shape(dataz), flush=True)
             print('len x, y, z:', len(xarray), len(yarray), len(zarray), flush=True)
 
         return (xarray, yarray, zarray), dataz

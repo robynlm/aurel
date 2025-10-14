@@ -4,58 +4,49 @@ Variable calculation and scalar estimation over time for the Aurel package.
 This module provides a function to calculate variables over time series data
 and applying statistical estimation functions to 3D arrays.
 """
-
-import jax.numpy as jnp
+import numpy as np
 from . import core
 import inspect
-import itertools
-import multiprocessing as mp
-import dask
-from dask import delayed
-from functools import partial
 try:
     from tqdm.notebook import tqdm
 except ImportError:
     from tqdm import tqdm
-from dask.diagnostics import ProgressBar, Profiler, ResourceProfiler
-from dask.diagnostics import visualize
-from dask.distributed import Client, progress
 
 # Dictionary of available estimation functions for 3D arrays
 est_functions = {
-    'max': jnp.max,
-    'mean': jnp.mean,
-    'median': jnp.median,
-    'min': jnp.min,
-    'sum': jnp.sum,
-    'std': jnp.std,
-    'var': jnp.var,
-    'maxabs': lambda array: jnp.max(jnp.abs(array)),
-    'minabs': lambda array: jnp.min(jnp.abs(array)),
-    'meanabs': lambda array: jnp.mean(jnp.abs(array)),
-    'medianabs': lambda array: jnp.median(jnp.abs(array)),
-    'sumabs': lambda array: jnp.sum(jnp.abs(array)),
-    'stdabs': lambda array: jnp.std(jnp.abs(array)),
-    'varabs': lambda array: jnp.var(jnp.abs(array)),
+    'max': np.max,
+    'mean': np.mean,
+    'median': np.median,
+    'min': np.min,
+    'sum': np.sum,
+    'std': np.std,
+    'var': np.var,
+    'maxabs': lambda array: np.max(np.abs(array)),
+    'minabs': lambda array: np.min(np.abs(array)),
+    'meanabs': lambda array: np.mean(np.abs(array)),
+    'medianabs': lambda array: np.median(np.abs(array)),
+    'sumabs': lambda array: np.sum(np.abs(array)),
+    'stdabs': lambda array: np.std(np.abs(array)),
+    'varabs': lambda array: np.var(np.abs(array)),
     'OD': lambda array: array[0, 0, 0],
     'UD': lambda array: array[-1, -1, -1],
 }
 
 def over_time(data, fd, vars=[], estimates=[], 
-              nbr_processes=1, verbose=True, veryverbose=False, **kwargs):
+              verbose=True, veryverbose=False, **rel_kwargs):
     """Calculate variables from the data and store them in the data dictionary.
     
     This function processes time series data by creating AurelCore instances 
     for each time step, calculating specified variables, and optionally 
-    applying statistical estimation functions to 3D arrays.
+    applying estimation functions to 3D arrays.
     
     Parameters
     ----------
     data : dict
         Dictionary containing time series data. Must include an 'it' key with
-        iteration information. The function will add calculated variables
+        iteration information. This function will add calculated variables
         to this dictionary.
-    fd : str
+    fd : FiniteDifference
         Finite difference class used to initialize AurelCore instances.
     vars : list of str or dict, optional
         List of variable names to calculate. These variables will be computed
@@ -73,23 +64,21 @@ def over_time(data, fd, vars=[], estimates=[],
         Elements can be:
 
         - str: Names of predefined functions from est_functions 
-          ('max', 'mean', 'median', 'min', 'OD', 'UD')
+          ('max', 'mean', 'median', 'min', 'OD', 'UD', ...)
         - dict: Custom estimation functions with string keys (function names) 
-          and functions that take a 3D array of shape (fd.Nx, fd.Ny, fd.Nz) 
-          and return a scalar value.
+          and functions that take a scalar 3D array of shape 
+          (fd.Nx, fd.Ny, fd.Nz) and return a scalar value.
         
         Default is an empty list (no estimation applied).
     verbose : bool, optional
         If True, prints debug information about the calculation process.
     veryverbose : bool, optional
         If True, provides more detailed debug information. Defaults to False.
-    **kwargs : dict, optional
+    **rel_kwargs : dict, optional
         Additional parameters passed to AurelCore initialization, such as:
         
         - Lambda : float, cosmological constant
         - tetrad_to_use : str, tetrad choice for Weyl calculations
-        - Psi4_lm_lmax : int, maximum l-mode for Psi4 decomposition
-        - Psi4_lm_radius : float, radius for Psi4 extraction
     
     Returns
     -------
@@ -208,49 +197,20 @@ def over_time(data, fd, vars=[], estimates=[],
         
         # Calculate first instance
         data_list_i0, scalarkeys = process_single_timestep(
-            input_data_list[0], fd, vars, estimates, verbose, None, **kwargs)
+            input_data_list[0], fd, vars, estimates, verbose, None, rel_kwargs)
         data_list = [data_list_i0]
         del data_list_i0
         
         # Calculate all the other
         if len(input_data_list) > 1:
-            if nbr_processes == 1:
-                # Sequential processing
-                if verbose:
-                    print("Now processing remaining time steps sequentially",
-                        flush=True)
-                    
-                results = [process_single_timestep(item, fd, vars, estimates, 
-                                                   veryverbose, scalarkeys, **kwargs)
-                           for item in input_data_list[1:]]
-            else:
-                # Parallel processing with Pool
-                #chunk_size = max(1, (len(input_data_list)-1) // (nbr_processes * 4))
-                #chunks = [input_data_list[i:i + chunk_size] 
-                #          for i in range(1, len(input_data_list), chunk_size)]
-                if verbose:
-                    print("Now processing remaining time steps in parallel"
-                        + f" with nbr_processes = {nbr_processes}", flush=True)
-                        #+ f" and nbr chunks = {len(chunks)}",
-                        #flush=True)
-                    #chunk_sizes = [len(chunk) for chunk in chunks]
-                    #print(f"Chunk sizes: {chunk_sizes}", flush=True)
-                #def process_wrapper(chunk):
-                #    results = []
-                #    for item in chunk:
-                #        results.append(process_single_timestep(
-                #        item, fd, vars, estimates, veryverbose, scalarkeys))
-                #    return results
-                client = Client(n_workers=1, threads_per_worker=nbr_processes)
-                def process_wrapper(item):
-                    return process_single_timestep(
-                        item, fd, vars, estimates, veryverbose, scalarkeys, **kwargs)
-                with ProgressBar(), Profiler() as prof, ResourceProfiler() as rprof:
-                    #delayed_tasks = [delayed(process_wrapper)(chunk) for chunk in chunks]
-                    delayed_tasks = [delayed(process_wrapper)(chunk) for chunk in input_data_list[1:]]
-                    results = dask.compute(*delayed_tasks, scheduler='threads', num_workers=nbr_processes)
-                visualize([prof, rprof])
-                #results = list(itertools.chain.from_iterable(chunked_results))
+            
+            # Sequential processing
+            if verbose:
+                print("Now processing remaining time steps sequentially",
+                    flush=True)
+            results = [process_single_timestep(item, fd, vars, estimates, 
+                                                veryverbose, scalarkeys, rel_kwargs)
+                        for item in tqdm(input_data_list[1:])]
             # Combine and sort the results by temporal_key key
             data_list += results
         del input_data_list
@@ -264,7 +224,7 @@ def over_time(data, fd, vars=[], estimates=[],
             for key in keys:
                 data[key].append(data_list_sorted[i][key])
         for key in keys:
-            data[key] = jnp.array(data[key])
+            data[key] = np.array(data[key])
         del data_list_sorted
     
         if verbose:
@@ -276,11 +236,11 @@ def over_time(data, fd, vars=[], estimates=[],
         return data
 
 def process_single_timestep(data, fd, vars, estimates, 
-                            verbose, scalarkeys, **kwargs):
+                            verbose, scalarkeys, rel_kwargs):
     """Process a single time step for variable calculation and estimation.
     
     This function creates an AurelCore instance for the specified time step,
-    calculates requested variables, and applies statistical estimation 
+    calculates requested variables, and applies estimation 
     functions to 3D arrays if specified.
     
     Parameters
@@ -289,7 +249,7 @@ def process_single_timestep(data, fd, vars, estimates,
         Dictionary containing variables of relevant iteration. 
         The function will add calculated variables
         to this dictionary.
-    fd : str
+    fd : FiniteDifference
         Finite difference class used to initialize AurelCore instances.
     vars : list of str or dict
         List of variable names to calculate. These variables will be computed
@@ -317,7 +277,7 @@ def process_single_timestep(data, fd, vars, estimates,
     scalarkeys : list of str
         List of keys in `data` that contain 3D scalar arrays. If None,
         the function will determine these keys automatically.
-    **kwargs : dict, optional
+    rel_kwargs : dict
         Additional parameters passed to AurelCore initialization.
     
     Returns
@@ -341,7 +301,7 @@ def process_single_timestep(data, fd, vars, estimates,
     # ====== Calculate vars if requested
     if vars:
         # Create a new AurelCore instance for this time step
-        rel = core.AurelCore(fd, verbose=verbose, **kwargs)
+        rel = core.AurelCore(fd, verbose=verbose, **rel_kwargs)
         
         # Set all existing data values for this time step 
         # (except variables to be calculated)
@@ -360,7 +320,7 @@ def process_single_timestep(data, fd, vars, estimates,
                     if verbose:
                         print(f"Calculating custom variable '{func_name}'...",
                               flush=True)
-                    rel.data[func_name] = core.block_all(function(rel))
+                    rel.data[func_name] = function(rel)
                     rel.var_importance[func_name] = 0 # Freeze this in
                     if verbose:
                         print(f"Calculated and freezed variable '{func_name}'"
@@ -372,7 +332,7 @@ def process_single_timestep(data, fd, vars, estimates,
                 data[v] = rel[v]
             elif isinstance(v, dict):
                 for func_name, function in v.items():
-                    data[func_name] = rel[v]
+                    data[func_name] = rel[func_name]
         
         # Clean up AurelCore instance to free memory
         del rel
@@ -382,7 +342,7 @@ def process_single_timestep(data, fd, vars, estimates,
     if scalarkeys is None:
         scalarkeys = []
         for key in data.keys():
-            if len(jnp.shape(data[key])) == 3:
+            if len(np.shape(data[key])) == 3:
                 scalarkeys += [key]
         return_scalarkeys = True
     else:
@@ -423,7 +383,7 @@ def process_single_timestep(data, fd, vars, estimates,
         return data
     
 def validate_estimation_function(func, func_name, fd, verbose=True):
-    """Validate that an estimation function has correct signature and behavior.
+    """Validate that estimation function has correct signature and behaviour.
     
     Parameters
     ----------
@@ -459,7 +419,7 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
         )
     
     # Test with dummy array
-    test_array = jnp.ones((fd.Nx, fd.Ny, fd.Nz))
+    test_array = np.ones((fd.Nx, fd.Ny, fd.Nz))
     
     try:
         result = func(test_array)
@@ -470,9 +430,8 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
         )
     
     # Check return type and shape - must be scalar-like
-    # Force evaluation for lazy libraries like JAX
     try:
-        # Convert to Python scalar if possible (forces JAX evaluation)
+        # Convert to Python scalar if possible evaluation
         if hasattr(result, 'item') and callable(result.item):
             result_value = result.item()
         else:
@@ -498,7 +457,7 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
 
 def validate_variable_function(func, func_name, fd, 
                                verbose=True, veryverbose=False):
-    """Validate that a variable function has correct signature and behavior.
+    """Validate that variable function has correct signature and behaviour.
     
     Parameters
     ----------
@@ -538,8 +497,7 @@ def validate_variable_function(func, func_name, fd,
     # Test with dummy AurelCore instance
     rel = core.AurelCore(fd, verbose=veryverbose)
     try:
-        # Block all to force execution of lazy JAX
-        rel.data[func_name] = core.block_all(func(rel))
+        rel.data[func_name] = func(rel)
     except Exception as e:
         raise ValueError(
             f"Variable function '{func_name}' failed when called with "

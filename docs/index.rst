@@ -89,6 +89,38 @@ With everything defined, you can call any entity listed in the
 **Aurel will automatically do its best to calculate 
 any relativistic term you ask for.**
 
+Now if you want calculations over multiple moments in coordinate time, you can 
+use the :func:`aurel.over_time` function. First, create a dictionary 
+containing the spacetime and matter fields over time:
+
+.. code-block:: python
+   
+   # Define the spacetime metric gxx over time
+   data = {
+       'gxx': [np.ones((param['Nx'], param['Ny'], param['Nz'])),
+               np.ones((param['Nx'], param['Ny'], param['Nz']))],
+       ...
+   }
+
+That is a data dictionary with keys the names of the quantities, and values a 
+list of numpy arrays, one for each time step. Calculations will be performed 
+for each of these time steps as:
+
+.. code-block:: python
+
+   data = aurel.over_time(
+      data, fd, 
+      vars=['name_of_the_entity', ..., {'custom_quantity': custom_quantity}], 
+      estimates=['name_of_estimate', ..., {'custom_estimate': custom_estimate}],
+      **kwargs)
+
+where `vars` is a list of entities to calculate at each time step, available 
+terms are in :ref:`descriptions_list` but you can also pass custom functions 
+to calculate your own quantities.
+Likewise `estimates` is a list of estimates to calculate at each time step, 
+available functions are in :ref:`estimates_list` but you can also pass custom 
+functions to calculate your own estimates. See the examples.
+
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
@@ -113,6 +145,7 @@ any relativistic term you ask for.**
    :caption: Examples:
 
    notebooks/Example
+   notebooks/Example_over_time
    notebooks/tov_ET
    notebooks/ICPertFLRW
    notebooks/Schwarzschild_check

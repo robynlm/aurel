@@ -7,6 +7,10 @@ import glob
 # Add the src directory to the Python path
 sys.path.insert(0, os.path.abspath('../src'))
 import aurel.core as core
+import aurel.time as time_module
+
+# Generate list of estimation functions for documentation
+est_functions_keys = ', '.join([f"``{key}``" for key in time_module.est_functions.keys()])
 
 # Configuration file for the Sphinx documentation builder.
 
@@ -40,7 +44,9 @@ mathjax3_config = {
 rst_prolog = """
 .. role:: raw-latex(raw)
    :format: latex html
-"""
+
+.. |est_functions_keys| replace:: {est_keys}
+""".format(est_keys=est_functions_keys)
 
 exclude_patterns = [
     '_build', 

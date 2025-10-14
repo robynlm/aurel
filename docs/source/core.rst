@@ -361,7 +361,9 @@ Weyl decomposition
 Null ray expansion
 ==================
 
-**null_ray_exp**: $\Theta_{out}, \; \Theta_{in}$ List of expansion of null rays radially going out and in respectively
+**null_ray_exp_out**: $\Theta_{out}$ List of expansion of null rays radially going out
+
+**null_ray_exp_in**: $\Theta_{in}$ List of expansion of null rays radially going in
 
 Constraints
 ===========

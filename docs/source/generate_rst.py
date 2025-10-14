@@ -32,7 +32,7 @@ shift = ['betax', 'betay', 'betaz',
          'betaup3', 'dtbetaup3', 'betadown3', 'betamag']
 enne = ['nup4', 'ndown4']
 gee = ['gdown4', 'gup4', 'gdet']
-nullrayexp = ['null_ray_exp']
+nullrayexp = ['null_ray_exp_out', 'null_ray_exp_in']
 matter = ['rho0', 'press', 'eps', 'rho', 'enthalpy']
 vel = ['w_lorentz', 'velx', 'vely', 'velz', 
        'velup3', 'velup4', 'veldown3', 'veldown4', 

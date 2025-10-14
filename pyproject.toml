@@ -36,12 +36,9 @@ dependencies = [
     "glob2",
     "scipy",
     "ipython",
-    "jax",
-    "jaxlib",
     "tqdm",
     "jupyter",
-    "ipykernel",
-    "dask[complete]"
+    "ipykernel"
 ]
 
 [project.urls]
