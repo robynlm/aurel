@@ -1,0 +1,512 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example over time &mdash; aurel May 2025 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d170800"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="tov_ET" href="tov_ET.html" />
+    <link rel="prev" title="Example" href="Example.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aurel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/core.html">aurel.core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/finitedifference.html">aurel.finitedifference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/maths.html">aurel.maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/numerical.html">aurel.numerical</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/reading.html">aurel.reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/time.html">aurel.time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/solutions.html">aurel.solutions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#citation">Citation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Example.html">Example</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example over time</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#calculate-any-quantity-from-aurel-descriptions-keys">Calculate any quantity from <code class="docutils literal notranslate"><span class="pre">aurel.descriptions.keys()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculate-your-custom-quantity-over-time">Calculate your custom quantity over time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculate-any-estimation-from-aurel-est-functions-keys">Calculate any estimation from <code class="docutils literal notranslate"><span class="pre">aurel.est_functions.keys()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculate-your-custom-estimate-over-time">Calculate your custom estimate over time</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tov_ET.html">tov_ET</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ICPertFLRW.html">ICPertFLRW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Schwarzschild_check.html">Schwarzschild check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Analytic_check.html">Analytic check</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aurel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Example over time</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/Example_over_time.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="example-over-time">
+<h1>Example over time<a class="headerlink" href="#example-over-time" title="Link to this heading"></a></h1>
+<p>Examples so far have shown how to use aurel to automatically calculate relativistic terms for a given coordinate time. In practice you may be interested in seeing how these quantities evolve over time. For this the aurel package has the function <code class="docutils literal notranslate"><span class="pre">over_time</span></code> to do this, here we demonstrate how this is used.</p>
+<p>First we need a big dictionnary containing the spacetime/matter:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aurel.solutions</span><span class="w"> </span><span class="kn">import</span> <span class="n">LCDM</span> <span class="k">as</span> <span class="n">sol</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.cm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mcolors</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define grid and finite difference class</span>
+<span class="n">param</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;Nx&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s1">&#39;Ny&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s1">&#39;Nz&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span>
+          <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;zmin&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+          <span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="mf">20.0</span><span class="p">,</span> <span class="s1">&#39;dy&#39;</span><span class="p">:</span> <span class="mf">20.0</span><span class="p">,</span> <span class="s1">&#39;dz&#39;</span><span class="p">:</span> <span class="mf">20.0</span><span class="p">}</span>
+<span class="n">fd</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">FiniteDifference</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cartesian_coords</span>
+
+<span class="c1"># Generate data for Lamnbda-CDM solution</span>
+<span class="n">Nt</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">tarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">Nt</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:[]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;gammadown3&#39;</span><span class="p">,</span> <span class="s1">&#39;Kdown3&#39;</span><span class="p">,</span> <span class="s1">&#39;rho0&#39;</span><span class="p">]}</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tarray</span><span class="p">:</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;gammadown3&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">sol</span><span class="o">.</span><span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Kdown3&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">sol</span><span class="o">.</span><span class="n">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">sol</span><span class="o">.</span><span class="n">rho</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">fd</span><span class="o">.</span><span class="n">Nx</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">Ny</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">Nz</span><span class="p">))]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data keys:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4th order finite difference schemes are defined
+Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="calculate-any-quantity-from-aurel-descriptions-keys">
+<h2>Calculate any quantity from <code class="docutils literal notranslate"><span class="pre">aurel.descriptions.keys()</span></code><a class="headerlink" href="#calculate-any-quantity-from-aurel-descriptions-keys" title="Link to this heading"></a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate further terms with AurelCore iterated over time</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;null_ray_exp_in&#39;</span><span class="p">],</span> 
+                       <span class="n">Lambda</span><span class="o">=</span><span class="n">sol</span><span class="o">.</span><span class="n">Lambda</span><span class="p">)</span>
+<span class="c1"># all aurel kwargs can be passed here</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data keys:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
+<span class="c1"># Plot Cosmological horizon over time</span>
+<span class="n">Bcolors</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Nt</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nt</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;null_ray_exp_in&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">Bcolors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;x [Mpc]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$|\Theta_</span><span class="si">{in}</span><span class="s2">|$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Cosmological horizon $\Theta_</span><span class="si">{in}</span><span class="s1"> = 0$ growing over time&#39;</span><span class="p">)</span>
+
+<span class="c1"># Colorbar</span>
+<span class="n">norm</span> <span class="o">=</span> <span class="n">mcolors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]),</span> <span class="n">vmax</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]))</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">set_array</span><span class="p">([])</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sm</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">(),</span> <span class="n">extend</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;t [Mpc]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing t = 1.0
+
+Cosmological constant set to AurelCore.Lambda = 1.04e-07
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
+Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated null_ray_exp_in: $\Theta_{in}$ List of expansion of null rays radially going in
+Now processing remaining time steps sequentially
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "62123c83781f4b2ba51095ff483613b8", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;]
+</pre></div>
+</div>
+<img alt="../_images/20bc7f704f4884a5fefe3d09317624ac918360eb78ee56297630b29bf670e6b1.png" src="../_images/20bc7f704f4884a5fefe3d09317624ac918360eb78ee56297630b29bf670e6b1.png" />
+</div>
+</div>
+</section>
+<section id="calculate-your-custom-quantity-over-time">
+<h2>Calculate your custom quantity over time<a class="headerlink" href="#calculate-your-custom-quantity-over-time" title="Link to this heading"></a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example of custom function to calculate backreaction</span>
+<span class="c1"># Custom function must only take one argument, the AurelCore class instance</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">backreaction</span><span class="p">(</span><span class="n">rel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Example function &quot;&quot;&quot;</span>
+    <span class="n">sqrgdet</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s1">&#39;gammadet&#39;</span><span class="p">])</span>
+    <span class="n">dcube</span> <span class="o">=</span> <span class="n">rel</span><span class="o">.</span><span class="n">fd</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="n">rel</span><span class="o">.</span><span class="n">fd</span><span class="o">.</span><span class="n">dy</span> <span class="o">*</span> <span class="n">rel</span><span class="o">.</span><span class="n">fd</span><span class="o">.</span><span class="n">dz</span>
+    <span class="n">volume</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sqrgdet</span><span class="p">)</span> <span class="o">*</span> <span class="n">dcube</span>
+    <span class="n">av_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sqrgdet</span><span class="p">)</span> <span class="o">*</span> <span class="n">dcube</span> <span class="o">/</span> <span class="n">volume</span>
+    <span class="n">av_theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">rel</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sqrgdet</span><span class="p">)</span> <span class="o">*</span> <span class="n">dcube</span> <span class="o">/</span> <span class="n">volume</span>
+    <span class="n">av_shear2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s1">&#39;shear2&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sqrgdet</span><span class="p">)</span> <span class="o">*</span> <span class="n">dcube</span> <span class="o">/</span> <span class="n">volume</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">av_theta2</span> <span class="o">-</span> <span class="n">av_theta</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">av_shear2</span>
+
+<span class="c1"># Custom function are passed as dict with name and function</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;backreaction&#39;</span><span class="p">:</span> <span class="n">backreaction</span><span class="p">}],</span> 
+                       <span class="n">Lambda</span><span class="o">=</span><span class="n">sol</span><span class="o">.</span><span class="n">Lambda</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data keys:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
+<span class="c1"># This is homogeneous, so the backreaction should be zero</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Backreaction values:&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;backreaction&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Validating variable function &#39;backreaction&#39;...
+✓ Custom function &#39;backreaction&#39; validated successfully
+Processing t = 1.0
+
+Cosmological constant set to AurelCore.Lambda = 1.04e-07
+Calculating custom variable &#39;backreaction&#39;...
+
+Calculated gammadet: $\gamma$ Determinant of spatial metric
+Calculated alpha: $\alpha$ Lapse. I assume $\alpha=1$, if not then please define AurelCore.data[&#39;alpha&#39;] = ... 
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated w_lorentz: $W$ Lorentz factor. I assume $W=1$, if not then please define AurelCore.data[&#39;w_lorentz&#39;] = ... 
+Calculated uup0: $u^t$ Lagrangian fluid four velocity with time indice up
+Calculated velx: $v^x$ x component of Eulerian fluid three velocity with indice up. I assume $v^x=0$, if not then please define AurelCore.data[&#39;velx&#39;] = ... 
+Calculated vely: $v^y$ y component of Eulerian fluid three velocity with indice up. I assume $v^y=0$, if not then please define AurelCore.data[&#39;vely&#39;] = ... 
+Calculated velz: $v^z$ z component of Eulerian fluid three velocity with indice up. I assume $v^z=0$, if not then please define AurelCore.data[&#39;velz&#39;] = ... 
+Calculated velup3: $v^i$ Eulerian fluid three velocity with spatial indices up.
+Calculated uup3: $u^i$ Lagrangian fluid four velocity with spatial indices up
+Calculated uup4: $u^\mu$ Lagrangian fluid four velocity with spacetime indices up
+Calculated hup4: $h^{\mu\nu}$ Spatial metric orthonomal to fluid flow with spacetime indices up
+Calculated udown4: $u_\mu$ Lagrangian fluid four velocity with spacetime indices down
+Calculated hdown4: $h_{\mu\nu}$ Spatial metric orthonomal to fluid flow with spacetime indices down
+CLEAN-UP: Cleaning up cache after 20 calculations...
+CLEAN-UP: data size before cleanup: 188.00 MB
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 13 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 2 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;hup4&#39; used 2 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removed 4 items
+CLEAN-UP: data size after cleanup: 86.00 MB
+Calculated hmixed4: ${h^{\mu}}_{\nu}$ Spatial metric orthonomal to fluid flow with mixed spacetime indices
+WARNING: dtconserved only works for constant press/rho
+Calculated conserved_D: $D$ Conserved mass-energy density in Wilson&#39;s formalism
+Calculated eps: $\epsilon$ Specific internal energy. I assume $\epsilon=0$, if not then please define AurelCore.data[&#39;eps&#39;] = ... 
+Calculated conserved_E: $E$ Conserved internal energy density in Wilson&#39;s formalism
+Calculated press: $p$ Pressure. I assume $p=0$, if not then please define AurelCore.data[&#39;press&#39;] = ... 
+Calculated enthalpy: $h$ Specific enthalpy of the fluid
+Calculated conserved_Sdown4: $S_{\mu}$ Conserved energy flux (or momentum density) in Wilson&#39;s formalism with spacetime indices down
+Calculated conserved_Sdown3: $S_{i}$ Conserved energy flux (or momentum density) in Wilson&#39;s formalism with spatial indices down
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated conserved_Sup4: $S^{\mu}$ Conserved energy flux (or momentum density) in Wilson&#39;s formalism with spacetime indices up
+Calculated conserved_Sup3: $S^{i}$ Conserved energy flux (or momentum density) in Wilson&#39;s formalism with spatial indices up
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
+Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated Kup3: $K^{ij}$ Extrinsic curvature with spatial indices up
+Calculated dtgammaup3: $\partial_t \gamma^{ij}$ Coordinate time derivative of spatial metric with spatial indices up
+Calculated dtconserved: $\partial_t D, \; \partial_t E, \partial_t S_{i}$ List of coordinate time derivatives of conserved rest mass-energy density, internal energy density and energy flux (or momentum density) with spatial indices down in Wilson&#39;s formalism
+Calculated udown3: $u_\mu$ Lagrangian fluid four velocity with spatial indices down
+CLEAN-UP: Cleaning up cache after 40 calculations...
+CLEAN-UP: data size before cleanup: 324.01 MB
+CLEAN-UP: Removing cached value for &#39;betax&#39; used 37 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;betay&#39; used 36 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;betaz&#39; used 35 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;uup0&#39; used 29 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;velx&#39; used 28 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;vely&#39; used 27 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;velz&#39; used 26 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;velup3&#39; used 25 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;uup3&#39; used 24 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;uup4&#39; used 19 calculations ago (size: 8.00 MB).
+CLEAN-UP: Removing cached value for &#39;hdown4&#39; used 20 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;hmixed4&#39; used 19 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;conserved_Sdown4&#39; used 7 calculations ago (size: 8.00 MB).
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 7 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 10 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 9 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;conserved_Sup4&#39; used 8 calculations ago (size: 8.00 MB).
+CLEAN-UP: Removing cached value for &#39;Kup3&#39; used 3 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removed 18 items
+CLEAN-UP: data size after cleanup: 122.00 MB
+Calculated velx: $v^x$ x component of Eulerian fluid three velocity with indice up. I assume $v^x=0$, if not then please define AurelCore.data[&#39;velx&#39;] = ... 
+Calculated vely: $v^y$ y component of Eulerian fluid three velocity with indice up. I assume $v^y=0$, if not then please define AurelCore.data[&#39;vely&#39;] = ... 
+Calculated velz: $v^z$ z component of Eulerian fluid three velocity with indice up. I assume $v^z=0$, if not then please define AurelCore.data[&#39;velz&#39;] = ... 
+Calculated velup3: $v^i$ Eulerian fluid three velocity with spatial indices up.
+Calculated uup3: $u^i$ Lagrangian fluid four velocity with spatial indices up
+Calculated uup0: $u^t$ Lagrangian fluid four velocity with time indice up
+Calculated dtalpha: $\partial_t \alpha$ Coordinate time derivative of the lapse. I assume $\partial_t \alpha=0$, if not then please define AurelCore.data[&#39;dtalpha&#39;] = ... 
+Calculated dtbetax: $\partial_t\beta^{x}$ Coordinate time derivative of the x component of the shift vector with indices up. I assume $\partial_t\beta^{x}=0$, if not then please define AurelCore.data[&#39;dtbetax&#39;] = ... 
+Calculated dtbetay: $\partial_t\beta^{y}$ Coordinate time derivative of the y component of the shift vector with indices up. I assume $\partial_t\beta^{y}=0$, if not then please define AurelCore.data[&#39;dtbetay&#39;] = ... 
+Calculated dtbetaz: $\partial_t\beta^{z}$ Coordinate time derivative of the z component of the shift vector with indices up. I assume $\partial_t\beta^{z}=0$, if not then please define AurelCore.data[&#39;dtbetaz&#39;] = ... 
+Calculated dtbetaup3: $\partial_t\beta^{i}$ Coordinate time derivative of the shift vector with spatial indices up
+Calculated st_Gamma_udd4: ${}^{(4)}{\Gamma^{\alpha}}_{\mu\nu}$ Christoffel symbols of spacetime metric with mixed spacetime indices
+Calculated st_covd_udown4: $\nabla_{\mu} u_{\nu}$ Spacetime covariant derivative of Lagrangian fluid four velocity with spacetime indices down
+Calculated s_covd_udown4: $\mathcal{D}^{\{u\}}_{\mu} u_{\nu}$ Spatial covariant derivative of Lagrangian fluid four velocity with spacetime indices down, with respect to spatial hypersurfaces orthonormal to the fluid flow
+Calculated thetadown4: $\Theta_{\mu\nu}$ Fluid expansion tensor with spacetime indices down
+Calculated theta: $\Theta$ Fluid expansion scalar
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated uup4: $u^\mu$ Lagrangian fluid four velocity with spacetime indices up
+CLEAN-UP: Cleaning up cache after 60 calculations...
+CLEAN-UP: data size before cleanup: 460.01 MB
+CLEAN-UP: Removing cached value for &#39;gammadet&#39; used 39 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;udown4&#39; used 13 calculations ago (size: 8.00 MB).
+CLEAN-UP: Removing cached value for &#39;conserved_D&#39; used 20 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;eps&#39; used 36 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;conserved_E&#39; used 20 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;press&#39; used 22 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;enthalpy&#39; used 34 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 9 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;Ktrace&#39; used 24 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;dtgammaup3&#39; used 20 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;velup3&#39; used 16 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;dtbetaup3&#39; used 9 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_Gamma_udd4&#39; used 8 calculations ago (size: 128.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_covd_udown4&#39; used 7 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_covd_udown4&#39; used 6 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;thetadown4&#39; used 5 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 2 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removed 17 items
+CLEAN-UP: data size after cleanup: 134.00 MB
+Calculated hup4: $h^{\mu\nu}$ Spatial metric orthonomal to fluid flow with spacetime indices up
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated udown4: $u_\mu$ Lagrangian fluid four velocity with spacetime indices down
+Calculated hdown4: $h_{\mu\nu}$ Spatial metric orthonomal to fluid flow with spacetime indices down
+Calculated hmixed4: ${h^{\mu}}_{\nu}$ Spatial metric orthonomal to fluid flow with mixed spacetime indices
+Calculated gammadet: $\gamma$ Determinant of spatial metric
+Calculated conserved_D: $D$ Conserved mass-energy density in Wilson&#39;s formalism
+Calculated eps: $\epsilon$ Specific internal energy. I assume $\epsilon=0$, if not then please define AurelCore.data[&#39;eps&#39;] = ... 
+Calculated conserved_E: $E$ Conserved internal energy density in Wilson&#39;s formalism
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated Kup3: $K^{ij}$ Extrinsic curvature with spatial indices up
+Calculated dtgammaup3: $\partial_t \gamma^{ij}$ Coordinate time derivative of spatial metric with spatial indices up
+Calculated dtbetaup3: $\partial_t\beta^{i}$ Coordinate time derivative of the shift vector with spatial indices up
+Calculated st_Gamma_udd4: ${}^{(4)}{\Gamma^{\alpha}}_{\mu\nu}$ Christoffel symbols of spacetime metric with mixed spacetime indices
+Calculated st_covd_udown4: $\nabla_{\mu} u_{\nu}$ Spacetime covariant derivative of Lagrangian fluid four velocity with spacetime indices down
+Calculated s_covd_udown4: $\mathcal{D}^{\{u\}}_{\mu} u_{\nu}$ Spatial covariant derivative of Lagrangian fluid four velocity with spacetime indices down, with respect to spatial hypersurfaces orthonormal to the fluid flow
+Calculated thetadown4: $\Theta_{\mu\nu}$ Fluid expansion tensor with spacetime indices down
+Calculated sheardown4: $\sigma_{\mu\nu}$ Fluid shear tensor with spacetime indices down
+Calculated shear2: $\sigma^2$ Magnitude of fluid shear
+Calculated and freezed variable &#39;backreaction&#39; in AurelCore
+Now processing remaining time steps sequentially
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "76177009efe84cba912c8c1ffc4169c9", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;]
+Backreaction values: [-3.55271368e-15 -1.62832710e-15  0.00000000e+00  0.00000000e+00
+ -2.59052039e-16  0.00000000e+00 -8.07271281e-33 -5.55111512e-17
+  1.85037171e-17  7.40148683e-17  3.70074342e-17 -9.25185854e-18
+  4.62592927e-17 -1.85037171e-17 -9.25185854e-18  4.16333634e-17
+ -9.47791116e-34  9.25185854e-18  2.77555756e-17  1.85037171e-17]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="calculate-any-estimation-from-aurel-est-functions-keys">
+<h2>Calculate any estimation from <code class="docutils literal notranslate"><span class="pre">aurel.est_functions.keys()</span></code><a class="headerlink" href="#calculate-any-estimation-from-aurel-est-functions-keys" title="Link to this heading"></a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Available estimations:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">aurel</span><span class="o">.</span><span class="n">est_functions</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Available estimations: [&#39;max&#39;, &#39;mean&#39;, &#39;median&#39;, &#39;min&#39;, &#39;sum&#39;, &#39;std&#39;, &#39;var&#39;, &#39;maxabs&#39;, &#39;minabs&#39;, &#39;meanabs&#39;, &#39;medianabs&#39;, &#39;sumabs&#39;, &#39;stdabs&#39;, &#39;varabs&#39;, &#39;OD&#39;, &#39;UD&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate further terms with AurelCore iterated over time</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">],</span> 
+                       <span class="n">Lambda</span><span class="o">=</span><span class="n">sol</span><span class="o">.</span><span class="n">Lambda</span><span class="p">)</span>
+<span class="c1"># all aurel kwargs can be passed here</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data keys:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing t = 1.0
+Processing estimation item: max
+Now processing remaining time steps sequentially
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ee3e3bfc40bb46eab4dc02ec6f85ce2e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;rho0_max&#39;, &#39;null_ray_exp_in_max&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Estimates are only applied to scalar quantities. In the data available only the <span class="math notranslate nohighlight">\(\rho_0\)</span> and <span class="math notranslate nohighlight">\(\Theta_{in}\)</span> are scalar arrays here.</p>
+<p>Let us get the max of an other quantity:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate further terms with AurelCore iterated over time</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Ktrace&#39;</span><span class="p">],</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">],</span> 
+                       <span class="n">Lambda</span><span class="o">=</span><span class="n">sol</span><span class="o">.</span><span class="n">Lambda</span><span class="p">)</span>
+<span class="c1"># all aurel kwargs can be passed here</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data keys:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing t = 1.0
+
+Cosmological constant set to AurelCore.Lambda = 1.04e-07
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Processing estimation item: max
+Now processing remaining time steps sequentially
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d9fde7ba075c4c09b8b01976c9b258aa", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;rho0_max&#39;, &#39;null_ray_exp_in_max&#39;, &#39;Ktrace&#39;, &#39;Ktrace_max&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="calculate-your-custom-estimate-over-time">
+<h2>Calculate your custom estimate over time<a class="headerlink" href="#calculate-your-custom-estimate-over-time" title="Link to this heading"></a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example of custom function to calculate scalar range</span>
+<span class="c1"># Custom function must only take one argument, a scalar array</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">range</span><span class="p">(</span><span class="n">scalar</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Example function &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span>
+
+<span class="c1"># Custom function are passed as dict with name and function</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="nb">range</span><span class="p">}],</span> 
+                       <span class="n">Lambda</span><span class="o">=</span><span class="n">sol</span><span class="o">.</span><span class="n">Lambda</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data keys:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Validating estimation function &#39;range&#39;...
+✓ Custom function &#39;range&#39; validated successfully
+Processing t = 1.0
+Processing estimation item: range
+Now processing remaining time steps sequentially
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "70ca32433cb842879404b8620660d84c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;rho0_max&#39;, &#39;null_ray_exp_in_max&#39;, &#39;Ktrace&#39;, &#39;Ktrace_max&#39;, &#39;rho0_range&#39;, &#39;null_ray_exp_in_range&#39;, &#39;Ktrace_range&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Example.html" class="btn btn-neutral float-left" title="Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tov_ET.html" class="btn btn-neutral float-right" title="tov_ET" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Robyn L. Munoz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -6,22 +6,23 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Advice &mdash; aurel May 2025 documentation</title>
+  <title>Working on an HPC &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
 
   
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}}</script>
-      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Example" href="../notebooks/Example.html" />
     <link rel="prev" title="aurel.solutions" href="solutions.html" /> 
 </head>
 
@@ -45,26 +46,35 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="core.html">aurel.core</a></li>
 <li class="toctree-l1"><a class="reference internal" href="coreanalytic.html">aurel.coreanalytic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="finitedifference.html">aurel.finitedifference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="maths.html">aurel.maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="numerical.html">aurel.numerical</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reading.html">aurel.reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="time.html">aurel.time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solutions.html">aurel.solutions</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Advice</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#working-on-an-hpc">Working on an HPC</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#create-a-virtual-environment">Create a virtual environment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#jupyter-notebook">Jupyter notebook</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#python-script">Python script</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Working on an HPC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#create-a-virtual-environment">Create a virtual environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-notebook">Jupyter notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-script">Python script</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#parallelisation">Parallelisation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#convergence">Convergence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#citation">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#citation">Citation</a></li>
 </ul>
-</li>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Example_over_time.html">Example over time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/tov_ET.html">tov_ET</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Schwarzschild_check.html">Schwarzschild check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Analytic_check.html">Analytic check</a></li>
 </ul>
 
         </div>
@@ -81,7 +91,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Advice</li>
+      <li class="breadcrumb-item active">Working on an HPC</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/source/advice.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -91,21 +101,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="advice">
-<h1>Advice<a class="headerlink" href="#advice" title="Link to this heading"></a></h1>
-<section id="working-on-an-hpc">
-<h2>Working on an HPC<a class="headerlink" href="#working-on-an-hpc" title="Link to this heading"></a></h2>
+  <section id="working-on-an-hpc">
+<h1>Working on an HPC<a class="headerlink" href="#working-on-an-hpc" title="Link to this heading"></a></h1>
 <p>While HPCs won’t let you install packages globally, you can still use aurel.
 You just need to create a virtual environment and install aurel there.</p>
 <section id="create-a-virtual-environment">
-<h3>Create a virtual environment<a class="headerlink" href="#create-a-virtual-environment" title="Link to this heading"></a></h3>
-<p>You need to install FFTW, typically on an HPC this is one of the modules available, so find its name (replace fftw_name below), load it and check its paths</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>avail
-module<span class="w"> </span>load<span class="w"> </span>fftw_name
-module<span class="w"> </span>show<span class="w"> </span>fftw_name
-</pre></div>
-</div>
-<p>Now create a virtual environment and activate it.</p>
+<h2>Create a virtual environment<a class="headerlink" href="#create-a-virtual-environment" title="Link to this heading"></a></h2>
+<p>Create a virtual environment and activate it.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/myenv
 <span class="nb">source</span><span class="w"> </span>~/myenv/bin/activate
 </pre></div>
@@ -117,34 +119,11 @@ module<span class="w"> </span>show<span class="w"> </span>fftw_name
 <p>and install any other packages you may use.</p>
 </section>
 <section id="jupyter-notebook">
-<h3>Jupyter notebook<a class="headerlink" href="#jupyter-notebook" title="Link to this heading"></a></h3>
+<h2>Jupyter notebook<a class="headerlink" href="#jupyter-notebook" title="Link to this heading"></a></h2>
 <p>If you want to use aurel in a jupyter notebook, add your virtual environment as a Jupyter kernel</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>ipykernel
-python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>myenv<span class="w"> </span>--display-name<span class="w"> </span><span class="s2">&quot;Python (myenv)&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>myenv<span class="w"> </span>--display-name<span class="w"> </span><span class="s2">&quot;Python (myenv)&quot;</span>
 </pre></div>
 </div>
-<p>To have FFTW loaded in your notebook make sure to load the module before starting up your notebook.</p>
-<p>To do this automatically, in the paths listed previously
-(with <cite>module show fftw_name</cite>) you should see:
-<cite>prepend_path(“LD_LIBRARY_PATH”,”/path/to/fftw/lib”)</cite>,
-this needs to be added to the kernel configuration file. So,
-<code class="docutils literal notranslate"><span class="pre">vim</span> <span class="pre">~/.local/share/jupyter/kernels/myenv/kernel.json</span></code> and edit this to
-include the path to the FFTW library in the <cite>env</cite> section,
-so it looks like this (change the path below):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
-<span class="s2">&quot;argv&quot;</span>:<span class="w"> </span><span class="o">[</span>lots<span class="w"> </span>of<span class="w"> </span>things<span class="w"> </span>here,<span class="w"> </span>keep<span class="w"> </span>them<span class="w"> </span>as<span class="w"> </span>they<span class="w"> </span>are<span class="o">]</span>,
-<span class="s2">&quot;env&quot;</span>:<span class="w"> </span><span class="o">{</span>
-<span class="s2">&quot;LD_LIBRARY_PATH&quot;</span>:<span class="w"> </span><span class="s2">&quot;/path/to/fftw/lib:</span><span class="nv">$LD_LIBRARY_PATH</span><span class="s2">&quot;</span>
-<span class="o">}</span>,
-<span class="s2">&quot;display_name&quot;</span>:<span class="w"> </span><span class="s2">&quot;Python (myenv)&quot;</span>,
-<span class="s2">&quot;language&quot;</span>:<span class="w"> </span><span class="s2">&quot;python&quot;</span>,
-<span class="s2">&quot;metadata&quot;</span>:<span class="w"> </span><span class="o">{</span>
-<span class="s2">&quot;debugger&quot;</span>:<span class="w"> </span><span class="nb">true</span>
-<span class="o">}</span>
-</pre></div>
-</div>
-<p>In vim, press <cite>i</cite> to enter insert mode, modify/include the <cite>env</cite> section,
-then press <cite>Esc</cite> to exit insert mode, and type <cite>:wq</cite> to save and quit.</p>
 <p>Now you can load your jupyter notebook, select the kernel you just created
 <cite>Python (myenv)</cite> and type in your notebook:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
@@ -152,10 +131,9 @@ then press <cite>Esc</cite> to exit insert mode, and type <cite>:wq</cite> to sa
 </div>
 </section>
 <section id="python-script">
-<h3>Python script<a class="headerlink" href="#python-script" title="Link to this heading"></a></h3>
+<h2>Python script<a class="headerlink" href="#python-script" title="Link to this heading"></a></h2>
 <p>If you want to use aurel in a python script, before running it, activate the environment</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>load<span class="w"> </span>fftw_name
-<span class="nb">source</span><span class="w"> </span>~/myenv/bin/activate
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>~/myenv/bin/activate
 python<span class="w"> </span>myscript.py
 </pre></div>
 </div>
@@ -165,33 +143,8 @@ python<span class="w"> </span>myscript.py
 </div>
 </section>
 </section>
-<section id="parallelisation">
-<h2>Parallelisation<a class="headerlink" href="#parallelisation" title="Link to this heading"></a></h2>
-<p>Aurel uses JAX for vectorisation, JIT compilation and parallelisation.
-See the <a class="reference external" href="https://docs.jax.dev/en/latest/user_guides.html#user-guides">JAX documentation</a> for more information on how to use it.</p>
-<p>To accelerate things, make sure anything you pass to aurel is a JAX array.</p>
-<ul class="simple">
-<li><p>In a <strong>jupyter notebook</strong></p></li>
-</ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
-<span class="n">jax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;jax_num_cpu_devices&#39;</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-<span class="c1"># Replace N with the number of threads you want to use</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">())</span> <span class="c1"># check the number of devices visible to jax</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
-</pre></div>
-</div>
-<p>All jax configuration options need to be set before importing aurel.</p>
-<ul class="simple">
-<li><p>In a <strong>python script</strong></p></li>
-</ul>
-<p>You can put the above in your python script, or before calling the script, put in the terminal or your executable:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">XLA_FLAGS</span><span class="o">=</span><span class="s2">&quot;--xla_cpu_multi_thread_eigen=true intra_op_parallelism_threads=N&quot;</span>
-</pre></div>
-</div>
-<p>Replace N with the number of threads you want to use.</p>
-</section>
 <section id="convergence">
-<h2>Convergence<a class="headerlink" href="#convergence" title="Link to this heading"></a></h2>
+<h1>Convergence<a class="headerlink" href="#convergence" title="Link to this heading"></a></h1>
 <p>See <a class="reference external" href="https://github.com/robynlm/aurel/blob/main/notebooks/Schwarzschild_check.ipynb">Schwarzschild_check notebook</a></p>
 <ul class="simple">
 <li><p>Choose the order of the finite difference scheme you want to use,
@@ -200,17 +153,10 @@ this is done by setting the <cite>fd_order</cite> parameter in the
 <code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">=</span> <span class="pre">aurel.FiniteDifference(param,</span> <span class="pre">fd_order=6)</span></code></p></li>
 <li><p>Increase the grid resolution in your simulation, or reduce the grid spacing
 for generated data.</p></li>
-<li><p>Increase float precision, default for jax is float32, you can increase
-this by configuring jax before importing aurel:</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
-<span class="n">jax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;jax_enable_x64&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
-</pre></div>
-</div>
 </section>
 <section id="citation">
-<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading"></a></h2>
+<h1>Citation<a class="headerlink" href="#citation" title="Link to this heading"></a></h1>
 <p>If you use aurel in your work, please cite it as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@misc</span><span class="p">{</span><span class="n">aurel2025</span><span class="p">,</span>
   <span class="n">title</span>     <span class="o">=</span> <span class="p">{</span><span class="n">Aurel</span><span class="p">:</span> <span class="n">A</span> <span class="n">Python</span> <span class="n">package</span> <span class="k">for</span> <span class="n">automatic</span> <span class="n">relativistic</span> <span class="n">calculations</span><span class="p">},</span>
@@ -233,36 +179,10 @@ include:</p>
   <span class="n">month</span>     <span class="o">=</span> <span class="p">{</span><span class="n">jun</span><span class="p">},</span>
   <span class="n">doi</span>       <span class="o">=</span> <span class="p">{</span><span class="mf">10.1088</span><span class="o">/</span><span class="mi">1361</span><span class="o">-</span><span class="mi">6382</span><span class="o">/</span><span class="n">acd6cf</span><span class="p">},</span>
   <span class="n">archivePrefix</span> <span class="o">=</span> <span class="p">{</span><span class="n">arXiv</span><span class="p">},</span>
-  <span class="n">eprint</span>    <span class="o">=</span> <span class="p">{</span><span class="n">gr</span><span class="o">-</span><span class="n">qc</span><span class="o">/</span><span class="mf">2211.08133</span><span class="p">}}</span>
+  <span class="n">eprint</span>    <span class="o">=</span> <span class="p">{</span><span class="mf">2211.08133</span><span class="p">},</span>
+  <span class="n">primaryClass</span> <span class="o">=</span> <span class="p">{</span><span class="n">gr</span><span class="o">-</span><span class="n">qc</span><span class="p">}}</span>
 </pre></div>
 </div>
-<p>If you use aurel to calculate <span class="math notranslate nohighlight">\(\Psi_{4}^{l,m}\)</span> then you ought to also cite
-the <a class="reference external" href="https://github.com/moble/spinsfast">spinsfast package</a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@software</span><span class="p">{</span><span class="n">M</span><span class="o">.</span><span class="n">Boyle_Okarin_2024</span><span class="p">,</span>
-  <span class="n">title</span>     <span class="o">=</span> <span class="p">{</span><span class="n">moble</span><span class="o">/</span><span class="n">spinsfast</span><span class="p">:</span> <span class="n">Release</span> <span class="n">v2022</span><span class="mf">.4.10</span><span class="p">},</span>
-  <span class="n">author</span>    <span class="o">=</span> <span class="p">{</span><span class="n">Boyle</span><span class="p">,</span> <span class="n">Mike</span> <span class="ow">and</span> <span class="n">Okarin</span><span class="p">},</span>
-  <span class="n">publisher</span> <span class="o">=</span> <span class="p">{</span><span class="n">Zenodo</span><span class="p">},</span>
-  <span class="n">month</span>     <span class="o">=</span> <span class="p">{</span><span class="n">dec</span><span class="p">},</span>
-  <span class="n">year</span>      <span class="o">=</span> <span class="p">{</span><span class="mi">2024</span><span class="p">},</span>
-  <span class="n">version</span>   <span class="o">=</span> <span class="p">{</span><span class="n">v2022</span><span class="mf">.4.10</span><span class="p">},</span>
-  <span class="n">doi</span>       <span class="o">=</span> <span class="p">{</span><span class="mf">10.5281</span><span class="o">/</span><span class="n">zenodo</span><span class="mf">.14522969</span><span class="p">}}</span>
-
-<span class="nd">@article</span><span class="p">{</span><span class="n">K</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">Huffenberger_B</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">Wandel_2010</span><span class="p">,</span>
-  <span class="n">title</span>     <span class="o">=</span> <span class="p">{</span><span class="n">FAST</span> <span class="n">AND</span> <span class="n">EXACT</span> <span class="n">SPIN</span><span class="o">-</span><span class="n">s</span> <span class="n">SPHERICAL</span> <span class="n">HARMONIC</span> <span class="n">TRANSFORMS</span><span class="p">},</span>
-  <span class="n">author</span>    <span class="o">=</span> <span class="p">{</span><span class="n">Huffenberger</span><span class="p">,</span> <span class="n">Kevin</span> <span class="n">M</span><span class="o">.</span> <span class="ow">and</span> <span class="n">Wandelt</span><span class="p">,</span> <span class="n">Benjamin</span> <span class="n">D</span><span class="o">.</span><span class="p">},</span>
-  <span class="n">journal</span>   <span class="o">=</span> <span class="p">{</span><span class="n">The</span> <span class="n">Astrophysical</span> <span class="n">Journal</span> <span class="n">Supplement</span> <span class="n">Series</span><span class="p">},</span>
-  <span class="n">publisher</span> <span class="o">=</span> <span class="p">{</span><span class="n">The</span> <span class="n">American</span> <span class="n">Astronomical</span> <span class="n">Society</span><span class="p">},</span>
-  <span class="n">volume</span>    <span class="o">=</span> <span class="p">{</span><span class="mi">189</span><span class="p">},</span>
-  <span class="n">number</span>    <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">},</span>
-  <span class="n">pages</span>     <span class="o">=</span> <span class="p">{</span><span class="mi">255</span><span class="p">},</span>
-  <span class="n">month</span>     <span class="o">=</span> <span class="p">{</span><span class="n">jul</span><span class="p">},</span>
-  <span class="n">year</span>      <span class="o">=</span> <span class="p">{</span><span class="mi">2010</span><span class="p">},</span>
-  <span class="n">doi</span>       <span class="o">=</span> <span class="p">{</span><span class="mf">10.1088</span><span class="o">/</span><span class="mi">0067</span><span class="o">-</span><span class="mi">0049</span><span class="o">/</span><span class="mi">189</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mi">255</span><span class="p">},</span>
-  <span class="n">archivePrefix</span> <span class="o">=</span> <span class="p">{</span><span class="n">astro</span><span class="o">-</span><span class="n">ph</span><span class="p">},</span>
-  <span class="n">eprint</span>    <span class="o">=</span> <span class="p">{</span><span class="n">gr</span><span class="o">-</span><span class="n">qc</span><span class="o">/</span><span class="mf">1007.3514</span><span class="p">}}</span>
-</pre></div>
-</div>
-</section>
 </section>
 
 
@@ -270,6 +190,7 @@ the <a class="reference external" href="https://github.com/moble/spinsfast">spin
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="solutions.html" class="btn btn-neutral float-left" title="aurel.solutions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../notebooks/Example.html" class="btn btn-neutral float-right" title="Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

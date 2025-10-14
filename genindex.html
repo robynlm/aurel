@@ -8,9 +8,11 @@
   <title>Index &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=0e075184" />
 
   
+    <link rel="shortcut icon" href="_static/favicon.png"/>
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=8d170800"></script>
@@ -48,8 +50,23 @@
 <li class="toctree-l1"><a class="reference internal" href="source/maths.html">aurel.maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/numerical.html">aurel.numerical</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/reading.html">aurel.reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/time.html">aurel.time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/solutions.html">aurel.solutions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html">Advice</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html#citation">Citation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example_over_time.html">Example over time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/tov_ET.html">tov_ET</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Schwarzschild_check.html">Schwarzschild check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Analytic_check.html">Analytic check</a></li>
 </ul>
 
         </div>
@@ -137,8 +154,6 @@
 </li>
       </ul></li>
       <li><a href="source/maths.html#aurel.maths.antisymmetrise_tensor">antisymmetrise_tensor() (in module aurel.maths)</a>
-</li>
-      <li><a href="source/core.html#aurel.core.AurelCore.assumption">assumption() (aurel.core.AurelCore method)</a>
 </li>
       <li>
     aurel.coreanalytic
@@ -247,6 +262,13 @@
         <li><a href="source/solutions.html#module-aurel.solutions.Szekeres">module</a>
 </li>
       </ul></li>
+      <li>
+    aurel.time
+
+      <ul>
+        <li><a href="source/time.html#module-aurel.time">module</a>
+</li>
+      </ul></li>
       <li><a href="source/core.html#aurel.core.AurelCore">AurelCore (class in aurel.core)</a>
 </li>
       <li><a href="source/coreanalytic.html#aurel.coreanalytic.AurelCoreAnalytic">AurelCoreAnalytic (class in aurel.coreanalytic)</a>
@@ -287,6 +309,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/core.html#aurel.core.AurelCore.clear_cache_every_nbr_calc">clear_cache_every_nbr_calc (aurel.core.AurelCore attribute)</a>
 </li>
+      <li><a href="source/reading.html#aurel.reading.collect_overall_iterations">collect_overall_iterations() (in module aurel.reading)</a>
+</li>
       <li><a href="source/finitedifference.html#aurel.finitedifference.FiniteDifference.cutoffmask">cutoffmask() (aurel.finitedifference.FiniteDifference method)</a>
 </li>
       <li><a href="source/finitedifference.html#aurel.finitedifference.FiniteDifference.cutoffmask2">cutoffmask2() (aurel.finitedifference.FiniteDifference method)</a>
@@ -307,13 +331,19 @@
 </li>
       <li><a href="source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3x">d3x() (aurel.finitedifference.FiniteDifference method)</a>
 </li>
+      <li><a href="source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3x_rank1tensor">d3x_rank1tensor() (aurel.finitedifference.FiniteDifference method)</a>
+</li>
       <li><a href="source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3x_rank2tensor">d3x_rank2tensor() (aurel.finitedifference.FiniteDifference method)</a>
 </li>
       <li><a href="source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3y">d3y() (aurel.finitedifference.FiniteDifference method)</a>
 </li>
+      <li><a href="source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3y_rank1tensor">d3y_rank1tensor() (aurel.finitedifference.FiniteDifference method)</a>
+</li>
       <li><a href="source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3y_rank2tensor">d3y_rank2tensor() (aurel.finitedifference.FiniteDifference method)</a>
 </li>
       <li><a href="source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3z">d3z() (aurel.finitedifference.FiniteDifference method)</a>
+</li>
+      <li><a href="source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3z_rank1tensor">d3z_rank1tensor() (aurel.finitedifference.FiniteDifference method)</a>
 </li>
       <li><a href="source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3z_rank2tensor">d3z_rank2tensor() (aurel.finitedifference.FiniteDifference method)</a>
 </li>
@@ -469,6 +499,8 @@
         <li><a href="source/solutions.html#aurel.solutions.Szekeres.gdown4">(in module aurel.solutions.Szekeres)</a>
 </li>
       </ul></li>
+      <li><a href="source/reading.html#aurel.reading.get_content">get_content() (in module aurel.reading)</a>
+</li>
       <li><a href="source/maths.html#aurel.maths.getcomponents3">getcomponents3() (in module aurel.maths)</a>
 </li>
       <li><a href="source/maths.html#aurel.maths.getcomponents4">getcomponents4() (in module aurel.maths)</a>
@@ -561,19 +593,19 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/core.html#aurel.core.AurelCore.Lambda">Lambda (aurel.core.AurelCore attribute)</a>
-</li>
       <li><a href="source/core.html#aurel.core.AurelCore.last_accessed">last_accessed (aurel.core.AurelCore attribute)</a>
 </li>
       <li><a href="source/core.html#aurel.core.AurelCore.levicivita_down3">levicivita_down3() (aurel.core.AurelCore method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/core.html#aurel.core.AurelCore.levicivita_down4">levicivita_down4() (aurel.core.AurelCore method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/core.html#aurel.core.AurelCore.levicivita_symbol_down3">levicivita_symbol_down3() (aurel.core.AurelCore method)</a>
 </li>
       <li><a href="source/core.html#aurel.core.AurelCore.levicivita_symbol_down4">levicivita_symbol_down4() (aurel.core.AurelCore method)</a>
+</li>
+      <li><a href="source/core.html#aurel.core.AurelCore.Lie_beta">Lie_beta() (aurel.core.AurelCore method)</a>
 </li>
       <li><a href="source/core.html#aurel.core.AurelCore.load_data">load_data() (aurel.core.AurelCore method)</a>
 </li>
@@ -586,6 +618,10 @@
       <li><a href="source/core.html#aurel.core.AurelCore.magnitude3">magnitude3() (aurel.core.AurelCore method)</a>
 </li>
       <li><a href="source/core.html#aurel.core.AurelCore.magnitude4">magnitude4() (aurel.core.AurelCore method)</a>
+</li>
+      <li><a href="source/finitedifference.html#aurel.finitedifference.map1">map1() (in module aurel.finitedifference)</a>
+</li>
+      <li><a href="source/finitedifference.html#aurel.finitedifference.map2">map2() (in module aurel.finitedifference)</a>
 </li>
       <li><a href="source/finitedifference.html#aurel.finitedifference.FiniteDifference.mask_len">mask_len (aurel.finitedifference.FiniteDifference attribute)</a>
 </li>
@@ -625,6 +661,8 @@
 </li>
         <li><a href="source/solutions.html#module-aurel.solutions.Szekeres">aurel.solutions.Szekeres</a>
 </li>
+        <li><a href="source/time.html#module-aurel.time">aurel.time</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -654,14 +692,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/solutions.html#aurel.solutions.Conformally_flat.Omega">Omega() (in module aurel.solutions.Conformally_flat)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/solutions.html#aurel.solutions.EdS.Omega_m">Omega_m() (in module aurel.solutions.EdS)</a>
 
       <ul>
         <li><a href="source/solutions.html#aurel.solutions.LCDM.Omega_m">(in module aurel.solutions.LCDM)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/time.html#aurel.time.over_time">over_time() (in module aurel.time)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -672,8 +712,14 @@
 </li>
       <li><a href="source/reading.html#aurel.reading.parameters">parameters() (in module aurel.reading)</a>
 </li>
+      <li><a href="source/reading.html#aurel.reading.parse_h5file">parse_h5file() (in module aurel.reading)</a>
+</li>
+      <li><a href="source/reading.html#aurel.reading.parse_hdf5_key">parse_hdf5_key() (in module aurel.reading)</a>
+</li>
       <li><a href="source/maths.html#aurel.maths.populate_4Riemann">populate_4Riemann() (in module aurel.maths)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/solutions.html#aurel.solutions.Collins_Stewart.press">press() (in module aurel.solutions.Collins_Stewart)</a>
 
       <ul>
@@ -684,11 +730,7 @@
         <li><a href="source/solutions.html#aurel.solutions.Szekeres.press">(in module aurel.solutions.Szekeres)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/core.html#aurel.core.AurelCore.Psi4_lm_lmax">Psi4_lm_lmax (aurel.core.AurelCore attribute)</a>
-</li>
-      <li><a href="source/core.html#aurel.core.AurelCore.Psi4_lm_radius">Psi4_lm_radius (aurel.core.AurelCore attribute)</a>
+      <li><a href="source/time.html#aurel.time.process_single_timestep">process_single_timestep() (in module aurel.time)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -704,7 +746,11 @@
 </li>
       <li><a href="source/reading.html#aurel.reading.read_ET_data">read_ET_data() (in module aurel.reading)</a>
 </li>
-      <li><a href="source/reading.html#aurel.reading.read_ET_var">read_ET_var() (in module aurel.reading)</a>
+      <li><a href="source/reading.html#aurel.reading.read_ET_group_or_var">read_ET_group_or_var() (in module aurel.reading)</a>
+</li>
+      <li><a href="source/reading.html#aurel.reading.read_ET_variables">read_ET_variables() (in module aurel.reading)</a>
+</li>
+      <li><a href="source/reading.html#aurel.reading.read_iterations">read_iterations() (in module aurel.reading)</a>
 </li>
       <li><a href="source/finitedifference.html#aurel.finitedifference.FiniteDifference.reconstruct">reconstruct() (aurel.finitedifference.FiniteDifference method)</a>
 </li>
@@ -714,8 +760,6 @@
         <li><a href="source/solutions.html#aurel.solutions.LCDM.redshift">(in module aurel.solutions.LCDM)</a>
 </li>
       </ul></li>
-      <li><a href="source/core.html#aurel.core.AurelCore.required_vars">required_vars (aurel.core.AurelCore attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/solutions.html#aurel.solutions.Collins_Stewart.rho">rho() (in module aurel.solutions.Collins_Stewart)</a>
@@ -796,11 +840,19 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/core.html#aurel.core.AurelCore.tetrad_base">tetrad_base() (aurel.core.AurelCore method)</a>
 </li>
-      <li><a href="source/core.html#aurel.core.AurelCore.tetrad_to_use">tetrad_to_use (aurel.core.AurelCore attribute)</a>
-</li>
       <li><a href="source/core.html#aurel.core.AurelCore.trace3">trace3() (aurel.core.AurelCore method)</a>
 </li>
       <li><a href="source/core.html#aurel.core.AurelCore.trace4">trace4() (aurel.core.AurelCore method)</a>
+</li>
+      <li><a href="source/core.html#aurel.core.AurelCore.tracefree3">tracefree3() (aurel.core.AurelCore method)</a>
+</li>
+      <li><a href="source/reading.html#aurel.reading.transform_vars_aurel_to_ET">transform_vars_aurel_to_ET() (in module aurel.reading)</a>
+</li>
+      <li><a href="source/reading.html#aurel.reading.transform_vars_ET_to_aurel">transform_vars_ET_to_aurel() (in module aurel.reading)</a>
+</li>
+      <li><a href="source/reading.html#aurel.reading.transform_vars_ET_to_aurel_groups">transform_vars_ET_to_aurel_groups() (in module aurel.reading)</a>
+</li>
+      <li><a href="source/reading.html#aurel.reading.transform_vars_tensor_to_scalar">transform_vars_tensor_to_scalar() (in module aurel.reading)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -816,10 +868,14 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/core.html#aurel.core.AurelCore.var_importance">var_importance (aurel.core.AurelCore attribute)</a>
+      <li><a href="source/time.html#aurel.time.validate_estimation_function">validate_estimation_function() (in module aurel.time)</a>
+</li>
+      <li><a href="source/time.html#aurel.time.validate_variable_function">validate_variable_function() (in module aurel.time)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/core.html#aurel.core.AurelCore.var_importance">var_importance (aurel.core.AurelCore attribute)</a>
+</li>
       <li><a href="source/core.html#aurel.core.AurelCore.vector_inner_product3">vector_inner_product3() (aurel.core.AurelCore method)</a>
 </li>
       <li><a href="source/core.html#aurel.core.AurelCore.vector_inner_product4">vector_inner_product4() (aurel.core.AurelCore method)</a>

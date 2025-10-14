@@ -1,0 +1,391 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Schwarzschild check &mdash; aurel May 2025 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d170800"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Analytic check" href="Analytic_check.html" />
+    <link rel="prev" title="ICPertFLRW" href="ICPertFLRW.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aurel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/core.html">aurel.core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/finitedifference.html">aurel.finitedifference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/maths.html">aurel.maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/numerical.html">aurel.numerical</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/reading.html">aurel.reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/time.html">aurel.time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/solutions.html">aurel.solutions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#citation">Citation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Example_over_time.html">Example over time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tov_ET.html">tov_ET</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ICPertFLRW.html">ICPertFLRW</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Schwarzschild check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Analytic_check.html">Analytic check</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aurel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Schwarzschild check</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/Schwarzschild_check.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="schwarzschild-check">
+<h1>Schwarzschild check<a class="headerlink" href="#schwarzschild-check" title="Link to this heading"></a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
+
+<span class="c1"># Import the module</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aurel.solutions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Schwarzschild_isotropic</span> <span class="k">as</span> <span class="n">sol</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">nt</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">NRerror</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">NKerror</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">NNerror</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">allN</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">96</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">144</span><span class="p">,</span> <span class="mi">192</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">N</span> <span class="ow">in</span> <span class="n">allN</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; *** N = &quot;</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">L</span> <span class="o">/</span> <span class="n">N</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;Nx&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s1">&#39;Ny&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s1">&#39;Nz&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> 
+            <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">+</span><span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">+</span><span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;zmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">+</span><span class="mf">0.01</span><span class="p">,</span> 
+            <span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="n">dx</span><span class="p">,</span> <span class="s1">&#39;dy&#39;</span><span class="p">:</span> <span class="n">dx</span><span class="p">,</span> <span class="s1">&#39;dz&#39;</span><span class="p">:</span> <span class="n">dx</span><span class="p">}</span>
+    <span class="n">fd</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">FiniteDifference</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">fd_order</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">rel</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCore</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+    <span class="n">rel</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+    <span class="n">rel</span><span class="o">.</span><span class="n">freeze_data</span><span class="p">()</span>
+    <span class="n">rel</span><span class="o">.</span><span class="n">memory_threshold_inGB</span> <span class="o">=</span> <span class="mi">20</span>
+
+    <span class="n">R_numerical</span> <span class="o">=</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;s_RicciS&quot;</span><span class="p">]</span>
+    <span class="n">Rerror</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">R_numerical</span><span class="p">)</span>
+    <span class="n">NRerror</span> <span class="o">+=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">excision2</span><span class="p">(</span><span class="n">Rerror</span><span class="p">))]</span>
+
+    <span class="n">K_numerical</span> <span class="o">=</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Kretschmann&quot;</span><span class="p">]</span>
+    <span class="n">K_exact</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">Kretschmann</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+    <span class="n">Kerror</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">K_numerical</span> <span class="o">-</span> <span class="n">K_exact</span><span class="p">)</span> <span class="o">/</span> <span class="n">K_exact</span><span class="p">)</span>
+    <span class="n">NKerror</span> <span class="o">+=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">excision2</span><span class="p">(</span><span class="n">Kerror</span><span class="p">))]</span>
+
+    <span class="n">N_numerical</span> <span class="o">=</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;null_ray_exp_out&quot;</span><span class="p">]</span>
+    <span class="n">N_exact</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">null_ray_exp_out</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+    <span class="n">Nerror</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">N_numerical</span> <span class="o">-</span> <span class="n">N_exact</span><span class="p">)</span> <span class="o">/</span> <span class="n">N_exact</span><span class="p">)</span>
+    <span class="n">NNerror</span> <span class="o">+=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">excision2</span><span class="p">(</span><span class="n">Nerror</span><span class="p">))]</span>
+    
+    <span class="k">if</span> <span class="n">N</span> <span class="o">!=</span> <span class="n">allN</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">del</span> <span class="n">fd</span><span class="p">,</span> <span class="n">rel</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> *** N =  32
+8th order finite difference schemes are defined
+
+Cosmological constant set to AurelCore.Lambda = 0.00e+00
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
+Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
+Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
+Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
+Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
+Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
+Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
+Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
+ *** N =  64
+8th order finite difference schemes are defined
+
+Cosmological constant set to AurelCore.Lambda = 0.00e+00
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
+Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
+Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
+Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
+Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
+Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
+Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
+Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
+ *** N =  96
+8th order finite difference schemes are defined
+
+Cosmological constant set to AurelCore.Lambda = 0.00e+00
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
+Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
+Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
+Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
+Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
+Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
+Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
+Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
+ *** N =  128
+8th order finite difference schemes are defined
+
+Cosmological constant set to AurelCore.Lambda = 0.00e+00
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
+Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
+Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
+Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
+Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
+Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
+Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
+Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
+ *** N =  144
+8th order finite difference schemes are defined
+
+Cosmological constant set to AurelCore.Lambda = 0.00e+00
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
+Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
+Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
+Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
+Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
+Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
+Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
+Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
+ *** N =  192
+8th order finite difference schemes are defined
+
+Cosmological constant set to AurelCore.Lambda = 0.00e+00
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
+Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
+Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
+Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
+Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
+Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
+CLEAN-UP: Cleaning up cache after 16 calculations...
+CLEAN-UP: data size before cleanup: 29700.00 MB
+CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 6 calculations ago (size: 486.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 11 calculations ago (size: 4374.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 10 calculations ago (size: 4374.00 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 4 calculations ago (size: 864.00 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 864.00 MB).
+CLEAN-UP: Removed 5 items
+CLEAN-UP: data size after cleanup: 18738.00 MB
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
+CLEAN-UP: Cleaning up cache after 19 calculations...
+CLEAN-UP: data size before cleanup: 34290.00 MB
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 5 calculations ago (size: 486.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 5 calculations ago (size: 486.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 3 calculations ago (size: 13824.00 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 2 calculations ago (size: 864.00 MB).
+CLEAN-UP: Removed 4 items
+CLEAN-UP: data size after cleanup: 18630.00 MB
+Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+CLEAN-UP: Cleaning up cache after 20 calculations...
+CLEAN-UP: data size before cleanup: 18684.00 MB
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 864.00 MB).
+CLEAN-UP: Removed 1 items
+CLEAN-UP: data size after cleanup: 17820.00 MB
+Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">NRerror</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;3 Ricci scalar&#39;</span><span class="p">)</span>
+<span class="n">order</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">ical</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span>
+<span class="n">converge</span> <span class="o">=</span> <span class="p">[</span><span class="n">NRerror</span><span class="p">[</span><span class="n">ical</span><span class="p">]</span><span class="o">*</span><span class="p">((</span><span class="n">allN</span><span class="p">[</span><span class="n">ical</span><span class="p">]</span><span class="o">/</span><span class="n">allN</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="p">(</span><span class="n">order</span><span class="p">))</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">allN</span><span class="p">))]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">converge</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">th order&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">order</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">NKerror</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Kretschmann&#39;</span><span class="p">)</span>
+<span class="n">order</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">ical</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span>
+<span class="n">converge</span> <span class="o">=</span> <span class="p">[</span><span class="n">NKerror</span><span class="p">[</span><span class="n">ical</span><span class="p">]</span><span class="o">*</span><span class="p">((</span><span class="n">allN</span><span class="p">[</span><span class="n">ical</span><span class="p">]</span><span class="o">/</span><span class="n">allN</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="p">(</span><span class="n">order</span><span class="p">))</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">allN</span><span class="p">))]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">converge</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">th order&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">order</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">NNerror</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\Theta_</span><span class="si">{out}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">order</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">ical</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span>
+<span class="n">converge</span> <span class="o">=</span> <span class="p">[</span><span class="n">NNerror</span><span class="p">[</span><span class="n">ical</span><span class="p">]</span><span class="o">*</span><span class="p">((</span><span class="n">allN</span><span class="p">[</span><span class="n">ical</span><span class="p">]</span><span class="o">/</span><span class="n">allN</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="p">(</span><span class="n">order</span><span class="p">))</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">allN</span><span class="p">))]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">converge</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">th order&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">order</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Error&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;8th order FD with excision&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;8th order FD with excision&#39;)
+</pre></div>
+</div>
+<img alt="../_images/149306eae6146b0220677aa1839c93808d08e52b8bdd94156d6aaa2cd684de94.png" src="../_images/149306eae6146b0220677aa1839c93808d08e52b8bdd94156d6aaa2cd684de94.png" />
+</div>
+</div>
+<p>This shows better than 8th order convergence and a transition from truncation error (from the finite differencing) to floating point noise (from the number of digits stored).</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ICPertFLRW.html" class="btn btn-neutral float-left" title="ICPertFLRW" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Analytic_check.html" class="btn btn-neutral float-right" title="Analytic check" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Robyn L. Munoz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

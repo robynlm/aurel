@@ -9,15 +9,17 @@
   <title>Welcome to aurel’s documentation! &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=0e075184" />
 
   
+    <link rel="shortcut icon" href="_static/favicon.png"/>
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=8d170800"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}}</script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -52,8 +54,23 @@
 <li class="toctree-l1"><a class="reference internal" href="source/maths.html">aurel.maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/numerical.html">aurel.numerical</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/reading.html">aurel.reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/time.html">aurel.time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/solutions.html">aurel.solutions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html">Advice</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html#citation">Citation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example_over_time.html">Example over time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/tov_ET.html">tov_ET</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Schwarzschild_check.html">Schwarzschild check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Analytic_check.html">Analytic check</a></li>
 </ul>
 
         </div>
@@ -86,9 +103,8 @@
 <h1>Welcome to aurel’s documentation!<a class="headerlink" href="#welcome-to-aurel-s-documentation" title="Link to this heading"></a></h1>
 <p>Aurel is an open source Python package for numerical relativity analysis.
 Designed with ease of use in mind, it will
-<span style="font-weight: bold;">au</span>tomatically calculate any
-<span style="font-weight: bold;">rel</span>ativistic term
-your heart desires.
+<span style="font-weight: bold;">au</span>tomatically calculate
+<span style="font-weight: bold;">rel</span>ativistic terms.
 </p><p>(As long as it is in the list of available entities,
 see <a class="reference internal" href="source/core.html#descriptions-list"><span class="std std-ref">descriptions</span></a>.)</p>
 <p>In addition, this package also provides tools for
@@ -101,14 +117,6 @@ from <a class="reference external" href="https://einsteintoolkit.org">Einstein T
 </ul>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
-<p>Install FFTW, depending on your operating system,</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>on Ubuntu/Debian you can run: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">libfftw3-dev</span></code></p></li>
-<li><p>on macOS you can run: <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">fftw</span></code> or <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">port</span> <span class="pre">install</span> <span class="pre">fftw-3</span></code> depending on your package manager.</p></li>
-</ul>
-</div></blockquote>
-<p>This is needed for the <a class="reference external" href="https://github.com/moble/spinsfast">spinsfast package</a>.</p>
 <p>Install aurel using <a class="reference external" href="https://pip.pypa.io/en/stable/installation/">pip</a>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>aurel
 </pre></div>
@@ -136,7 +144,7 @@ and import the AurelCore class:</p>
 </pre></div>
 </div>
 <p>At this point you need to provide the spacetime metric, extrinsic curvature
-and matter fields, see <a class="reference internal" href="source/core.html#required-quantities"><span class="std std-ref">Required quantities</span></a>.
+and matter fields, see <a class="reference internal" href="source/core.html#assumed-quantities"><span class="std std-ref">Assumed quantities</span></a>.
 These are passed as numpy arrays to aurel in the following way:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the xx component of the spacetime metric</span>
 <span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;gxx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]))</span>
@@ -146,9 +154,6 @@ These are passed as numpy arrays to aurel in the following way:</p>
 In this example <span class="math notranslate nohighlight">\(g_{xx} = 1\)</span>, but you can pass any numpy array;
 it can be of numerical relativity simulation data,
 or an array generated from an analytical expression.</p>
-<p>Assumptions are made for other core quantities,
-if these are not valid they should be overwritten at this point,
-see <a class="reference internal" href="source/core.html#assumed-quantities"><span class="std std-ref">Assumed quantities</span></a>.</p>
 <p>With everything defined, you can call any entity listed in the
 <a class="reference internal" href="source/core.html#descriptions-list"><span class="std std-ref">descriptions</span></a> list. Just call it as:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;name_of_the_entity&quot;</span><span class="p">]</span>
@@ -156,13 +161,33 @@ see <a class="reference internal" href="source/core.html#assumed-quantities"><sp
 </div>
 <p><strong>Aurel will automatically do its best to calculate
 any relativistic term you ask for.</strong></p>
-<p>For further examples on how to use aurel see:</p>
-<ul class="simple">
-<li><p>the <a class="reference external" href="https://github.com/robynlm/aurel/blob/main/notebooks/Example.ipynb">Example notebook</a>,
-for an in depth description with tips and tricks,</p></li>
-<li><p>the <a class="reference external" href="https://github.com/robynlm/aurel/blob/main/notebooks/tov_ET.ipynb">tov_ET notebook</a>,
-for an example of how to load in data from an Einstein Toolkit simulation.</p></li>
-</ul>
+<p>Now if you want calculations over multiple moments in coordinate time, you can
+use the <code class="xref py py-func docutils literal notranslate"><span class="pre">aurel.over_time()</span></code> function. First, create a dictionary
+containing the spacetime and matter fields over time:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the spacetime metric gxx over time</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;gxx&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">])),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]))],</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>That is a data dictionary with keys the names of the quantities, and values a
+list of numpy arrays, one for each time step. Calculations will be performed
+for each of these time steps as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span>
+   <span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span>
+   <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name_of_the_entity&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;custom_quantity&#39;</span><span class="p">:</span> <span class="n">custom_quantity</span><span class="p">}],</span>
+   <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name_of_estimate&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;custom_estimate&#39;</span><span class="p">:</span> <span class="n">custom_estimate</span><span class="p">}],</span>
+   <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <cite>vars</cite> is a list of entities to calculate at each time step, available
+terms are in <a class="reference internal" href="source/core.html#descriptions-list"><span class="std std-ref">descriptions</span></a> but you can also pass custom functions
+to calculate your own quantities.
+Likewise <cite>estimates</cite> is a list of estimates to calculate at each time step,
+available functions are in <a class="reference internal" href="source/time.html#estimates-list"><span class="std std-ref">estimates</span></a> but you can also pass custom
+functions to calculate your own estimates. See the examples.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -172,8 +197,27 @@ for an example of how to load in data from an Einstein Toolkit simulation.</p></
 <li class="toctree-l1"><a class="reference internal" href="source/maths.html">aurel.maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/numerical.html">aurel.numerical</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/reading.html">aurel.reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/time.html">aurel.time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/solutions.html">aurel.solutions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html">Advice</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html#citation">Citation</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example_over_time.html">Example over time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/tov_ET.html">tov_ET</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Schwarzschild_check.html">Schwarzschild check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Analytic_check.html">Analytic check</a></li>
 </ul>
 </div>
 </section>

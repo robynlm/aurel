@@ -1,0 +1,796 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example &mdash; aurel May 2025 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d170800"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Example over time" href="Example_over_time.html" />
+    <link rel="prev" title="Working on an HPC" href="../source/advice.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aurel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/core.html">aurel.core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/finitedifference.html">aurel.finitedifference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/maths.html">aurel.maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/numerical.html">aurel.numerical</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/reading.html">aurel.reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/time.html">aurel.time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/solutions.html">aurel.solutions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#citation">Citation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quick-demonstration">Quick demonstration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#conformally-flat-metric">Conformally flat metric</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#accessing-variables">Accessing Variables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#in-depth-demonstration">In depth demonstration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grid-and-finite-difference-setup">Grid and finite difference setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aurel-automatic-relativity">aurel: Automatic Relativity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#minkowski-metric">Minkowski metric</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#harvey-tsoubelis-metric">Harvey Tsoubelis metric</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#weyl-scalars-and-petrov-classification">Weyl Scalars and Petrov Classification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cache-management">Cache management</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Example_over_time.html">Example over time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tov_ET.html">tov_ET</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ICPertFLRW.html">ICPertFLRW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Schwarzschild_check.html">Schwarzschild check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Analytic_check.html">Analytic check</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aurel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Example</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/Example.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="example">
+<h1>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="quick-demonstration">
+<h2>Quick demonstration<a class="headerlink" href="#quick-demonstration" title="Link to this heading"></a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the grid parameters</span>
+<span class="n">L</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">72</span>
+<span class="n">param</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;Nx&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s1">&#39;Ny&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s1">&#39;Nz&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> 
+          <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;zmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> 
+          <span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="n">L</span><span class="o">/</span><span class="n">N</span><span class="p">,</span> <span class="s1">&#39;dy&#39;</span><span class="p">:</span> <span class="n">L</span><span class="o">/</span><span class="n">N</span><span class="p">,</span> <span class="s1">&#39;dz&#39;</span><span class="p">:</span> <span class="n">L</span><span class="o">/</span><span class="n">N</span><span class="p">}</span>
+<span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+<span class="c1"># Define the finite difference and aurel classes</span>
+<span class="n">fd</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">FiniteDifference</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+<span class="n">rel</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCore</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4th order finite difference schemes are defined
+
+Cosmological constant set to AurelCore.Lambda = 0.00e+00
+dict_keys([])
+</pre></div>
+</div>
+</div>
+</div>
+<p>At this point the data dictionary is empty. Should you request a quantity, it will assume you are working with a vacuum Minkowski spacetime and calculate your quantity accordingly. Otherwise you need to provide the matter/spacetime.</p>
+<section id="conformally-flat-metric">
+<h3>Conformally flat metric<a class="headerlink" href="#conformally-flat-metric" title="Link to this heading"></a></h3>
+<p>The user needs to input the spacetime and matter distribution.
+For an easy example we use a conformally flat metric:
+<div class="math notranslate nohighlight">
+\[
+ds^2 = \Omega(x)^2 \left[- dt^2 + dx^2 + dy^2 + dz^2\right]
+\]</div>
+
+where <span class="math notranslate nohighlight">\(\Omega(x) = 1 + x^2\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define conformal factor</span>
+<span class="n">Om</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">fd</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+<span class="c1"># Define spacetime</span>
+<span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+<span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Om</span>
+<span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;gammadown3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">Om</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">zeros</span><span class="p">],</span>
+                                   <span class="p">[</span><span class="n">zeros</span><span class="p">,</span> <span class="n">Om</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">zeros</span><span class="p">],</span>
+                                   <span class="p">[</span><span class="n">zeros</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">Om</span><span class="o">**</span><span class="mi">2</span><span class="p">]])</span>
+
+<span class="c1"># Define matter field</span>
+<span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;rho_n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span> <span class="o">/</span> <span class="p">(</span><span class="n">rel</span><span class="o">.</span><span class="n">kappa</span> <span class="o">*</span> <span class="n">Om</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;press_n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span> <span class="o">*</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;rho_n&quot;</span><span class="p">]</span>
+
+<span class="n">rel</span><span class="o">.</span><span class="n">freeze_data</span><span class="p">()</span> <span class="c1"># freeze the data to not delete it in cache cleanup</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Now the rel class knows:&#39;</span><span class="p">,</span> <span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Now the rel class knows: dict_keys([&#39;alpha&#39;, &#39;gammadown3&#39;, &#39;rho_n&#39;, &#39;press_n&#39;])
+</pre></div>
+</div>
+</div>
+</div>
+<section id="accessing-variables">
+<h4>Accessing Variables<a class="headerlink" href="#accessing-variables" title="Link to this heading"></a></h4>
+<p>Here we can directly plot anything, calling it from the aurel class. If not available it will automatically calculate it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot formating</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s2">&quot;text.usetex&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;font.family&quot;</span><span class="p">:</span> <span class="s2">&quot;lmodern&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mf">16.0</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_var</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">varname</span><span class="p">,</span> <span class="n">semilogy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">semilogy</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> 
+                     <span class="n">var</span><span class="p">[:,</span><span class="n">fd</span><span class="o">.</span><span class="n">iycenter</span><span class="p">,</span><span class="n">fd</span><span class="o">.</span><span class="n">izcenter</span><span class="p">],</span> 
+                     <span class="n">label</span><span class="o">=</span><span class="n">varname</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> 
+                <span class="n">var</span><span class="p">[:,</span><span class="n">fd</span><span class="o">.</span><span class="n">iycenter</span><span class="p">,</span><span class="n">fd</span><span class="o">.</span><span class="n">izcenter</span><span class="p">],</span> 
+                <span class="n">label</span><span class="o">=</span><span class="n">varname</span><span class="p">)</span>  
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; *****************************************************&quot;</span><span class="p">)</span>
+    
+
+<span class="c1"># Lapse</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">231</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; -  alpha was part of the input data&quot;</span><span class="p">)</span>
+<span class="n">plot_var</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">],</span> <span class="sa">r</span><span class="s1">&#39;$\alpha$&#39;</span><span class="p">)</span>
+
+<span class="c1"># Spacetime metric determinant</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">232</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - Calculations for gdet&quot;</span><span class="p">)</span>
+<span class="n">plot_var</span><span class="p">(</span><span class="o">-</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;gdet&quot;</span><span class="p">],</span>
+         <span class="sa">r</span><span class="s1">&#39;-$g$&#39;</span><span class="p">,</span> <span class="n">semilogy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Eulerian pressure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">233</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - Calculations for trace of energy-stress tensor&quot;</span><span class="p">)</span>
+<span class="n">plot_var</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Ttrace&quot;</span><span class="p">],</span>  
+         <span class="sa">r</span><span class="s1">&#39;$T = T_{\mu\nu} g^{\mu\nu}$&#39;</span><span class="p">)</span>
+
+<span class="c1"># 3 Ricci scalar</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">234</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - Calculations for s_RicciS&quot;</span><span class="p">)</span>
+<span class="n">plot_var</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;s_RicciS&quot;</span><span class="p">],</span> <span class="sa">r</span><span class="s1">&#39;$</span><span class="si">{}</span><span class="s1">^{(3)}R$&#39;</span><span class="p">)</span>
+
+<span class="c1"># Spherically outgoing null ray expansion</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">235</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - Calculations for null_ray_exp&quot;</span><span class="p">)</span>
+<span class="n">plot_var</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;null_ray_exp_out&quot;</span><span class="p">],</span> <span class="sa">r</span><span class="s1">&#39;$\Theta_</span><span class="si">{out}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> 
+             <span class="o">-</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;null_ray_exp_in&quot;</span><span class="p">][:,</span><span class="n">fd</span><span class="o">.</span><span class="n">iycenter</span><span class="p">,</span><span class="n">fd</span><span class="o">.</span><span class="n">izcenter</span><span class="p">],</span> 
+             <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$-\Theta_</span><span class="si">{in}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Kretschmann scalar</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">236</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - Calculations for Kretschmann&quot;</span><span class="p">)</span>
+<span class="n">plot_var</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Kretschmann&quot;</span><span class="p">],</span> 
+         <span class="sa">r</span><span class="s1">&#39;$K = {R^{\alpha\beta}}_{\mu\nu} {R_{\alpha\beta}}^{\mu\nu}$&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> -  alpha was part of the input data
+ *****************************************************
+ - Calculations for gdet
+
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gdet: $g$ Determinant of spacetime metric
+ *****************************************************
+ - Calculations for trace of energy-stress tensor
+
+Calculated Ttrace: $T$ Trace of the energy-stress tensor
+ *****************************************************
+ - Calculations for s_RicciS
+
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
+Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
+Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
+ *****************************************************
+ - Calculations for null_ray_exp
+
+Calculated kxx: $K_{xx}$ Extrinsic curvature with xx indices down. I assume $K_{xx}=0$, if not then please define AurelCore.data[&#39;kxx&#39;] = ... 
+Calculated kxy: $K_{xy}$ Extrinsic curvature with xy indices down. I assume $K_{xy}=0$, if not then please define AurelCore.data[&#39;kxy&#39;] = ... 
+Calculated kxz: $K_{xz}$ Extrinsic curvature with xz indices down. I assume $K_{xz}=0$, if not then please define AurelCore.data[&#39;kxz&#39;] = ... 
+Calculated kyy: $K_{yy}$ Extrinsic curvature with yy indices down. I assume $K_{yy}=0$, if not then please define AurelCore.data[&#39;kyy&#39;] = ... 
+Calculated kyz: $K_{yz}$ Extrinsic curvature with yz indices down. I assume $K_{yz}=0$, if not then please define AurelCore.data[&#39;kyz&#39;] = ... 
+Calculated kzz: $K_{zz}$ Extrinsic curvature with zz indices down. I assume $K_{zz}=0$, if not then please define AurelCore.data[&#39;kzz&#39;] = ... 
+Calculated Kdown3: $K_{ij}$ Extrinsic curvature with spatial indices down
+Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+CLEAN-UP: Cleaning up cache after 20 calculations...
+CLEAN-UP: data size before cleanup: 287.62 MB
+CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 16 calculations ago (size: 8.54 MB).
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 15 calculations ago (size: 8.54 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 14 calculations ago (size: 45.56 MB).
+CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 9 calculations ago (size: 25.63 MB).
+CLEAN-UP: Removed 4 items
+CLEAN-UP: data size after cleanup: 199.34 MB
+Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
+ *****************************************************
+
+Calculated null_ray_exp_in: $\Theta_{in}$ List of expansion of null rays radially going in
+ - Calculations for Kretschmann
+
+Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
+Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
+Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
+Calculated rho0: $\rho_0$ Rest mass energy density. I assume $\rho_0=0$, if not then please define AurelCore.data[&#39;rho0&#39;] = ... 
+Calculated eps: $\epsilon$ Specific internal energy. I assume $\epsilon=0$, if not then please define AurelCore.data[&#39;eps&#39;] = ... 
+Calculated rho: $\rho$ Energy density
+Calculated w_lorentz: $W$ Lorentz factor. I assume $W=1$, if not then please define AurelCore.data[&#39;w_lorentz&#39;] = ... 
+Calculated uup0: $u^t$ Lagrangian fluid four velocity with time indice up
+Calculated velx: $v^x$ x component of Eulerian fluid three velocity with indice up. I assume $v^x=0$, if not then please define AurelCore.data[&#39;velx&#39;] = ... 
+Calculated vely: $v^y$ y component of Eulerian fluid three velocity with indice up. I assume $v^y=0$, if not then please define AurelCore.data[&#39;vely&#39;] = ... 
+Calculated velz: $v^z$ z component of Eulerian fluid three velocity with indice up. I assume $v^z=0$, if not then please define AurelCore.data[&#39;velz&#39;] = ... 
+Calculated velup3: $v^i$ Eulerian fluid three velocity with spatial indices up.
+Calculated uup3: $u^i$ Lagrangian fluid four velocity with spatial indices up
+Calculated uup4: $u^\mu$ Lagrangian fluid four velocity with spacetime indices up
+Calculated press: $p$ Pressure. I assume $p=0$, if not then please define AurelCore.data[&#39;press&#39;] = ... 
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+CLEAN-UP: Cleaning up cache after 40 calculations...
+CLEAN-UP: data size before cleanup: 808.74 MB
+CLEAN-UP: Removing cached value for &#39;gdet&#39; used 33 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;Ttrace&#39; used 32 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 15 calculations ago (size: 25.63 MB).
+CLEAN-UP: Removing cached value for &#39;kxx&#39; used 27 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;kxy&#39; used 26 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;kxz&#39; used 25 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;kyy&#39; used 24 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;kyz&#39; used 23 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;kzz&#39; used 22 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;Kdown3&#39; used 15 calculations ago (size: 25.63 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 17 calculations ago (size: 230.66 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 15 calculations ago (size: 230.66 MB).
+CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 14 calculations ago (size: 25.63 MB).
+CLEAN-UP: Removed 13 items
+CLEAN-UP: data size after cleanup: 247.75 MB
+Calculated udown4: $u_\mu$ Lagrangian fluid four velocity with spacetime indices down
+Calculated hdown4: $h_{\mu\nu}$ Spatial metric orthonomal to fluid flow with spacetime indices down
+Calculated Tdown4: $T_{\mu\nu}$ Energy-stress tensor with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
+Calculated kxx: $K_{xx}$ Extrinsic curvature with xx indices down. I assume $K_{xx}=0$, if not then please define AurelCore.data[&#39;kxx&#39;] = ... 
+Calculated kxy: $K_{xy}$ Extrinsic curvature with xy indices down. I assume $K_{xy}=0$, if not then please define AurelCore.data[&#39;kxy&#39;] = ... 
+Calculated kxz: $K_{xz}$ Extrinsic curvature with xz indices down. I assume $K_{xz}=0$, if not then please define AurelCore.data[&#39;kxz&#39;] = ... 
+Calculated kyy: $K_{yy}$ Extrinsic curvature with yy indices down. I assume $K_{yy}=0$, if not then please define AurelCore.data[&#39;kyy&#39;] = ... 
+Calculated kyz: $K_{yz}$ Extrinsic curvature with yz indices down. I assume $K_{yz}=0$, if not then please define AurelCore.data[&#39;kyz&#39;] = ... 
+Calculated kzz: $K_{zz}$ Extrinsic curvature with zz indices down. I assume $K_{zz}=0$, if not then please define AurelCore.data[&#39;kzz&#39;] = ... 
+Calculated Kdown3: $K_{ij}$ Extrinsic curvature with spatial indices down
+Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
+Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
+Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+ *****************************************************
+</pre></div>
+</div>
+<img alt="../_images/3251525ef7a16c1f3fa5ab9962ac3829dec67e12b35bca927d8c2fd0f657a160.png" src="../_images/3251525ef7a16c1f3fa5ab9962ac3829dec67e12b35bca927d8c2fd0f657a160.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">del</span> <span class="n">param</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">rel</span> <span class="c1"># for new demonstration</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="in-depth-demonstration">
+<h2>In depth demonstration<a class="headerlink" href="#in-depth-demonstration" title="Link to this heading"></a></h2>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Link to this heading"></a></h3>
+<p>All functions are documented, and you can access it with the help() function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">aurel</span><span class="o">.</span><span class="n">AurelCore</span><span class="o">.</span><span class="n">freeze_data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*********&#39;</span><span class="p">)</span>
+<span class="n">help</span><span class="p">(</span><span class="n">aurel</span><span class="o">.</span><span class="n">AurelCore</span><span class="o">.</span><span class="n">Ktrace</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*********&#39;</span><span class="p">)</span>
+<span class="n">help</span><span class="p">(</span><span class="n">aurel</span><span class="o">.</span><span class="n">AurelCore</span><span class="o">.</span><span class="n">s_covd</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on function freeze_data in module aurel.core:
+
+freeze_data(self)
+    Freeze the data dictionary to prevent cache removal.
+
+*********
+Help on function Ktrace in module aurel.core:
+
+Ktrace(self)
+    $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+
+*********
+Help on function s_covd in module aurel.core:
+
+s_covd(self, f, indexing)
+    Spatial covariant derivative of a 3D tensor of rank 0, 1 or 2.
+
+    Covariant derivative with respects to the spatial metric.
+
+    Parameters
+    ----------
+    f : (..., Nx, Ny, Nz) array_like
+        Tensor of rank 0, 1 or 2. The first indices are the spatial ones.
+    indexing : str
+        &#39;&#39; for scalar,
+        &#39;u&#39; for upper index, &#39;d&#39; for down index,
+        &#39;uu&#39; for two upper indices, &#39;dd&#39; for two down indices,
+        &#39;ud&#39; for one upper and one down index
+
+    Returns
+    -------
+    (3, ..., Nx, Ny, Nz) array_like
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="grid-and-finite-difference-setup">
+<h3>Grid and finite difference setup<a class="headerlink" href="#grid-and-finite-difference-setup" title="Link to this heading"></a></h3>
+<p>AurelCore takes as input the FiniteDifference class that defines the grid and will be used to calculate spatial derivatives.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># == Parameters</span>
+
+<span class="n">L</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># Data grid size</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">64</span> <span class="c1"># Number of data points per side</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">N</span> <span class="c1"># Elementary grid size</span>
+<span class="c1"># If you are running this on your own laptop and don&#39;t want the </span>
+<span class="c1"># computation to take too much time, you should make N smaller. </span>
+<span class="c1"># (But keep in mind that the accuracy increases as N increases)</span>
+
+<span class="c1"># Here we use a cube, but aurel is able to work with a rectangular grid of </span>
+<span class="c1"># arbitrary size and number of points so each side of the grid can be different</span>
+<span class="n">param</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Nx&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span>
+    <span class="s1">&#39;Ny&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span>
+    <span class="s1">&#39;Nz&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span>
+    <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="o">-</span> <span class="n">L</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="o">-</span> <span class="n">L</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;zmin&#39;</span><span class="p">:</span> <span class="o">-</span> <span class="n">L</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="n">dx</span><span class="p">,</span>
+    <span class="s1">&#39;dy&#39;</span><span class="p">:</span> <span class="n">dx</span><span class="p">,</span>
+    <span class="s1">&#39;dz&#39;</span><span class="p">:</span> <span class="n">dx</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># == Finite Difference class</span>
+<span class="n">fd</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">FiniteDifference</span><span class="p">(</span>
+    <span class="n">param</span><span class="p">,</span> 
+    <span class="n">boundary</span> <span class="o">=</span> <span class="s1">&#39;no boundary&#39;</span><span class="p">,</span>
+    <span class="c1"># &#39;no boundary&#39; is the default option, </span>
+    <span class="c1"># it calculates derivatives along edges using a combination of </span>
+    <span class="c1"># backward, centered and forward difference schemes</span>
+    <span class="c1"># &#39;periodic&#39; and &#39;symmetric&#39; are also available</span>
+    <span class="c1"># careful, if f is periodic, that does not mean dxf is periodic</span>
+    <span class="n">fd_order</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="c1"># 4th order schemes are the default option,</span>
+    <span class="c1"># but 6th and 8th order schemes are also available</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4th order finite difference schemes are defined
+</pre></div>
+</div>
+</div>
+</div>
+<p>There are a couple useful variables that are defined in the initialization, see <a class="reference external" href="https://robynlm.github.io/aurel/source/finitedifference.html">the docstrings</a>:</p>
+<ul class="simple">
+<li><p>fd.xarray, fd.yarray, fd.zarray: These are each 1D numpy arrays of the corresponding Cartesian coordinate</p></li>
+<li><p>fd.x, fd.y, fd.z: These are each 3D numpy arrays of the corresponding Cartesian coordinate</p></li>
+<li><p>fd.r, fd.phi (azimuth), fd.theta (inclination): These are each 3D numpy arrays of the corresponding Spherical coordinate</p></li>
+<li><p>fd.cartesian_coords, fd.spherical_coords: These are lists of the previously listed coordinates</p></li>
+<li><p>fd.ixcenter, fd.iycenter, fd.izcenter: These are each ints of the index of the grid position closest to the origin of the grid (x=0, y=0, z=0).</p></li>
+</ul>
+<p>These are useful for plotting but also for generating analytical data.</p>
+<p>Furthermore, the FiniteDifference class functions can be used independently to calculate spatial derivatives, see the <a class="reference external" href="https://robynlm.github.io/aurel/source/finitedifference.html">fd functions</a>.</p>
+<p>FiniteDifference is defined outside of the AurelCore class, because all calculations in AurelCore are valid for a fixed time, while FiniteDifference is valid for all times.
+So for multiple timesteps, the Aurel class should be redefined or overwritten for each.
+The timesteps can then be treated independently.</p>
+</section>
+<section id="aurel-automatic-relativity">
+<h3>aurel: Automatic Relativity<a class="headerlink" href="#aurel-automatic-relativity" title="Link to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># == Aurel class</span>
+<span class="n">rel</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCore</span><span class="p">(</span>
+    <span class="n">fd</span><span class="p">,</span>
+    <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># Default</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cosmological constant set to AurelCore.Lambda = 0.00e+00
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># There are two main dictionnaries in aurel:</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">aurel</span><span class="o">.</span><span class="n">descriptions</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[]
+[&#39;gxx&#39;, &#39;gxy&#39;, &#39;gxz&#39;, &#39;gyy&#39;, &#39;gyz&#39;, &#39;gzz&#39;, &#39;gammadown3&#39;, &#39;gammadown3_bssnok&#39;, &#39;dtgammadown3_bssnok&#39;, &#39;gammaup3&#39;, &#39;dtgammaup3&#39;, &#39;gammaup3_bssnok&#39;, &#39;gammadet&#39;, &#39;psi_bssnok&#39;, &#39;phi_bssnok&#39;, &#39;dtphi_bssnok&#39;, &#39;gammadown4&#39;, &#39;gammaup4&#39;, &#39;kxx&#39;, &#39;kxy&#39;, &#39;kxz&#39;, &#39;kyy&#39;, &#39;kyz&#39;, &#39;kzz&#39;, &#39;Kdown3&#39;, &#39;Kup3&#39;, &#39;Ktrace&#39;, &#39;dtKtrace&#39;, &#39;Adown3&#39;, &#39;Aup3&#39;, &#39;A2&#39;, &#39;Adown3_bssnok&#39;, &#39;dtAdown3_bssnok&#39;, &#39;Aup3_bssnok&#39;, &#39;A2_bssnok&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;DDalpha&#39;, &#39;betax&#39;, &#39;betay&#39;, &#39;betaz&#39;, &#39;betaup3&#39;, &#39;dtbetax&#39;, &#39;dtbetay&#39;, &#39;dtbetaz&#39;, &#39;dtbetaup3&#39;, &#39;betadown3&#39;, &#39;betamag&#39;, &#39;nup4&#39;, &#39;ndown4&#39;, &#39;gdown4&#39;, &#39;gup4&#39;, &#39;gdet&#39;, &#39;null_ray_exp_out&#39;, &#39;null_ray_exp_in&#39;, &#39;rho0&#39;, &#39;press&#39;, &#39;eps&#39;, &#39;rho&#39;, &#39;enthalpy&#39;, &#39;w_lorentz&#39;, &#39;velx&#39;, &#39;vely&#39;, &#39;velz&#39;, &#39;velup3&#39;, &#39;velup4&#39;, &#39;veldown3&#39;, &#39;veldown4&#39;, &#39;uup0&#39;, &#39;uup3&#39;, &#39;uup4&#39;, &#39;udown3&#39;, &#39;udown4&#39;, &#39;hdown4&#39;, &#39;hdet&#39;, &#39;hmixed4&#39;, &#39;hup4&#39;, &#39;Tdown4&#39;, &#39;Tup4&#39;, &#39;Ttrace&#39;, &#39;rho_n&#39;, &#39;fluxup3_n&#39;, &#39;fluxdown3_n&#39;, &#39;angmomup3_n&#39;, &#39;angmomdown3_n&#39;, &#39;Stressup3_n&#39;, &#39;Stressdown3_n&#39;, &#39;Stresstrace_n&#39;, &#39;press_n&#39;, &#39;anisotropic_press_down3_n&#39;, &#39;rho_n_fromHam&#39;, &#39;fluxup3_n_fromMom&#39;, &#39;conserved_D&#39;, &#39;conserved_E&#39;, &#39;conserved_Sdown4&#39;, &#39;conserved_Sdown3&#39;, &#39;conserved_Sup4&#39;, &#39;conserved_Sup3&#39;, &#39;dtconserved&#39;, &#39;st_covd_udown4&#39;, &#39;accelerationdown4&#39;, &#39;accelerationup4&#39;, &#39;s_covd_udown4&#39;, &#39;thetadown4&#39;, &#39;theta&#39;, &#39;sheardown4&#39;, &#39;shear2&#39;, &#39;omegadown4&#39;, &#39;omega2&#39;, &#39;s_RicciS_u&#39;, &#39;s_Gamma_udd3&#39;, &#39;s_Gamma_bssnok&#39;, &#39;s_Riemann_uddd3&#39;, &#39;s_Riemann_down3&#39;, &#39;s_Ricci_down3&#39;, &#39;s_RicciS&#39;, &#39;st_Gamma_udd4&#39;, &#39;st_Riemann_uddd4&#39;, &#39;st_Riemann_down4&#39;, &#39;st_Riemann_uudd4&#39;, &#39;st_Ricci_down4&#39;, &#39;st_Ricci_down3&#39;, &#39;st_RicciS&#39;, &#39;Einsteindown4&#39;, &#39;Kretschmann&#39;, &#39;Hamiltonian&#39;, &#39;Hamiltonian_Escale&#39;, &#39;Momentumup3&#39;, &#39;Momentum_Escale&#39;, &#39;st_Weyl_down4&#39;, &#39;Weyl_Psi&#39;, &#39;Weyl_invariants&#39;, &#39;eweyl_u_down4&#39;, &#39;eweyl_n_down3&#39;, &#39;bweyl_u_down4&#39;, &#39;bweyl_n_down3&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, right now the AurelCore.data dictionnary is empty, so far we have not provided the spacetime or matter fields or asked for anything to be calculated.</p>
+<p>The au.descriptions dictionnary lists all variables that aurel knows how to handle and calculate, and gives the corresponding discriptive documentation. To compute a variable, you can either call its method directly or access it like a dictionary key.</p>
+<p>Taking an example with Ktrace, the trace of the extrinsic curvature, this variable can be called in two ways:</p>
+<ul class="simple">
+<li><p>AurelCore.Ktrace() this is calling the function that calculates that variable, then directly returns it</p></li>
+<li><p>AurelCore[“Ktrace”] this is calling the variable in the AurelCore.data dictionary. If it is not available, then AurelCore.Ktrace() is called to complete the calculation and its output is stored in AurelCore.data and also provided to the user. Following this, should AurelCore[“Ktrace”] be called again, the variable is directly retrieved from the AurelCore.data dictionary without the need for further calculations.</p></li>
+</ul>
+<p>During these calcutions, many intermediary variables may be necessary. Thankfully, these are all listed in the desciptions dictionary. Therefore, if these are available in the data dictionary, these are provided directly, otherwise they will also be calculated.
+This creates a recursive automatic process managed by the __ getitem __ function to calculate all necessary variables until important variables that the user needs to define are reached. If the user has not defined these, it will <strong>assume</strong> those core terms correspond to the vacuum Minkowski spacetime.</p>
+</section>
+<section id="minkowski-metric">
+<h3>Minkowski metric<a class="headerlink" href="#minkowski-metric" title="Link to this heading"></a></h3>
+<p>If the user does not provide any matter field / spacetime, the vacuum Minkowski spacetime is assumed. See how those assumptions are made when retrieving a variable:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Determinant of the spatial metric: &#39;</span><span class="p">,</span> 
+      <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;gammadet&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated gxx: $g_{xx}$ Metric with xx indices down. I assume $g_{xx}=1$, if not then please define AurelCore.data[&#39;gxx&#39;] = ... 
+Calculated gxy: $g_{xy}$ Metric with xy indices down. I assume $g_{xy}=0$, if not then please define AurelCore.data[&#39;gxy&#39;] = ... 
+Calculated gxz: $g_{xz}$ Metric with xz indices down. I assume $g_{xz}=0$, if not then please define AurelCore.data[&#39;gxz&#39;] = ... 
+Calculated gyy: $g_{yy}$ Metric with yy indices down. I assume $g_{yy}=1$, if not then please define AurelCore.data[&#39;gyy&#39;] = ... 
+Calculated gyz: $g_{yz}$ Metric with yz indices down. I assume $g_{yz}=0$, if not then please define AurelCore.data[&#39;gyz&#39;] = ... 
+Calculated gzz: $g_{zz}$ Metric with zz indices down. I assume $g_{zz}=1$, if not then please define AurelCore.data[&#39;gzz&#39;] = ... 
+Calculated gammadown3: $\gamma_{ij}$ Spatial metric with spatial indices down
+Calculated gammadet: $\gamma$ Determinant of spatial metric
+Determinant of the spatial metric:  1.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>To see all variable that take this assumption unless defined see the <a class="reference external" href="https://robynlm.github.io/aurel/source/core.html#assumed-quantities">Assumed quantities list</a></p>
+<p>To provide these missing terms, use the variable name as the key, and provide the variable as a numpy array with the appropriate data grid shape.</p>
+</section>
+<section id="harvey-tsoubelis-metric">
+<h3>Harvey Tsoubelis metric<a class="headerlink" href="#harvey-tsoubelis-metric" title="Link to this heading"></a></h3>
+<p>Now let us use a more interesting spacetime. A number of different analytical spacetimes can be found in the solutions folder. Here we use the Harvey Tsoubelis solution that corresponds to a vacuum plane wave solution.</p>
+<p>Should you want to do numerical calculations from an analytical spacetime, this can be done by directly providing the corresponding numpy arrays, as was done for the Conformally flat metric example. Or you can create a python file for your specific solution and call it to pass the generated data to AurelCore.data as is demonstrated below.</p>
+<p>We can use the same grid as before so we keep param and fd but AurelCore needs to be redefined for this example</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">del</span> <span class="n">rel</span>
+<span class="n">rel</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCore</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cosmological constant set to AurelCore.Lambda = 0.00e+00
+</pre></div>
+</div>
+</div>
+</div>
+<p>This next module generates numerical data for the analytical Harvey-Tsoubelis solution. The spacetime and matter variables are defined in the file as functions that depend on the grid coordinates</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">aurel.solutions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Harvey_Tsoubelis</span> <span class="k">as</span> <span class="n">sol</span>
+
+<span class="c1"># Define the coordinates used</span>
+<span class="n">t</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cartesian_coords</span>
+
+<span class="c1"># Update the AurelCore.data dictionnary to include the spacetime and matter solution</span>
+<span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;gammadown3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="c1"># (3, 3, Nx, Ny, Nz) numpy.array</span>
+<span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Kdown3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>         <span class="c1"># (3, 3, Nx, Ny, Nz)</span>
+<span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Tdown4&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">Tdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>         <span class="c1"># (4, 4, Nx, Ny, Nz)</span>
+<span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;uup4&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">uup4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>             <span class="c1"># (4, Nx, Ny, Nz)</span>
+<span class="n">rel</span><span class="o">.</span><span class="n">freeze_data</span><span class="p">()</span> <span class="c1"># freeze the data to not delete it in cache cleanup</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice here we directly passed, gammadown3 instead of gxx, gxy, gxz, … and Tdown4 instead of rho0.
+This is because the automatic recursive process will only go down to what it needs for the specific calculation requested.</p>
+<section id="weyl-scalars-and-petrov-classification">
+<h4>Weyl Scalars and Petrov Classification<a class="headerlink" href="#weyl-scalars-and-petrov-classification" title="Link to this heading"></a></h4>
+<p>Call the Weyl scalars with “Weyl_Psi”, this gives a list whose elements correspond to the <span class="math notranslate nohighlight">\(\Psi_i\)</span> Weyl scalars computed with the quasi-kinnersley tetrad. Default AurelCore.tetrad_to_use = “quasi-kinnersley”, another option is to set it to another string and it will use an orthonormal tetrad base aligned with the Cartesian coordinates.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loop through the 5 scalars</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">Psi</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask2</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">real_part</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Psi</span><span class="p">))</span>
+    <span class="n">imag_part</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">Psi</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean(abs(Psi_</span><span class="si">{}</span><span class="s1">)) = &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">real_part</span><span class="p">,</span> <span class="s1">&#39; + i(&#39;</span><span class="p">,</span> <span class="n">imag_part</span><span class="p">,</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tetrad is set to AurelCore.tetrad_to_use = quasi-Kinnersley
+Calculated alpha: $\alpha$ Lapse. I assume $\alpha=1$, if not then please define AurelCore.data[&#39;alpha&#39;] = ... 
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gdet: $g$ Determinant of spacetime metric
+Calculated gammadet: $\gamma$ Determinant of spatial metric
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
+Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
+Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated Stressup3_n: $S^{\{n\}ij}$ Stress tensor in the $n^\mu$ frame with spatial indices up
+Calculated Stressdown3_n: $S^{\{n\}}_{ij}$ Stress tensor in the $n^\mu$ frame with spatial indices down
+Calculated eweyl_n_down3: $E^{\{n\}}_{ij}$ Electric part of the Weyl tensor on the hypersurface orthogonal to $n^{\mu}$ with spatial indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated nup4: $n^{\mu}$ Timelike vector normal to the spatial metric with spacetime indices up
+Calculated bweyl_n_down3: $B^{\{n\}}_{ij}$ Magnetic part of the Weyl tensor on the hypersurface orthogonal to $n^{\mu}$ with spatial indices down
+Calculated ndown4: $n_{\mu}$ Timelike vector normal to the spatial metric with spacetime indices down
+CLEAN-UP: Cleaning up cache after 20 calculations...
+CLEAN-UP: data size before cleanup: 344.00 MB
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 14 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 8 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;Stressup3_n&#39; used 6 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;Stressdown3_n&#39; used 5 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;eweyl_n_down3&#39; used 4 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 3 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removed 6 items
+CLEAN-UP: data size after cleanup: 234.00 MB
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated st_Weyl_down4: $C_{\alpha\beta\mu\nu}$ Weyl tensor of spacetime metric with spacetime indices down
+Calculated Weyl_Psi: $\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$ List of Weyl scalars for an null vector base defined with AurelCore.tetrad_to_use
+mean(abs(Psi_0)) =  -0.056854352588593  + i( 0.0004337842600139842 )
+mean(abs(Psi_1)) =  0.00036435542405428644  + i( 0.0005091692783650128 )
+mean(abs(Psi_2)) =  0.0011930336565166956  + i( -0.004897107788552394 )
+mean(abs(Psi_3)) =  -8.05618522953661e-05  + i( -0.0001326851726266182 )
+mean(abs(Psi_4)) =  -0.044286602383704535  + i( 0.009394586101073372 )
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that here I’m applying the FiniteDifference.cutoffmask function before taking the mean. By default the class uses a combination of backward and forward finite difference schemes for the boundaries. Those slightly underperform compared to the centered one, so that is why I remove the edge points affected by those schemes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on method cutoffmask2 in module aurel.finitedifference:
+
+cutoffmask2(f) method of aurel.finitedifference.FiniteDifference instance
+    Remove boundary points, for when FDs were applied twice.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then we can see what the Weyl scalars look like, should we use the other tetrad.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">del</span> <span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="o">.</span><span class="n">last_accessed</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi&quot;</span><span class="p">]</span>
+<span class="n">rel</span><span class="o">.</span><span class="n">tetrad_to_use</span> <span class="o">=</span> <span class="s1">&#39;not Kinnersley&#39;</span>
+<span class="c1"># Loop through the 5 scalars</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">Psi</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask2</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">real_part</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Psi</span><span class="p">))</span>
+    <span class="n">imag_part</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">Psi</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean(abs(Psi_</span><span class="si">{}</span><span class="s1">)) = &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">real_part</span><span class="p">,</span> <span class="s1">&#39; + i(&#39;</span><span class="p">,</span> <span class="n">imag_part</span><span class="p">,</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tetrad is set to AurelCore.tetrad_to_use = not Kinnersley
+Calculated Weyl_Psi: $\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$ List of Weyl scalars for an null vector base defined with AurelCore.tetrad_to_use
+mean(abs(Psi_0)) =  0.2499500983725248  + i( -2.750832833501293e-05 )
+mean(abs(Psi_1)) =  8.2494878838321e-17  + i( 2.561661433370836e-16 )
+mean(abs(Psi_2)) =  8.306760178328783e-06  + i( -1.2493610844711934e-05 )
+mean(abs(Psi_3)) =  -4.9365893338814685e-17  + i( 2.2303105092043635e-16 )
+mean(abs(Psi_4)) =  -4.995234030063878e-05  + i( -7.456392419711132e-06 )
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this case this specific tetrad provides the null principal directions in Newmann-Penrose’s formalism. Where <span class="math notranslate nohighlight">\(\Psi_0 = t^{-2}\)</span> (and we previously defined t = 2) and the others are numerical noise that decreases as resolution is increased.</p>
+<p>However, while two sets of tetrads are available in this code, frame rotations to find the null principal directions are not performed.</p>
+<p>We can further check the <strong>Petrov</strong> classification by computing the Weyl invariants. You get these by calling “Weyl_invariants”, this provides a dictionary whose keys are crucial for spacetime classification. See <a class="reference external" href="https://www.cambridge.org/core/books/exact-solutions-of-einsteins-field-equations/11CF6CFCC10CC62B9B299F08C32C37A6"><em>Exact Solutions of Einstein’s Field Equations</em> by Stephani, H., D. Kramer, M. MacCallum, C. Hoenselaers, and E. Herlt (2003)</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">]:</span>
+    <span class="n">invar</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask2</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Weyl_invariants&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">invar</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: I&#39;m not switching Psi0 and Psi4 here, so the invariants are not correct if Psi4 = 0.Same for Psi1 and Psi3.
+Calculated Weyl_invariants: $I, \; J, \; L, \; K, \; N$ Dictionary of Weyl invariants
+I = 1.2624275719980143e-05
+J = 1.8939608190115552e-10
+L = 7.577425800803073e-10
+K = 5.495319107195999e-23
+N = 3.219885922862559e-14
+</pre></div>
+</div>
+</div>
+</div>
+<p>All invariants are numerical zero, their value decreasing as the scheme converges, however we have seen <span class="math notranslate nohighlight">\(\Psi_0 \neq 0\)</span> so <span class="math notranslate nohighlight">\(C_{\alpha\beta\mu\nu} \neq 0\)</span> (so the spacetime is not conformally flat). Therefore this spacetime is of Petrov type N.</p>
+<p>We can check this with the <strong>electric and magnetic parts of the Weyl tensor</strong> as <span class="math notranslate nohighlight">\(E^2 = B^2 = 1/(4t^4)\)</span>. With <span class="math notranslate nohighlight">\(E^2 = \frac{1}{2}E^{ij}E_{ij}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;E^2 =&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask2</span><span class="p">(</span>
+    <span class="n">rel</span><span class="o">.</span><span class="n">magnitude3</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;eweyl_n_down3&quot;</span><span class="p">]))))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;B^2 =&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask2</span><span class="p">(</span>
+    <span class="n">rel</span><span class="o">.</span><span class="n">magnitude3</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;bweyl_n_down3&quot;</span><span class="p">]))))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
+Calculated Stressup3_n: $S^{\{n\}ij}$ Stress tensor in the $n^\mu$ frame with spatial indices up
+Calculated Stressdown3_n: $S^{\{n\}}_{ij}$ Stress tensor in the $n^\mu$ frame with spatial indices down
+Calculated eweyl_n_down3: $E^{\{n\}}_{ij}$ Electric part of the Weyl tensor on the hypersurface orthogonal to $n^{\mu}$ with spatial indices down
+E^2 = 0.015612521054258593
+B^2 = 0.01562500711300769
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="cache-management">
+<h4>Cache management<a class="headerlink" href="#cache-management" title="Link to this heading"></a></h4>
+<p>Notice that aurel went through cleanup cache processes.
+Indeed during the many calculations, AurelCore.data can become quite large.
+So after <strong>AurelCore.clear_cache_every_nbr_calc</strong> (= 20 default) number of calculation, or when it exceeds <strong>AurelCore.memory_threshold_inGB</strong> (= 4 default), <strong>AurelCore.cleanup_cache</strong> removes variables based on how heavy and old they are.</p>
+<p>To protect certain variables, the <strong>AurelCore.var_importance</strong> dictionarry weights the variable’s strain. By default they all start with 1.0, but a variable that should never be removed is then AurelCore.var_importance[varname] = 0.0 (not strenuous to keep this).</p>
+<p>The <strong>AurelCore.freeze()</strong> function now takes meaning as this takes all the variables currently defined in AurelCore.data and updates their var_importance to never perceive those as strenuous to deal with, and so they are protected to never be deleted in the cleanup_cache operation.</p>
+<p>Hope this helps!</p>
+<p>Now for an example working with simulation data, see the tov_ET notebook</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../source/advice.html" class="btn btn-neutral float-left" title="Working on an HPC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Example_over_time.html" class="btn btn-neutral float-right" title="Example over time" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Robyn L. Munoz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

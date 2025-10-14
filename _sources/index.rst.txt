@@ -16,9 +16,8 @@ Welcome to aurel's documentation!
 
    <p>Aurel is an open source Python package for numerical relativity analysis.
    Designed with ease of use in mind, it will 
-   <span style="font-weight: bold;">au</span>tomatically calculate any 
-   <span style="font-weight: bold;">rel</span>ativistic term 
-   your heart desires. 
+   <span style="font-weight: bold;">au</span>tomatically calculate 
+   <span style="font-weight: bold;">rel</span>ativistic terms. 
    </p>
 
 (As long as it is in the list of available entities, 
@@ -34,13 +33,6 @@ advanced numerical computations, including:
 
 Installation
 ------------
-
-Install FFTW, depending on your operating system, 
-
- * on Ubuntu/Debian you can run: ``sudo apt install libfftw3-dev``
- * on macOS you can run: ``brew install fftw`` or ``sudo port install fftw-3`` depending on your package manager.
-
-This is needed for the `spinsfast package <https://github.com/moble/spinsfast>`_.
 
 Install aurel using `pip <https://pip.pypa.io/en/stable/installation/>`_:
 
@@ -74,7 +66,7 @@ and import the AurelCore class:
    rel = aurel.AurelCore(fd)
 
 At this point you need to provide the spacetime metric, extrinsic curvature
-and matter fields, see :ref:`required_quantities`.
+and matter fields, see :ref:`assumed_quantities`.
 These are passed as numpy arrays to aurel in the following way:
 
 .. code-block:: python
@@ -87,10 +79,6 @@ In this example $g_{xx} = 1$, but you can pass any numpy array;
 it can be of numerical relativity simulation data, 
 or an array generated from an analytical expression.
 
-Assumptions are made for other core quantities, 
-if these are not valid they should be overwritten at this point, 
-see :ref:`assumed_quantities`.
-
 With everything defined, you can call any entity listed in the 
 :ref:`descriptions_list` list. Just call it as:
 
@@ -101,12 +89,37 @@ With everything defined, you can call any entity listed in the
 **Aurel will automatically do its best to calculate 
 any relativistic term you ask for.**
 
-For further examples on how to use aurel see:
+Now if you want calculations over multiple moments in coordinate time, you can 
+use the :func:`aurel.over_time` function. First, create a dictionary 
+containing the spacetime and matter fields over time:
 
-- the `Example notebook <https://github.com/robynlm/aurel/blob/main/notebooks/Example.ipynb>`_, 
-  for an in depth description with tips and tricks,
-- the `tov_ET notebook <https://github.com/robynlm/aurel/blob/main/notebooks/tov_ET.ipynb>`_, 
-  for an example of how to load in data from an Einstein Toolkit simulation.
+.. code-block:: python
+   
+   # Define the spacetime metric gxx over time
+   data = {
+       'gxx': [np.ones((param['Nx'], param['Ny'], param['Nz'])),
+               np.ones((param['Nx'], param['Ny'], param['Nz']))],
+       ...
+   }
+
+That is a data dictionary with keys the names of the quantities, and values a 
+list of numpy arrays, one for each time step. Calculations will be performed 
+for each of these time steps as:
+
+.. code-block:: python
+
+   data = aurel.over_time(
+      data, fd, 
+      vars=['name_of_the_entity', ..., {'custom_quantity': custom_quantity}], 
+      estimates=['name_of_estimate', ..., {'custom_estimate': custom_estimate}],
+      **kwargs)
+
+where `vars` is a list of entities to calculate at each time step, available 
+terms are in :ref:`descriptions_list` but you can also pass custom functions 
+to calculate your own quantities.
+Likewise `estimates` is a list of estimates to calculate at each time step, 
+available functions are in :ref:`estimates_list` but you can also pass custom 
+functions to calculate your own estimates. See the examples.
 
 .. toctree::
    :maxdepth: 1
@@ -118,8 +131,25 @@ For further examples on how to use aurel see:
    source/maths
    source/numerical
    source/reading
+   source/time
    source/solutions
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Advice:
+
    source/advice
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Examples:
+
+   notebooks/Example
+   notebooks/Example_over_time
+   notebooks/tov_ET
+   notebooks/ICPertFLRW
+   notebooks/Schwarzschild_check
+   notebooks/Analytic_check
 
 Links
 -----

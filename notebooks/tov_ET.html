@@ -1,0 +1,498 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tov_ET &mdash; aurel May 2025 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d170800"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ICPertFLRW" href="ICPertFLRW.html" />
+    <link rel="prev" title="Example over time" href="Example_over_time.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aurel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/core.html">aurel.core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/finitedifference.html">aurel.finitedifference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/maths.html">aurel.maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/numerical.html">aurel.numerical</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/reading.html">aurel.reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/time.html">aurel.time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/solutions.html">aurel.solutions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#citation">Citation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Example_over_time.html">Example over time</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">tov_ET</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setting-things-up">Setting things up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reading-in-the-data">Reading in the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#want-to-work-with-a-refined-level">Want to work with a refined level?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ICPertFLRW.html">ICPertFLRW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Schwarzschild_check.html">Schwarzschild check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Analytic_check.html">Analytic check</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aurel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">tov_ET</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/tov_ET.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="tov-et">
+<h1>tov_ET<a class="headerlink" href="#tov-et" title="Link to this heading"></a></h1>
+<p>This notebook demonstrates how to read and work with data from the tov_ET simulation generated with the Einstein Toolkit code.</p>
+<p>See: <a class="reference external" href="https://github.com/nds-org/jupyter-et/blob/master/tutorial-server/notebooks/CactusTutorial.ipynb">Cactus tutorial</a></p>
+<p>Aurel reads in 3D data so update the tov_ET.par file accordingly, see below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="setting-things-up">
+<h2>Setting things up<a class="headerlink" href="#setting-things-up" title="Link to this heading"></a></h2>
+<p>First you need to tell aurel where you store your simulations directory. You can run the following in the notebook, but update the path to your own.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SIMLOC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;/Users/rlm36AA/simulations/&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Alternatively, in your bashrc include:</p>
+<p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SIMLOC=&quot;/path/to/simulations/&quot;</span></code></p>
+<p>then after reloading the terminal, you can check this with</p>
+<p><code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">$SIMLOC</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a dictionary with the content of the simulation&#39;s parameter file</span>
+<span class="n">param</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="s1">&#39;tov_ET_group_one&#39;</span><span class="p">)</span>
+<span class="c1"># Define the FiniteDifference class for the base level grid of the simulation</span>
+<span class="n">fd</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">FiniteDifference</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4th order finite difference schemes are defined
+</pre></div>
+</div>
+</div>
+</div>
+<p>aurel.read_data and aurel.AurelCore only work on 3D data, so add the following to the tov_ET.par before running the simulation:</p>
+<p>CarpetIOHDF5::out_every = 4096</p>
+<p>CarpetIOHDF5::out_vars = “</p>
+<p>HydroBase::rho</p>
+<p>…and any other relevant variables</p>
+<p>“</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This lists all the iterations available accross different refinement levels and restarts</span>
+<span class="n">it_dict</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">iterations</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">skip_last</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="c1"># By default skip_last = True so that the last restart is skipped to avoid reading active files</span>
+<span class="c1"># This is all nicely written in a human readable file called &#39;iterations.txt&#39;</span>
+<span class="c1"># But also provided as a dictionary</span>
+
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39; == For info&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;it_dict :&#39;</span><span class="p">,</span> <span class="n">it_dict</span><span class="p">)</span>
+<span class="c1"># And a &#39;content.txt&#39; file was also created</span>
+<span class="c1"># This lists the available variables and what files they are in</span>
+<span class="n">content</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">get_content</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;content :&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reading iterations in /Users/rlm36AA/simulations/tov_ET_group_one/iterations.txt
+ === restart 0
+3D variables available: [&#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;betaup3&#39;, &#39;dtbetaup3&#39;, &#39;rho0&#39;, &#39;eps&#39;, &#39;press&#39;, &#39;w_lorentz&#39;, &#39;velup3&#39;, &#39;Hamiltonian&#39;, &#39;Momentumup3&#39;, &#39;Weyl_Psi&#39;]
+it = 0 -&gt; 409600
+rl = 0 at it = np.arange(0, 409600, 4096)
+rl = 1 at it = np.arange(0, 409600, 4096)
+
+Restarts to process: []
+ === Overall iterations
+rl = 0 at it = np.arange(0, 409600, 4096)
+rl = 1 at it = np.arange(0, 409600, 4096)
+
+ == For info
+it_dict : {0: {&#39;var available&#39;: [&#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;betaup3&#39;, &#39;dtbetaup3&#39;, &#39;rho0&#39;, &#39;eps&#39;, &#39;press&#39;, &#39;w_lorentz&#39;, &#39;velup3&#39;, &#39;Hamiltonian&#39;, &#39;Momentumup3&#39;, &#39;Weyl_Psi&#39;], &#39;its available&#39;: [0, 409600], &#39;rl = 0&#39;: [0, 409600, 4096], &#39;rl = 1&#39;: [0, 409600, 4096]}, &#39;overall&#39;: {&#39;rl = 0&#39;: [[0, 409600, 4096]], &#39;rl = 1&#39;: [[0, 409600, 4096]]}}
+content : {(&#39;dtalp&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/admbase-dtlapse.h5&#39;], (&#39;gxx&#39;, &#39;gxy&#39;, &#39;gxz&#39;, &#39;gyy&#39;, &#39;gyz&#39;, &#39;gzz&#39;): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/admbase-metric.h5&#39;], (&#39;rho&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/hydrobase-rho.h5&#39;], (&#39;trK&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/ml_bssn-ml_trace_curv.h5&#39;], (&#39;eps&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/hydrobase-eps.h5&#39;], (&#39;Psi4i&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/weylscal4-psi4i_group.h5&#39;], (&#39;alp&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/admbase-lapse.h5&#39;], (&#39;Psi4r&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/weylscal4-psi4r_group.h5&#39;], (&#39;betax&#39;, &#39;betay&#39;, &#39;betaz&#39;): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/admbase-shift.h5&#39;], (&#39;H&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/ml_bssn-ml_ham.h5&#39;], (&#39;kxx&#39;, &#39;kxy&#39;, &#39;kxz&#39;, &#39;kyy&#39;, &#39;kyz&#39;, &#39;kzz&#39;): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/admbase-curv.h5&#39;], (&#39;M1&#39;, &#39;M2&#39;, &#39;M3&#39;): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/ml_bssn-ml_mom.h5&#39;], (&#39;w_lorentz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/hydrobase-w_lorentz.h5&#39;], (&#39;vel[0]&#39;, &#39;vel[1]&#39;, &#39;vel[2]&#39;): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/hydrobase-vel.h5&#39;], (&#39;press&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/hydrobase-press.h5&#39;], (&#39;dtbetax&#39;, &#39;dtbetay&#39;, &#39;dtbetaz&#39;): [&#39;/Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/admbase-dtshift.h5&#39;]}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="reading-in-the-data">
+<h2>Reading in the data<a class="headerlink" href="#reading-in-the-data" title="Link to this heading"></a></h2>
+<p>Great, we can choose a couple of iterations and read in the simulation data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span>
+    <span class="n">param</span><span class="p">,</span> 
+    <span class="nb">vars</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="c1"># Specify the fields to read, these have to be 3D outputs of the simulation amongst the available variables listed above</span>
+    <span class="c1"># e.g. [&#39;gammadown3&#39;, &#39;rho0&#39;, &#39;Weyl_Psi&#39;]</span>
+    <span class="c1"># If var is empty, all available variables will be read</span>
+    <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">409600</span><span class="p">,</span> <span class="mi">4096</span><span class="p">),</span> <span class="c1"># Iterations to be read, default is [0]</span>
+    <span class="n">rl</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>                          <span class="c1"># Refinement level default is 0</span>
+    <span class="n">restart</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>                     <span class="c1"># Restart number, default is -1, meaning it&#39;ll find the restart of the iteration you want</span>
+    <span class="n">split_per_it</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>               <span class="c1"># This will copy the data in per-iteration files for easier access next time and to facilitate parallel reading</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">veryverbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># The output is a dictionary with the iteration, simulation time, and each requested variables</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39; == Data read from the simulation:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;it format: type </span><span class="si">{}</span><span class="s1"> and shape </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;it&#39;</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;it&#39;</span><span class="p">])))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rho0 format: type </span><span class="si">{}</span><span class="s1"> and shape </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">])))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rho0[0] format: type </span><span class="si">{}</span><span class="s1"> and shape </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
+<span class="c1"># note some variable names may be different to those called</span>
+<span class="c1"># the new names will match the AurelCore naming convention</span>
+<span class="c1"># rho0: rest-mass energy density</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reading iterations in /Users/rlm36AA/simulations/tov_ET_group_one/iterations.txt
+Restarts to process: []
+Nothing new to process. Consider running with skip_last=False to analyse the last restart (if it is not an active restart).
+Loading existing content from /Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/content.txt...
+Loaded 16 variables from cache.
+ =========== Restart 0:
+vars to get [&#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;betaup3&#39;, &#39;dtbetaup3&#39;, &#39;rho0&#39;, &#39;eps&#39;, &#39;press&#39;, &#39;w_lorentz&#39;, &#39;velup3&#39;, &#39;Hamiltonian&#39;, &#39;Momentumup3&#39;, &#39;Weyl_Psi&#39;]:
+Data read from split iterations: [&#39;kxy&#39;, &#39;Hamiltonian&#39;, &#39;betax&#39;, &#39;Ktrace&#39;, &#39;dtbetay&#39;, &#39;Momentumz&#39;, &#39;kyy&#39;, &#39;kyz&#39;, &#39;gxy&#39;, &#39;Weyl_Psi4i&#39;, &#39;gzz&#39;, &#39;gxx&#39;, &#39;kzz&#39;, &#39;Weyl_Psi4r&#39;, &#39;gyy&#39;, &#39;Momentumy&#39;, &#39;gyz&#39;, &#39;vely&#39;, &#39;eps&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;dtbetaz&#39;, &#39;press&#39;, &#39;rho0&#39;, &#39;kxx&#39;, &#39;betay&#39;, &#39;Momentumx&#39;, &#39;gxz&#39;, &#39;velz&#39;, &#39;velx&#39;, &#39;kxz&#39;, &#39;betaz&#39;, &#39;w_lorentz&#39;, &#39;dtbetax&#39;, &#39;t&#39;]
+
+ == Data read from the simulation:
+dict_keys([&#39;it&#39;, &#39;kxy&#39;, &#39;Hamiltonian&#39;, &#39;betax&#39;, &#39;Ktrace&#39;, &#39;dtbetay&#39;, &#39;Momentumz&#39;, &#39;kyy&#39;, &#39;kyz&#39;, &#39;gxy&#39;, &#39;Weyl_Psi4i&#39;, &#39;gzz&#39;, &#39;gxx&#39;, &#39;kzz&#39;, &#39;Weyl_Psi4r&#39;, &#39;gyy&#39;, &#39;Momentumy&#39;, &#39;gyz&#39;, &#39;vely&#39;, &#39;eps&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;dtbetaz&#39;, &#39;press&#39;, &#39;rho0&#39;, &#39;kxx&#39;, &#39;betay&#39;, &#39;Momentumx&#39;, &#39;gxz&#39;, &#39;velz&#39;, &#39;velx&#39;, &#39;kxz&#39;, &#39;betaz&#39;, &#39;w_lorentz&#39;, &#39;dtbetax&#39;, &#39;t&#39;])
+it format: type &lt;class &#39;list&#39;&gt; and shape (100,)
+rho0 format: type &lt;class &#39;list&#39;&gt; and shape (100, 12, 12, 12)
+rho0[0] format: type &lt;class &#39;numpy.ndarray&#39;&gt; and shape (12, 12, 12)
+</pre></div>
+</div>
+</div>
+</div>
+<p>This data can directly be assessed and plotted</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1"># plot the first iteration</span>
+<span class="n">it_index</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># iteration index</span>
+<span class="n">iz</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># z slice index</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">][</span><span class="n">it_index</span><span class="p">][:,:,</span><span class="n">iz</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\rho_0$ at $t=0$ and $z=0$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$y$&#39;</span><span class="p">)</span>
+
+<span class="c1"># get the maximum rest mass density at each iteration</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">])</span>
+
+<span class="c1"># plot the maximum rest mass density as a function of time</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0_max&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0_max&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$t$ [$M_{\odot}$]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$max(\rho_0) / \rho_0(0)$&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing it = 0
+Processing estimation item: max
+Now processing remaining time steps sequentially
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6654a239a4ab4134a88692c7a13d979d", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;$max(\\rho_0) / \\rho_0(0)$&#39;)
+</pre></div>
+</div>
+<img alt="../_images/aadb99504d4543a24e0f5c69af4c11aea6a989d9150b11edc7bef3c87832bca8.png" src="../_images/aadb99504d4543a24e0f5c69af4c11aea6a989d9150b11edc7bef3c87832bca8.png" />
+</div>
+</div>
+<p>How about calculating further terms provided by AurelCore at each time step.</p>
+<p>Well this is all available with the <code class="docutils literal notranslate"><span class="pre">over_time</span></code> function, see the example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculating at the determinant of the spatial metric</span>
+<span class="n">variable</span> <span class="o">=</span> <span class="s1">&#39;gammadet&#39;</span>
+<span class="n">varstr</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$\gamma$&#39;</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="n">variable</span><span class="p">],</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1"># plot the first iteration</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">variable</span><span class="p">][</span><span class="n">it_index</span><span class="p">][:,:,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">varstr</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39; at $t=0$ and $z=0$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$y$&#39;</span><span class="p">)</span>
+
+<span class="c1"># plot the maximum rest mass density as a function of time</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">variable</span><span class="o">+</span><span class="s1">&#39;_max&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$t$ [$M_{\odot}$]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;max(&#39;</span> <span class="o">+</span> <span class="n">varstr</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing it = 0
+
+Cosmological constant set to AurelCore.Lambda = 0.00e+00
+Calculated gammadown3: $\gamma_{ij}$ Spatial metric with spatial indices down
+Calculated gammadet: $\gamma$ Determinant of spatial metric
+Processing estimation item: max
+Now processing remaining time steps sequentially
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "bd7f82ffb72e46ef9df4c5ae07344158", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;max($\\gamma$)&#39;)
+</pre></div>
+</div>
+<img alt="../_images/bd562ab9cf7f1a5f1edea23730024507f8d5cdcd4e37562fbfd0e9ba68af83d3.png" src="../_images/bd562ab9cf7f1a5f1edea23730024507f8d5cdcd4e37562fbfd0e9ba68af83d3.png" />
+</div>
+</div>
+</section>
+<section id="want-to-work-with-a-refined-level">
+<h2>Want to work with a refined level?<a class="headerlink" href="#want-to-work-with-a-refined-level" title="Link to this heading"></a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete the previous finitedifference class (or name the new one something else)</span>
+<span class="k">del</span> <span class="n">fd</span>
+<span class="c1"># now we will look at the following refinement level</span>
+<span class="n">rl</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># load the data from that level</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span>
+    <span class="n">param</span><span class="p">,</span> 
+    <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">,</span> <span class="s1">&#39;gammadown3&#39;</span><span class="p">],</span>
+    <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">409600</span><span class="p">,</span> <span class="mi">4096</span><span class="p">),</span>
+    <span class="n">rl</span> <span class="o">=</span> <span class="n">rl</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># relevant parameters of this grid level</span>
+<span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Nx&#39;</span><span class="p">:</span> <span class="n">Nx</span><span class="p">,</span> <span class="s1">&#39;Ny&#39;</span><span class="p">:</span> <span class="n">Ny</span><span class="p">,</span> <span class="s1">&#39;Nz&#39;</span><span class="p">:</span> <span class="n">Nz</span><span class="p">,</span>
+    <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;zmin&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
+    <span class="s1">&#39;dy&#39;</span><span class="p">:</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
+    <span class="s1">&#39;dz&#39;</span><span class="p">:</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
+    <span class="s1">&#39;Lx&#39;</span><span class="p">:</span> <span class="n">Nx</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
+    <span class="s1">&#39;Ly&#39;</span><span class="p">:</span> <span class="n">Ny</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
+    <span class="s1">&#39;Lz&#39;</span><span class="p">:</span> <span class="n">Nz</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">fd</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">FiniteDifference</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reading iterations in /Users/rlm36AA/simulations/tov_ET_group_one/iterations.txt
+Restarts to process: []
+Nothing new to process. Consider running with skip_last=False to analyse the last restart (if it is not an active restart).
+Loading existing content from /Users/rlm36AA/simulations/tov_ET_group_one/output-0000/tov_ET_group_one/content.txt...
+Loaded 16 variables from cache.
+ =========== Restart 0:
+vars to get [&#39;rho0&#39;, &#39;gammadown3&#39;]:
+Data read from split iterations: [&#39;gxz&#39;, &#39;gzz&#39;, &#39;gxx&#39;, &#39;rho0&#39;, &#39;gyy&#39;, &#39;gyz&#39;, &#39;gxy&#39;, &#39;t&#39;]
+4th order finite difference schemes are defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="n">variable</span><span class="p">],</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing it = 0
+
+Cosmological constant set to AurelCore.Lambda = 0.00e+00
+Calculated gammadown3: $\gamma_{ij}$ Spatial metric with spatial indices down
+Calculated gammadet: $\gamma$ Determinant of spatial metric
+Processing estimation item: max
+Now processing remaining time steps sequentially
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "11da6ed9bcca4813ac9ba948dab02ba0", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1"># plot the first iteration</span>
+<span class="n">it_index</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># iteration index</span>
+<span class="n">iz</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># z slice index</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">][</span><span class="n">it_index</span><span class="p">][:,:,</span><span class="n">iz</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\rho_0$ at $t=0$ and $z=0$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$y$&#39;</span><span class="p">)</span>
+
+<span class="c1"># plot the maximum rest mass density as a function of time</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0_max&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0_max&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$t$ [$M_{\odot}$]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$max(\rho_0) / \rho_0(0)$&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;$max(\\rho_0) / \\rho_0(0)$&#39;)
+</pre></div>
+</div>
+<img alt="../_images/5ab34b22c3674c9a4304265ad4e39909eb9d400f4386f0485707354651e868cf.png" src="../_images/5ab34b22c3674c9a4304265ad4e39909eb9d400f4386f0485707354651e868cf.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculating at the determinant of the spatial metric</span>
+<span class="n">variable</span> <span class="o">=</span> <span class="s1">&#39;gammadet&#39;</span>
+<span class="n">varstr</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$\gamma$&#39;</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">it_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># plot the first iteration</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">variable</span><span class="p">][</span><span class="n">it_index</span><span class="p">][:,:,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">varstr</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39; at $t=0$ and $z=0$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$y$&#39;</span><span class="p">)</span>
+
+<span class="c1"># plot the maximum rest mass density as a function of time</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">variable</span><span class="o">+</span><span class="s1">&#39;_max&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$t$ [$M_{\odot}$]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;max(&#39;</span> <span class="o">+</span> <span class="n">varstr</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;max($\\gamma$)&#39;)
+</pre></div>
+</div>
+<img alt="../_images/5514b61c5aa3cc501c519c177f19a5dd5e1152f11c7c125ef545aafc088652f6.png" src="../_images/5514b61c5aa3cc501c519c177f19a5dd5e1152f11c7c125ef545aafc088652f6.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Example_over_time.html" class="btn btn-neutral float-left" title="Example over time" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ICPertFLRW.html" class="btn btn-neutral float-right" title="ICPertFLRW" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Robyn L. Munoz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

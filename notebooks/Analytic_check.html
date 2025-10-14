@@ -1,0 +1,705 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytic check &mdash; aurel May 2025 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d170800"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Schwarzschild check" href="Schwarzschild_check.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aurel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/core.html">aurel.core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/finitedifference.html">aurel.finitedifference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/maths.html">aurel.maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/numerical.html">aurel.numerical</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/reading.html">aurel.reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/time.html">aurel.time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/solutions.html">aurel.solutions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#citation">Citation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Example_over_time.html">Example over time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tov_ET.html">tov_ET</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ICPertFLRW.html">ICPertFLRW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Schwarzschild_check.html">Schwarzschild check</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Analytic check</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#check-christoffel-symbols">Check Christoffel symbols</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#d">3D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">4D</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#check-riemann-and-ricci">Check Riemann and Ricci</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">3D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">4D</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aurel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Analytic check</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/Analytic_check.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="analytic-check">
+<h1>Analytic check<a class="headerlink" href="#analytic-check" title="Link to this heading"></a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;jax_enable_x64&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.special</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
+<span class="c1">#from aurel.solutions import Collins_Stewart as sol</span>
+<span class="c1">#from aurel.solutions import Conformally_flat as sol</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aurel.solutions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Harvey_Tsoubelis</span> <span class="k">as</span> <span class="n">sol</span>
+<span class="c1">#from aurel.solutions import Non_diagonal as sol</span>
+<span class="c1">#from aurel.solutions import Rosquist_Jantzen as sol</span>
+<span class="c1">#from aurel.solutions import Schwarzschild as sol #too long for analytics</span>
+<span class="c1">#from aurel.solutions import Szekeres as sol #too long for analytics</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Analytical setup</span>
+<span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;t x y z&#39;</span><span class="p">)</span>
+
+<span class="c1"># Spacetime</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">gdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">an4</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCoreAnalytic</span><span class="p">([</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">],</span> <span class="n">g</span><span class="p">)</span>
+
+<span class="c1"># Space</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">an3</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCoreAnalytic</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">],</span> <span class="n">gamma</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Numerical setup</span>
+
+<span class="n">L</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Nx&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span>  <span class="c1"># Number of data points per side</span>
+    <span class="s1">&#39;Ny&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span>
+    <span class="s1">&#39;Nz&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span>
+    <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="o">-</span> <span class="n">L</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">,</span>  <span class="c1"># Minimum x coordinate</span>
+    <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="o">-</span> <span class="n">L</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">,</span>  <span class="c1"># Minimum y coordinate</span>
+    <span class="s1">&#39;zmin&#39;</span><span class="p">:</span> <span class="o">-</span> <span class="n">L</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">,</span>  <span class="c1"># Minimum z coordinate</span>
+    <span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="n">L</span> <span class="o">/</span> <span class="n">N</span><span class="p">,</span>  <span class="c1"># Elementary grid size</span>
+    <span class="s1">&#39;dy&#39;</span><span class="p">:</span> <span class="n">L</span> <span class="o">/</span> <span class="n">N</span><span class="p">,</span>
+    <span class="s1">&#39;dz&#39;</span><span class="p">:</span> <span class="n">L</span> <span class="o">/</span> <span class="n">N</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">fd</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">FiniteDifference</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">boundary</span><span class="o">=</span><span class="s1">&#39;other&#39;</span><span class="p">,</span> <span class="n">fd_order</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">rel</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCore</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span> <span class="c1"># Need to pass Lambda=sol.Lambda if != 0.0</span>
+
+<span class="n">nt</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nz</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cartesian_coords</span>
+
+<span class="n">rel</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nz</span><span class="p">)</span>
+<span class="n">rel</span><span class="o">.</span><span class="n">freeze_data</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8th order finite difference schemes are defined
+
+Cosmological constant set to AurelCore.Lambda = 0.00e+00
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">err_max</span> <span class="o">=</span> <span class="mf">1e-4</span>
+
+<span class="n">custom_funcs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;hyper&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">sc</span><span class="o">.</span><span class="n">hyp2f1</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">z</span><span class="p">),</span>
+    <span class="s2">&quot;exp_polar&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">}</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compare_values</span><span class="p">(</span><span class="n">theory</span><span class="p">,</span> <span class="n">numerical</span><span class="p">):</span>
+    <span class="n">f_num</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">lambdify</span><span class="p">((</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="n">theory</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">[</span><span class="n">custom_funcs</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">])</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">f_num</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask</span><span class="p">(</span><span class="n">nx</span><span class="p">),</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask</span><span class="p">(</span><span class="n">ny</span><span class="p">),</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask</span><span class="p">(</span><span class="n">nz</span><span class="p">)))</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask</span><span class="p">(</span><span class="n">numerical</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">theory</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">rel_err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">aurel</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">safe_division</span><span class="p">(</span><span class="n">s2</span> <span class="o">-</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s1</span><span class="p">))</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">rel_err</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">error</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">checks</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">theory</span><span class="p">,</span> <span class="n">numerical</span><span class="p">):</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">compare_values</span><span class="p">(</span><span class="n">theory</span><span class="p">,</span> <span class="n">numerical</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">error</span> <span class="o">&gt;</span> <span class="n">err_max</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> 
+              <span class="sa">f</span><span class="s2">&quot;, max(abs(num_val)) = &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask</span><span class="p">(</span><span class="n">numerical</span><span class="p">))),</span> 
+              <span class="s2">&quot;, relative error =&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check1d</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">theory</span><span class="p">,</span> <span class="n">numerical</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+        <span class="n">checks</span><span class="p">(</span><span class="n">var</span><span class="o">+</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">theory</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">numerical</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check2d</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">theory</span><span class="p">,</span> <span class="n">numerical</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+            <span class="n">checks</span><span class="p">(</span><span class="n">var</span><span class="o">+</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">theory</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">numerical</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check3d</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">theory</span><span class="p">,</span> <span class="n">numerical</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+                <span class="n">checks</span><span class="p">(</span><span class="n">var</span><span class="o">+</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}{</span><span class="n">j</span><span class="si">}{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">theory</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">numerical</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check4d</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">theory</span><span class="p">,</span> <span class="n">numerical</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+                    <span class="n">checks</span><span class="p">(</span><span class="n">var</span><span class="o">+</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}{</span><span class="n">j</span><span class="si">}{</span><span class="n">k</span><span class="si">}{</span><span class="n">l</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">theory</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">],</span> <span class="n">numerical</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_them</span><span class="p">(</span><span class="n">analytical</span><span class="p">,</span> <span class="n">numerical</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">f_num</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">lambdify</span><span class="p">((</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="n">analytical</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">[</span><span class="n">custom_funcs</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">])</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">f_num</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nz</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">numerical</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
+
+    <span class="n">rel_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">aurel</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">safe_division</span><span class="p">(</span><span class="n">numerical</span> <span class="o">-</span> <span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="p">))</span>
+    <span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">iz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rel_error</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rel_error</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ix</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">ix</span> <span class="o">=</span> <span class="n">ix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">iy</span> <span class="o">=</span> <span class="n">iy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">iz</span> <span class="o">=</span> <span class="n">iz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;max </span><span class="si">{:.2e}</span><span class="s2"> error at&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rel_error</span><span class="p">)),</span> <span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">iz</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">iy</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="o">*</span><span class="n">fd</span><span class="o">.</span><span class="n">mask_len</span> <span class="ow">or</span> <span class="n">iz</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="o">*</span><span class="n">fd</span><span class="o">.</span><span class="n">mask_len</span><span class="p">:</span>
+        <span class="n">cutoff</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max relative difference in boundary region&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">cutoff</span><span class="p">:</span>
+        <span class="n">xv</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">)</span>
+        <span class="n">nv</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask</span><span class="p">(</span><span class="n">numerical</span><span class="p">[:,</span><span class="n">iy</span><span class="p">,</span><span class="n">iz</span><span class="p">])</span>
+        <span class="n">av</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask</span><span class="p">(</span><span class="n">A</span><span class="p">[:,</span><span class="n">iy</span><span class="p">,</span><span class="n">iz</span><span class="p">])</span>
+        <span class="n">rv</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask</span><span class="p">(</span><span class="n">rel_error</span><span class="p">[:,</span><span class="n">iy</span><span class="p">,</span><span class="n">iz</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">xv</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">xarray</span>
+        <span class="n">nv</span> <span class="o">=</span> <span class="n">numerical</span><span class="p">[:,</span><span class="n">iy</span><span class="p">,</span><span class="n">iz</span><span class="p">]</span>
+        <span class="n">av</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:,</span><span class="n">iy</span><span class="p">,</span><span class="n">iz</span><span class="p">]</span>
+        <span class="n">rv</span> <span class="o">=</span> <span class="n">rel_error</span><span class="p">[:,</span><span class="n">iy</span><span class="p">,</span><span class="n">iz</span><span class="p">]</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span class="n">nv</span><span class="p">,</span> 
+             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;numerical&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span class="n">av</span><span class="p">,</span> 
+             <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;analytical&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span class="n">rv</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;relative difference&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="check-christoffel-symbols">
+<h2>Check Christoffel symbols<a class="headerlink" href="#check-christoffel-symbols" title="Link to this heading"></a></h2>
+<section id="d">
+<h3>3D<a class="headerlink" href="#d" title="Link to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">check2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;gamma^&quot;</span><span class="p">,</span> <span class="n">an3</span><span class="p">[</span><span class="s2">&quot;gup&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;gammaup3&quot;</span><span class="p">])</span>
+
+<span class="n">check3d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Γudd&quot;</span><span class="p">,</span> <span class="n">an3</span><span class="p">[</span><span class="s2">&quot;Gamma_udd&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;s_Gamma_udd3&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated analytic gup: Metric tensor in the up index form
+
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated analytic Gamma_udd: Christoffel symbols in the up-down-down index form
+
+Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
+Γudd022 , max(abs(num_val)) =  208116.36229624215 , relative error = 0.0016382525191416827
+Γudd202 , max(abs(num_val)) =  4.723738844061859 , relative error = 0.0001341854370830323
+Γudd220 , max(abs(num_val)) =  4.723738844061859 , relative error = 0.0001341854370830323
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id1">
+<h3>4D<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">check2d</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;g^&quot;</span><span class="p">,</span> <span class="n">an4</span><span class="p">[</span><span class="s2">&quot;gup&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;gup4&quot;</span><span class="p">])</span>
+<span class="n">check3d</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;Γudd&quot;</span><span class="p">,</span> <span class="n">an4</span><span class="p">[</span><span class="s2">&quot;Gamma_udd&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;st_Gamma_udd4&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated analytic gup: Metric tensor in the up index form
+
+Calculated alpha: $\alpha$ Lapse. I assume $\alpha=1$, if not then please define AurelCore.data[&#39;alpha&#39;] = ... 
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated analytic Gamma_udd: Christoffel symbols in the up-down-down index form
+
+Calculated dtalpha: $\partial_t \alpha$ Coordinate time derivative of the lapse. I assume $\partial_t \alpha=0$, if not then please define AurelCore.data[&#39;dtalpha&#39;] = ... 
+Calculated dtbetax: $\partial_t\beta^{x}$ Coordinate time derivative of the x component of the shift vector with indices up. I assume $\partial_t\beta^{x}=0$, if not then please define AurelCore.data[&#39;dtbetax&#39;] = ... 
+Calculated dtbetay: $\partial_t\beta^{y}$ Coordinate time derivative of the y component of the shift vector with indices up. I assume $\partial_t\beta^{y}=0$, if not then please define AurelCore.data[&#39;dtbetay&#39;] = ... 
+Calculated dtbetaz: $\partial_t\beta^{z}$ Coordinate time derivative of the z component of the shift vector with indices up. I assume $\partial_t\beta^{z}=0$, if not then please define AurelCore.data[&#39;dtbetaz&#39;] = ... 
+Calculated dtbetaup3: $\partial_t\beta^{i}$ Coordinate time derivative of the shift vector with spatial indices up
+Calculated st_Gamma_udd4: ${}^{(4)}{\Gamma^{\alpha}}_{\mu\nu}$ Christoffel symbols of spacetime metric with mixed spacetime indices
+Γudd133 , max(abs(num_val)) =  208116.36229624215 , relative error = 0.0016382525191416827
+Γudd313 , max(abs(num_val)) =  4.723738844061859 , relative error = 0.0001341854370830323
+Γudd331 , max(abs(num_val)) =  4.723738844061859 , relative error = 0.0001341854370830323
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="check-riemann-and-ricci">
+<h2>Check Riemann and Ricci<a class="headerlink" href="#check-riemann-and-ricci" title="Link to this heading"></a></h2>
+<section id="id2">
+<h3>3D<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compute 3-Riemann tensor: R^i_{jkl}</span>
+<span class="n">check4d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Ruddd&quot;</span><span class="p">,</span> <span class="n">an3</span><span class="p">[</span><span class="s2">&quot;Riemann_uddd&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;s_Riemann_uddd3&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 1 0 1,  0 1 0 2,  0 1 1 2,  0 2 0 1,  0 2 0 2,  0 2 1 2,  1 0 0 1,  1 0 0 2,  1 0 1 2,  1 2 0 1,  1 2 0 2,  1 2 1 2,  2 0 0 1,  2 0 0 2,  2 0 1 2,  2 1 0 1,  2 1 0 2,  2 1 1 2,  
+Calculated analytic Riemann_uddd: Riemann curvature tensor in the up-down-down-down index form
+
+Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
+Ruddd0101 , max(abs(num_val)) =  0.016679485081112944 , relative error = 0.016679485081112944
+Ruddd0102 , max(abs(num_val)) =  2331.4100690063497 , relative error = 0.0001242683747693139
+Ruddd0110 , max(abs(num_val)) =  0.016679485081303968 , relative error = 0.016679485081303968
+Ruddd0120 , max(abs(num_val)) =  2331.4100690063483 , relative error = 0.000124268374769899
+Ruddd0201 , max(abs(num_val)) =  2331.4100690064515 , relative error = 0.00012426837472562759
+Ruddd0202 , max(abs(num_val)) =  44052.60137026294 , relative error = 0.00014654071619464928
+Ruddd0210 , max(abs(num_val)) =  2331.41006900645 , relative error = 0.00012426837472621268
+Ruddd0220 , max(abs(num_val)) =  44052.601370262935 , relative error = 0.00014654071619464928
+Ruddd1001 , max(abs(num_val)) =  4.372981885582807 , relative error = 0.0006823536802762492
+Ruddd1010 , max(abs(num_val)) =  4.372981885582807 , relative error = 0.0006823536802762492
+Ruddd1112 , max(abs(num_val)) =  0.08309351022762712 , relative error = 0.08309351022762712
+Ruddd1121 , max(abs(num_val)) =  0.08309351022762712 , relative error = 0.08309351022762712
+Ruddd1212 , max(abs(num_val)) =  0.7117688893340528 , relative error = 0.7117688893340528
+Ruddd1221 , max(abs(num_val)) =  0.7117688893340528 , relative error = 0.7117688893340528
+Ruddd2001 , max(abs(num_val)) =  0.5003281227507504 , relative error = 0.0006562455015008961
+Ruddd2010 , max(abs(num_val)) =  0.5003281227507504 , relative error = 0.0006562455015008961
+Ruddd2112 , max(abs(num_val)) =  0.00983646171152941 , relative error = 0.00983646171152941
+Ruddd2121 , max(abs(num_val)) =  0.00983646171152941 , relative error = 0.00983646171152941
+Ruddd2212 , max(abs(num_val)) =  0.08309351032949053 , relative error = 0.08309351032949053
+Ruddd2221 , max(abs(num_val)) =  0.08309351032949053 , relative error = 0.08309351032949053
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Lower the first index: R_{lijk} = γ_{lm} R^m_{ijk}</span>
+<span class="n">check4d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;R_&quot;</span><span class="p">,</span> <span class="n">an3</span><span class="p">[</span><span class="s2">&quot;Riemann_down&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;s_Riemann_down3&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 1 0 1,  0 1 0 2,  0 1 1 2,  0 2 0 2,  0 2 1 2,  1 2 1 2,  
+Calculated analytic Riemann_down: Riemann curvature tensor in the down index form
+
+Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
+R_0101 , max(abs(num_val)) =  0.016679485081112944 , relative error = 0.016679485081112944
+R_0102 , max(abs(num_val)) =  2331.4100690063497 , relative error = 0.0001242683747693139
+R_0110 , max(abs(num_val)) =  0.016679485081303968 , relative error = 0.016679485081303968
+R_0120 , max(abs(num_val)) =  2331.4100690063483 , relative error = 0.000124268374769899
+R_0201 , max(abs(num_val)) =  2331.4100690064515 , relative error = 0.00012426837472562759
+R_0202 , max(abs(num_val)) =  44052.60137026294 , relative error = 0.00014654071619464928
+R_0210 , max(abs(num_val)) =  2331.41006900645 , relative error = 0.00012426837472621268
+R_0220 , max(abs(num_val)) =  44052.601370262935 , relative error = 0.00014654071619464928
+R_1001 , max(abs(num_val)) =  0.01412428077706889 , relative error = 0.01412428077706889
+R_1002 , max(abs(num_val)) =  2331.913775963813 , relative error = 0.00016553528610018482
+R_1010 , max(abs(num_val)) =  0.01412428077488208 , relative error = 0.01412428077488208
+R_1020 , max(abs(num_val)) =  2331.913775963813 , relative error = 0.00016553528610103156
+R_1212 , max(abs(num_val)) =  45.87134798262318 , relative error = 45.87134798262318
+R_1221 , max(abs(num_val)) =  45.87134798262318 , relative error = 45.87134798262318
+R_2001 , max(abs(num_val)) =  2331.68195273488 , relative error = 0.0013380956155417867
+R_2010 , max(abs(num_val)) =  2331.681952734861 , relative error = 0.0013380956155319642
+R_2112 , max(abs(num_val)) =  45.87135528560006 , relative error = 45.87135528560006
+R_2121 , max(abs(num_val)) =  45.87135528560006 , relative error = 45.87135528560006
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">check2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;R_&quot;</span><span class="p">,</span> <span class="n">an3</span><span class="p">[</span><span class="s2">&quot;Ricci_down&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;s_Ricci_down3&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated analytic Ricci_down: Ricci curvature tensor in the down index form
+
+Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
+R_00 , max(abs(num_val)) =  1.003148449103068 , relative error = 0.003148449103067996
+R_11 , max(abs(num_val)) =  0.026515946792642336 , relative error = 0.026515946792642336
+R_12 , max(abs(num_val)) =  2331.326975496122 , relative error = 0.00015990482733364868
+R_21 , max(abs(num_val)) =  2331.326975496122 , relative error = 0.00015990482733364868
+R_22 , max(abs(num_val)) =  44051.88960137361 , relative error = 0.00020066236838926717
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">checks</span><span class="p">(</span><span class="s2">&quot;R&quot;</span><span class="p">,</span> <span class="n">an3</span><span class="p">[</span><span class="s2">&quot;RicciS&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;s_RicciS&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated analytic RicciS: Ricci scalar
+
+Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
+CLEAN-UP: Cleaning up cache after 20 calculations...
+CLEAN-UP: data size before cleanup: 710.00 MB
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 12 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 11 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 10 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_Gamma_udd4&#39; used 4 calculations ago (size: 128.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 3 calculations ago (size: 162.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 2 calculations ago (size: 162.00 MB).
+CLEAN-UP: Removed 6 items
+CLEAN-UP: data size after cleanup: 188.00 MB
+R , max(abs(num_val)) =  2.0054514864455992 , relative error = 0.002725743222799615
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_them</span><span class="p">(</span><span class="n">an3</span><span class="p">[</span><span class="s2">&quot;RicciS&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;s_RicciS&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>max 1.18e-01 error at [0] [0] [0]
+Max relative difference in boundary region
+</pre></div>
+</div>
+<img alt="../_images/f42a1ab0264ac7235cc6028376190dae89a83f5b64e45419e52fb93b4ceb14e7.png" src="../_images/f42a1ab0264ac7235cc6028376190dae89a83f5b64e45419e52fb93b4ceb14e7.png" />
+</div>
+</div>
+</section>
+<section id="id3">
+<h3>4D<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">check4d</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;Ruddd&quot;</span><span class="p">,</span> <span class="n">an4</span><span class="p">[</span><span class="s2">&quot;Riemann_uddd&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;st_Riemann_uddd4&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 1 0 1,  0 1 0 2,  0 1 0 3,  0 1 1 2,  0 1 1 3,  0 1 2 3,  0 2 0 1,  0 2 0 2,  0 2 0 3,  0 2 1 2,  0 2 1 3,  0 2 2 3,  0 3 0 1,  0 3 0 2,  0 3 0 3,  0 3 1 2,  0 3 1 3,  0 3 2 3,  1 0 0 1,  1 0 0 2,  1 0 0 3,  1 0 1 2,  1 0 1 3,  1 0 2 3,  1 2 0 1,  1 2 0 2,  1 2 0 3,  1 2 1 2,  1 2 1 3,  1 2 2 3,  1 3 0 1,  1 3 0 2,  1 3 0 3,  1 3 1 2,  1 3 1 3,  1 3 2 3,  2 0 0 1,  2 0 0 2,  2 0 0 3,  2 0 1 2,  2 0 1 3,  2 0 2 3,  2 1 0 1,  2 1 0 2,  2 1 0 3,  2 1 1 2,  2 1 1 3,  2 1 2 3,  2 3 0 1,  2 3 0 2,  2 3 0 3,  2 3 1 2,  2 3 1 3,  2 3 2 3,  3 0 0 1,  3 0 0 2,  3 0 0 3,  3 0 1 2,  3 0 1 3,  3 0 2 3,  3 1 0 1,  3 1 0 2,  3 1 0 3,  3 1 1 2,  3 1 1 3,  3 1 2 3,  3 2 0 1,  3 2 0 2,  3 2 0 3,  3 2 1 2,  3 2 1 3,  3 2 2 3,  
+Calculated analytic Riemann_uddd: Riemann curvature tensor in the up-down-down-down index form
+
+Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
+Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
+Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
+Calculated st_Riemann_uddd4: ${}^{(4)}{R^{\alpha}}_{\beta\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
+Ruddd0101 , max(abs(num_val)) =  0.0031484491030582262 , relative error = 0.0031484491030582262
+Ruddd0110 , max(abs(num_val)) =  0.0031484491030582262 , relative error = 0.0031484491030582262
+Ruddd0123 , max(abs(num_val)) =  0.01262044790564687 , relative error = 0.01262044790564687
+Ruddd0132 , max(abs(num_val)) =  0.01262044790564687 , relative error = 0.01262044790564687
+Ruddd0203 , max(abs(num_val)) =  19697.40712642635 , relative error = 0.0003891806778538999
+Ruddd0230 , max(abs(num_val)) =  19697.40712642635 , relative error = 0.0003891806778538999
+Ruddd0302 , max(abs(num_val)) =  19697.40712642635 , relative error = 0.0003891806778538999
+Ruddd0303 , max(abs(num_val)) =  164064.5758265376 , relative error = 0.00020820998017207775
+Ruddd0312 , max(abs(num_val)) =  19697.00558478495 , relative error = 0.000601699148547393
+Ruddd0313 , max(abs(num_val)) =  164058.73499428353 , relative error = 0.0001017379136592247
+Ruddd0320 , max(abs(num_val)) =  19697.40712642635 , relative error = 0.0003891806778538999
+Ruddd0321 , max(abs(num_val)) =  19697.00558478495 , relative error = 0.000601699148547393
+Ruddd0330 , max(abs(num_val)) =  164064.5758265376 , relative error = 0.00020820998017207775
+Ruddd0331 , max(abs(num_val)) =  164058.73499428353 , relative error = 0.0001017379136592247
+Ruddd1001 , max(abs(num_val)) =  0.0031484491030582262 , relative error = 0.0031484491030582262
+Ruddd1010 , max(abs(num_val)) =  0.0031484491030582262 , relative error = 0.0031484491030582262
+Ruddd1023 , max(abs(num_val)) =  0.01262044790564687 , relative error = 0.01262044790564687
+Ruddd1032 , max(abs(num_val)) =  0.01262044790564687 , relative error = 0.01262044790564687
+Ruddd1203 , max(abs(num_val)) =  19697.00558478495 , relative error = 0.000601699148547393
+Ruddd1213 , max(abs(num_val)) =  19697.32403291621 , relative error = 0.00039339925765970705
+Ruddd1230 , max(abs(num_val)) =  19697.00558478495 , relative error = 0.000601699148547393
+Ruddd1231 , max(abs(num_val)) =  19697.32403291621 , relative error = 0.0003933992576816906
+Ruddd1303 , max(abs(num_val)) =  164058.73499428353 , relative error = 0.0001017379136592247
+Ruddd1312 , max(abs(num_val)) =  19697.32403291611 , relative error = 0.00039339925763772355
+Ruddd1313 , max(abs(num_val)) =  164063.8640576504 , relative error = 0.00015205262380855634
+Ruddd1321 , max(abs(num_val)) =  19697.32403291611 , relative error = 0.00039339925765970705
+Ruddd1330 , max(abs(num_val)) =  164058.73499428353 , relative error = 0.0001017379136592247
+Ruddd1331 , max(abs(num_val)) =  164063.8640576504 , relative error = 0.00015205262380855634
+Ruddd2002 , max(abs(num_val)) =  0.5003766011970541 , relative error = 0.004461712594083345
+Ruddd2003 , max(abs(num_val)) =  8.740676153529426 , relative error = 0.0005113896423065301
+Ruddd2020 , max(abs(num_val)) =  0.5003766011970541 , relative error = 0.004461712594083345
+Ruddd2030 , max(abs(num_val)) =  8.740676153529426 , relative error = 0.0005113896423065301
+Ruddd2103 , max(abs(num_val)) =  8.73999212532988 , relative error = 0.0002991099226462979
+Ruddd2112 , max(abs(num_val)) =  0.5008153624203805 , relative error = 0.005963771165482301
+Ruddd2113 , max(abs(num_val)) =  8.741538532811123 , relative error = 0.0004457114229562048
+Ruddd2121 , max(abs(num_val)) =  0.5008153624203763 , relative error = 0.005963771165482301
+Ruddd2130 , max(abs(num_val)) =  8.73999212532988 , relative error = 0.0002991099226462979
+Ruddd2131 , max(abs(num_val)) =  8.741538532810669 , relative error = 0.0004457114229562048
+Ruddd2223 , max(abs(num_val)) =  0.08309351007491746 , relative error = 0.08309351007491746
+Ruddd2232 , max(abs(num_val)) =  0.08309351007491746 , relative error = 0.08309351007491746
+Ruddd2301 , max(abs(num_val)) =  0.00020943222492908245 , relative error = 0.00020943222492908245
+Ruddd2310 , max(abs(num_val)) =  0.00020943222492908245 , relative error = 0.00020943222492908245
+Ruddd2323 , max(abs(num_val)) =  0.7117688877163798 , relative error = 0.7117688877163798
+Ruddd2332 , max(abs(num_val)) =  0.7117688877163798 , relative error = 0.7117688877163798
+Ruddd3002 , max(abs(num_val)) =  0.0002525336748191673 , relative error = 0.0002525336748191673
+Ruddd3003 , max(abs(num_val)) =  0.5002037766096384 , relative error = 0.001041708533186636
+Ruddd3020 , max(abs(num_val)) =  0.0002525336748191673 , relative error = 0.0002525336748191673
+Ruddd3030 , max(abs(num_val)) =  0.5002037766096384 , relative error = 0.001041708533186636
+Ruddd3112 , max(abs(num_val)) =  0.0003281227507435711 , relative error = 0.0003281227507435711
+Ruddd3113 , max(abs(num_val)) =  0.5001665635203726 , relative error = 0.0008805607837963914
+Ruddd3121 , max(abs(num_val)) =  0.0003281227507435711 , relative error = 0.0003281227507435711
+Ruddd3131 , max(abs(num_val)) =  0.5001665635203228 , relative error = 0.0008805607837963914
+Ruddd3223 , max(abs(num_val)) =  0.00983646169337686 , relative error = 0.00983646169337686
+Ruddd3232 , max(abs(num_val)) =  0.00983646169337686 , relative error = 0.00983646169337686
+Ruddd3323 , max(abs(num_val)) =  0.08309351014149692 , relative error = 0.08309351014149692
+Ruddd3332 , max(abs(num_val)) =  0.08309351014149692 , relative error = 0.08309351014149692
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">check4d</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;R_&quot;</span><span class="p">,</span> <span class="n">an4</span><span class="p">[</span><span class="s2">&quot;Riemann_down&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;st_Riemann_down4&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 1 0 1,  0 1 0 2,  0 1 0 3,  0 1 1 2,  0 1 1 3,  0 1 2 3,  0 2 0 2,  0 2 0 3,  0 2 1 2,  0 2 1 3,  0 2 2 3,  0 3 0 3,  0 3 1 2,  0 3 1 3,  0 3 2 3,  1 2 1 2,  1 2 1 3,  1 2 2 3,  1 3 1 3,  1 3 2 3,  2 3 2 3,  
+Calculated analytic Riemann_down: Riemann curvature tensor in the down index form
+R_0101 , max(abs(num_val)) =  0.0031484491030582262 , relative error = 0.0031484491030582262
+R_0110 , max(abs(num_val)) =  0.0031484491030582262 , relative error = 0.0031484491030582262
+R_0123 , max(abs(num_val)) =  0.01262044790564687 , relative error = 0.01262044790564687
+R_0132 , max(abs(num_val)) =  0.01262044790564687 , relative error = 0.01262044790564687
+R_0203 , max(abs(num_val)) =  19697.40712642635 , relative error = 0.0003891806778538999
+R_0230 , max(abs(num_val)) =  19697.40712642635 , relative error = 0.0003891806778538999
+R_0302 , max(abs(num_val)) =  19697.40712642635 , relative error = 0.0003891806778538999
+R_0303 , max(abs(num_val)) =  164064.5758265376 , relative error = 0.00020820998017207775
+R_0312 , max(abs(num_val)) =  19697.00558478495 , relative error = 0.000601699148547393
+R_0313 , max(abs(num_val)) =  164058.73499428353 , relative error = 0.0001017379136592247
+R_0320 , max(abs(num_val)) =  19697.40712642635 , relative error = 0.0003891806778538999
+R_0321 , max(abs(num_val)) =  19697.00558478495 , relative error = 0.000601699148547393
+R_0330 , max(abs(num_val)) =  164064.5758265376 , relative error = 0.00020820998017207775
+R_0331 , max(abs(num_val)) =  164058.73499428353 , relative error = 0.0001017379136592247
+R_1001 , max(abs(num_val)) =  0.0031484491030582262 , relative error = 0.0031484491030582262
+R_1010 , max(abs(num_val)) =  0.0031484491030582262 , relative error = 0.0031484491030582262
+R_1023 , max(abs(num_val)) =  0.01262044790564687 , relative error = 0.01262044790564687
+R_1032 , max(abs(num_val)) =  0.01262044790564687 , relative error = 0.01262044790564687
+R_1203 , max(abs(num_val)) =  19697.00558478495 , relative error = 0.000601699148547393
+R_1213 , max(abs(num_val)) =  19697.32403291621 , relative error = 0.00039339925765970705
+R_1230 , max(abs(num_val)) =  19697.00558478495 , relative error = 0.000601699148547393
+R_1231 , max(abs(num_val)) =  19697.32403291621 , relative error = 0.0003933992576816906
+R_1303 , max(abs(num_val)) =  164058.73499428353 , relative error = 0.0001017379136592247
+R_1312 , max(abs(num_val)) =  19697.32403291611 , relative error = 0.00039339925763772355
+R_1313 , max(abs(num_val)) =  164063.8640576504 , relative error = 0.00015205262380855634
+R_1321 , max(abs(num_val)) =  19697.32403291611 , relative error = 0.00039339925765970705
+R_1330 , max(abs(num_val)) =  164058.73499428353 , relative error = 0.0001017379136592247
+R_1331 , max(abs(num_val)) =  164063.8640576504 , relative error = 0.00015205262380855634
+R_2003 , max(abs(num_val)) =  19697.40712642635 , relative error = 0.0003891806778538999
+R_2030 , max(abs(num_val)) =  19697.40712642635 , relative error = 0.0003891806778538999
+R_2103 , max(abs(num_val)) =  19697.00558478495 , relative error = 0.000601699148547393
+R_2112 , max(abs(num_val)) =  2331.6857012733462 , relative error = 0.0002281854824960171
+R_2113 , max(abs(num_val)) =  19696.820325958746 , relative error = 0.00039205847954967344
+R_2121 , max(abs(num_val)) =  2331.6857012733462 , relative error = 0.0002281854824960171
+R_2130 , max(abs(num_val)) =  19697.00558478495 , relative error = 0.000601699148547393
+R_2131 , max(abs(num_val)) =  19696.820325958746 , relative error = 0.00039205847954967344
+R_2301 , max(abs(num_val)) =  0.01262044790564687 , relative error = 0.01262044790564687
+R_2310 , max(abs(num_val)) =  0.01262044790564687 , relative error = 0.01262044790564687
+R_2323 , max(abs(num_val)) =  45.87134784460068 , relative error = 45.87134784460068
+R_2332 , max(abs(num_val)) =  45.87134784460068 , relative error = 45.87134784460068
+R_3002 , max(abs(num_val)) =  19697.40712642635 , relative error = 0.0003891806778538999
+R_3003 , max(abs(num_val)) =  164064.5758265376 , relative error = 0.00020820998017207775
+R_3012 , max(abs(num_val)) =  19697.00558478495 , relative error = 0.000601699148547393
+R_3013 , max(abs(num_val)) =  164058.73499428353 , relative error = 0.0001017379136592247
+R_3020 , max(abs(num_val)) =  19697.40712642635 , relative error = 0.0003891806778538999
+R_3021 , max(abs(num_val)) =  19697.00558478495 , relative error = 0.000601699148547393
+R_3030 , max(abs(num_val)) =  164064.5758265376 , relative error = 0.00020820998017207775
+R_3031 , max(abs(num_val)) =  164058.73499428353 , relative error = 0.0001017379136592247
+R_3103 , max(abs(num_val)) =  164058.73499428353 , relative error = 0.0001017379136592247
+R_3112 , max(abs(num_val)) =  19697.0521491877 , relative error = 0.0006904520382722087
+R_3113 , max(abs(num_val)) =  164059.24308140838 , relative error = 0.0001625071400577208
+R_3121 , max(abs(num_val)) =  19697.0521491877 , relative error = 0.0006904520382722087
+R_3130 , max(abs(num_val)) =  164058.73499428353 , relative error = 0.0001017379136592247
+R_3131 , max(abs(num_val)) =  164059.24308140838 , relative error = 0.0001625071400577208
+R_3201 , max(abs(num_val)) =  0.01262044790564687 , relative error = 0.01262044790564687
+R_3210 , max(abs(num_val)) =  0.01262044790564687 , relative error = 0.01262044790564687
+R_3223 , max(abs(num_val)) =  45.871355175971985 , relative error = 45.871355175971985
+R_3232 , max(abs(num_val)) =  45.871355175971985 , relative error = 45.871355175971985
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_them</span><span class="p">(</span><span class="n">an4</span><span class="p">[</span><span class="s2">&quot;Riemann_down&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;st_Riemann_down4&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>max 1.04e-02 error at 0 1 0
+Max relative difference in boundary region
+</pre></div>
+</div>
+<img alt="../_images/4afad4f09ab8f8e909864088107c3250862a85c7f071a24de629512be3124c00.png" src="../_images/4afad4f09ab8f8e909864088107c3250862a85c7f071a24de629512be3124c00.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">check2d</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;R_&quot;</span><span class="p">,</span> <span class="n">an4</span><span class="p">[</span><span class="s2">&quot;Ricci_down&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;st_Ricci_down4&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated analytic Ricci_down: Ricci curvature tensor in the down index form
+
+Calculated Ttrace: $T$ Trace of the energy-stress tensor
+Calculated st_Ricci_down4: ${}^{(4)}R_{\alpha\beta}$ Ricci tensor of spacetime metric with spacetime indices down
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">checks</span><span class="p">(</span><span class="s2">&quot;R&quot;</span><span class="p">,</span> <span class="n">an4</span><span class="p">[</span><span class="s2">&quot;RicciS&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;st_RicciS&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated analytic RicciS: Ricci scalar
+
+Calculated st_RicciS: ${}^{(4)}R$ Ricci scalar of spacetime metric
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Schwarzschild_check.html" class="btn btn-neutral float-left" title="Schwarzschild check" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Robyn L. Munoz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

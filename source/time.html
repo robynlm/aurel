@@ -1,0 +1,311 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aurel.time &mdash; aurel May 2025 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d170800"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="aurel.solutions" href="solutions.html" />
+    <link rel="prev" title="aurel.reading" href="reading.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aurel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="core.html">aurel.core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="finitedifference.html">aurel.finitedifference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths.html">aurel.maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="numerical.html">aurel.numerical</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reading.html">aurel.reading</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">aurel.time</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.time.over_time"><code class="docutils literal notranslate"><span class="pre">over_time()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.time.process_single_timestep"><code class="docutils literal notranslate"><span class="pre">process_single_timestep()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.time.validate_estimation_function"><code class="docutils literal notranslate"><span class="pre">validate_estimation_function()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.time.validate_variable_function"><code class="docutils literal notranslate"><span class="pre">validate_variable_function()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#estimates">estimates</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="solutions.html">aurel.solutions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Example_over_time.html">Example over time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/tov_ET.html">tov_ET</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Schwarzschild_check.html">Schwarzschild check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Analytic_check.html">Analytic check</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aurel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">aurel.time</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/time.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aurel.time">
+<span id="aurel-time"></span><h1>aurel.time<a class="headerlink" href="#module-aurel.time" title="Link to this heading"></a></h1>
+<p>Variable calculation and scalar estimation over time for the Aurel package.</p>
+<p>This module provides a function to calculate variables over time series data
+and applying statistical estimation functions to 3D arrays.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.time.over_time">
+<span class="sig-prename descclassname"><span class="pre">aurel.time.</span></span><span class="sig-name descname"><span class="pre">over_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">veryverbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">rel_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/time.html#over_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.time.over_time" title="Link to this definition"></a></dt>
+<dd><p>Calculate variables from the data and store them in the data dictionary.</p>
+<p>This function processes time series data by creating AurelCore instances
+for each time step, calculating specified variables, and optionally
+applying estimation functions to 3D arrays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dict</em>) – Dictionary containing time series data. Must include an ‘it’ key with
+iteration information. This function will add calculated variables
+to this dictionary.</p></li>
+<li><p><strong>fd</strong> (<a class="reference internal" href="finitedifference.html#aurel.finitedifference.FiniteDifference" title="aurel.finitedifference.FiniteDifference"><em>FiniteDifference</em></a>) – Finite difference class used to initialize AurelCore instances.</p></li>
+<li><p><strong>vars</strong> (<em>list</em><em> of </em><em>str</em><em> or </em><em>dict</em><em>, </em><em>optional</em>) – <p>List of variable names to calculate. These variables will be computed
+using the AurelCore instance at each time step.
+Elements can be:</p>
+<ul>
+<li><p>str: Names of predefined variables from core.descriptions</p></li>
+<li><p>dict: Custom variable definitions with string keys (variable names)
+and functions that take an AurelCore instance and return the variable
+value.</p></li>
+</ul>
+<p>Default is an empty list, no variable calculations are performed.</p>
+</p></li>
+<li><p><strong>estimates</strong> (<em>list</em><em> of </em><em>str</em><em> or </em><em>dict</em><em>, </em><em>optional</em>) – <p>List containing estimation functions to apply to all 3D scalar arrays.
+Elements can be:</p>
+<ul>
+<li><p>str: Names of predefined functions from est_functions
+(‘max’, ‘mean’, ‘median’, ‘min’, ‘OD’, ‘UD’, …)</p></li>
+<li><p>dict: Custom estimation functions with string keys (function names)
+and functions that take a scalar 3D array of shape
+(fd.Nx, fd.Ny, fd.Nz) and return a scalar value.</p></li>
+</ul>
+<p>Default is an empty list (no estimation applied).</p>
+</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints debug information about the calculation process.</p></li>
+<li><p><strong>veryverbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, provides more detailed debug information. Defaults to False.</p></li>
+<li><p><strong>**rel_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Additional parameters passed to AurelCore initialization, such as:</p>
+<ul>
+<li><p>Lambda : float, cosmological constant</p></li>
+<li><p>tetrad_to_use : str, tetrad choice for Weyl calculations</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Updated data dictionary with calculated variables.
+If <cite>vars</cite> is provided, a new key is added containing a list of
+values for each time step.
+If <cite>estimates</cite> is provided, additional keys are added with format
+‘{variable}_{estimation_func}’.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.time.process_single_timestep">
+<span class="sig-prename descclassname"><span class="pre">aurel.time.</span></span><span class="sig-name descname"><span class="pre">process_single_timestep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalarkeys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/time.html#process_single_timestep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.time.process_single_timestep" title="Link to this definition"></a></dt>
+<dd><p>Process a single time step for variable calculation and estimation.</p>
+<p>This function creates an AurelCore instance for the specified time step,
+calculates requested variables, and applies estimation
+functions to 3D arrays if specified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dict</em>) – Dictionary containing variables of relevant iteration.
+The function will add calculated variables
+to this dictionary.</p></li>
+<li><p><strong>fd</strong> (<a class="reference internal" href="finitedifference.html#aurel.finitedifference.FiniteDifference" title="aurel.finitedifference.FiniteDifference"><em>FiniteDifference</em></a>) – Finite difference class used to initialize AurelCore instances.</p></li>
+<li><p><strong>vars</strong> (<em>list</em><em> of </em><em>str</em><em> or </em><em>dict</em>) – <p>List of variable names to calculate. These variables will be computed
+using the AurelCore instance at each time step.
+Elements can be:</p>
+<ul>
+<li><p>str: Names of predefined variables from core.descriptions</p></li>
+<li><p>dict: Custom variable definitions with string keys (variable names)
+and functions that take an AurelCore instance and return the variable
+value.</p></li>
+</ul>
+<p>If empty, no variable calculations are performed.</p>
+</p></li>
+<li><p><strong>estimates</strong> (<em>list</em><em> of </em><em>str</em><em> or </em><em>dict</em>) – <p>List containing estimation functions to apply to all 3D scalar arrays.
+Elements can be:</p>
+<ul>
+<li><p>str: Names of predefined functions from est_functions</p></li>
+<li><p>dict: Custom estimation functions with string keys (function names)
+and functions that take a 3D array of shape (fd.Nx, fd.Ny, fd.Nz)
+and return a scalar value.</p></li>
+</ul>
+<p>If empty, no estimation applied.</p>
+</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Passed to AurelCore for debug information and calculation process.</p></li>
+<li><p><strong>scalarkeys</strong> (<em>list</em><em> of </em><em>str</em>) – List of keys in <cite>data</cite> that contain 3D scalar arrays. If None,
+the function will determine these keys automatically.</p></li>
+<li><p><strong>rel_kwargs</strong> (<em>dict</em>) – Additional parameters passed to AurelCore initialization.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>dict</em> – Updated data dictionary with calculated variables.
+If <cite>vars</cite> is provided, a new key is added containing a list of
+values for this time step.
+If <cite>estimates</cite> is provided, additional keys are added with format
+‘{variable}_{estimation_func}’.</p></li>
+<li><p><em>list of str</em> – List of scalar keys if <cite>scalarkeys</cite> is None, otherwise returns None.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.time.validate_estimation_function">
+<span class="sig-prename descclassname"><span class="pre">aurel.time.</span></span><span class="sig-name descname"><span class="pre">validate_estimation_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/time.html#validate_estimation_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.time.validate_estimation_function" title="Link to this definition"></a></dt>
+<dd><p>Validate that estimation function has correct signature and behaviour.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>callable</em>) – Function to validate</p></li>
+<li><p><strong>func_name</strong> (<em>str</em>) – Name of the function for error messages</p></li>
+<li><p><strong>fd</strong> (<a class="reference internal" href="finitedifference.html#aurel.finitedifference.FiniteDifference" title="aurel.finitedifference.FiniteDifference"><em>FiniteDifference</em></a>) – Finite difference object to get grid dimensions</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints debug information about the validation process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if function is valid</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.time.validate_variable_function">
+<span class="sig-prename descclassname"><span class="pre">aurel.time.</span></span><span class="sig-name descname"><span class="pre">validate_variable_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">veryverbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/time.html#validate_variable_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.time.validate_variable_function" title="Link to this definition"></a></dt>
+<dd><p>Validate that variable function has correct signature and behaviour.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>callable</em>) – Function to validate</p></li>
+<li><p><strong>func_name</strong> (<em>str</em>) – Name of the function for error messages</p></li>
+<li><p><strong>fd</strong> (<a class="reference internal" href="finitedifference.html#aurel.finitedifference.FiniteDifference" title="aurel.finitedifference.FiniteDifference"><em>FiniteDifference</em></a>) – Finite difference object to get grid dimensions</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints debug information about the validation process.
+Default Ture.</p></li>
+<li><p><strong>veryverbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints aurelcore verbose information. Default False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if function is valid</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="estimates">
+<span id="estimates-list"></span><h2>estimates<a class="headerlink" href="#estimates" title="Link to this heading"></a></h2>
+<p>The following estimation functions are available for use with the <code class="docutils literal notranslate"><span class="pre">estimates</span></code>
+parameter in <code class="xref py py-func docutils literal notranslate"><span class="pre">aurel.over_time()</span></code>:</p>
+<p><code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">median</span></code>, <code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">sum</span></code>, <code class="docutils literal notranslate"><span class="pre">std</span></code>, <code class="docutils literal notranslate"><span class="pre">var</span></code>, <code class="docutils literal notranslate"><span class="pre">maxabs</span></code>, <code class="docutils literal notranslate"><span class="pre">minabs</span></code>, <code class="docutils literal notranslate"><span class="pre">meanabs</span></code>, <code class="docutils literal notranslate"><span class="pre">medianabs</span></code>, <code class="docutils literal notranslate"><span class="pre">sumabs</span></code>, <code class="docutils literal notranslate"><span class="pre">stdabs</span></code>, <code class="docutils literal notranslate"><span class="pre">varabs</span></code>, <code class="docutils literal notranslate"><span class="pre">OD</span></code>, <code class="docutils literal notranslate"><span class="pre">UD</span></code></p>
+<p><a class="reference external" href="../_modules/aurel/time.html#est_functions">[source: est_functions definition]</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="reading.html" class="btn btn-neutral float-left" title="aurel.reading" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="solutions.html" class="btn btn-neutral float-right" title="aurel.solutions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Robyn L. Munoz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

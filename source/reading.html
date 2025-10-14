@@ -9,9 +9,11 @@
   <title>aurel.reading &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
 
   
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=8d170800"></script>
@@ -20,7 +22,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="aurel.solutions" href="solutions.html" />
+    <link rel="next" title="aurel.time" href="time.html" />
     <link rel="prev" title="aurel.numerical" href="numerical.html" /> 
 </head>
 
@@ -51,21 +53,48 @@
 <li class="toctree-l1"><a class="reference internal" href="maths.html">aurel.maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="numerical.html">aurel.numerical</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">aurel.reading</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#core-einstein-toolkit-functionality">Core Einstein Toolkit Functionality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-setup">Environment Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.bash"><code class="docutils literal notranslate"><span class="pre">bash()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.collect_overall_iterations"><code class="docutils literal notranslate"><span class="pre">collect_overall_iterations()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.fixij"><code class="docutils literal notranslate"><span class="pre">fixij()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.get_content"><code class="docutils literal notranslate"><span class="pre">get_content()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.iterations"><code class="docutils literal notranslate"><span class="pre">iterations()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.join_chunks"><code class="docutils literal notranslate"><span class="pre">join_chunks()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.parameters"><code class="docutils literal notranslate"><span class="pre">parameters()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.parse_h5file"><code class="docutils literal notranslate"><span class="pre">parse_h5file()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.parse_hdf5_key"><code class="docutils literal notranslate"><span class="pre">parse_hdf5_key()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_ET_data"><code class="docutils literal notranslate"><span class="pre">read_ET_data()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_ET_var"><code class="docutils literal notranslate"><span class="pre">read_ET_var()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_ET_group_or_var"><code class="docutils literal notranslate"><span class="pre">read_ET_group_or_var()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_ET_variables"><code class="docutils literal notranslate"><span class="pre">read_ET_variables()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_aurel_data"><code class="docutils literal notranslate"><span class="pre">read_aurel_data()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_data"><code class="docutils literal notranslate"><span class="pre">read_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_iterations"><code class="docutils literal notranslate"><span class="pre">read_iterations()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.saveprint"><code class="docutils literal notranslate"><span class="pre">saveprint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.transform_vars_ET_to_aurel"><code class="docutils literal notranslate"><span class="pre">transform_vars_ET_to_aurel()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.transform_vars_ET_to_aurel_groups"><code class="docutils literal notranslate"><span class="pre">transform_vars_ET_to_aurel_groups()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.transform_vars_aurel_to_ET"><code class="docutils literal notranslate"><span class="pre">transform_vars_aurel_to_ET()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.transform_vars_tensor_to_scalar"><code class="docutils literal notranslate"><span class="pre">transform_vars_tensor_to_scalar()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="time.html">aurel.time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solutions.html">aurel.solutions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advice.html">Advice</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Example_over_time.html">Example over time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/tov_ET.html">tov_ET</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Schwarzschild_check.html">Schwarzschild check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Analytic_check.html">Analytic check</a></li>
 </ul>
 
         </div>
@@ -95,35 +124,96 @@
   <section id="module-aurel.reading">
 <span id="aurel-reading"></span><h1>aurel.reading<a class="headerlink" href="#module-aurel.reading" title="Link to this heading"></a></h1>
 <p>reading.py</p>
-<p>This module contains functions to read/write data, and has specific
-functions for using data generated from Einstein Toolkit simulations.
-This includes:</p>
+<p>This module provides comprehensive functionality for reading and writing
+numerical relativity simulation data, with specialized support for
+Einstein Toolkit (ET) simulations. The module handles complex data structures
+including multiple restart files, chunked data, variable groupings, and
+different refinement levels.</p>
+<p>Key functions relevant for Aurel: <code class="docutils literal notranslate"><span class="pre">read_data</span></code> and <code class="docutils literal notranslate"><span class="pre">save_data</span></code>.
+All other functions are auxiliary utilities for Einstein Toolkit data handling.</p>
+<section id="core-einstein-toolkit-functionality">
+<h2>Core Einstein Toolkit Functionality<a class="headerlink" href="#core-einstein-toolkit-functionality" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>reading parameters from the simulation</p></li>
-<li><p>listing available iterations of the simulation</p></li>
-<li><p>reading data from the simulation output files</p></li>
-<li><p>joining chunks of data together</p></li>
-<li><p>fixing the x-z indexing of the data</p></li>
-<li><p>saving data to files</p></li>
+<li><p><strong>Parameter extraction</strong>: Read simulation parameters from .par files</p></li>
+<li><p><strong>Iteration management</strong>: List and track available simulation iterations</p></li>
+<li><p><strong>Content listing</strong>: List available variables and their file associations</p></li>
+<li><p><strong>Data reading</strong>: Read 3D simulation data from HDF5 files</p></li>
+<li><p><strong>Data chunking</strong>: Join data chunks from distributed file systems</p></li>
+<li><p><strong>Caching</strong>: Save/load data in per-iteration formats for faster access</p></li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Users should first provide the path to their simulations:</p>
-<p><strong>export SIMLOC=”/path/to/simulations/”</strong></p>
-</div>
+</section>
+<section id="environment-setup">
+<h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading"></a></h2>
+<p>Users must set the SIMLOC environment variable to the simulation directories:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SIMLOC=&quot;/path/to/simulations/&quot;</span></code></p>
+</div></blockquote>
+<p>For multiple simulation locations, use colon separation:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SIMLOC=&quot;/path1:/path2:/path3&quot;</span></code></p>
+</div></blockquote>
+</section>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.reading.bash">
 <span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">bash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#bash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.bash" title="Link to this definition"></a></dt>
-<dd><p>Run a bash command and return the output as a string.</p>
+<dd><p>Execute a bash command and return its output as a string.</p>
+<p>This utility function provides a simple interface for running shell
+commands from within Python, primarily used for file system operations and
+parameter file reading in simulation data processing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>command</strong> (<em>str</em>) – The bash command to run.</p>
+<dd class="field-odd"><p><strong>command</strong> (<em>str</em>) – The bash command to execute.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The output of the command as a string.</p>
+<dd class="field-even"><p>The command output as a UTF-8 decoded string with leading/trailing
+whitespace stripped. Empty string if command produces no output.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This function uses subprocess.check_output() which will raise an exception
+if the command fails. Consider using appropriate error handling for
+production code.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.collect_overall_iterations">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">collect_overall_iterations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">its_available</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#collect_overall_iterations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.collect_overall_iterations" title="Link to this definition"></a></dt>
+<dd><p>Merge iteration data across all restarts into overall summary.</p>
+<p>This is a helper function for <cite>iterations()</cite>.</p>
+<p>This function analyzes the iteration information from individual restart
+and merges them into a comprehensive overview of what iterations are
+available across the entire simulation. It handles multiple refinement
+levels and various iteration patterns: overlapping iteration ranges,
+different time stepping patterns, single iterations. These are merged when
+possible, otherwise they are kept as separate entries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>its_available</strong> (<em>dict</em>) – Dictionary with iterations available for each restart, typically
+from <cite>read_iterations()</cite> or <cite>iterations()</cite>.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If True, print the overall iterations summary to stdout.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>The input dictionary with an added ‘overall’ key containing merged
+iteration information across all restarts:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="n">restart_number</span><span class="p">:</span> <span class="p">{</span><span class="o">...</span><span class="p">},</span>  <span class="c1"># Original restart data preserved</span>
+    <span class="s1">&#39;overall&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;rl = 0&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span>
+        <span class="s1">&#39;rl = 1&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -135,20 +225,129 @@ This includes:</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="aurel.reading.iterations">
-<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">iterations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_last</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#iterations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.iterations" title="Link to this definition"></a></dt>
-<dd><p>Lists available iterations of the simulation’s 3D output files.</p>
-<p>Prints available iterations on screen and records this
-in a file called iterations.txt in the simulation directory.</p>
+<dt class="sig sig-object py" id="aurel.reading.get_content">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">get_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#get_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.get_content" title="Link to this definition"></a></dt>
+<dd><p>Analyze Einstein Toolkit output directory and map variables to files.</p>
+<p>This function creates a comprehensive mapping between simulation variables
+and their corresponding HDF5 files, handling both single-variable and
+grouped-variable file organizations. It implements intelligent caching
+to avoid expensive file scanning on repeated calls.</p>
+<p>The function performs several key operations:
+1. Scans all HDF5 files in the directory
+2. Determines file organization (single vs. grouped variables)
+3. Maps each variable to its containing files
+4. Groups variables that share the same file sets
+5. Caches results for faster subsequent access</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>param</strong> (<em>dict</em>) – The parameters of the simulation.</p></li>
-<li><p><strong>skip_last</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, skip the last restart. The default is True.
-This is to not mess with things in case they’re still running.</p></li>
+<li><p><strong>param</strong> (<em>dict</em>) – <p>Simulation parameters dictionary containing:</p>
+<ul>
+<li><p>’simpath’: Path to simulation root directory</p></li>
+<li><p>’simname’: Simulation name</p></li>
+</ul>
+</p></li>
+<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – Restart number to analyze. Default 0. Used to construct the path to
+the ET output directory containing .h5 files.
+Example: “/simulations/BHB/output-0000/BHB/”</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em><em>, </em><em>optional</em>) – Overwrite existing content file. Default False.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print progress information during processing. Default True.
+Shows file scanning progress and caching status.</p></li>
+<li><p><strong>veryverbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print extra progress information during processing. Default False.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Dictionary mapping variable groups to their file lists:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="p">(</span><span class="s1">&#39;var1&#39;</span><span class="p">,</span> <span class="s1">&#39;var2&#39;</span><span class="p">):</span> <span class="p">[</span><span class="s1">&#39;path/to/file1.h5&#39;</span><span class="p">,</span> <span class="s1">&#39;path/to/file2.h5&#39;</span><span class="p">],</span>
+    <span class="p">(</span><span class="s1">&#39;var3&#39;</span><span class="p">,):</span> <span class="p">[</span><span class="s1">&#39;path/to/file3.h5&#39;</span><span class="p">,</span> <span class="s1">&#39;path/to/file4.h5&#39;</span><span class="p">],</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
 </dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Cache file ‘content.txt’ created in the target directory</p></li>
+<li><p>Variable names follow Einstein Toolkit conventions</p></li>
+<li><p>If variables are grouped in files and are not in the known_groups,
+the variable names will be retrieved from the keys in the file.
+Depending on the file size, this may take some time.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.iterations">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">iterations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#iterations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.iterations" title="Link to this definition"></a></dt>
+<dd><p>Analyze and catalog available iterations across all simulation restarts.</p>
+<p>This function systematically scans Einstein Toolkit simulation output
+to determine what data is available at each iteration and refinement level
+across all restart files. It creates a comprehensive catalog saved to
+simpath/simname/iterations.txt for quick access by other analysis
+functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param</strong> (<em>dict</em>) – <p>Simulation parameters from <cite>parameters()</cite> function. Must contain:</p>
+<ul>
+<li><p>’simpath’: Path to simulation directory (with trailing slash)</p></li>
+<li><p>’simname’: Simulation name</p></li>
+</ul>
+</p></li>
+<li><p><strong>skip_last</strong> (<em>bool</em><em>, </em><em>optional</em>) – Skip the last restart directory. Default True.
+Useful to avoid interrupting running simulations.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print detailed progress information. Default True.
+Shows contents of iterations.txt file and overall summary.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Dictionary containing iteration information for all restarts:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="n">restart_number</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;var available&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">variable</span> <span class="n">names</span><span class="p">],</span>
+        <span class="s1">&#39;its available&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">],</span>
+        <span class="s1">&#39;rl = 0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
+        <span class="s1">&#39;rl = 1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
+        <span class="o">...</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+    <span class="s1">&#39;overall&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;rl = 0&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span>
+        <span class="s1">&#39;rl = 1&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Creates/appends to ‘{simpath}/{simname}/iterations.txt’ with format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">===</span> <span class="n">restart</span> <span class="mi">0</span>
+<span class="mi">3</span><span class="n">D</span> <span class="n">variables</span> <span class="n">available</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;rho&#39;</span><span class="p">,</span> <span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="s1">&#39;gxx&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<span class="n">it</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">-&gt;</span> <span class="mi">1000</span>
+<span class="n">rl</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">at</span> <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">rl</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="o">===</span> <span class="n">restart</span> <span class="mi">1</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Also with verbose=True, prints the above and overall iterations from
+collect_overall_iterations</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">===</span> <span class="n">Overall</span> <span class="n">iterations</span>
+<span class="n">rl</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">at</span> <span class="n">it</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="n">rl</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">it</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -161,7 +360,7 @@ This is to not mess with things in case they’re still running.</p></li>
 <li><p><strong>cut_data</strong> (<em>dict</em><em> of </em><em>dict</em>) – A dictionary containing the data from the simulation output files.
 dict.keys() = tuple of the chunks ‘iorigin’ attribute
 which maps out how the data is to be joined together.</p></li>
-<li><p><strong>veryverbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, print additional information during the joining process.
+<li><p><strong>veryextraverbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, print additional information during the joining process.
 The default is False.</p></li>
 </ul>
 </dd>
@@ -177,31 +376,216 @@ The default is False.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.reading.parameters">
 <span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.parameters" title="Link to this definition"></a></dt>
-<dd><p>Read the parameters from the simulation.</p>
-<p>This also counts the number of restarts, and calculates the
-size and number of grid points in each direction
-of the simulation box.</p>
+<dd><p>Read and parse Einstein Toolkit simulation parameters.</p>
+<p>Extracts comprehensive simulation metadata from Einstein Toolkit parameter
+files (.par), including grid configuration, restart information, and all
+thorn-specific parameters.</p>
+<p>The function automatically:
+- Locates parameter files
+- Counts restart files to determine simulation state
+- Calculates derived grid parameters (extents, grid points)
+- Parses thorn parameters with proper type conversion</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>simname</strong> (<em>str</em>) – The name of the simulation to read the parameters from.</p>
+<dd class="field-odd"><p><strong>simname</strong> (<em>str</em>) – Name of the simulation directory to analyze.
+Must exist in one of the SIMLOC directories.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary containing the parameters of the simulation.</p>
+<dd class="field-even"><p><p>Comprehensive parameter dictionary containing:</p>
+<dl>
+<dt>Core Information:</dt><dd><p>’simname’ : str, Simulation name (input parameter)</p>
+<p>’simulation’ : str, Data format identifier (‘ET’)</p>
+<p>’simpath’ : str, Path to simulation root directory</p>
+<p>’datapath’ : str, Path to output-0000 data directory</p>
+</dd>
+<dt>Grid Parameters:</dt><dd><p>’xmin’, ‘xmax’, ‘Lx’, ‘Nx’, ‘dx’ : float/int, minimum, maximum,
+extent, grid points and spacing. Same for Y and Z-direction
+parameters.</p>
+</dd>
+<dt>Thorn Information:</dt><dd><p>’list_of_thorns’ : list of str, All active thorns in the simulation</p>
+</dd>
+<dt>Parameter Values:</dt><dd><p>All parameters from the .par file with appropriate types.
+Conflicting parameter names include thorn prefix.</p>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Users should first provide the path to their simulations:</p>
-<p><strong>export SIMLOC=”/path/to/simulations/”</strong></p>
+<p class="rubric">Notes</p>
+<p>The SIMLOC environment variable must be set:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SIMLOC=&quot;/path/to/simulations&quot;</span></code></p>
+</div></blockquote>
+<p>For multiple locations:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SIMLOC=&quot;/path1:/path2:/path3&quot;</span></code></p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.parse_h5file">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">parse_h5file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#parse_h5file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.parse_h5file" title="Link to this definition"></a></dt>
+<dd><p>Parse HDF5 filename into its components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – <p>HDF5 file path or filename. Can be either:</p>
+<ul class="simple">
+<li><p>Full absolute/relative path: “/path/to/admbase-metric.h5”</p></li>
+<li><p>Just filename: “rho.xyz.h5”</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Returns None if the filename doesn’t match the expected format.
+Otherwise returns dictionary with parsed components:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;thorn_group&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> <span class="c1"># e.g., &#39;admbase-&#39; or None</span>
+    <span class="s1">&#39;thorn&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>       <span class="c1"># e.g., &#39;admbase&#39; or None</span>
+    <span class="s1">&#39;variable_or_group&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>   <span class="c1"># e.g., &#39;metric&#39; or &#39;rho&#39;</span>
+    <span class="s1">&#39;xyz_prefix&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># e.g., &#39;.xyz&#39; or None</span>
+    <span class="s1">&#39;file_number&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> <span class="c1"># e.g., &#39;.file_123&#39; or None</span>
+    <span class="s1">&#39;xyz_suffix&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># e.g., &#39;.xyz&#39; or None</span>
+    <span class="s1">&#39;is_group_file&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>      <span class="c1"># True -&gt; a grouped variable file</span>
+    <span class="s1">&#39;chunk_number&#39;</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span> <span class="c1"># e.g., 123 or None (from file_nbr)</span>
+<span class="p">}</span>
+</pre></div>
 </div>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.parse_hdf5_key">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">parse_hdf5_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#parse_hdf5_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.parse_hdf5_key" title="Link to this definition"></a></dt>
+<dd><p>Parse HDF5 dataset key into its components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>str</em>) – HDF5 dataset key in format like “admbase::gxx it=0 tl=0 m=0 rl=0 c=0”</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Returns None if the key doesn’t match the expected format.
+Otherwise returns dictionary with parsed components:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;thorn&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>        <span class="c1"># e.g., &#39;admbase&#39;</span>
+    <span class="s1">&#39;variable&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>     <span class="c1"># e.g., &#39;gxx&#39;</span>
+    <span class="s1">&#39;it&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>          <span class="c1"># iteration number</span>
+    <span class="s1">&#39;tl&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>          <span class="c1"># time level</span>
+    <span class="s1">&#39;m&#39;</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>   <span class="c1"># m value (if present)</span>
+    <span class="s1">&#39;rl&#39;</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># refinement level (if present)</span>
+    <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span>    <span class="c1"># chunk number (if present)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict or None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.reading.read_ET_data">
-<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_ET_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_ET_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_ET_data" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_ET_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_ET_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_ET_data" title="Link to this definition"></a></dt>
+<dd><p>Read Einstein Toolkit simulation data with intelligent restart handling.</p>
+<p>This is the main Einstein Toolkit data reading function that handles the
+complexity of multi-restart simulations, variable groupings, and chunking.
+It provides a unified interface for accessing ET simulation data
+regardless of the underlying file organization.</p>
+<p>Key Features:</p>
+<ul class="simple">
+<li><p><strong>Restart Management</strong>: Automatically finds iterations across restarts</p></li>
+<li><p><strong>Hybrid Reading</strong>: Combines cached per-iteration files with ET files</p></li>
+<li><p><strong>Missing Data Handling</strong>: Fills gaps by reading from original ET files</p></li>
+<li><p><strong>Variable Mapping</strong>: Handles Aurel to Einstein Toolkit name conversions</p></li>
+<li><p><strong>Caching Strategy</strong>: Saves data in optimized format for future access</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param</strong> (<em>dict</em>) – Simulation parameters from <cite>parameters()</cite> function.</p></li>
+<li><p><strong>it</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Iterations to read. Default [0].</p></li>
+<li><p><strong>vars</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional.</em>) – Variables in Aurel format. Default [] (all available).
+Examples: [‘rho’, ‘Kdown3’], [‘gammadown3’, ‘alpha’]</p></li>
+<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – Specific restart to read from.
+Default -1 (auto-detect).</p></li>
+<li><p><strong>split_per_it</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use cached per-iteration files when available and save read data
+in per-iteration files. Default True.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print progress information. Default True.</p></li>
+<li><p><strong>veryverbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print detailed debugging information. Default False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Simulation data dictionary with structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;it&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">iteration_numbers</span><span class="p">],</span>
+    <span class="s1">&#39;t&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">time_values</span><span class="p">],</span>
+    <span class="s1">&#39;var1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
+    <span class="s1">&#39;var2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Processing Workflow:</p>
+<ol class="arabic simple">
+<li><p><strong>Iteration Location</strong>: Determines which restart contains each iteration</p></li>
+<li><p><strong>Cache Reading</strong>: Loads available data from per-iteration files</p></li>
+<li><p><strong>Gap Detection</strong>: Identifies missing iterations/variables</p></li>
+<li><p><strong>ET Reading</strong>: Fills gaps by reading original Einstein Toolkit files</p></li>
+<li><p><strong>Data Integration</strong>: Combines cached and newly-read data</p></li>
+<li><p><strong>Cache Update</strong>: Saves newly-read data for future access</p></li>
+</ol>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.read_ET_group_or_var">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_ET_group_or_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmax</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_ET_group_or_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_ET_group_or_var" title="Link to this definition"></a></dt>
+<dd><p>Read variables from Einstein Toolkit simulation output files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variables</strong> (<em>list</em>) – The variables to read from the simulation output files.
+Each variable is a string that identifies the variable.
+These should all be found in the same files.</p></li>
+<li><p><strong>files</strong> (<em>list</em>) – The list of files to read the variables from.
+Each file is a string that identifies the file.
+These should all contain the same variables just at different chunks.</p></li>
+<li><p><strong>cmax</strong> (<em>int</em>) – The maximum number of chunks to read from the simulation output files.
+If ‘in file’, it will be extracted from the file.</p></li>
+<li><p><strong>it</strong> (<em>list</em><em>, </em><em>optional</em>) – The iterations to save from the data.
+The default is [0].</p></li>
+<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – The refinement level to read from the simulation output files.
+The default is 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A dictionary containing the data from the simulation output files.</p>
+<p>dict.keys() = [‘it’, ‘t’, var]</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.read_ET_variables">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_ET_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vars_and_files</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_ET_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_ET_variables" title="Link to this definition"></a></dt>
 <dd><p>Read the data from Einstein Toolkit simulation output files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -229,30 +613,38 @@ dict.keys() = [‘it’, ‘t’, var[0], var[1], …]</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="aurel.reading.read_ET_var">
-<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_ET_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varkey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_ET_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_ET_var" title="Link to this definition"></a></dt>
-<dd><p>Read variables from Einstein Toolkit simulation output files.</p>
+<dt class="sig sig-object py" id="aurel.reading.read_aurel_data">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_aurel_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_aurel_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_aurel_data" title="Link to this definition"></a></dt>
+<dd><p>Read data from Aurel format simulation output files.</p>
+<p>Aurel format stores simulation data in per-iteration HDF5 files with the
+naming convention ‘it_&lt;iteration&gt;.hdf5’. Each file contains variables
+organized by refinement level with keys like ‘varname rl=0’.</p>
+<p>This format is optimized for easy parallelization across iterations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<em>str</em>) – The path to the simulation output files.</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – Identifying part of the variable output file name.</p></li>
-<li><p><strong>varkey</strong> (<em>str</em>) – Identifying part of the variable’s hdf5 key.</p></li>
-<li><p><strong>cmax</strong> (<em>int</em>) – The maximum number of chunks to read from the simulation output files.
-If ‘in file’, it will be extracted from the file.</p></li>
-<li><p><strong>rank</strong> (<em>int</em>) – The rank of the variable to read from the simulation output files.
-0 scalar, 1 vector, 2 tensor.</p></li>
-<li><p><strong>it</strong> (<em>list</em><em>, </em><em>optional</em>) – The iterations to save from the data.
-The default is [0].</p></li>
-<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – The refinement level to read from the simulation output files.
-The default is 0.</p></li>
-<li><p><strong>veryverbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, print additional information during the joining process.
-The default is False.</p></li>
+<li><p><strong>param</strong> (<em>dict</em>) – Simulation parameters dictionary. Must contain either:
+- ‘datapath’: Direct path to directory with it_*.hdf5 files, OR
+- ‘simulation’, ‘simpath’, ‘simname’: For ET-style directory structure</p></li>
+<li><p><strong>it</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Iteration numbers to read. Default [0].</p></li>
+<li><p><strong>vars</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – Variable names to read. Default [] (read all available variables).</p></li>
+<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – Refinement level to read. Default 0.</p></li>
+<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – Restart number (for ET-style directory structure). Default 0.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print progress information. Default False.</p></li>
+<li><p><strong>veryverbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print detailed debugging information. Default False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p>A dictionary containing the data from the simulation output files.</p>
-<p>dict.keys() = [‘it’, ‘t’, var]</p>
+<dd class="field-even"><p><p>Dictionary with simulation data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;it&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">iteration_numbers</span><span class="p">],</span> <span class="c1"># ints</span>
+    <span class="s1">&#39;t&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">time_values</span><span class="p">],</span>        <span class="c1"># floats or None if not available</span>
+    <span class="s1">&#39;var1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>     <span class="c1"># arrays or Nones if not available</span>
+    <span class="s1">&#39;var2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -262,25 +654,45 @@ The default is False.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="aurel.reading.read_aurel_data">
-<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_aurel_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_aurel_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_aurel_data" title="Link to this definition"></a></dt>
-<dd><p>Read the data from AurelCore simulation output files.</p>
+<dt class="sig sig-object py" id="aurel.reading.read_data">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_data" title="Link to this definition"></a></dt>
+<dd><p>Read simulation data from Aurel or Einstein Toolkit format files.</p>
+<p>This is the main entry point for reading numerical relativity simulation
+data. It automatically detects the data format and routes to the
+appropriate reading function. Supports both Einstein Toolkit HDF5 output
+and Aurel’s optimized per-iteration format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>param</strong> (<em>dict</em>) – The parameters of the simulation.</p></li>
-<li><p><strong>var</strong> (<em>list</em>) – The variables to read from the simulation output files.</p></li>
-<li><p><strong>it</strong> (<em>list</em><em>, </em><em>optional</em>) – The iterations to read from the simulation output files.
-The default is [0].</p></li>
-<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – The refinement level to read from the simulation output files.
-The default is 0.</p></li>
-<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – The restart number to read from the simulation output files.
-The default is 0.</p></li>
+<li><p><strong>param</strong> (<em>dict</em>) – Simulation parameters dictionary containing metadata about the
+simulation. If ‘simulation’ key is present, treats as Einstein Toolkit
+data; otherwise treats as Aurel format. In Einstein Toolkit case, you
+can use the parameters function.</p></li>
+<li><p><strong>it</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Iteration numbers to read. Default [0].</p></li>
+<li><p><strong>vars</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – Variable names to read. Default [] (read all available).</p></li>
+<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – Refinement level to read. Default 0 (coarsest level).</p></li>
+<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – Specific restart number to read from. Default -1 (auto-detect).
+Set to specific value to read from that restart only.</p></li>
+<li><p><strong>split_per_it</strong> (<em>bool</em><em>, </em><em>optional</em>) – For ET data: whether to use per-iteration files. Default True.
+When True, reads from cached files and fills missing data from ET
+files, then saves newly read ET data to per-iteration files.
+When False, reads exclusively from ET files.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print detailed progress information. Default False.</p></li>
+<li><p><strong>veryverbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print very detailed debugging information. Default False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary containing the data from the simulation output files.
-dict.keys() = [‘it’, ‘t’, var[0], var[1], …]</p>
+<dd class="field-even"><p><p>Dictionary containing the simulation data with keys:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;it&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">iteration_numbers</span><span class="p">],</span> <span class="c1"># ints</span>
+    <span class="s1">&#39;t&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">time_values</span><span class="p">],</span>        <span class="c1"># floats or None if not available</span>
+    <span class="s1">&#39;var1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>     <span class="c1"># arrays or Nones if not available</span>
+    <span class="s1">&#39;var2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
@@ -289,31 +701,44 @@ dict.keys() = [‘it’, ‘t’, var[0], var[1], …]</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="aurel.reading.read_data">
-<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_data" title="Link to this definition"></a></dt>
-<dd><p>Read the data from the simulation output files.</p>
+<dt class="sig sig-object py" id="aurel.reading.read_iterations">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_iterations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_iterations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_iterations" title="Link to this definition"></a></dt>
+<dd><p>Read and parse the iterations.txt file to extract iteration information.</p>
+<p>This is a helper function for <cite>iterations()</cite>.</p>
+<p>This function loads the iterations catalog created by <cite>iterations()</cite> and
+parses it into a structured dictionary format for programmatic access.
+If the iterations.txt file doesn’t exist, then the <cite>iterations()</cite> function
+is called instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>param</strong> (<em>dict</em>) – The parameters of the simulation.</p></li>
-<li><p><strong>var</strong> (<em>list</em>) – The variables to read from the simulation output files.</p></li>
-<li><p><strong>it</strong> (<em>list</em><em>, </em><em>optional</em>) – The iterations to read from the simulation output files.
-The default is [0].</p></li>
-<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – The refinement level to read from the simulation output files.
-The default is 0.</p></li>
-<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – The restart number to save the data to.
-The default is 0.</p></li>
-<li><p><strong>split_per_it</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, if possible read the data from the split iterations.
-Complete request ET files and save variables
-in individual files per iteration.
-Else just read ET files.</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, print additional information during the reading process.</p></li>
-<li><p><strong>veryverbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, print even more information during the reading process.</p></li>
+<li><p><strong>param</strong> (<em>dict</em>) – <p>Simulation parameters from <cite>parameters()</cite> function. Must contain:</p>
+<ul>
+<li><p>’simpath’: Path to simulation directory</p></li>
+<li><p>’simname’: Simulation name</p></li>
+</ul>
+</p></li>
+<li><p><strong>skip_last</strong> (<em>bool</em><em>, </em><em>optional</em>) – Skip the last restart directory when creating iterations.txt.
+Default True. This is passed to <cite>iterations()</cite>.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print detailed parsing information. Default False.
+Also passed to <cite>iterations()</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary containing the data from the simulation output files.
-dict.keys() = [‘it’, ‘t’, var[0], var[1], …]</p>
+<dd class="field-even"><p><p>Dictionary containing iteration information for all restarts:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="n">restart_number</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;var available&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">variable</span> <span class="n">names</span><span class="p">],</span>
+        <span class="s1">&#39;its available&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">],</span>
+        <span class="s1">&#39;rl = 0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
+        <span class="s1">&#39;rl = 1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
+        <span class="o">...</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
@@ -324,41 +749,129 @@ dict.keys() = [‘it’, ‘t’, var[0], var[1], …]</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.reading.save_data">
 <span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.save_data" title="Link to this definition"></a></dt>
-<dd><p>Save the data to a file</p>
+<dd><p>Save simulation data to Aurel format HDF5 files.</p>
+<p>Saves simulation data in the per-iteration format used by Aurel, where each
+iteration is stored in a separate HDF5 file named ‘it_&lt;iteration&gt;.hdf5’.
+Variables are stored as datasets with keys like ‘varname rl=&lt;level&gt;’.</p>
+<p>This format provides several advantages:</p>
+<ul class="simple">
+<li><p>Fast random access to specific iterations</p></li>
+<li><p>Parallel I/O capabilities</p></li>
+<li><p>Efficient storage for sparse temporal sampling</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>param</strong> (<em>dict</em>) – The parameters of the simulation.
-Needs to contain the key ‘datapath’,
-this is where the data will be saved.</p></li>
-<li><p><strong>data</strong> (<em>dict</em>) – The data to be saved.
-dict.keys() = [‘it’, ‘t’, var[0], var[1], …]</p></li>
-<li><p><strong>vars</strong> (<em>list</em><em>, </em><em>optional</em>) – The variables to save from the data.
-If not provided, all variables in data will be saved.
-The default is [].</p></li>
-<li><p><strong>it</strong> (<em>list</em><em>, </em><em>optional</em>) – The iterations to save from the data.
-The default is [0].</p></li>
-<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – The refinement level to save from the data.
-The default is 0.</p></li>
-<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – The restart number to save the data to.
-The default is 0.</p></li>
+<li><p><strong>param</strong> (<em>dict</em>) – Simulation parameters dictionary containing path information.
+Should include either:
+- ‘datapath’: Direct path where files will be saved, OR
+- ‘simulation’ ‘simpath’, ‘simname’: For ET-style directory structure</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – <p>Dictionary containing simulation data to save.
+Expected structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;it&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">iteration_numbers</span><span class="p">],</span>
+    <span class="s1">&#39;t&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">time_values</span><span class="p">],</span>
+    <span class="s1">&#39;var1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
+    <span class="s1">&#39;var2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Each variable should have one array per iteration.</p>
+</p></li>
+<li><p><strong>vars</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – Variables to save. Default [] (save all variables in data).
+Note: ‘it’ and ‘t’ are automatically included if present.</p></li>
+<li><p><strong>it</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Iterations to save. Default [0].</p></li>
+<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – Refinement level for saved data. Default 0.
+Used in HDF5 dataset keys: ‘varname rl=&lt;rl&gt;’
+Can just represent grids of different shapes.</p></li>
+<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – Restart number (for ET-style paths). Default 0.</p></li>
 </ul>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The data will be saved in the format:
-datapath/it_&lt;iteration&gt;.hdf5
-where &lt;iteration&gt; is the iteration number.
-The variables will be saved as datasets in the file,
-with keys ‘&lt;variable_name&gt; rl=&lt;refinement_level&gt;’</p>
-</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Overwrites existing datasets with the same name</p></li>
+<li><p>Skips variables with None values</p></li>
+</ul>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.reading.saveprint">
-<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">saveprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">it_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">some_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#saveprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.saveprint" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">saveprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">it_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">some_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#saveprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.saveprint" title="Link to this definition"></a></dt>
 <dd><p>Save the string to the file and print it to the screen.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.transform_vars_ET_to_aurel">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">transform_vars_ET_to_aurel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#transform_vars_ET_to_aurel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.transform_vars_ET_to_aurel" title="Link to this definition"></a></dt>
+<dd><p>Transform ET variable name to Aurel variable name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> (<em>str</em>) – String of variable name to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>String of transformed variable name.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.transform_vars_ET_to_aurel_groups">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">transform_vars_ET_to_aurel_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vars</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#transform_vars_ET_to_aurel_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.transform_vars_ET_to_aurel_groups" title="Link to this definition"></a></dt>
+<dd><p>Transform ET variable names to Aurel variable group names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> (<em>list</em><em> of </em><em>str</em>) – List of variable names to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of transformed variable names.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.transform_vars_aurel_to_ET">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">transform_vars_aurel_to_ET</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#transform_vars_aurel_to_ET"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.transform_vars_aurel_to_ET" title="Link to this definition"></a></dt>
+<dd><p>Transform ET variable names to Aurel variable names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> (<em>list</em><em> of </em><em>str</em>) – List of variable names to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of transformed variable names.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.transform_vars_tensor_to_scalar">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">transform_vars_tensor_to_scalar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#transform_vars_tensor_to_scalar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.transform_vars_tensor_to_scalar" title="Link to this definition"></a></dt>
+<dd><p>Transform Aurel tensor variable names to their scalar component names.</p>
+<p>This function decomposes tensor quantities into their individual scalar
+components for detailed analysis. For example, the 3-metric ‘gammadown3’
+becomes [‘gxx’, ‘gxy’, ‘gxz’, ‘gyy’, ‘gyz’, ‘gzz’].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> (<em>list</em><em> of </em><em>str</em>) – List of Aurel tensor variable names to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of scalar variable names. Tensor variables are expanded to their
+components, while scalar variables are kept as-is.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of str</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -368,7 +881,7 @@ with keys ‘&lt;variable_name&gt; rl=&lt;refinement_level&gt;’</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="numerical.html" class="btn btn-neutral float-left" title="aurel.numerical" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="solutions.html" class="btn btn-neutral float-right" title="aurel.solutions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="time.html" class="btn btn-neutral float-right" title="aurel.time" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
