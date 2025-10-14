@@ -16,13 +16,16 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
+        ref: main  # Checkout the main branch instead of detached HEAD
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Extract version from tag
       id: get_version
       run: |
-        VERSION=${GITHUB_REF#refs/tags/v}
+        VERSION=${GITHUB_REF#refs/tags/}
+        # Remove 'v' prefix if present
+        VERSION=${VERSION#v}
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         echo "Extracted version: $VERSION"
 
