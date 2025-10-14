@@ -24,7 +24,6 @@ This module is the main event. It contains:
 #TODO: add hdeterminant of spatial metric orthonormal to fluid flow
 
 import sys
-import scipy
 import numpy as np
 from collections.abc import Mapping, Sequence
 from IPython.display import display, Math, Latex
@@ -303,10 +302,6 @@ descriptions = {
     "Weyl_Psi": (r"$\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$"
         + r" List of Weyl scalars for an null vector base defined"
         + r" with AurelCore.tetrad_to_use"),
-    #"Psi4_lm": (r"$\Psi_4^{l,m}$ Dictionary of spin weighted spherical"
-    #    + r" harmonic decomposition of the 4th Weyl scalar,"
-    #    + r" with AurelCore.Psi4_lm_radius."
-    #    + r" ``s2fft`` is used for the decomposition."),
     "Weyl_invariants": (r"$I, \; J, \; L, \; K, \; N$"
         + r" Dictionary of Weyl invariants"),
     "eweyl_u_down4": (r"$E^{\{u\}}_{\alpha\beta}$ Electric part of the Weyl"
@@ -1541,60 +1536,6 @@ class AurelCore():
             psi4 = np.einsum('abcd..., a..., b..., c..., d... -> ...',
                             self["st_Weyl_down4"], lup4, mbup4, lup4, mbup4)
             return [psi0, psi1, psi2, psi3, psi4]
-        
-    """
-    def Psi4_lm(self):
-        # TODO: make list of radius
-        self.myprint(f"Radius is set to AurelCore.Psi4_lm_radius"
-                     + f" = {self.Psi4_lm_radius:.2e}")
-        L = np.min([self.fd.Nx, self.fd.Ny, self.fd.Nz])
-        sampling = "mw"
-        theta = s2fft.sampling.s2_samples.thetas(L=L, sampling=sampling)
-        phi = s2fft.sampling.s2_samples.phis_equiang(L=L, sampling=sampling)
-        theta_sphere, phi_sphere = np.meshgrid(theta, phi, indexing='ij')
-
-        x_sphere = (self.Psi4_lm_radius 
-                    * np.sin(theta_sphere) * np.cos(phi_sphere))
-        y_sphere = (self.Psi4_lm_radius 
-                    * np.sin(theta_sphere) * np.sin(phi_sphere))
-        z_sphere = (self.Psi4_lm_radius 
-                    * np.cos(theta_sphere))
-        points_sphere = np.stack(
-            (x_sphere.flatten(), y_sphere.flatten(), z_sphere.flatten()), 
-            axis=-1)
-
-        # Psi4 on a sphere
-        # Reconstruct full box
-        # sphere around the origin
-        # TODO: make origin location an option
-        coord, Psi4r = self.fd.reconstruct(np.real(self["Weyl_Psi"][4]))
-        coord, Psi4i = self.fd.reconstruct(np.imag(self["Weyl_Psi"][4]))
-
-        # Interpolation functions
-        interp_real = scipy.interpolate.RegularGridInterpolator(coord, Psi4r)
-        interp_imag = scipy.interpolate.RegularGridInterpolator(coord, Psi4i)
-
-        # Interpolate on sphere locations
-        # This will error if point not in domain
-        psi4_sphere = (interp_real(points_sphere) 
-                           + 1j * interp_imag(points_sphere))
-        psi4_sphere = psi4_sphere.reshape(theta_sphere.shape)
-
-        # lm mode of Psi4
-        self.myprint("WARNING: using ``s2fft``, outputs from this code "
-                     + "may differ from others as different codes use "
-                     + "different normalisations, integration schemes, "
-                     + "conventions...")
-        alm = s2fft.forward(psi4_sphere, L=L, spin=-2, 
-                            sampling=sampling)
-
-        # change to a format I like better
-        lm_dict = {}
-        for l in range(L):
-            for m in range(-l, l + 1):
-                lm_dict[l, m] = alm[l, m + L - 1]
-        return lm_dict
-    """
     
     def Weyl_invariants(self):
         Psis = self["Weyl_Psi"]

@@ -62,14 +62,14 @@ class TestOverTimeFunction:
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
-            vars=['gammadet', 'null_ray_exp'], 
+            vars=['gammadet', 'null_ray_exp_in'], 
             estimates=[],
             verbose=False
         )
         assert 'gammadet' in result.keys()
-        assert 'null_ray_exp' in result.keys()
+        assert 'null_ray_exp_in' in result.keys()
         assert len(result['gammadet']) == self.Nt
-        assert len(result['null_ray_exp']) == self.Nt
+        assert len(result['null_ray_exp_in']) == self.Nt
     
     def test_custom_var_no_estimates(self):
         """Test over_time with custom variable function."""
