@@ -691,6 +691,9 @@ def parameters(simname):
             parampath = param_files[0]
             founddata = True
             parameters['simpath'] = simloc
+            parameters['datapath'] = (simloc + parameters['simname'] 
+                                      + '/output-0000/'
+                                      + parameters['simname'] + '/')
             break
     if not founddata:
         raise ValueError('Could not find simulation parameter file for: ' 
