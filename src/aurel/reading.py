@@ -647,8 +647,6 @@ def parameters(simname):
             'simulation' : str, Data format identifier ('ET')
 
             'simpath' : str, Path to simulation root directory
-
-            'datapath' : str, Path to output-0000 data directory
             
         Grid Parameters:
             'xmin', 'xmax', 'Lx', 'Nx', 'dx' : float/int, minimum, maximum, 
@@ -686,19 +684,17 @@ def parameters(simname):
             +'Please set it to the path of your simulations.'
             +'`export SIMLOC="/path/to/simulations/"`')
     for simloc in simlocs:
-        parampath = (simloc + parameters['simname'] 
-                     + '/output-0000/' + parameters['simname'] + '.par')
-        if os.path.isfile(parampath):
+        param_files = sorted(glob.glob(simloc + parameters['simname'] 
+                                       + '/output-*/' 
+                                       + parameters['simname'] + '.par'))
+        if param_files:
+            parampath = param_files[0]
             founddata = True
-            # save paths of files
             parameters['simpath'] = simloc
-            parameters['datapath'] = (parameters['simpath'] 
-                                      + parameters['simname'] 
-                                      + '/output-0000/' 
-                                      + parameters['simname'] + '/')
             break
     if not founddata:
-        raise ValueError('Could not find simulation: ' + simname)
+        raise ValueError('Could not find simulation parameter file for: ' 
+                         + simname)
 
     # save all parameters
     lines = bash('cat ' + parampath).split('\n') # read file
@@ -1176,6 +1172,15 @@ def collect_overall_iterations(its_available, verbose):
                 }
             }
     """
+    # Find maximum refinement level across all restarts
+    rlmax = 0
+    for restart in list(its_available.keys()):
+        for key in list(its_available[restart].keys()):
+            if 'rl = ' in key:
+                rl = int(key.split('rl = ')[1])
+                if rl > rlmax:
+                    rlmax = rl
+
     # First collect all the iterations, gradually merging them together
     # Start with base level then gradually increment to consider them all
     rl = 0
@@ -1275,6 +1280,10 @@ def collect_overall_iterations(its_available, verbose):
                 # Print overall iterations of said refinement level
                 print(rlkey, 'at it =', it_situation_string, flush=True)
         rl += 1
+        if rl > rlmax:
+            rl_to_do = False
+        else:
+            rl_to_do = True
     return its_available
 
 known_groups = {
