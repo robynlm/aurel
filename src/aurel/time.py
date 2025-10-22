@@ -115,8 +115,8 @@ def over_time(data, fd, vars=[], estimates=[],
                 if func_name not in data:
                     try:
                         validate_variable_function(
-                            function, func_name, fd, 
-                            verbose=verbose, veryverbose=False)
+                            function, func_name, fd,
+                            verbose, False, rel_kwargs)
                         cleaned_vars += [{func_name: function}]
                     except ValueError as e:
                         print(f"Error: {e}")
@@ -455,8 +455,8 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
         print(f"✓ Custom function '{func_name}' validated successfully")
     return True
 
-def validate_variable_function(func, func_name, fd, 
-                               verbose=True, veryverbose=False):
+def validate_variable_function(func, func_name, fd,
+                               verbose, veryverbose, rel_kwargs):
     """Validate that variable function has correct signature and behaviour.
     
     Parameters
@@ -467,11 +467,12 @@ def validate_variable_function(func, func_name, fd,
         Name of the function for error messages
     fd : FiniteDifference
         Finite difference object to get grid dimensions
-    verbose : bool, optional
+    verbose : bool
         If True, prints debug information about the validation process. 
-        Default Ture.
-    veryverbose : bool, optional
-        If True, prints aurelcore verbose information. Default False.
+    veryverbose : bool
+        If True, prints aurelcore verbose information.
+    rel_kwargs : dict
+        Additional parameters passed to AurelCore initialization.
         
     Returns
     -------
@@ -495,7 +496,7 @@ def validate_variable_function(func, func_name, fd,
         )
     
     # Test with dummy AurelCore instance
-    rel = core.AurelCore(fd, verbose=veryverbose)
+    rel = core.AurelCore(fd, verbose=veryverbose, **rel_kwargs)
     try:
         rel.data[func_name] = func(rel)
     except Exception as e:

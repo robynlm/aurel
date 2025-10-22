@@ -379,6 +379,12 @@ class AurelCore():
         self.Lambda = kwargs.get('Lambda', 0.0)
         self.tetrad_to_use = kwargs.get('tetrad_to_use', "quasi-Kinnersley")
         
+        # Save any additional kwargs as attributes
+        handled_kwargs = {'Lambda', 'tetrad_to_use'}
+        for key, value in kwargs.items():
+            if key not in handled_kwargs:
+                setattr(self, key, value)
+        
         # Physics variables
         self.kappa = 8*np.pi  # Einstein's constant with G = c = 1
         self.myprint(f"Cosmological constant set to AurelCore.Lambda"
