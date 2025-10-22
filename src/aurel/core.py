@@ -20,9 +20,6 @@ This module is the main event. It contains:
 
 """
 
-#TODO: check textbook, vel is 3 or 4 velocity?
-#TODO: add hdeterminant of spatial metric orthonormal to fluid flow
-
 import sys
 import numpy as np
 from collections.abc import Mapping, Sequence
@@ -1483,15 +1480,13 @@ class AurelCore():
     
     # === Gravito-electromagnetism quantities
     def st_Weyl_down4(self): 
-        if "st_Riemann_down4" in self.data.keys():
-            # TODO: accelerate this
-            Cdown = np.zeros(np.shape(self["st_Riemann_down4"]))
+        if "st_Riemann_down4" in self.data.keys():            
+            Cdown = self["st_Riemann_down4"]
             for a in range(4):
                 for b in range(4):
                     for c in range(4):
                         for d in range(4):
-                            Cdown[a,b,c,d] = (
-            self["st_Riemann_down4"][a,b,c,d]
+                            Cdown[a,b,c,d] += (
             - 0.5 * (self["gdown4"][a,c] * self["st_Ricci_down4"][d,b]
                        - self["gdown4"][a,d] * self["st_Ricci_down4"][c,b]
                        + self["gdown4"][b,c] * self["st_Ricci_down4"][d,a]
