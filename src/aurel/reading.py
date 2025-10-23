@@ -159,6 +159,12 @@ def read_data(param, **kwargs):
                 ...
             }
     """
+    it = np.sort(list(set(kwargs.get('it', [0]))))
+    if it==[]:
+        raise ValueError(
+            'it can not be an empty list. '
+            + 'Please provide at least one iteration number to read.')
+
     # Determine data format and route to appropriate reader
     # Einstein Toolkit data has 'simulation' key in parameters
     if 'simulation' in param.keys():
