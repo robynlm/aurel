@@ -17,14 +17,15 @@ output_file = os.path.join(output_dir, "source/core.rst")
 
 gamma = ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz', 
          'gammadown3', 'gammaup3', 
-         'gammadown3_bssnok', 'dtgammadown3_bssnok', 
          'dtgammaup3', 
-         'gammaup3_bssnok', 
-         'gammadet', 'psi_bssnok', 'dtphi_bssnok', 'phi_bssnok', 
+         'gammadet',  
          'gammadown4', 'gammaup4']
+metric_bssnok = ['gammadown3_bssnok', 'dtgammadown3_bssnok',
+                 'gammaup3_bssnok', 'psi_bssnok', 'dtphi_bssnok', 'phi_bssnok']
 extcurv = ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz', 
            'Kdown3', 'Kup3', 'Ktrace', 'dtKtrace',
-           'Adown3', 'Aup3', 'A2', 'A2_bssnok',
+           'Adown3', 'Aup3', 'A2']
+extcurv_bssnok = ['A2_bssnok',
            'Adown3_bssnok', 'dtAdown3_bssnok', 'Aup3_bssnok']
 lapse = ['alpha', 'dtalpha', 'DDalpha']
 shift = ['betax', 'betay', 'betaz',
@@ -50,13 +51,14 @@ conserv = ['conserved_D', 'conserved_E', 'conserved_Sdown4',
 kinema = ['st_covd_udown4', 'accelerationdown4', 'accelerationup4', 
           's_covd_udown4', 'thetadown4', 'theta', 'sheardown4', 'shear2',
           'omegadown4', 'omega2']
-s_curv = ['s_RicciS_u', 's_Gamma_udd3', 's_Gamma_udd3_bssnok', 
-          's_Gamma_bssnok', 's_Riemann_uddd3', 
+s_curv = ['s_RicciS_u', 's_Gamma_udd3', 's_Riemann_uddd3', 
           's_Riemann_down3', 's_Ricci_down3', 's_RicciS']
 st_curv = ['st_Gamma_udd4', 'st_Riemann_uddd4',
     'st_Riemann_down4', 'st_Riemann_uudd4',
     'st_Ricci_down4', 'st_Ricci_down3',
     'st_RicciS', 'Einsteindown4', 'Kretschmann']
+curv_bssnok = ['s_Gamma_udd3_bssnok', 
+          's_Gamma_bssnok', 's_Ricci_down3_phi']
 constraints = ['Hamiltonian', 'Hamiltonian_Escale',
     'Momentumup3', 'Momentum_Escale']
 gravimag = ['st_Weyl_down4', 'Weyl_Psi', 'Psi4_lm', 'Weyl_invariants',
@@ -111,13 +113,15 @@ with open(output_file, "w") as f:
 
     f.write("Metric quantities\n")
     f.write("=================\n\n")
-    print_subsec("Spatial metric", gamma, allfunctions, varsdone)
-    print_subsec("Extrinsic curvature", extcurv, allfunctions, varsdone)
     print_subsec("Lapse", lapse, allfunctions, varsdone)
     print_subsec("Shift", shift, allfunctions, varsdone)
-    print_subsec("Proper time", time, allfunctions, varsdone)
     print_subsec("Timelike normal vector", enne, allfunctions, varsdone)
+    print_subsec("Spatial metric", gamma, allfunctions, varsdone)
     print_subsec("Spacetime metric", gee, allfunctions, varsdone)
+    print_subsec("BSSNOK metric", metric_bssnok, allfunctions, varsdone)
+    print_subsec("Extrinsic curvature", extcurv, allfunctions, varsdone)
+    print_subsec("BSSNOK extrinsic curvature", extcurv_bssnok, allfunctions, varsdone)
+    print_subsec("Proper time", time, allfunctions, varsdone)
 
     f.write("Matter quantities\n")
     f.write("=================\n\n")
@@ -134,6 +138,7 @@ with open(output_file, "w") as f:
     f.write("====================\n\n")
     print_subsec("Spatial curvature", s_curv, allfunctions, varsdone)
     print_subsec("Spacetime curvature", st_curv, allfunctions, varsdone)
+    print_subsec("BSSNOK curvature", curv_bssnok, allfunctions, varsdone)
     print_subsec("Weyl decomposition", gravimag, allfunctions, varsdone)
 
     f.write("Null ray expansion\n")

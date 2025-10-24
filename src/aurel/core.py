@@ -50,24 +50,25 @@ descriptions = {
     "gzz": (r"$g_{zz}$ Metric with zz indices down." 
         + assumption('gzz', r"$g_{zz}=1$")),
     "gammadown3": r"$\gamma_{ij}$ Spatial metric with spatial indices down",
-    "gammadown3_bssnok": (r"$\tilde{\gamma}_{ij}$ Conformal spatial metric"
-        + r" with spatial indices down"),
-    "dtgammadown3_bssnok": (r"$\partial_t \tilde{\gamma}_{ij}$ Coordinate"
-        + r" time derivative of conformal spatial metric with spatial"
-        + r" indices down"),
     "gammaup3": r"$\gamma^{ij}$ Spatial metric with spatial indices up",
     "dtgammaup3": (r"$\partial_t \gamma^{ij}$ Coordinate time derivative of"
         + r" spatial metric with spatial indices up"),
-    "gammaup3_bssnok": (r"$\tilde{\gamma}^{ij}$ Conformal spatial metric"
-        + r" with spatial indices up"),
     "gammadet": r"$\gamma$ Determinant of spatial metric",
+    "gammadown4": (r"$\gamma_{\mu\nu}$ Spatial metric with spacetime indices"
+        + r" down"),
+    "gammaup4": r"$\gamma^{\mu\nu}$ Spatial metric with spacetime indices up",
+    # BSSNOK metric
     "psi_bssnok": r"$\psi = \gamma^{1/12}$ BSSNOK conformal factor",
     "phi_bssnok": r"$\phi = \ln(\gamma^{1/12})$ BSSNOK conformal factor",
     "dtphi_bssnok": (r"$\partial_t \phi$ Coordinate time derivative of BSSNOK"
         + r" $\phi$ conformal factor"),
-    "gammadown4": (r"$\gamma_{\mu\nu}$ Spatial metric with spacetime indices"
-        + r" down"),
-    "gammaup4": r"$\gamma^{\mu\nu}$ Spatial metric with spacetime indices up",
+    "gammadown3_bssnok": (r"$\tilde{\gamma}_{ij}$ Conformal spatial metric"
+        + r" with spatial indices down"),
+    "gammaup3_bssnok": (r"$\tilde{\gamma}^{ij}$ Conformal spatial metric"
+        + r" with spatial indices up"),
+    "dtgammadown3_bssnok": (r"$\partial_t \tilde{\gamma}_{ij}$ Coordinate"
+        + r" time derivative of conformal spatial metric with spatial"
+        + r" indices down"),
     # Extrinsic curvature
     "kxx": (r"$K_{xx}$ Extrinsic curvature with xx indices down." 
         + assumption('kxx', r"$K_{xx}=0$")),
@@ -91,15 +92,16 @@ descriptions = {
     "Aup3": (r"$A^{ij}$ Traceless part of the extrinsic curvature"
         + r" with spatial indices up"),
     "A2": r"$A^2$ Magnitude of traceless part of the extrinsic curvature",
+    # BSSN extrinsic curvature
     "Adown3_bssnok": (r"$\tilde{A}_{ij}$ Conformal traceless part of the"
         + r" extrinsic curvature with spatial indices down"),
-    "dtAdown3_bssnok": (r"$\partial_t \tilde{A}_{ij}$ Coordinate time"
-        + r" derivative of conformal traceless part of the extrinsic"
-        + r" curvature with spatial indices down"),
     "Aup3_bssnok": (r"$\tilde{A}^{ij}$ Conformal traceless part of the"
         + r" extrinsic curvature with spatial indices up"),
     "A2_bssnok": (r"$\tilde{A}^2$ Magnitude of conformal traceless"
         + r" part of the extrinsic curvature"),
+    "dtAdown3_bssnok": (r"$\partial_t \tilde{A}_{ij}$ Coordinate time"
+        + r" derivative of conformal traceless part of the extrinsic"
+        + r" curvature with spatial indices down"),
     # Lapse
     "alpha": r"$\alpha$ Lapse." + assumption('alpha', r"$\alpha=1$"),
     "dtalpha": (r"$\partial_t \alpha$ Coordinate time derivative"
@@ -258,10 +260,6 @@ descriptions = {
     # of spatial metric
     "s_Gamma_udd3": (r"${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of"
         + r" spatial metric with mixed spatial indices"),
-    "s_Gamma_udd3_bssnok": (r"${}^{(3)}{\tilde{\Gamma}^{k}}_{ij}$ Christoffel"
-        + r" symbols of conformal spatial metric with mixed spatial indices"),
-    "s_Gamma_bssnok": (r"$\tilde{\Gamma}^i$ Conformal connection functions"
-        + r" with spatial indice up"),
     "s_Riemann_uddd3": (r"${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of"
         + r" spatial metric with mixed spatial indices"),
     "s_Riemann_down3": (r"${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric"
@@ -287,7 +285,13 @@ descriptions = {
         + r" indices down"),
     "Kretschmann": (r"$K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$"
         + r" Kretschmann scalar"),
-
+    # in BSSNOK form
+    "s_Gamma_udd3_bssnok": (r"${}^{(3)}{\tilde{\Gamma}^{k}}_{ij}$ Christoffel"
+        + r" symbols of conformal spatial metric with mixed spatial indices"),
+    "s_Gamma_bssnok": (r"${}^{(3)}\tilde{\Gamma}^i$ Conformal connection functions"
+        + r" with spatial indice up"),
+    "s_Ricci_down3_phi": (r"${}^{(3)}R^{\phi}_{ij}$ Ricci terms that depend on the"
+        + r" conformal function $\phi$"),
     # Constraints
     "Hamiltonian": r"$\mathcal{H}$ Hamilonian constraint",
     "Hamiltonian_Escale": (r"[$\mathcal{H}$] Hamilonian constraint"
@@ -605,19 +609,9 @@ class AurelCore():
         return maths.format_rank2_3(
             [self["gxx"], self["gxy"], self["gxz"],
              self["gyy"], self["gyz"], self["gzz"]])
-    
-    def gammadown3_bssnok(self):
-        return self["psi_bssnok"]**(-4) * self["gammadown3"]
-    
-    def dtgammadown3_bssnok(self):
-        return (self.Lie_beta(self["gammadown3_bssnok"], 's_dd', weight=-2/3) 
-                -2 * self["alpha"] * self["Adown3_bssnok"])
 
     def gammaup3(self):
         return maths.inverse3(self["gammadown3"])
-    
-    def gammaup3_bssnok(self):
-        return self["psi_bssnok"]**(4) * self["gammaup3"]
     
     def dtgammaup3(self):
         return (self.Lie_beta(self["gammaup3"], 's_uu') 
@@ -625,16 +619,6 @@ class AurelCore():
 
     def gammadet(self):
         return maths.determinant3(self["gammadown3"])
-    
-    def psi_bssnok(self):
-        return self["gammadet"]**(1/12)
-    
-    def phi_bssnok(self):
-        return np.log(self["psi_bssnok"])
-    
-    def dtphi_bssnok(self):
-        return (self.Lie_beta(self["phi_bssnok"], '', weight=1/6)
-                - (1/6) * self["alpha"] * self["Ktrace"])
     
     def gammadown4(self):
         return np.array(
@@ -657,6 +641,26 @@ class AurelCore():
                   self["gammaup3"][1,1], self["gammaup3"][1,2]], 
                  [zero, self["gammaup3"][2,0], 
                   self["gammaup3"][2,1], self["gammaup3"][2,2]]])
+    
+    def psi_bssnok(self):
+        return self["gammadet"]**(1/12)
+    
+    def phi_bssnok(self):
+        return np.log(self["psi_bssnok"])
+    
+    def dtphi_bssnok(self):
+        return (self.Lie_beta(self["phi_bssnok"], '', weight=1/6)
+                - (1/6) * self["alpha"] * self["Ktrace"])
+    
+    def gammaup3_bssnok(self):
+        return self["psi_bssnok"]**(4) * self["gammaup3"]
+    
+    def gammadown3_bssnok(self):
+        return self["psi_bssnok"]**(-4) * self["gammadown3"]
+    
+    def dtgammadown3_bssnok(self):
+        return (self.Lie_beta(self["gammadown3_bssnok"], 's_dd', weight=-2/3) 
+                -2 * self["alpha"] * self["Adown3_bssnok"])
     
     # Extrinsic curvature
     def kxx(self):
@@ -1270,19 +1274,6 @@ class AurelCore():
         # Spatial Christoffel symbols with indices: Gamma^{i}_{kl}.
         return np.einsum('ij..., jkl... -> ikl...', self["gammaup3"], Gddd)
     
-    def s_Gamma_udd3_bssnok(self):
-        # Alcubierre 2.8.14
-        dphi = self.fd.d3_scalar(self["phi_bssnok"])
-        return self["s_Gamma_udd3"] - 2 * (
-            np.einsum('ki..., j... -> kij...', self.kronecker_delta3(), dphi)
-            + np.einsum('kj..., i... -> kij...', self.kronecker_delta3(), dphi)
-            - np.einsum('ij..., kl..., l... -> kij...', 
-                        self["gammadown3"], self["gammaup3"], dphi))
-    
-    def s_Gamma_bssnok(self):
-        return - np.einsum('jij... -> i...', 
-                           self.fd.d3_rank2tensor(self["gammaup3_bssnok"]))
-    
     def s_Riemann_uddd3(self):
         dGudd3 = np.array([
             [self.fd.d3x_rank2tensor(self["s_Gamma_udd3"][j]) 
@@ -1451,6 +1442,35 @@ class AurelCore():
         return np.einsum(
             'abcd..., cdab... -> ...', 
             self["st_Riemann_uudd4"], self["st_Riemann_uudd4"])
+    
+    # In BSSNOK form
+    def s_Gamma_udd3_bssnok(self):
+        # Alcubierre 2.8.14
+        dphi = self.fd.d3_scalar(self["phi_bssnok"])
+        return self["s_Gamma_udd3"] - 2 * (
+            np.einsum('ki..., j... -> kij...', self.kronecker_delta3(), dphi)
+            + np.einsum('kj..., i... -> kij...', self.kronecker_delta3(), dphi)
+            - np.einsum('ij..., kl..., l... -> kij...', 
+                        self["gammadown3"], self["gammaup3"], dphi))
+    
+    def s_Gamma_bssnok(self):
+        return - np.einsum('jij... -> i...', 
+                           self.fd.d3_rank2tensor(self["gammaup3_bssnok"]))
+    
+    def s_Ricci_down3_phi(self):
+        # Alcubierre 2.8.18
+        dphi = self.fd.d3_scalar(self["phi_bssnok"])
+        ddphi = (self.fd.d3_rank1tensor(dphi) 
+                 - np.einsum('kij..., k... -> ij...', 
+                             self["s_Gamma_udd3_bssnok"], dphi))
+        return (
+            - 2 * ddphi 
+            - 2 * self["gammadown3_bssnok"] * np.einsum(
+                'ij..., ij... -> ...', self["gammaup3_bssnok"], ddphi)
+            + 4 * np.einsum('i..., j... -> ij...', dphi, dphi)
+            - 4 * self["gammadown3_bssnok"] * np.einsum(
+                'ij..., i..., j... -> ...', self["gammaup3_bssnok"], dphi, dphi)
+            )
     
     # Constraints
     def Hamiltonian(self):

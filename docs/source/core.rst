@@ -43,82 +43,6 @@ $\Lambda = 0$, the Cosmological constant, to change this do **AurelCore.Lambda =
 Metric quantities
 =================
 
-Spatial metric
---------------
-
-**gxx**: $g_{xx}$ Metric with xx indices down. I assume $g_{xx}=1$, if not then please define AurelCore.data['gxx'] = ... 
-
-**gxy**: $g_{xy}$ Metric with xy indices down. I assume $g_{xy}=0$, if not then please define AurelCore.data['gxy'] = ... 
-
-**gxz**: $g_{xz}$ Metric with xz indices down. I assume $g_{xz}=0$, if not then please define AurelCore.data['gxz'] = ... 
-
-**gyy**: $g_{yy}$ Metric with yy indices down. I assume $g_{yy}=1$, if not then please define AurelCore.data['gyy'] = ... 
-
-**gyz**: $g_{yz}$ Metric with yz indices down. I assume $g_{yz}=0$, if not then please define AurelCore.data['gyz'] = ... 
-
-**gzz**: $g_{zz}$ Metric with zz indices down. I assume $g_{zz}=1$, if not then please define AurelCore.data['gzz'] = ... 
-
-**gammadown3**: $\gamma_{ij}$ Spatial metric with spatial indices down
-
-**gammadown3_bssnok**: $\tilde{\gamma}_{ij}$ Conformal spatial metric with spatial indices down
-
-**dtgammadown3_bssnok**: $\partial_t \tilde{\gamma}_{ij}$ Coordinate time derivative of conformal spatial metric with spatial indices down
-
-**gammaup3**: $\gamma^{ij}$ Spatial metric with spatial indices up
-
-**dtgammaup3**: $\partial_t \gamma^{ij}$ Coordinate time derivative of spatial metric with spatial indices up
-
-**gammaup3_bssnok**: $\tilde{\gamma}^{ij}$ Conformal spatial metric with spatial indices up
-
-**gammadet**: $\gamma$ Determinant of spatial metric
-
-**psi_bssnok**: $\psi = \gamma^{1/12}$ BSSNOK conformal factor
-
-**phi_bssnok**: $\phi = \ln(\gamma^{1/12})$ BSSNOK conformal factor
-
-**dtphi_bssnok**: $\partial_t \phi$ Coordinate time derivative of BSSNOK $\phi$ conformal factor
-
-**gammadown4**: $\gamma_{\mu\nu}$ Spatial metric with spacetime indices down
-
-**gammaup4**: $\gamma^{\mu\nu}$ Spatial metric with spacetime indices up
-
-Extrinsic curvature
--------------------
-
-**kxx**: $K_{xx}$ Extrinsic curvature with xx indices down. I assume $K_{xx}=0$, if not then please define AurelCore.data['kxx'] = ... 
-
-**kxy**: $K_{xy}$ Extrinsic curvature with xy indices down. I assume $K_{xy}=0$, if not then please define AurelCore.data['kxy'] = ... 
-
-**kxz**: $K_{xz}$ Extrinsic curvature with xz indices down. I assume $K_{xz}=0$, if not then please define AurelCore.data['kxz'] = ... 
-
-**kyy**: $K_{yy}$ Extrinsic curvature with yy indices down. I assume $K_{yy}=0$, if not then please define AurelCore.data['kyy'] = ... 
-
-**kyz**: $K_{yz}$ Extrinsic curvature with yz indices down. I assume $K_{yz}=0$, if not then please define AurelCore.data['kyz'] = ... 
-
-**kzz**: $K_{zz}$ Extrinsic curvature with zz indices down. I assume $K_{zz}=0$, if not then please define AurelCore.data['kzz'] = ... 
-
-**Kdown3**: $K_{ij}$ Extrinsic curvature with spatial indices down
-
-**Kup3**: $K^{ij}$ Extrinsic curvature with spatial indices up
-
-**Ktrace**: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
-
-**dtKtrace**: $\partial_t K$ Coordinate time derivative of the trace of extrinsic curvature
-
-**Adown3**: $A_{ij}$ Traceless part of the extrinsic curvature with spatial indices down
-
-**Aup3**: $A^{ij}$ Traceless part of the extrinsic curvature with spatial indices up
-
-**A2**: $A^2$ Magnitude of traceless part of the extrinsic curvature
-
-**Adown3_bssnok**: $\tilde{A}_{ij}$ Conformal traceless part of the extrinsic curvature with spatial indices down
-
-**dtAdown3_bssnok**: $\partial_t \tilde{A}_{ij}$ Coordinate time derivative of conformal traceless part of the extrinsic curvature with spatial indices down
-
-**Aup3_bssnok**: $\tilde{A}^{ij}$ Conformal traceless part of the extrinsic curvature with spatial indices up
-
-**A2_bssnok**: $\tilde{A}^2$ Magnitude of conformal traceless part of the extrinsic curvature
-
 Lapse
 -----
 
@@ -158,6 +82,33 @@ Timelike normal vector
 
 **ndown4**: $n_{\mu}$ Timelike vector normal to the spatial metric with spacetime indices down
 
+Spatial metric
+--------------
+
+**gxx**: $g_{xx}$ Metric with xx indices down. I assume $g_{xx}=1$, if not then please define AurelCore.data['gxx'] = ... 
+
+**gxy**: $g_{xy}$ Metric with xy indices down. I assume $g_{xy}=0$, if not then please define AurelCore.data['gxy'] = ... 
+
+**gxz**: $g_{xz}$ Metric with xz indices down. I assume $g_{xz}=0$, if not then please define AurelCore.data['gxz'] = ... 
+
+**gyy**: $g_{yy}$ Metric with yy indices down. I assume $g_{yy}=1$, if not then please define AurelCore.data['gyy'] = ... 
+
+**gyz**: $g_{yz}$ Metric with yz indices down. I assume $g_{yz}=0$, if not then please define AurelCore.data['gyz'] = ... 
+
+**gzz**: $g_{zz}$ Metric with zz indices down. I assume $g_{zz}=1$, if not then please define AurelCore.data['gzz'] = ... 
+
+**gammadown3**: $\gamma_{ij}$ Spatial metric with spatial indices down
+
+**gammaup3**: $\gamma^{ij}$ Spatial metric with spatial indices up
+
+**dtgammaup3**: $\partial_t \gamma^{ij}$ Coordinate time derivative of spatial metric with spatial indices up
+
+**gammadet**: $\gamma$ Determinant of spatial metric
+
+**gammadown4**: $\gamma_{\mu\nu}$ Spatial metric with spacetime indices down
+
+**gammaup4**: $\gamma^{\mu\nu}$ Spatial metric with spacetime indices up
+
 Spacetime metric
 ----------------
 
@@ -166,6 +117,66 @@ Spacetime metric
 **gup4**: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
 
 **gdet**: $g$ Determinant of spacetime metric
+
+BSSNOK metric
+-------------
+
+**psi_bssnok**: $\psi = \gamma^{1/12}$ BSSNOK conformal factor
+
+**phi_bssnok**: $\phi = \ln(\gamma^{1/12})$ BSSNOK conformal factor
+
+**dtphi_bssnok**: $\partial_t \phi$ Coordinate time derivative of BSSNOK $\phi$ conformal factor
+
+**gammadown3_bssnok**: $\tilde{\gamma}_{ij}$ Conformal spatial metric with spatial indices down
+
+**gammaup3_bssnok**: $\tilde{\gamma}^{ij}$ Conformal spatial metric with spatial indices up
+
+**dtgammadown3_bssnok**: $\partial_t \tilde{\gamma}_{ij}$ Coordinate time derivative of conformal spatial metric with spatial indices down
+
+Extrinsic curvature
+-------------------
+
+**kxx**: $K_{xx}$ Extrinsic curvature with xx indices down. I assume $K_{xx}=0$, if not then please define AurelCore.data['kxx'] = ... 
+
+**kxy**: $K_{xy}$ Extrinsic curvature with xy indices down. I assume $K_{xy}=0$, if not then please define AurelCore.data['kxy'] = ... 
+
+**kxz**: $K_{xz}$ Extrinsic curvature with xz indices down. I assume $K_{xz}=0$, if not then please define AurelCore.data['kxz'] = ... 
+
+**kyy**: $K_{yy}$ Extrinsic curvature with yy indices down. I assume $K_{yy}=0$, if not then please define AurelCore.data['kyy'] = ... 
+
+**kyz**: $K_{yz}$ Extrinsic curvature with yz indices down. I assume $K_{yz}=0$, if not then please define AurelCore.data['kyz'] = ... 
+
+**kzz**: $K_{zz}$ Extrinsic curvature with zz indices down. I assume $K_{zz}=0$, if not then please define AurelCore.data['kzz'] = ... 
+
+**Kdown3**: $K_{ij}$ Extrinsic curvature with spatial indices down
+
+**Kup3**: $K^{ij}$ Extrinsic curvature with spatial indices up
+
+**Ktrace**: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+
+**dtKtrace**: $\partial_t K$ Coordinate time derivative of the trace of extrinsic curvature
+
+**Adown3**: $A_{ij}$ Traceless part of the extrinsic curvature with spatial indices down
+
+**Aup3**: $A^{ij}$ Traceless part of the extrinsic curvature with spatial indices up
+
+**A2**: $A^2$ Magnitude of traceless part of the extrinsic curvature
+
+BSSNOK extrinsic curvature
+--------------------------
+
+**Adown3_bssnok**: $\tilde{A}_{ij}$ Conformal traceless part of the extrinsic curvature with spatial indices down
+
+**Aup3_bssnok**: $\tilde{A}^{ij}$ Conformal traceless part of the extrinsic curvature with spatial indices up
+
+**A2_bssnok**: $\tilde{A}^2$ Magnitude of conformal traceless part of the extrinsic curvature
+
+**dtAdown3_bssnok**: $\partial_t \tilde{A}_{ij}$ Coordinate time derivative of conformal traceless part of the extrinsic curvature with spatial indices down
+
+Proper time
+-----------
+
+**dttau**: $\partial_t \tau$ Coordinate time derivative of proper time
 
 Matter quantities
 =================
@@ -310,8 +321,6 @@ Spatial curvature
 
 **s_Gamma_udd3**: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
 
-**s_Gamma_bssnok**: $\tilde{\Gamma}^i$ Conformal connection functions with spatial indice up
-
 **s_Riemann_uddd3**: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
 
 **s_Riemann_down3**: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
@@ -340,6 +349,15 @@ Spacetime curvature
 **Einsteindown4**: $G_{\alpha\beta}$ Einstein tensor with spacetime indices down
 
 **Kretschmann**: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+
+BSSNOK curvature
+----------------
+
+**s_Gamma_udd3_bssnok**: ${}^{(3)}{\tilde{\Gamma}^{k}}_{ij}$ Christoffel symbols of conformal spatial metric with mixed spatial indices
+
+**s_Gamma_bssnok**: ${}^{(3)}\tilde{\Gamma}^i$ Conformal connection functions with spatial indice up
+
+**s_Ricci_down3_phi**: ${}^{(3)}R^{\phi}_{ij}$ Ricci terms that depend on the conformal function $\phi$
 
 Weyl decomposition
 ------------------
