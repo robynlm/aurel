@@ -1004,7 +1004,6 @@ def iterations(param, **kwargs):
                         if varkey is not None:
                             varkey = varkey['variable']
                             break
-                    varkey = parse_hdf5_key(fkeys[0])['variable']
                     if verbose: print(f'Checking variable {varkey}')
                         
                     # all the keys of this variable
