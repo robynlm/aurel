@@ -160,7 +160,7 @@ def read_data(param, **kwargs):
             }
     """
     it = np.sort(list(set(kwargs.get('it', [0]))))
-    if it==[]:
+    if len(it) == 0:
         raise ValueError(
             'it can not be an empty list. '
             + 'Please provide at least one iteration number to read.')
@@ -424,8 +424,14 @@ aurel_to_ET_varnames = {
     'press' : ['press'],
     'w_lorentz' : ['w_lorentz'],
     'velup3' : ['vel[0]', 'vel[1]', 'vel[2]'],
+    'velx' : ['vel[0]'],
+    'vely' : ['vel[1]'],
+    'velz' : ['vel[2]'],
     'Hamiltonian' : ['H'],
     'Momentumup3' : ['M1', 'M2', 'M3'],
+    'Momentumx' : ['M1'],
+    'Momentumy' : ['M2'],
+    'Momentumz' : ['M3'],
     'Weyl_Psi' : ['Psi4r', 'Psi4i'],
     'Weyl_Psi4r' : ['Psi4r'],
     'Weyl_Psi4i' : ['Psi4i']
@@ -1408,17 +1414,23 @@ def get_content(param, **kwargs):
         print("No existing content file found or invalid format."
               + " Calculating from scratch...")
         
+        variables_grouped = None
         vars_and_files = {}
         processed_groups = {}  # Track which groups we've already read
         h5files = glob.glob(path+'*.h5')
         for filepath in h5files:
             file_info = parse_h5file(filepath)
+
+            # Ensure 'variables_grouped' key is set
+            if variables_grouped is None:
+                variables_grouped = file_info['group_file']
+
             if file_info is not None:
                 if veryverbose:
                     print('Processing: ', filepath, flush=True)
 
                 # If the file is a single variable file
-                if not file_info['group_file']:
+                if not variables_grouped:
                     if veryverbose:
                         print('Single variable file', flush=True)
                     files = vars_and_files.setdefault(
@@ -1448,7 +1460,6 @@ def get_content(param, **kwargs):
                                              if parse_hdf5_key(k) is not None}
                                 varnames = list(variables)
                                 processed_groups[base_name] = varnames
-                            #varnames = processed_groups[base_name]   #???
                     else:
                         # We've already processed this group 
                         # - reuse the variable names
@@ -1707,6 +1718,21 @@ def read_ET_data(param, **kwargs):
                 # ======== Collect missing data from ET data
                 ETread_vars = []
                 verbose_saved_vars = []
+
+                # if variables not grouped, read join and save them one by one
+                variables_grouped = False
+                for vgroup in vars_and_files.keys():
+                    if len(vgroup) > 1:
+                        variables_grouped = True
+                        break
+                if not variables_grouped:
+                    newvar = []
+                    for v in var:
+                        av = transform_vars_tensor_to_scalar([v])
+                        newvar += av
+                    var = newvar.copy()
+
+                # Now process each variable
                 for v in var:
                     # collect missing iterations
                     avar = transform_vars_tensor_to_scalar([v])
@@ -1831,7 +1857,7 @@ def read_ET_variables(param, var, vars_and_files, **kwargs):
     else:
         cmax = 'in file'
 
-    # Transalte var names from aurel to ET
+    # Translate var names from aurel to ET
     var_ET = transform_vars_aurel_to_ET(var)
     if veryverbose:
         print('In read_ET_variables looking for variables:', 
