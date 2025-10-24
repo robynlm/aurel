@@ -30,6 +30,7 @@ lapse = ['alpha', 'dtalpha', 'DDalpha']
 shift = ['betax', 'betay', 'betaz',
          'dtbetax', 'dtbetay', 'dtbetaz',
          'betaup3', 'dtbetaup3', 'betadown3', 'betamag']
+time = ['dttau']
 enne = ['nup4', 'ndown4']
 gee = ['gdown4', 'gup4', 'gdet']
 nullrayexp = ['null_ray_exp_out', 'null_ray_exp_in']
@@ -49,8 +50,9 @@ conserv = ['conserved_D', 'conserved_E', 'conserved_Sdown4',
 kinema = ['st_covd_udown4', 'accelerationdown4', 'accelerationup4', 
           's_covd_udown4', 'thetadown4', 'theta', 'sheardown4', 'shear2',
           'omegadown4', 'omega2']
-s_curv = ['s_RicciS_u', 's_Gamma_udd3', 's_Gamma_bssnok', 's_Riemann_uddd3', 
-    's_Riemann_down3', 's_Ricci_down3', 's_RicciS']
+s_curv = ['s_RicciS_u', 's_Gamma_udd3', 's_Gamma_udd3_bssnok', 
+          's_Gamma_bssnok', 's_Riemann_uddd3', 
+          's_Riemann_down3', 's_Ricci_down3', 's_RicciS']
 st_curv = ['st_Gamma_udd4', 'st_Riemann_uddd4',
     'st_Riemann_down4', 'st_Riemann_uudd4',
     'st_Ricci_down4', 'st_Ricci_down3',
@@ -113,6 +115,7 @@ with open(output_file, "w") as f:
     print_subsec("Extrinsic curvature", extcurv, allfunctions, varsdone)
     print_subsec("Lapse", lapse, allfunctions, varsdone)
     print_subsec("Shift", shift, allfunctions, varsdone)
+    print_subsec("Proper time", time, allfunctions, varsdone)
     print_subsec("Timelike normal vector", enne, allfunctions, varsdone)
     print_subsec("Spacetime metric", gee, allfunctions, varsdone)
 

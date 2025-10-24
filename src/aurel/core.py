@@ -127,6 +127,8 @@ descriptions = {
         + r" of the shift vector with spatial indices up"),
     "betadown3": r"$\beta_{i}$ Shift vector with spatial indices down",
     "betamag": r"$\beta_{i}\beta^{i}$ Magnitude of shift vector",
+    # Proper time
+    "dttau": r"$\partial_t \tau$ Coordinate time derivative of proper time",
     # Timelike normal vector
     "nup4": (r"$n^{\mu}$ Timelike vector normal to the spatial metric"
         + r" with spacetime indices up"),
@@ -256,8 +258,10 @@ descriptions = {
     # of spatial metric
     "s_Gamma_udd3": (r"${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of"
         + r" spatial metric with mixed spatial indices"),
+    "s_Gamma_udd3_bssnok": (r"${}^{(3)}{\tilde{\Gamma}^{k}}_{ij}$ Christoffel"
+        + r" symbols of conformal spatial metric with mixed spatial indices"),
     "s_Gamma_bssnok": (r"$\tilde{\Gamma}^i$ Conformal connection functions"
-        + " with spatial indice up"),
+        + r" with spatial indice up"),
     "s_Riemann_uddd3": (r"${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of"
         + r" spatial metric with mixed spatial indices"),
     "s_Riemann_down3": (r"${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric"
@@ -704,17 +708,17 @@ class AurelCore():
     def Ktrace(self):
         return self.trace3(self["Kdown3"])
     
-    # TODO: include cosmological constant
     def dtKtrace(self):
         return (
             self.Lie_beta(self["Ktrace"], '')
             - np.einsum('ij..., ij... -> ...', 
                          self["gammaup3"], self["DDalpha"])
             + self["alpha"] * (
-                2 * self["A2_bssnok"]
+                self["A2_bssnok"]
                 + (1/3) * self["Ktrace"]**2)
             + 0.5 * self.kappa * self["alpha"] * (
-                self["rho_n"] + self["Stresstrace_n"]))
+                self["rho_n"] + self["Stresstrace_n"] 
+                - 2 * (self.Lambda / self.kappa)))
     
     def Adown3(self):
         return self.tracefree3(self["Kdown3"])
@@ -814,6 +818,9 @@ class AurelCore():
         return np.einsum(
                 'i..., i... -> ...',
                 self["betaup3"], self["betadown3"])
+    
+    def dttau(self):
+        return np.sqrt(abs(self["alpha"]**2 - self["betamag"]))
     
     # Timelike normal vector
     def nup4(self):
@@ -1262,6 +1269,15 @@ class AurelCore():
             
         # Spatial Christoffel symbols with indices: Gamma^{i}_{kl}.
         return np.einsum('ij..., jkl... -> ikl...', self["gammaup3"], Gddd)
+    
+    def s_Gamma_udd3_bssnok(self):
+        # Alcubierre 2.8.14
+        dphi = self.fd.d3_scalar(self["phi_bssnok"])
+        return self["s_Gamma_udd3"] - 2 * (
+            np.einsum('ki..., j... -> kij...', self.kronecker_delta3(), dphi)
+            + np.einsum('kj..., i... -> kij...', self.kronecker_delta3(), dphi)
+            - np.einsum('ij..., kl..., l... -> kij...', 
+                        self["gammadown3"], self["gammaup3"], dphi))
     
     def s_Gamma_bssnok(self):
         return - np.einsum('jij... -> i...', 
