@@ -999,6 +999,11 @@ def iterations(param, **kwargs):
                     
                     # only consider one of the variables in this file
                     fkeys = list(f.keys())
+                    for fk in fkeys:
+                        varkey = parse_hdf5_key(fk)
+                        if varkey is not None:
+                            varkey = varkey['variable']
+                            break
                     varkey = parse_hdf5_key(fkeys[0])['variable']
                     if verbose: print(f'Checking variable {varkey}')
                         
@@ -1414,23 +1419,18 @@ def get_content(param, **kwargs):
         print("No existing content file found or invalid format."
               + " Calculating from scratch...")
         
-        variables_grouped = None
         vars_and_files = {}
         processed_groups = {}  # Track which groups we've already read
         h5files = glob.glob(path+'*.h5')
         for filepath in h5files:
             file_info = parse_h5file(filepath)
 
-            # Ensure 'variables_grouped' key is set
-            if variables_grouped is None:
-                variables_grouped = file_info['group_file']
-
             if file_info is not None:
                 if veryverbose:
                     print('Processing: ', filepath, flush=True)
 
                 # If the file is a single variable file
-                if not variables_grouped:
+                if not file_info['group_file']:
                     if veryverbose:
                         print('Single variable file', flush=True)
                     files = vars_and_files.setdefault(
