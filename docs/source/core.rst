@@ -364,7 +364,9 @@ Weyl decomposition
 
 **st_Weyl_down4**: $C_{\alpha\beta\mu\nu}$ Weyl tensor of spacetime metric with spacetime indices down
 
-**Weyl_Psi**: $\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$ List of Weyl scalars for an null vector base defined with AurelCore.tetrad_to_use
+**Weyl_Psi**: $\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$ List of Weyl scalars for an null vector base defined with AurelCore.tetrad
+
+**Psi4_lm**: $\Psi_4^{l,m}$ List of dictionaries of spin weighted spherical harmonic decomposition of the 4th Weyl scalar. Control with AurelCore.lmax, extract_radii, and interp_method.
 
 **Weyl_invariants**: $I, \; J, \; L, \; K, \; N$ Dictionary of Weyl invariants
 

@@ -10,6 +10,7 @@ This module contains functions for manipulating rank 2 tensors, including:
 """
 
 import numpy as np
+import scipy.special as sc
 
 def getcomponents3(f):
     """Extract components of a rank 2 tensor with 3D indices.
@@ -191,3 +192,22 @@ def populate_4Riemann(Riemann_ssss, Riemann_ssst, Riemann_stst):
     
     # remaining terms are all zero
     return R
+
+def factorial(n):
+    """Returns the factorial of n"""
+    if n<=1:
+        return 1
+    else:
+        return sc.factorial(n)
+    
+def sYlm(s, l, m, theta, phi):
+    """Spin-weighted spherical harmonics"""
+    fac = np.sqrt(factorial(l + m) * factorial(l - m) * (2*l + 1)
+                  /(factorial(l + s) * factorial(l - s) * 4 * np.pi))
+    sumY = 0
+    for r in range(max(m - s, 0), min(l + m, l - s) + 1):
+        cos = np.cos(theta/2)**(2*r + s - m)
+        sin = np.sin(theta/2)**(2*l - 2*r - s + m)
+        sumY += (sc.binom(l-s, r) * sc.binom(l+s, r+s-m) 
+              * ((-1)**(l - r - s)) * np.exp(1j * m * phi) * cos * sin)
+    return fac * sumY

@@ -22,8 +22,8 @@ This module is the main event. It contains:
 
 import sys
 import numpy as np
-from collections.abc import Mapping, Sequence
-from IPython.display import display, Math, Latex
+import scipy
+from IPython.display import display, Latex
 from . import maths
 
 # Descriptions for each AurelCore.data entry and function
@@ -306,7 +306,10 @@ descriptions = {
         + r" metric with spacetime indices down"),
     "Weyl_Psi": (r"$\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$"
         + r" List of Weyl scalars for an null vector base defined"
-        + r" with AurelCore.tetrad_to_use"),
+        + r" with AurelCore.tetrad"),
+    "Psi4_lm": (r"$\Psi_4^{l,m}$ List of dictionaries of spin weighted"
+        + r" spherical harmonic decomposition of the 4th Weyl scalar."
+        + r" Control with AurelCore.lmax, extract_radii, and interp_method."),
     "Weyl_invariants": (r"$I, \; J, \; L, \; K, \; N$"
         + r" Dictionary of Weyl invariants"),
     "eweyl_u_down4": (r"$E^{\{u\}}_{\alpha\beta}$ Electric part of the Weyl"
@@ -338,9 +341,17 @@ class AurelCore():
         If True, display messages about the calculations.
     Lambda : float, optional, also attribute
         Cosmological constant. Default is 0.0.
-    tetrad_to_use : str, optional, also attribute
+    tetrad : str, optional, also attribute
         Tetrad choice for Weyl scalar calculations.
         Default is "quasi-Kinnersley". Any other value provides ...
+    lmax : int, optional, also attribute
+        Maximum l value for spherical harmonic decompositions. Default is 8.
+    extract_radii : list, optional, also attribute
+        List of extraction radii for spherical harmonic decompositions.
+        Default is [0.9 * max radius in the grid].
+    interp_method : str, optional, also attribute
+        Interpolation method for scipy.interpolate.RegularGridInterpolator.
+        Default is 'linear'.
 
     Attributes
     ----------
@@ -382,10 +393,18 @@ class AurelCore():
 
         # Kwargs or use defaults
         self.Lambda = kwargs.get('Lambda', 0.0)
-        self.tetrad_to_use = kwargs.get('tetrad_to_use', "quasi-Kinnersley")
+        self.tetrad = kwargs.get('tetrad', "quasi-Kinnersley")
+        self.lmax = kwargs.get('lmax', 8)
+        self.extract_radii = kwargs.get('extract_radii', [
+            np.min([abs(np.min(self.fd.xarray)), abs(np.max(self.fd.xarray)),
+                    abs(np.min(self.fd.yarray)), abs(np.max(self.fd.yarray)),
+                    abs(np.min(self.fd.zarray)), abs(np.max(self.fd.zarray))]
+                    ) * 0.9])
+        self.interp_method = kwargs.get('interp_method', 'linear')
         
         # Save any additional kwargs as attributes
-        handled_kwargs = {'Lambda', 'tetrad_to_use'}
+        handled_kwargs = {'Lambda', 'tetrad', 'lmax', 'extract_radii',
+                          'interp_method'}
         for key, value in kwargs.items():
             if key not in handled_kwargs:
                 setattr(self, key, value)
@@ -738,6 +757,7 @@ class AurelCore():
         return self["psi_bssnok"]**(-4) * self["Adown3"]
     
     def dtAdown3_bssnok(self):
+        # TODO: Not that Ricci! Also Tracefree with which metric?
         innerterm = (
             - self.tracefree3(self["DDalpha"])
             + self["alpha"] * self.tracefree3(self["s_Ricci_down3"])
@@ -1573,6 +1593,57 @@ class AurelCore():
             psi4 = np.einsum('abcd..., a..., b..., c..., d... -> ...',
                             self["st_Weyl_down4"], lup4, mbup4, lup4, mbup4)
             return [psi0, psi1, psi2, psi3, psi4]
+        
+    def Psi4_lm(self):
+        self.myprint(f"Maximum l of spherical decomposition is set to"
+                     + f" AurelCore.lmax = {self.lmax}")
+        self.myprint(f"Extraction radii set to AurelCore.extract_radii"
+                     + f" = {self.extract_radii}")
+        self.myprint(f"Scipy interpolation method is set to"
+                     + f" AurelCore.interp_method = {self.interp_method}")
+        
+        # Spherical sampling points
+        Ntheta = np.max([np.min([self.fd.Nx, self.fd.Ny, self.fd.Nz]), 
+                         self.lmax + 1])
+        Nphi = 2 * Ntheta
+        theta = np.pi * np.arange(0.5, Ntheta+1.5, 1) / (Ntheta+1)
+        phi = 2 * np.pi * np.arange(0.5, Nphi+1.5, 1) / (Nphi+1)
+        dtheta = np.diff(theta)[0]
+        dphi = np.diff(phi)[0]
+        
+        # Reconstruct full box
+        coord, Psi4r = self.fd.reconstruct(np.real(self["Weyl_Psi"][4]))
+        coord, Psi4i = self.fd.reconstruct(np.imag(self["Weyl_Psi"][4]))
+        
+        psi4lm = {radius:{} for radius in self.extract_radii}
+        for radius in self.extract_radii:
+            # Points on sphere
+            theta2, phi2 = np.meshgrid(theta, phi, indexing='ij')
+            x_sphere = (radius * np.sin(theta2) * np.cos(phi2))
+            y_sphere = (radius * np.sin(theta2) * np.sin(phi2))
+            z_sphere = (radius * np.cos(theta2))
+            points_sphere = np.stack((x_sphere.flatten(), 
+                                    y_sphere.flatten(), 
+                                    z_sphere.flatten()), axis=-1)
+            
+            # Interpolation functions
+            interp_real = scipy.interpolate.RegularGridInterpolator(
+                coord, Psi4r, method=self.interp_method)
+            interp_imag = scipy.interpolate.RegularGridInterpolator(
+                coord, Psi4i, method=self.interp_method)
+            psi4_sphere = (interp_real(points_sphere) 
+                        + 1j * interp_imag(points_sphere))
+            psi4_sphere = psi4_sphere.reshape(theta2.shape)
+            
+            # Spherical harmonic decomposition
+            for l in range(self.lmax):
+                for m in range(-l, l+1):
+                    psi4lm[radius][l,m] = np.sum(
+                        np.conj(maths.sYlm(-2, l, m, theta2, phi2)) 
+                        * psi4_sphere 
+                        * np.sin(theta2) * dtheta * dphi)
+        
+        return psi4lm
     
     def Weyl_invariants(self):
         Psis = self["Weyl_Psi"]
@@ -1661,8 +1732,8 @@ class AurelCore():
     def tetrad_base(self):
         r"""Return an quasi-Kinnersley or arbitrary tetrad base.
         
-        if AurelCore.tetrad_to_use == "quasi-Kinnersley":
-            Which is the default, because the tetrad_to_use is set to
+        if AurelCore.tetrad == "quasi-Kinnersley":
+            Which is the default, because the tetrad is set to
             "quasi-Kinnersley" in the init.
             Then quasi-Kinnersley tetrad is returned where the first tetrad
             is the normal to the hypersurface $n^\mu$.
@@ -1689,9 +1760,9 @@ class AurelCore():
 
         """
 
-        self.myprint(f"Tetrad is set to AurelCore.tetrad_to_use"
-                     + f" = {self.tetrad_to_use}")
-        if self.tetrad_to_use == "quasi-Kinnersley":
+        self.myprint(f"Tetrad is set to AurelCore.tetrad"
+                     + f" = {self.tetrad}")
+        if self.tetrad == "quasi-Kinnersley":
             nup4 = np.array(
                 [np.ones(self.data_shape), 
                  np.zeros(self.data_shape),
