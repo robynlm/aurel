@@ -833,6 +833,7 @@ def iterations(param, **kwargs):
                     'rl = 0': [itmin, itmax, dit],
                     'rl = 1': [itmin, itmax, dit],
                     ...
+                    'checkpoints': [it1, it2, ...]
                 },
                 ...
                 'overall': {
@@ -851,6 +852,7 @@ def iterations(param, **kwargs):
         it = 0 -> 1000
         rl = 0 at it = np.arange(0, 1000, 2)
         rl = 1 at it = np.arange(0, 1000, 1)
+        Checkpoints available at its: [0, 10, ...]
         === restart 1
         ...
 
@@ -1054,7 +1056,27 @@ def iterations(param, **kwargs):
                                 its_available[restart][rlkey] = allits
                             saveprint(it_file, rlkey+' at '+itkey, 
                                       verbose=verbose_file)
-                                
+            
+            # List checkpoints available
+            checkpoint_files = glob.glob(
+                param['simpath'] + param['simname']
+                + '/output-{:04d}/'.format(restart)
+                + param['simname'] + '/checkpoint.chkpt.it_*.h5')
+            if checkpoint_files != []:
+                if 'file_' in checkpoint_files[0]:
+                    checkpoint_files = [
+                        cf for cf in checkpoint_files if '.file_0.' in cf]
+                
+            checkpoint_its = []
+            for chkfile in checkpoint_files:
+                chk_it = int(chkfile.split('checkpoint.chkpt.it_')[1].split('.')[0])
+                checkpoint_its += [chk_it]
+            checkpoint_its = sorted(list(set(checkpoint_its)))
+            its_available[restart]['checkpoints'] = checkpoint_its
+            saveprint(it_file, 
+                      'Checkpoints available at its: {}'.format(
+                          list(checkpoint_its)),
+                          verbose=verbose_file)
         # Overall iterations
         its_available = collect_overall_iterations(its_available, verbose_file)
         return its_available
@@ -1097,6 +1119,7 @@ def read_iterations(param, **kwargs):
                     'rl = 0': [itmin, itmax, dit],
                     'rl = 1': [itmin, itmax, dit],
                     ...
+                    'checkpoints': [it1, it2, ...]
                 },
                 ...
             }
@@ -1153,6 +1176,16 @@ def read_iterations(param, **kwargs):
                     else:
                         it_list = [int(l.split('[')[1].split(']')[0])]
                         its_available[restart_nbr][rlkey] = it_list
+                
+                elif 'Checkpoints available at its' in l:
+                    chk_its = l.split('Checkpoints available at its: ')[1]
+                    chk_its = chk_its.replace('[', '').replace(']', '')
+                    if chk_its.strip() == '':
+                        its_available[restart_nbr]['checkpoints'] = []
+                    else:
+                        chk_its = [int(it.strip()) for it in chk_its.split(',')]
+                        its_available[restart_nbr]['checkpoints'] = chk_its
+
             return its_available
 
 def collect_overall_iterations(its_available, verbose):
