@@ -2088,7 +2088,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                 else:
                                     for k in key:
                                         if user_var in k:
-                                            key = [k]
+                                            key = k
                                             get_user_input = False
                                             break
                                     else:
@@ -2263,7 +2263,7 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                                 else:
                                     for k in key:
                                         if user_var in k:
-                                            key = [k]
+                                            key = k
                                             get_user_input = False
                                             break
                                     else:
