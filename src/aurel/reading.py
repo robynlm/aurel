@@ -609,8 +609,8 @@ def parse_h5file(filepath):
     match_checkpoint = rx_checkpoint.match(filename)
     match = rx_h5file.match(filename)
     if match_checkpoint:
-        iteration = match_checkpoint.group(1)
-        chunk_number = match_checkpoint.group(3)
+        iteration = int(match_checkpoint.group(1))
+        chunk_number = int(match_checkpoint.group(3))
         return {'iteration': iteration,
                 'chunk_number': chunk_number}
     elif match:
@@ -618,7 +618,7 @@ def parse_h5file(filepath):
         thorn_name = match.group(2)             # e.g., "admbase" or None
         variable_or_group_name = match.group(3) # e.g., "metric" or "rho"
         xyz_prefix = match.group(4)             # e.g., ".xyz" or None
-        chunk_number = match.group(6)            # e.g., "123" or None
+        chunk_number = int(match.group(6))      # e.g., "123" or None
         xyz_suffix = match.group(7)             # e.g., ".xyz" or None
         
         base_name = f"{thorn_group_with_dash}{variable_or_group_name}"
