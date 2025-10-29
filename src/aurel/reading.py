@@ -558,10 +558,10 @@ def parse_hdf5_key(key):
 # Regex for HDF5 filenames: matches both single-variable and group files
 # Examples: "rho.xyz.h5", "admbase-metric.file_123.xyz.h5"
 rx_h5file = re.compile(
-    r"^(([a-zA-Z0-9_]+)-)?([a-zA-Z0-9\[\]_]+)(.xyz)?(.file_[\d]+)?(.xyz)?.h5$")
+    r"^(([a-zA-Z0-9_]+)-)?([a-zA-Z0-9\[\]_]+)(.xyz)?(.file_(\d)+)?(.xyz)?.h5$")
 
 rx_checkpoint = re.compile(
-    r"^checkpoint\.chkpt\.it_(\d+)(.file_[\d]+)?.h5$")
+    r"^checkpoint\.chkpt\.it_(\d+)(.file_(\d)+)?.h5$")
 
 def parse_h5file(filepath):
     """Parse HDF5 filename into its components.
@@ -586,9 +586,15 @@ def parse_h5file(filepath):
                 'thorn': str or None,       # e.g., 'admbase' or None  
                 'variable_or_group': str,   # e.g., 'metric' or 'rho'
                 'xyz_prefix': str or None,  # e.g., '.xyz' or None
-                'file_number': str or None, # e.g., '.file_123' or None
+                'chunk_number': int or None # e.g., 123 or None (from file_nbr)
                 'xyz_suffix': str or None,  # e.g., '.xyz' or None
                 'is_group_file': bool,      # True -> a grouped variable file
+            }
+
+        And if it is a checkpoint file::
+
+            {
+                'iteration': int,        # e.g., 1000
                 'chunk_number': int or None # e.g., 123 or None (from file_nbr)
             }
 
@@ -612,29 +618,19 @@ def parse_h5file(filepath):
         thorn_name = match.group(2)             # e.g., "admbase" or None
         variable_or_group_name = match.group(3) # e.g., "metric" or "rho"
         xyz_prefix = match.group(4)             # e.g., ".xyz" or None
-        file_number = match.group(5)            # e.g., ".file_123" or None
-        xyz_suffix = match.group(6)             # e.g., ".xyz" or None
+        chunk_number = match.group(6)            # e.g., "123" or None
+        xyz_suffix = match.group(7)             # e.g., ".xyz" or None
         
         base_name = f"{thorn_group_with_dash}{variable_or_group_name}"
-
-        # Extract chunk number if present
-        chunk_number = None
-        if file_number:
-            try:
-                chunk_number = int(file_number.split('_')[1])
-            except (IndexError, ValueError):
-                pass
-        
         return {
             'thorn_with_dash': thorn_group_with_dash,
             'thorn': thorn_name,
             'variable_or_group': variable_or_group_name,
             'base_name': base_name,
             'xyz_prefix': xyz_prefix,
-            'file_number': file_number,
+            'chunk_number': chunk_number,
             'xyz_suffix': xyz_suffix,
-            'group_file': thorn_group_with_dash is not None,
-            'chunk_number': chunk_number
+            'group_file': thorn_group_with_dash is not None
         }
     return None
 
