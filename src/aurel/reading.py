@@ -977,11 +977,13 @@ def iterations(param, **kwargs):
                                       + ' can be read', flush=True)
                             with h5py.File(file_for_it, 'r') as f:
                                 fkeys = list(f.keys())
+                            file_to_read = True
                             break
                         except OSError:
                             if verbose:
                                 print('ERROR: Could not read ' 
                                       + file_for_it, flush=True)
+                            file_to_read = False
                             continue
                 else:
                     for var_to_read in files_with_single_var:
@@ -993,73 +995,76 @@ def iterations(param, **kwargs):
                                         + ' can be read', flush=True)
                                 with h5py.File(file_for_it, 'r') as f:
                                     fkeys = list(f.keys())
+                                file_to_read = True
                                 break
                             except OSError:
                                 if verbose:
                                     print('ERROR: Could not read ' 
                                         + file_for_it, flush=True)
-                            continue
-                saveprint(it_file, 'Reading iterations in: '
-                         + file_for_it, verbose=verbose_file)
-                with h5py.File(file_for_it, 'r') as f:
-                    
-                    # only consider one of the variables in this file
-                    fkeys = list(f.keys())
-                    for fk in fkeys:
-                        varkey = parse_hdf5_key(fk)
-                        if varkey is not None:
-                            varkey = varkey['variable']
-                            break
-                    if verbose: print(f'Checking variable {varkey}')
+                                file_to_read = False
+                                continue
+                if file_to_read:
+                    saveprint(it_file, 'Reading iterations in: '
+                            + file_for_it, verbose=verbose_file)
+                    with h5py.File(file_for_it, 'r') as f:
                         
-                    # all the keys of this variable
-                    fkeys = [k for k in fkeys if varkey in k]
-                    
-                    # all the iterations
-                    allits = np.sort([parse_hdf5_key(k)['it'] for k in fkeys])
-                    saveprint(
-                        it_file, 
-                        'it = {} -> {}'.format(np.min(allits), np.max(allits)), 
-                        verbose=verbose_file)
-                    its_available[restart]['its available'] = [
-                        np.min(allits), np.max(allits)]
-                        
-                    # maximum refinement level present
-                    rlmax = np.max([parse_hdf5_key(k)['rl'] for k in fkeys])
-                    
-                    # for each refinement level
-                    for rl in range(rlmax+1):
-                        # take the corresponding keys
-                        keysrl = [k for k in fkeys 
-                                  if parse_hdf5_key(k)['rl'] == rl]
-    
-                        if keysrl!=[]:
-                            # Check if there are chunk numbers
-                            if parse_hdf5_key(keysrl[0])['c'] is not None:
-                                cs = list(set([parse_hdf5_key(k)['c'] 
-                                               for k in keysrl]))
-                                chosen_c = ' c=' + str(np.sort(cs)[-1])
-                            else:
-                                chosen_c = ''
-                            keysrl = [k for k in keysrl if chosen_c in k]
+                        # only consider one of the variables in this file
+                        fkeys = list(f.keys())
+                        for fk in fkeys:
+                            varkey = parse_hdf5_key(fk)
+                            if varkey is not None:
+                                varkey = varkey['variable']
+                                break
+                        if verbose: print(f'Checking variable {varkey}')
                             
-                            # and look at what iterations they have
-                            allits = np.sort([parse_hdf5_key(k)['it'] 
-                                              for k in keysrl])
+                        # all the keys of this variable
+                        fkeys = [k for k in fkeys if varkey in k]
+                        
+                        # all the iterations
+                        allits = np.sort([parse_hdf5_key(k)['it'] for k in fkeys])
+                        saveprint(
+                            it_file, 
+                            'it = {} -> {}'.format(np.min(allits), np.max(allits)), 
+                            verbose=verbose_file)
+                        its_available[restart]['its available'] = [
+                            np.min(allits), np.max(allits)]
+                            
+                        # maximum refinement level present
+                        rlmax = np.max([parse_hdf5_key(k)['rl'] for k in fkeys])
+                        
+                        # for each refinement level
+                        for rl in range(rlmax+1):
+                            # take the corresponding keys
+                            keysrl = [k for k in fkeys 
+                                    if parse_hdf5_key(k)['rl'] == rl]
+        
+                            if keysrl!=[]:
+                                # Check if there are chunk numbers
+                                if parse_hdf5_key(keysrl[0])['c'] is not None:
+                                    cs = list(set([parse_hdf5_key(k)['c'] 
+                                                for k in keysrl]))
+                                    chosen_c = ' c=' + str(np.sort(cs)[-1])
+                                else:
+                                    chosen_c = ''
+                                keysrl = [k for k in keysrl if chosen_c in k]
+                                
+                                # and look at what iterations they have
+                                allits = np.sort([parse_hdf5_key(k)['it'] 
+                                                for k in keysrl])
 
-                            rlkey = 'rl = {}'.format(rl)
-                            if len(allits)>1:
-                                itkey = 'it = np.arange({}, {}, {})'.format(
-                                    np.min(allits), np.max(allits), 
-                                    np.diff(allits)[0])
-                                its_available[restart][rlkey] = [
-                                    np.min(allits), np.max(allits), 
-                                    np.diff(allits)[0]]
-                            else:
-                                itkey = 'it = {}'.format(allits)
-                                its_available[restart][rlkey] = allits
-                            saveprint(it_file, rlkey+' at '+itkey, 
-                                      verbose=verbose_file)
+                                rlkey = 'rl = {}'.format(rl)
+                                if len(allits)>1:
+                                    itkey = 'it = np.arange({}, {}, {})'.format(
+                                        np.min(allits), np.max(allits), 
+                                        np.diff(allits)[0])
+                                    its_available[restart][rlkey] = [
+                                        np.min(allits), np.max(allits), 
+                                        np.diff(allits)[0]]
+                                else:
+                                    itkey = 'it = {}'.format(allits)
+                                    its_available[restart][rlkey] = allits
+                                saveprint(it_file, rlkey+' at '+itkey, 
+                                        verbose=verbose_file)
             
             # List checkpoints available
             checkpoint_files = glob.glob(
