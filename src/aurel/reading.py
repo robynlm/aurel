@@ -558,10 +558,10 @@ def parse_hdf5_key(key):
 # Regex for HDF5 filenames: matches both single-variable and group files
 # Examples: "rho.xyz.h5", "admbase-metric.file_123.xyz.h5"
 rx_h5file = re.compile(
-    r"^(([a-zA-Z0-9_]+)-)?([a-zA-Z0-9\[\]_]+)(.xyz)?(.file_(\d)+)?(.xyz)?.h5$")
+    r"^(([a-zA-Z0-9_]+)-)?([a-zA-Z0-9\[\]_]+)(.xyz)?(.file_(\d+))?(.xyz)?.h5$")
 
 rx_checkpoint = re.compile(
-    r"^checkpoint\.chkpt\.it_(\d+)(.file_(\d)+)?.h5$")
+    r"^checkpoint\.chkpt\.it_(\d+)(\.file_(\d+))?.h5$")
 
 def parse_h5file(filepath):
     """Parse HDF5 filename into its components.
@@ -2081,8 +2081,6 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                    if ((parse_hdf5_key(k)['variable'] == v))]
                             # should be only one key
                             if len(key) != 1:
-                                print('Error: {} keys found:'.format(len(key)),
-                                      flush=True)
                                 if user_var is None:
                                     get_user_input = True
                                 else:
@@ -2179,8 +2177,8 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
     it = sorted(list(set(it)))
     var = transform_vars_aurel_to_ET(var)
     verbose = kwargs.get('verbose', True)
-    veryverbose = kwargs.get('veryverbose', True)
-    veryextraverbose = kwargs.get('veryextraverbose', True)
+    veryverbose = kwargs.get('veryverbose', False)
+    veryextraverbose = kwargs.get('veryextraverbose', False)
 
     if verbose:
         print('Using checkpoints for restart {}'.format(restart), flush=True)
