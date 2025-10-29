@@ -2031,6 +2031,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
     # also collect time while you're at it
     time = []
     collect_time = True
+    user_var = None
 
     # go through one file at a time
     for filepath in files:
@@ -2082,20 +2083,34 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                             if len(key) != 1:
                                 print('Error: {} keys found:'.format(len(key)),
                                       flush=True)
-                                for i, k in enumerate(key):
-                                    print(f'  [{i}] {k}', flush=True)
-                                user_input = input(
-                                    'Enter the index of the key to use: ')
-                                try:
-                                    key_index = int(user_input)
-                                    if 0 <= key_index < len(key):
-                                        key = key[key_index]
+                                if user_var is None:
+                                    get_user_input = True
+                                else:
+                                    for k in key:
+                                        if user_var in k:
+                                            key = [k]
+                                            get_user_input = False
+                                            break
                                     else:
+                                        get_user_input = True
+                                if get_user_input:
+                                    print('Error: {} keys found:'.format(len(key)),
+                                        flush=True)
+                                    for i, k in enumerate(key):
+                                        print(f'  [{i}] {k}', flush=True)
+                                    user_input = input(
+                                        'Enter the index of the key to use: ')
+                                    try:
+                                        key_index = int(user_input)
+                                        if 0 <= key_index < len(key):
+                                            key = key[key_index]
+                                            user_var = key.split(' ')[0]
+                                        else:
+                                            raise ValueError(
+                                                f'Index {key_index} out of range')
+                                    except (ValueError, IndexError) as e:
                                         raise ValueError(
-                                            f'Index {key_index} out of range')
-                                except (ValueError, IndexError) as e:
-                                    raise ValueError(
-                                        f'Invalid index selection: {e}')
+                                            f'Invalid index selection: {e}')
                             else:
                                 key = key[0]
                             
@@ -2193,6 +2208,7 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
 
     # data to be returned
     data = {'it':it, 't':[]}
+    user_var = None
     print(it, flush=True)
     for iit in it:
         it_file = [cf for cf in checkpoint_files 
@@ -2242,22 +2258,34 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                                 
                             # should be only one key
                             if len(key) != 1:
-                                print('Error: {} keys found:'.format(len(key)),
-                                      flush=True)
-                                for i, k in enumerate(key):
-                                    print(f'  [{i}] {k}', flush=True)
-                                user_input = input(
-                                    'Enter the index of the key to use: ')
-                                try:
-                                    key_index = int(user_input)
-                                    if 0 <= key_index < len(key):
-                                        key = key[key_index]
+                                if user_var is None:
+                                    get_user_input = True
+                                else:
+                                    for k in key:
+                                        if user_var in k:
+                                            key = [k]
+                                            get_user_input = False
+                                            break
                                     else:
+                                        get_user_input = True
+                                if get_user_input:
+                                    print('Error: {} keys found:'.format(len(key)),
+                                        flush=True)
+                                    for i, k in enumerate(key):
+                                        print(f'  [{i}] {k}', flush=True)
+                                    user_input = input(
+                                        'Enter the index of the key to use: ')
+                                    try:
+                                        key_index = int(user_input)
+                                        if 0 <= key_index < len(key):
+                                            key = key[key_index]
+                                            user_var = key.split(' ')[0]
+                                        else:
+                                            raise ValueError(
+                                                f'Index {key_index} out of range')
+                                    except (ValueError, IndexError) as e:
                                         raise ValueError(
-                                            f'Index {key_index} out of range')
-                                except (ValueError, IndexError) as e:
-                                    raise ValueError(
-                                        f'Invalid index selection: {e}')
+                                            f'Invalid index selection: {e}')
                             else:
                                 key = key[0]
                             
