@@ -140,6 +140,10 @@ def read_data(param, **kwargs):
         files, then saves newly read ET data to per-iteration files.
         When False, reads exclusively from ET files.
 
+    usecheckpoints : bool, optional
+        For ET data: whether to use checkpoint iterations if available. 
+        Default False.
+
     verbose : bool, optional
         Print detailed progress information. Default False.
 
@@ -900,7 +904,7 @@ def iterations(param, **kwargs):
         output_pattern = re.compile(r'^output-(\d+)$')
         relevant_files = [file for file in files 
                           if output_pattern.match(file)]
-        all_restarts = np.sort([int(fl.split('-')[1]) 
+        all_restarts = sorted([int(fl.split('-')[1]) 
                                 for fl in relevant_files])
 
         # Determine which restarts need processing
@@ -1563,12 +1567,12 @@ def read_ET_data(param, **kwargs):
     - **Missing Data Handling**: Fills gaps by reading from original ET files
     - **Variable Mapping**: Handles Aurel to Einstein Toolkit name conversions
     - **Caching Strategy**: Saves data in optimized format for future access
-
+    
     Parameters
     ----------
     param : dict
         Simulation parameters from `parameters()` function.
-
+    
     Other Parameters
     ----------------
     it : list of int, optional
@@ -1577,26 +1581,30 @@ def read_ET_data(param, **kwargs):
     vars : list of str, optional.
         Variables in Aurel format. Default [] (all available). 
         Examples: ['rho', 'Kdown3'], ['gammadown3', 'alpha']
-            
+    
     restart : int, optional
         Specific restart to read from. 
         Default -1 (auto-detect).
-            
+    
     split_per_it : bool, optional
         Use cached per-iteration files when available and save read data
         in per-iteration files. Default True.
-            
+    
+    usecheckpoints : bool, optional
+        For ET data: whether to use checkpoint iterations if available. 
+        Default False.
+    
     verbose : bool, optional
         Print progress information. Default True.
-            
+    
     veryverbose : bool, optional
         Print detailed debugging information. Default False.
-
+    
     Returns
     -------
     dict
         Simulation data dictionary with structure::
-
+        
             {
                 'it': [iteration_numbers],
                 't': [time_values],
@@ -1604,11 +1612,11 @@ def read_ET_data(param, **kwargs):
                 'var2': [data_arrays],
                 ...
             }
-
+    
     Notes
     -----
     Processing Workflow:
-
+    
     1. **Iteration Location**: Determines which restart contains each iteration
     2. **Cache Reading**: Loads available data from per-iteration files  
     3. **Gap Detection**: Identifies missing iterations/variables
@@ -1621,6 +1629,7 @@ def read_ET_data(param, **kwargs):
     var = kwargs.get('vars', [])
     restart = kwargs.get('restart', -1)
     split_per_it = kwargs.get('split_per_it', True)
+    usecheckpoints = kwargs.get('usecheckpoints', False)
     verbose = kwargs.get('verbose', True)
     veryverbose = kwargs.get('veryverbose', False)
 
@@ -1644,16 +1653,26 @@ def read_ET_data(param, **kwargs):
         # reverse order so that I'm always taking the most recent iteration
         for iit in it[::-1]:
             for restart in list(its_available.keys())[::-1]:
-                if 'its available' not in list(its_available[restart]):
-                    it_in_restart = False
-                else:
-                    # is this iteration available within this restart?
-                    if len(its_available[restart]['its available']) ==1:
-                        it_in_restart = (
-                            iit == its_available[restart]['its available'][0])
+                if usecheckpoints:
+                    if 'checkpoints' not in list(its_available[restart]):
+                        it_in_restart = False
                     else:
-                        itmin, itmax = its_available[restart]['its available']
-                        it_in_restart = ((itmin <= iit) and (iit <= itmax))
+                        # is this iteration a checkpoint within this restart?
+                        if iit in its_available[restart]['checkpoints']:
+                            it_in_restart = True
+                        else:
+                            it_in_restart = False
+                else:
+                    if 'its available' not in list(its_available[restart]):
+                        it_in_restart = False
+                    else:
+                        # is this iteration available within this restart?
+                        if len(its_available[restart]['its available']) ==1:
+                            it_in_restart = (
+                                iit == its_available[restart]['its available'][0])
+                        else:
+                            itmin, itmax = its_available[restart]['its available']
+                            it_in_restart = ((itmin <= iit) and (iit <= itmax))
                 if it_in_restart:
                     its_available[restart]['it to do'] += [iit]
                     # I found it, so break to not go through the other restart
@@ -1698,129 +1717,135 @@ def read_ET_data(param, **kwargs):
                 print('vars to get {}:'.format(var), flush=True)
             if veryverbose:
                 print('its to get {}:'.format(it), flush=True)
-            
-            # ====== directly read and provide the data
-            if not split_per_it:
-                datar[restart] = read_ET_variables(
-                    param, var, vars_and_files, **kwargs)
-                
-            # ====== combination of Einstein Toolkit data and aurel data
-            # + save into it files for quicker reading next time
+
+            # ====== checkpoints
+            if usecheckpoints:
+                datar[restart] = read_ET_checkpoints(param, var, **kwargs)
             else:
-                # ====== change variable names to scalar elements
-                avar = transform_vars_tensor_to_scalar(var)
-                kwargs['vars'] = avar
-
-                # =============================================================
-                # ======= Get variables from split iterations files
-                # Read in data
-                datar[restart] = read_aurel_data(param, **kwargs)
-                if verbose:
-                    verbose_cleaned_dict = {
-                        k: v for k, v in datar[restart].items() 
-                        if (not (isinstance(v, list) 
-                                    and all(x is None for x in v))
-                            and k!='it')}
-                    print('Data read from split iterations:', 
-                            list(verbose_cleaned_dict.keys()), flush=True)
+            
+                # ====== directly read and provide the data
+                if not split_per_it:
+                    datar[restart] = read_ET_variables(
+                        param, var, vars_and_files, **kwargs)
                     
-                # Find iterations missing
-                avart = avar + ['t']
-                its_missing = {v: [] for v in avart}
-                for it_idx, iit in enumerate(it):
-                    for av in avart:
-                        # Include it if it's not present
-                        if datar[restart][av][it_idx] is None:
-                            its_missing[av] += [iit]
-                        # Do a set to not have repeats
-                        its_missing[av] = list(set(its_missing[av]))
-                # Need to sort because of the set
-                for av in avart:
-                    its_missing[av] = list(np.sort(its_missing[av]))
+                # ====== combination of Einstein Toolkit data and aurel data
+                # + save into it files for quicker reading next time
+                else:
+                    # ====== change variable names to scalar elements
+                    avar = transform_vars_tensor_to_scalar(var)
+                    kwargs['vars'] = avar
 
-                # Verbose update
-                if veryverbose:
-                    verbose_clean_its_missing = {
-                        k:v for k, v in its_missing.items() if v!= []}
-                    print('Iterations missing:', 
-                            verbose_clean_its_missing, flush=True)
-                            
-
-                # =============================================================
-                # ======== Collect missing data from ET data
-                ETread_vars = []
-                verbose_saved_vars = []
-
-                # if variables not grouped, read join and save them one by one
-                variables_grouped = False
-                for vgroup in vars_and_files.keys():
-                    if len(vgroup) > 1:
-                        variables_grouped = True
-                        break
-                if not variables_grouped:
-                    newvar = []
-                    for v in var:
-                        av = transform_vars_tensor_to_scalar([v])
-                        newvar += av
-                    var = newvar.copy()
-
-                # Now process each variable
-                for v in var:
-                    # collect missing iterations
-                    avar = transform_vars_tensor_to_scalar([v])
-                    its_temp = [item for av in avar 
-                                for item in its_missing[av]]
-                    its_temp = list(set(its_temp))
-                    # if there are missing iterations
-                    if its_temp != []:
-                        kwargs['it'] = its_temp
-                        # retrieve missing iterations
-                        data_temp = read_ET_variables(
-                                param, [v], vars_and_files, **kwargs)
-                        # verbose update
-                        ETread_vars += list(data_temp.keys())
-                        if veryverbose:
-                            print('Data read from ET files:', 
-                                    v, list(data_temp.keys()), flush=True)
-                        # update the data with the missing iterations
-                        avart = avar + ['t']
+                    # =========================================================
+                    # ======= Get variables from split iterations files
+                    # Read in data
+                    datar[restart] = read_aurel_data(param, **kwargs)
+                    if verbose:
+                        verbose_cleaned_dict = {
+                            k: v for k, v in datar[restart].items() 
+                            if (not (isinstance(v, list) 
+                                        and all(x is None for x in v))
+                                and k!='it')}
+                        print('Data read from split iterations:', 
+                                list(verbose_cleaned_dict.keys()), flush=True)
+                        
+                    # Find iterations missing
+                    avart = avar + ['t']
+                    its_missing = {v: [] for v in avart}
+                    for it_idx, iit in enumerate(it):
                         for av in avart:
-                            if data_temp[av] is not None:
-                                for iidx, iit in enumerate(it):
-                                    if iit in its_missing[av]:
-                                        iidxtem = np.argmin(np.abs(
-                                            data_temp['it'] - iit))
-                                        datar[restart][av][iidx] = (
-                                            data_temp[av][iidxtem])
-                                        # don't save this iteration
-                                        if (data_temp[av][iidxtem] is None
-                                            or av == 't'):
-                                            its_missing[av].remove(iit)
-                                            
-                                if its_missing[av] != []:
-                                    # save the missing iterations
-                                    # and save them individually
-                                    kwargs['it'] = its_missing[av]
-                                    kwargs['vars'] = [av]
-                                    verbose_saved_vars += [av]
-                                    if veryverbose:
-                                        print(
-                                            'Saving data for {}'.format(av)
-                                            + ' at it = {}'.format(
-                                                its_missing[av]), 
-                                            flush=True)
-                                    save_data(
-                                        param, data_temp,
-                                        **kwargs)
-                if verbose:
-                    ETread_vars = list(set(ETread_vars))
-                    verbose_saved_vars = list(set(verbose_saved_vars))
-                    if ETread_vars != []:
-                        print('Variables read from ET files:', 
-                            ETread_vars, flush=True)
-                    if verbose_saved_vars != []:
-                        print('Variables saved to split iterations files:',
-                            verbose_saved_vars, flush=True)
+                            # Include it if it's not present
+                            if datar[restart][av][it_idx] is None:
+                                its_missing[av] += [iit]
+                            # Do a set to not have repeats
+                            its_missing[av] = list(set(its_missing[av]))
+                    # Need to sort because of the set
+                    for av in avart:
+                        its_missing[av] = list(np.sort(its_missing[av]))
+
+                    # Verbose update
+                    if veryverbose:
+                        verbose_clean_its_missing = {
+                            k:v for k, v in its_missing.items() if v!= []}
+                        print('Iterations missing:', 
+                                verbose_clean_its_missing, flush=True)
+                                
+
+                    # =========================================================
+                    # ======== Collect missing data from ET data
+                    ETread_vars = []
+                    verbose_saved_vars = []
+
+                    # if variables not grouped, read, join and save them
+                    # one by one
+                    variables_grouped = False
+                    for vgroup in vars_and_files.keys():
+                        if len(vgroup) > 1:
+                            variables_grouped = True
+                            break
+                    if not variables_grouped:
+                        newvar = []
+                        for v in var:
+                            av = transform_vars_tensor_to_scalar([v])
+                            newvar += av
+                        var = newvar.copy()
+
+                    # Now process each variable
+                    for v in var:
+                        # collect missing iterations
+                        avar = transform_vars_tensor_to_scalar([v])
+                        its_temp = [item for av in avar 
+                                    for item in its_missing[av]]
+                        its_temp = list(set(its_temp))
+                        # if there are missing iterations
+                        if its_temp != []:
+                            kwargs['it'] = its_temp
+                            # retrieve missing iterations
+                            data_temp = read_ET_variables(
+                                    param, [v], vars_and_files, **kwargs)
+                            # verbose update
+                            ETread_vars += list(data_temp.keys())
+                            if veryverbose:
+                                print('Data read from ET files:', 
+                                        v, list(data_temp.keys()), flush=True)
+                            # update the data with the missing iterations
+                            avart = avar + ['t']
+                            for av in avart:
+                                if data_temp[av] is not None:
+                                    for iidx, iit in enumerate(it):
+                                        if iit in its_missing[av]:
+                                            iidxtem = np.argmin(np.abs(
+                                                data_temp['it'] - iit))
+                                            datar[restart][av][iidx] = (
+                                                data_temp[av][iidxtem])
+                                            # don't save this iteration
+                                            if (data_temp[av][iidxtem] is None
+                                                or av == 't'):
+                                                its_missing[av].remove(iit)
+                                                
+                                    if its_missing[av] != []:
+                                        # save the missing iterations
+                                        # and save them individually
+                                        kwargs['it'] = its_missing[av]
+                                        kwargs['vars'] = [av]
+                                        verbose_saved_vars += [av]
+                                        if veryverbose:
+                                            print(
+                                                'Saving data for {}'.format(av)
+                                                + ' at it = {}'.format(
+                                                    its_missing[av]), 
+                                                flush=True)
+                                        save_data(
+                                            param, data_temp,
+                                            **kwargs)
+                    if verbose:
+                        ETread_vars = list(set(ETread_vars))
+                        verbose_saved_vars = list(set(verbose_saved_vars))
+                        if ETread_vars != []:
+                            print('Variables read from ET files:', 
+                                ETread_vars, flush=True)
+                        if verbose_saved_vars != []:
+                            print('Variables saved to split iterations files:',
+                                verbose_saved_vars, flush=True)
     
     # create ultimate data dictionary (flattening datar)
     if veryverbose:
@@ -2059,6 +2084,150 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
         var['t'] = time
         
     return var
+
+def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
+    """Read the data from Einstein Toolkit simulation checkpoint files.
+    
+    Parameters
+    ----------
+    param : dict
+        The parameters of the simulation.
+    var : list
+        The variables to read from the simulation checkpoint files.
+    it : list
+        The iterations to read from the simulation checkpoint files.
+    restart : int
+        The restart number to read from.
+    rl : int
+        The refinement level to read from the simulation checkpoint files.
+
+    Other Parameters
+    ----------------
+    verbose : bool, optional
+        Print progress information. Default True.
+        
+    Returns
+    -------
+    dict
+        A dictionary containing the data from the simulation checkpoint files.
+        dict.keys() = ['it', 't', var[0], var[1], ...]
+    """
+    it = sorted(list(set(it)))
+    var = transform_vars_aurel_to_ET(var)
+    verbose = kwargs.get('verbose', True)
+    veryverbose = kwargs.get('veryverbose', True)
+    veryextraverbose = kwargs.get('veryextraverbose', True)
+
+    if verbose:
+        print('Using checkpoints for restart {}'.format(restart), flush=True)
+
+    checkpoint_files = glob.glob(
+        param['simpath'] + param['simname']
+        + '/output-{:04d}/'.format(restart)
+        + param['simname'] + '/checkpoint.chkpt.it_*.h5')
+    
+    # find cmax
+    it0_file = []
+    i = 0
+    while it0_file == []:
+        it0 = it[i]
+        it0_file = [cf for cf in checkpoint_files 
+                    if f"it_{it0}." in cf]
+        if len(it0_file) == 0:
+            pass
+        elif len(it0_file) == 1:
+            cmax = 'in file'
+        else:
+            cmax = np.max([parse_h5file(cf)['chunk_number'] 
+                           for cf in it0_file])
+        i += 1
+
+    # data to be returned
+    data = {'it':it, 't':[]}
+    print(it, flush=True)
+    for iit in it:
+        it_file = [cf for cf in checkpoint_files 
+                    if f"it_{iit}." in cf]
+        if it_file != []:
+            collect_time = True
+            for file in it_file:
+                with h5py.File(file, 'r') as f:
+                    if veryverbose:
+                        print('Reading checkpoint file: {}'.format(file), 
+                            flush=True)
+                        
+                    # keys 
+                    file_keys = [k for k in f.keys() 
+                                 if parse_hdf5_key(k) is not None]
+                    relevant_keys = [k for k in file_keys 
+                                     if ((parse_hdf5_key(k)['it'] == iit)
+                                     and (parse_hdf5_key(k)['rl'] == rl)
+                                     and (parse_hdf5_key(k)['tl'] == 0))]
+                    
+                    # max number of chunks
+                    if cmax == 'in file':
+                        if 'c=' in relevant_keys[0]:
+                            nochunks = False
+                            actual_cmax = np.max(
+                                [parse_hdf5_key(k)['c'] 
+                                 for k in relevant_keys])
+                        else:
+                            nochunks = True
+                            actual_cmax = 0
+                        crange = np.arange(actual_cmax+1)
+                    else:
+                        nochunks = False
+                        actual_cmax = cmax
+                        crange = [parse_h5file(file)['chunk_number']]
+
+                    for v in var:
+                        varkeys = [k for k in relevant_keys 
+                                   if parse_hdf5_key(k)['variable'] == v]
+                        var_chunks = {}
+                        for c in crange:
+                            if nochunks:
+                                key = varkeys
+                            else:
+                                key = [k for k in varkeys 
+                                        if parse_hdf5_key(k)['c'] == c]
+                                
+                            # should be only one key
+                            if len(key) != 1:
+                                print('Error: {} keys found:'.format(len(key)),
+                                      key, flush=True)
+                            else:
+                                key = key[0]
+                            
+                            # Read in the variable
+                            if veryextraverbose:
+                                print('Reading key = {}'.format(key), 
+                                      flush=True)
+                            var_array = np.array(f[key])
+
+                            # Cut off ghost grid points
+                            ghost_x = f[key].attrs['cctk_nghostzones'][0]
+                            ghost_y = f[key].attrs['cctk_nghostzones'][1]
+                            ghost_z = f[key].attrs['cctk_nghostzones'][2]
+                            var_array = var_array[ghost_z:-ghost_z, 
+                                                  ghost_y:-ghost_y, 
+                                                  ghost_x:-ghost_x]
+                            iorigin = tuple(f[key].attrs['iorigin'])
+                            var_chunks[iorigin] = var_array
+                    
+                        # Join chunks, fix indexing and save in data dictionary
+                        aurel_v = transform_vars_ET_to_aurel(v)
+                        varlist = data.setdefault(aurel_v, [])
+                        varlist += [fixij(join_chunks(
+                            var_chunks, **kwargs))]
+                        
+                    if collect_time:
+                        data['t'] += [f[key].attrs['time']]
+                        collect_time = False
+        else:
+            print('Could not find checkpoint file for'
+                    + ' it={}'.format(iit), flush=True)
+                           
+    return data
 
 def fixij(f):
     """Fix the x-z indexing as you read in the data."""
