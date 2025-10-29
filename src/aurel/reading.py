@@ -1021,16 +1021,19 @@ def iterations(param, **kwargs):
                         fkeys = [k for k in fkeys if varkey in k]
                         
                         # all the iterations
-                        allits = np.sort([parse_hdf5_key(k)['it'] for k in fkeys])
+                        allits = np.sort([parse_hdf5_key(k)['it'] 
+                                          for k in fkeys])
                         saveprint(
                             it_file, 
-                            'it = {} -> {}'.format(np.min(allits), np.max(allits)), 
+                            'it = {} -> {}'.format(
+                                np.min(allits), np.max(allits)), 
                             verbose=verbose_file)
                         its_available[restart]['its available'] = [
                             np.min(allits), np.max(allits)]
                             
                         # maximum refinement level present
-                        rlmax = np.max([parse_hdf5_key(k)['rl'] for k in fkeys])
+                        rlmax = np.max([parse_hdf5_key(k)['rl'] 
+                                        for k in fkeys])
                         
                         # for each refinement level
                         for rl in range(rlmax+1):
@@ -1081,6 +1084,14 @@ def iterations(param, **kwargs):
                 chk_it = int(chkfile.split('checkpoint.chkpt.it_')[1].split('.')[0])
                 checkpoint_its += [chk_it]
             checkpoint_its = sorted(list(set(checkpoint_its)))
+
+            if 'its available' not in its_available[restart].keys():
+                its_available[restart]['its available'] = [
+                    np.min(checkpoint_its), np.max(checkpoint_its)]
+                saveprint(it_file, 'it = {} -> {}'.format(
+                    np.min(checkpoint_its), np.max(checkpoint_its)), 
+                    verbose=verbose_file)
+
             its_available[restart]['checkpoints'] = checkpoint_its
             saveprint(it_file, 
                       'Checkpoints available at its: {}'.format(
