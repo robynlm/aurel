@@ -2150,6 +2150,7 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                     if f"it_{iit}." in cf]
         if it_file != []:
             collect_time = True
+            var_chunks = {v:{} for v in var}
             for file in it_file:
                 with h5py.File(file, 'r') as f:
                     if veryverbose:
@@ -2183,7 +2184,6 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                     for v in var:
                         varkeys = [k for k in relevant_keys 
                                    if parse_hdf5_key(k)['variable'] == v]
-                        var_chunks = {}
                         for c in crange:
                             if nochunks:
                                 key = varkeys
@@ -2212,17 +2212,18 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                                                   ghost_y:-ghost_y, 
                                                   ghost_x:-ghost_x]
                             iorigin = tuple(f[key].attrs['iorigin'])
-                            var_chunks[iorigin] = var_array
-                    
-                        # Join chunks, fix indexing and save in data dictionary
-                        aurel_v = transform_vars_ET_to_aurel(v)
-                        varlist = data.setdefault(aurel_v, [])
-                        varlist += [fixij(join_chunks(
-                            var_chunks, **kwargs))]
+                            var_chunks[v][iorigin] = var_array
                         
                     if collect_time:
                         data['t'] += [f[key].attrs['time']]
                         collect_time = False
+                    
+            # Join chunks, fix indexing and save in data dictionary
+            for v in var:
+                aurel_v = transform_vars_ET_to_aurel(v)
+                varlist = data.setdefault(aurel_v, [])
+                varlist += [fixij(join_chunks(
+                            var_chunks[v], **kwargs))]
         else:
             print('Could not find checkpoint file for'
                     + ' it={}'.format(iit), flush=True)
