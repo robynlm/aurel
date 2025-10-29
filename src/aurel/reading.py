@@ -2092,7 +2092,10 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                     else:
                                         get_user_input = True
                                 if get_user_input:
-                                    print('Error: {} keys found:'.format(len(key)),
+                                    print('Error: {}'.format(len(key))
+                                          + 'keys found for variable '
+                                          + '{} it={} rl={} c={}'.format(
+                                              var, iit, rl, c),
                                         flush=True)
                                     for i, k in enumerate(key):
                                         print(f'  [{i}] {k}', flush=True)
@@ -2207,8 +2210,9 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
     # data to be returned
     data = {'it':it, 't':[]}
     user_var = None
-    print(it, flush=True)
     for iit in it:
+        if veryverbose:
+            print('Reading checkpoint for it={}'.format(iit), flush=True)
         it_file = [cf for cf in checkpoint_files 
                     if f"it_{iit}." in cf]
         if it_file != []:
@@ -2216,7 +2220,7 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
             var_chunks = {v:{} for v in var}
             for file in it_file:
                 with h5py.File(file, 'r') as f:
-                    if veryverbose:
+                    if veryextraverbose:
                         print('Reading checkpoint file: {}'.format(file), 
                             flush=True)
                         
@@ -2267,7 +2271,10 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                                     else:
                                         get_user_input = True
                                 if get_user_input:
-                                    print('Error: {} keys found:'.format(len(key)),
+                                    print('Error: {}'.format(len(key))
+                                          + 'keys found for variable '
+                                          + '{} it={} rl={} c={}'.format(
+                                              var, iit, rl, c),
                                         flush=True)
                                     for i, k in enumerate(key):
                                         print(f'  [{i}] {k}', flush=True)
