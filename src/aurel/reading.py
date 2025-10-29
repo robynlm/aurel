@@ -560,6 +560,9 @@ def parse_hdf5_key(key):
 rx_h5file = re.compile(
     r"^(([a-zA-Z0-9_]+)-)?([a-zA-Z0-9\[\]_]+)(.xyz)?(.file_[\d]+)?(.xyz)?.h5$")
 
+rx_checkpoint = re.compile(
+    r"^checkpoint\.chkpt\.it_(\d+)(.file_[\d]+)?.h5$")
+
 def parse_h5file(filepath):
     """Parse HDF5 filename into its components.
     
@@ -597,8 +600,14 @@ def parse_h5file(filepath):
     else:
         filename = filepath
     
+    match_checkpoint = rx_checkpoint.match(filename)
     match = rx_h5file.match(filename)
-    if match:
+    if match_checkpoint:
+        iteration = int(match.group(1))
+        chunk_number = int(match.group(3)) if match.group(3) else None
+        return {'iteration': iteration,
+                'chunk_number': chunk_number}
+    elif match:
         thorn_group_with_dash = match.group(1)  # e.g., "admbase-" or None
         thorn_name = match.group(2)             # e.g., "admbase" or None
         variable_or_group_name = match.group(3) # e.g., "metric" or "rho"
