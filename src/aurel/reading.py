@@ -163,7 +163,7 @@ def read_data(param, **kwargs):
                 ...
             }
     """
-    it = np.sort(list(set(kwargs.get('it', [0]))))
+    it = sorted(list(set(kwargs.get('it', [0]))))
     if len(it) == 0:
         raise ValueError(
             'it can not be an empty list. '
@@ -228,7 +228,7 @@ def read_aurel_data(param, **kwargs):
             }
     """
     # Extract reading parameters with defaults
-    it = np.sort(list(set(kwargs.get('it', [0]))))
+    it = sorted(list(set(kwargs.get('it', [0]))))
     rl = kwargs.get('rl', 0)
     restart = kwargs.get('restart', 0)
     var = list(set(kwargs.get('vars', [])))
@@ -358,7 +358,7 @@ def save_data(param, data, **kwargs):
     - Skips variables with None values
     """
     vars = kwargs.get('vars', [])
-    it = np.sort(kwargs.get('it', [0]))
+    it = sorted(list(set(kwargs.get('it', [0]))))
     rl = kwargs.get('rl', 0)
     restart = kwargs.get('restart', 0)
 
@@ -1625,7 +1625,7 @@ def read_ET_data(param, **kwargs):
     6. **Cache Update**: Saves newly-read data for future access
     """
     # reading kwargs
-    it = np.sort(kwargs.get('it', [0]))
+    it = sorted(list(set(kwargs.get('it', [0]))))
     var = kwargs.get('vars', [])
     restart = kwargs.get('restart', -1)
     split_per_it = kwargs.get('split_per_it', True)
@@ -1895,7 +1895,7 @@ def read_ET_variables(param, var, vars_and_files, **kwargs):
         A dictionary containing the data from the simulation output files.
         dict.keys() = ['it', 't', var[0], var[1], ...]
     """
-    it = np.sort(kwargs.get('it', [0]))
+    it = sorted(list(set(kwargs.get('it', [0]))))
     veryverbose = kwargs.get('veryverbose', False)
 
     if veryverbose:
@@ -1983,7 +1983,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
         dict.keys() = ['it', 't', var]
     """
 
-    it = np.sort(kwargs.get('it', [0]))
+    it = sorted(list(set(kwargs.get('it', [0]))))
     rl = kwargs.get('rl', 0)
     veryextraverbose = kwargs.get('veryextraverbose', False)
 
