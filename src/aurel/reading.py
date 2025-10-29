@@ -1641,7 +1641,21 @@ def read_ET_data(param, **kwargs):
     # use user provided restart
     if restart >= 0:
         restarts_available = [restart]
-        its_available[restart]['it to do'] = list(it)
+        its_available[restart]['it to do'] = []
+        for iit in it:
+            if usecheckpoints:
+                if 'checkpoints' in list(its_available[restart]):
+                    if iit in its_available[restart]['checkpoints']:
+                        its_available[restart]['it to do'] += [iit]
+            else:
+                if 'its available' in list(its_available[restart]):
+                    if len(its_available[restart]['its available']) ==1:
+                        if iit == its_available[restart]['its available'][0]:
+                            its_available[restart]['it to do'] += [iit]
+                    else:
+                        itmin, itmax = its_available[restart]['its available']
+                        if ((itmin <= iit) and (iit <= itmax)):
+                            its_available[restart]['it to do'] += [iit]
     # find restart myself
     elif restart == -1:
         restarts_available = list(its_available.keys())
