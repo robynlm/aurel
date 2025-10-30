@@ -288,8 +288,15 @@ descriptions = {
     # in BSSNOK form
     "s_Gamma_udd3_bssnok": (r"${}^{(3)}{\tilde{\Gamma}^{k}}_{ij}$ Christoffel"
         + r" symbols of conformal spatial metric with mixed spatial indices"),
-    "s_Gamma_bssnok": (r"${}^{(3)}\tilde{\Gamma}^i$ Conformal connection functions"
+    "s_Gamma_bssnok": (r"${}^{(3)}\tilde{\Gamma}^i$ Conformal connection"
+        + r" functions with spatial indice up"),
+    "dts_Gamma_bssnok": (r"$\partial_t {}^{(3)}\tilde{\Gamma}^i$"
+        + r" Coordinate time derivative of conformal connection functions"
         + r" with spatial indice up"),
+    "s_Ricci_down3_bssnok": (r"${}^{(3)}\tilde{R}_{ij}$ Ricci tensor of"
+        + r" conformal spatial metric with spatial indices down"),
+    "s_RicciS_bssnok": (r"${}^{(3)}\tilde{R}$ Ricci scalar of conformal"
+        + r" spatial metric"),
     "s_Ricci_down3_phi": (r"${}^{(3)}R^{\phi}_{ij}$ Ricci terms that depend on the"
         + r" conformal function $\phi$"),
     # Constraints
@@ -757,12 +764,12 @@ class AurelCore():
         return self["psi_bssnok"]**(-4) * self["Adown3"]
     
     def dtAdown3_bssnok(self):
-        # TODO: Not that Ricci! Also Tracefree with which metric?
-        innerterm = (
-            - self.tracefree3(self["DDalpha"])
-            + self["alpha"] * self.tracefree3(self["s_Ricci_down3"])
-            - self["alpha"] * self.kappa 
-                * self.tracefree3(self["Stressdown3_n"]))
+        # Eq 11.38 Baumgarte & Shapiro
+        Ricci = self["s_Ricci_down3_bssnok"] + self["s_Ricci_down3_phi"]
+        innerterm = self.tracefree3(
+            - self["DDalpha"]
+            + self["alpha"] * Ricci
+            - self["alpha"] * self.kappa * self["Stressdown3_n"])
         AAterm = np.einsum(
             'ia..., bj..., ab... -> ij...',
             self["Adown3_bssnok"], self["Adown3_bssnok"], 
@@ -1476,6 +1483,66 @@ class AurelCore():
     def s_Gamma_bssnok(self):
         return - np.einsum('jij... -> i...', 
                            self.fd.d3_rank2tensor(self["gammaup3_bssnok"]))
+    
+    def dts_Gamma_bssnok(self):
+        # Eq 2.8.25 of Alcubierre
+        ddbeta = self.fd.d3_rank2tensor(
+            self.fd.d3_rank1tensor(self["betaup3"]))
+        Gamma = self.Lie_beta(self["s_Gamma_bssnok"], 's_u', weight=2/3)
+        Gamma += np.einsum('jk..., jki... -> i...', 
+                          self["gammaup3_bssnok"], ddbeta)
+        Gamma += (1/3) * np.einsum('ij..., jkk... -> i...',
+                                   self["gammaup3_bssnok"], ddbeta)
+        Gamma += - 2 * np.einsum('ij..., j... -> i...', 
+                                 self["Aup3_bssnok"], 
+                                 self.fd.d3_scalar(self["alpha"]))
+        Gamma += 2 * self["alpha"] * np.einsum('ijk..., jk... -> i...', 
+                                               self["s_Gamma_udd3_bssnok"], 
+                                               self["Aup3_bssnok"])
+        Gamma += 12 * self["alpha"] * np.einsum('ij..., j... -> i...', 
+                                                self["Aup3_bssnok"], 
+                                                self.fd.d3_scalar(
+                                                    self["phi_bssnok"]))
+        Gamma += - (4/3) * self["alpha"] * np.einsum('ij..., j... -> i...',
+                                                    self["gammaup3_bssnok"], 
+                                                    self.fd.d3_scalar(
+                                                        self["Ktrace"]))
+        Gamma += (- 2 * self.kappa * self["alpha"] 
+                  * np.exp(4 * self["phi_bssnok"]) 
+                  * self["fluxup3_n"])
+        return Gamma
+    
+    def s_Ricci_down3_bssnok(self):
+        # Eq 2.8.18 of Alcubierre
+        Ricci = - 0.5 * np.einsum('lm..., lmij... -> ij...', 
+                                  self["gammaup3_bssnok"],
+                                  self.fd.d3_rank3tensor(
+                                      self.fd.d3_rank2tensor(
+                                          self["gammadown3_bssnok"])))
+        tosymmetrise = np.einsum('ki..., jk... -> ij...',
+                           self["gammadown3_bssnok"],
+                           self.fd.d3_rank1tensor(self["s_Gamma_bssnok"]))
+        Gddd = np.einsum('oi..., ojk... -> ijk...', 
+                         self["gammadown3_bssnok"],
+                         self["s_Gamma_udd3_bssnok"])
+        tosymmetrise += np.einsum('k..., ijk... -> ij...',
+                           self["s_Gamma_bssnok"],
+                           Gddd)
+        tosymmetrise += 2 * np.einsum('lm..., kli..., jkm... -> ij...',
+                            self["gammaup3_bssnok"],
+                            self["s_Gamma_udd3_bssnok"],
+                            Gddd)
+        Ricci += maths.symmetrise_tensor(tosymmetrise)
+        Ricci += np.einsum('lm..., kim..., klj... -> ij...',
+                                  self["gammaup3_bssnok"],
+                                  self["s_Gamma_udd3_bssnok"],
+                                  Gddd)
+        return Ricci
+    
+    def s_RicciS_bssnok(self):
+        return np.einsum('ij..., ij... -> ...', 
+                         self["gammaup3_bssnok"], 
+                         self["s_Ricci_down3_bssnok"])
     
     def s_Ricci_down3_phi(self):
         # Alcubierre 2.8.18

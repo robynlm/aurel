@@ -58,7 +58,9 @@ st_curv = ['st_Gamma_udd4', 'st_Riemann_uddd4',
     'st_Ricci_down4', 'st_Ricci_down3',
     'st_RicciS', 'Einsteindown4', 'Kretschmann']
 curv_bssnok = ['s_Gamma_udd3_bssnok', 
-          's_Gamma_bssnok', 's_Ricci_down3_phi']
+          's_Gamma_bssnok', 'dts_Gamma_bssnok', 
+          's_Ricci_down3_bssnok', 's_RicciS_bssnok',
+          's_Ricci_down3_phi']
 constraints = ['Hamiltonian', 'Hamiltonian_Escale',
     'Momentumup3', 'Momentum_Escale']
 gravimag = ['st_Weyl_down4', 'Weyl_Psi', 'Psi4_lm', 'Weyl_invariants',

@@ -132,6 +132,16 @@ def map2(func, f):
                       for j in range(dimj)] 
                       for k in range(dimk)])
 
+def map3(func, f):
+    """Map a function over the three indices of a rank 3 tensor."""
+    dimk = np.shape(f)[0]
+    dimj = np.shape(f)[1]
+    dimi = np.shape(f)[1]
+    return np.array([[[func(f[k, j, i]) 
+                       for i in range(dimi)]
+                       for j in range(dimj)] 
+                       for k in range(dimk)])
+
 ###############################################################################
 # Finite differencing class applying the schemes to data grid.
 ###############################################################################
@@ -388,6 +398,25 @@ class FiniteDifference():
         $\partial_z (f_{kj})$ or $\partial_z (f^{kj})$ 
         or $\partial_z (f^{k}_{j})$."""
         return map2(self.d3z, f)
+    
+    def d3_rank3tensor(self, f):
+        r"""Spatial derivatives of a spatial rank 3 tensor."""
+        return np.array(
+            [self.d3x_rank3tensor(f),
+             self.d3y_rank3tensor(f),
+             self.d3z_rank3tensor(f)])
+    
+    def d3x_rank3tensor(self, f):
+        r"""Spatial derivatives along x of a spatial rank 3 tensor."""
+        return map3(self.d3x, f)
+    
+    def d3y_rank2tensor(self, f):
+        r"""Spatial derivatives along y of a spatial rank 3 tensor."""
+        return map3(self.d3y, f)
+    
+    def d3z_rank2tensor(self, f):
+        r"""Spatial derivatives along z of a spatial rank 3 tensor."""
+        return map3(self.d3z, f)
     
     def cutoffmask(self, f):
         """Remove boundary points, for when FDs were applied once."""
