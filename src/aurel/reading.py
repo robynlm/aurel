@@ -2101,15 +2101,17 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                             '{}'.format(len(key))
                                             + 'keys found for variable '
                                             + '{} it={} rl={} c={}'.format(
-                                                var, iit, rl, c)
+                                                v, iit, rl, c)
                                             + ' found: {}'.format(key), 
                                             flush=True)
+                                    else:
+                                        key = key[0]
                                 else:
                                     raise ValueError(
                                         '{}'.format(len(key))
                                         + 'keys found for variable '
                                         + '{} it={} rl={} c={}'.format(
-                                            var, iit, rl, c)
+                                            v, iit, rl, c)
                                         + ' found: {}'.format(key), 
                                         flush=True)
                             else:
@@ -2280,15 +2282,17 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                                             '{}'.format(len(key))
                                             + 'keys found for variable '
                                             + '{} it={} rl={} c={}'.format(
-                                                var, iit, rl, c)
+                                                v, iit, rl, c)
                                             + ' found: {}'.format(key), 
                                             flush=True)
+                                    else:
+                                        key = key[0]
                                 else:
                                     raise ValueError(
                                         '{}'.format(len(key))
                                         + 'keys found for variable '
                                         + '{} it={} rl={} c={}'.format(
-                                            var, iit, rl, c)
+                                            v, iit, rl, c)
                                         + ' found: {}'.format(key), 
                                         flush=True)
                             else:
