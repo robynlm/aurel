@@ -2026,12 +2026,11 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
         print('read_ET_group_or_var(variables, files, cmax) activated with:', 
               variables, files, cmax, flush=True)
     
-    var_chunks = {iit:{v:{} for v in variables} for iit in it}
+    var_chunks = {iit:{} for iit in it}
     
     # also collect time while you're at it
     time = []
     collect_time = True
-    user_var = None
 
     # go through one file at a time
     for filepath in files:
@@ -2081,37 +2080,38 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                    if ((parse_hdf5_key(k)['variable'] == v))]
                             # should be only one key
                             if len(key) != 1:
-                                if user_var is None:
-                                    get_user_input = True
-                                else:
-                                    for k in key:
-                                        if user_var in k:
-                                            key = k
-                                            get_user_input = False
-                                            break
-                                    else:
-                                        get_user_input = True
-                                if get_user_input:
-                                    print('Error: {}'.format(len(key))
-                                          + 'keys found for variable '
-                                          + '{} it={} rl={} c={}'.format(
-                                              var, iit, rl, c),
-                                        flush=True)
-                                    for i, k in enumerate(key):
-                                        print(f'  [{i}] {k}', flush=True)
-                                    user_input = input(
-                                        'Enter the index of the key to use: ')
-                                    try:
-                                        key_index = int(user_input)
-                                        if 0 <= key_index < len(key):
-                                            key = key[key_index]
-                                            user_var = key.split(' ')[0]
-                                        else:
-                                            raise ValueError(
-                                                f'Index {key_index} out of range')
-                                    except (ValueError, IndexError) as e:
+                                other = [k.split(' it=')[1] for k in key]
+                                is_rest_same = (sum(
+                                    [other[i] == other[i+1] 
+                                     for i in range(len(other)-1)]) 
+                                     == (len(other)-1))
+                                if is_rest_same:
+                                    mult_vars = [k.split(' it=')[0] 
+                                                 for k in key]
+                                    variables = [vi.replace(v, mult_vars[0]) 
+                                           for vi in var]
+                                    variables += mult_vars[1:]
+                                    v = mult_vars[0]
+
+                                    key = [k for k in relevant_keys_with_c
+                                           if ((parse_hdf5_key(k)['variable'] 
+                                                == v))]
+                                    if len(key) == 1:
                                         raise ValueError(
-                                            f'Invalid index selection: {e}')
+                                            '{}'.format(len(key))
+                                            + 'keys found for variable '
+                                            + '{} it={} rl={} c={}'.format(
+                                                var, iit, rl, c)
+                                            + ' found: {}'.format(key), 
+                                            flush=True)
+                                else:
+                                    raise ValueError(
+                                        '{}'.format(len(key))
+                                        + 'keys found for variable '
+                                        + '{} it={} rl={} c={}'.format(
+                                            var, iit, rl, c)
+                                        + ' found: {}'.format(key), 
+                                        flush=True)
                             else:
                                 key = key[0]
                             
@@ -2119,16 +2119,16 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                             if veryextraverbose:
                                 print('Reading key = {}'.format(key), 
                                       flush=True)
-                            var = np.array(f[key])
+                            var_array = np.array(f[key])
                             # Cut off ghost grid points
                             ghost_x = f[key].attrs['cctk_nghostzones'][0]
                             ghost_y = f[key].attrs['cctk_nghostzones'][1]
                             ghost_z = f[key].attrs['cctk_nghostzones'][2]
-                            var = var[ghost_z:-ghost_z, 
-                                      ghost_y:-ghost_y, 
-                                      ghost_x:-ghost_x]
+                            var_array = var_array[ghost_z:-ghost_z, 
+                                                  ghost_y:-ghost_y, 
+                                                  ghost_x:-ghost_x]
                             iorigin = tuple(f[key].attrs['iorigin'])
-                            var_chunks[iit][v][iorigin] = var
+                            var_chunks[iit].setdefault(v, {})[iorigin] = var_array
                             del var
                     if collect_time:
                         time += [f[key].attrs['time']]
@@ -2209,7 +2209,6 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
 
     # data to be returned
     data = {'it':it, 't':[]}
-    user_var = None
     for iit in it:
         if veryverbose:
             print('Reading checkpoint for it={}'.format(iit), flush=True)
@@ -2217,7 +2216,7 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                     if f"it_{iit}." in cf]
         if it_file != []:
             collect_time = True
-            var_chunks = {v:{} for v in var}
+            var_chunks = {}
             for file in it_file:
                 with h5py.File(file, 'r') as f:
                     if veryextraverbose:
@@ -2260,37 +2259,38 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                                 
                             # should be only one key
                             if len(key) != 1:
-                                if user_var is None:
-                                    get_user_input = True
-                                else:
-                                    for k in key:
-                                        if user_var in k:
-                                            key = k
-                                            get_user_input = False
-                                            break
-                                    else:
-                                        get_user_input = True
-                                if get_user_input:
-                                    print('Error: {}'.format(len(key))
-                                          + 'keys found for variable '
-                                          + '{} it={} rl={} c={}'.format(
-                                              var, iit, rl, c),
-                                        flush=True)
-                                    for i, k in enumerate(key):
-                                        print(f'  [{i}] {k}', flush=True)
-                                    user_input = input(
-                                        'Enter the index of the key to use: ')
-                                    try:
-                                        key_index = int(user_input)
-                                        if 0 <= key_index < len(key):
-                                            key = key[key_index]
-                                            user_var = key.split(' ')[0]
-                                        else:
-                                            raise ValueError(
-                                                f'Index {key_index} out of range')
-                                    except (ValueError, IndexError) as e:
+                                other = [k.split(' it=')[1] for k in key]
+                                is_rest_same = (sum(
+                                    [other[i] == other[i+1] 
+                                     for i in range(len(other)-1)]) 
+                                     == (len(other)-1))
+                                if is_rest_same:
+                                    mult_vars = [k.split(' it=')[0] 
+                                                 for k in key]
+                                    var = [vi.replace(v, mult_vars[0]) 
+                                           for vi in var]
+                                    var += mult_vars[1:]
+                                    v = mult_vars[0]
+
+                                    key = [k for k in varkeys
+                                           if ((parse_hdf5_key(k)['variable'] 
+                                                == v))]
+                                    if len(key) == 1:
                                         raise ValueError(
-                                            f'Invalid index selection: {e}')
+                                            '{}'.format(len(key))
+                                            + 'keys found for variable '
+                                            + '{} it={} rl={} c={}'.format(
+                                                var, iit, rl, c)
+                                            + ' found: {}'.format(key), 
+                                            flush=True)
+                                else:
+                                    raise ValueError(
+                                        '{}'.format(len(key))
+                                        + 'keys found for variable '
+                                        + '{} it={} rl={} c={}'.format(
+                                            var, iit, rl, c)
+                                        + ' found: {}'.format(key), 
+                                        flush=True)
                             else:
                                 key = key[0]
                             
@@ -2308,7 +2308,7 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                                                   ghost_y:-ghost_y, 
                                                   ghost_x:-ghost_x]
                             iorigin = tuple(f[key].attrs['iorigin'])
-                            var_chunks[v][iorigin] = var_array
+                            var_chunks.setdefault(v, {})[iorigin] = var_array
                         
                     if collect_time:
                         data['t'] += [f[key].attrs['time']]
