@@ -2101,7 +2101,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                     if len(key) != 1:
                                         raise ValueError(
                                             '{}'.format(len(key))
-                                            + 'keys found for variable '
+                                            + ' keys found for variable '
                                             + '{} it={} rl={} c={}'.format(
                                                 v, iit, rl, c)
                                             + ' found: {}'.format(key))
@@ -2110,7 +2110,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                 else:
                                     raise ValueError(
                                         '{}'.format(len(key))
-                                        + 'keys found for variable '
+                                        + ' keys found for variable '
                                         + '{} it={} rl={} c={}'.format(
                                             v, iit, rl, c)
                                         + ' found: {}'.format(key))
@@ -2144,6 +2144,9 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
     var = {}
     for iit in it:
         for v in variables:
+            if veryextraverbose:
+                print('Joining chunks for variable {}'.format(v), 
+                      flush=True)
             aurel_v = transform_vars_ET_to_aurel(v)
             varlist = var.setdefault(aurel_v, [])
             varlist += [fixij(join_chunks(
@@ -2281,7 +2284,7 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                                     if len(key) != 1:
                                         raise ValueError(
                                             '{}'.format(len(key))
-                                            + 'keys found for variable '
+                                            + ' keys found for variable '
                                             + '{} it={} rl={} c={}'.format(
                                                 v, iit, rl, c)
                                             + ' found: {}'.format(key))
@@ -2290,7 +2293,7 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                                 else:
                                     raise ValueError(
                                         '{}'.format(len(key))
-                                        + 'keys found for variable '
+                                        + ' keys found for variable '
                                         + '{} it={} rl={} c={}'.format(
                                             v, iit, rl, c)
                                         + ' found: {}'.format(key))
@@ -2319,6 +2322,9 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                     
             # Join chunks, fix indexing and save in data dictionary
             for v in var:
+                if veryextraverbose:
+                    print('Joining chunks for variable {}'.format(v), 
+                          flush=True)
                 aurel_v = transform_vars_ET_to_aurel(v)
                 varlist = data.setdefault(aurel_v, [])
                 varlist += [fixij(join_chunks(
