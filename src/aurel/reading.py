@@ -2075,7 +2075,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                      if ((parse_hdf5_key(k)['c'] == c))]
                              
                         # For each component
-                        for v in variables:
+                        for vi, v in enumerate(variables):
                             # the full key to use
                             key = [k for k in relevant_keys_with_c
                                    if (parse_hdf5_key(k)['variable'] == v
@@ -2091,8 +2091,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                 if is_rest_same:
                                     mult_vars = [k.split(' it=')[0] 
                                                  for k in key]
-                                    variables = [vi.replace(v, mult_vars[0]) 
-                                           for vi in var]
+                                    variables[vi] = mult_vars[0]
                                     variables += mult_vars[1:]
                                     v = mult_vars[0]
 
@@ -2145,7 +2144,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
     for iit in it:
         for v in variables:
             if veryextraverbose:
-                print('Joining chunks for variable {}'.format(v), 
+                print('Joining chunks for {} at it = {}'.format(v, iit), 
                       flush=True)
             aurel_v = transform_vars_ET_to_aurel(v)
             varlist = var.setdefault(aurel_v, [])
@@ -2252,7 +2251,7 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                         actual_cmax = cmax
                         crange = [parse_h5file(file)['chunk_number']]
 
-                    for v in var:
+                    for vi, v in enumerate(var):
                         varkeys = [k for k in relevant_keys 
                                    if (parse_hdf5_key(k)['variable'] == v
                                        or parse_hdf5_key(k)[
@@ -2274,8 +2273,7 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                                 if is_rest_same:
                                     mult_vars = [k.split(' it=')[0] 
                                                  for k in key]
-                                    var = [vi.replace(v, mult_vars[0]) 
-                                           for vi in var]
+                                    var[vi] = mult_vars[0]
                                     var += mult_vars[1:]
                                     v = mult_vars[0]
 
@@ -2323,7 +2321,7 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
             # Join chunks, fix indexing and save in data dictionary
             for v in var:
                 if veryextraverbose:
-                    print('Joining chunks for variable {}'.format(v), 
+                    print('Joining chunks for {} at it = {}'.format(v, iit), 
                           flush=True)
                 aurel_v = transform_vars_ET_to_aurel(v)
                 varlist = data.setdefault(aurel_v, [])
@@ -2370,7 +2368,6 @@ def join_chunks(cut_data, **kwargs):
               flush=True)
         for i, k in enumerate(all_keys):
             print(i, k, np.shape(cut_data[k]))
-        print()
     # =================
     if cmax == 0:
         uncut_data = cut_data[all_keys[0]]
@@ -2420,7 +2417,6 @@ def join_chunks(cut_data, **kwargs):
             print(' === Key and shape after 1st append', flush=True)
             for i, k in enumerate(all_keys):
                 print(i, k, np.shape(ndata[k]), flush=True)
-            print()
 
         # --- Append along axis = 1
         if veryextraverbose:
@@ -2458,7 +2454,6 @@ def join_chunks(cut_data, **kwargs):
             print(' === Key and shape after 2nd append', flush=True)
             for i, k in enumerate(all_keys):
                 print(i, k, np.shape(nndata[k]), flush=True)
-            print()
                 
         # --- Append along axis = 0
         if veryextraverbose:
