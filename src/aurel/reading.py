@@ -551,7 +551,8 @@ def parse_hdf5_key(key):
             'tl': int(match.group(4)),
             'm': 0 if match.group(5) else None,
             'rl': int(match.group(7)) if match.group(7) else None,
-            'c': int(match.group(9)) if match.group(9) else None
+            'c': int(match.group(9)) if match.group(9) else None,
+            'combined variable name': match.group(1) + '::' + match.group(2)
         }
     return None
 
@@ -2077,7 +2078,9 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                         for v in variables:
                             # the full key to use
                             key = [k for k in relevant_keys_with_c
-                                   if ((parse_hdf5_key(k)['variable'] == v))]
+                                   if (parse_hdf5_key(k)['variable'] == v
+                                       or parse_hdf5_key(k)[
+                                           'combined variable name'] == v)]
                             # should be only one key
                             if len(key) != 1:
                                 other = [k.split(' it=')[1] for k in key]
@@ -2094,16 +2097,14 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                     v = mult_vars[0]
 
                                     key = [k for k in relevant_keys_with_c
-                                           if ((parse_hdf5_key(k)['variable'] 
-                                                == v))]
-                                    if len(key) == 1:
+                                           if v in k]
+                                    if len(key) != 1:
                                         raise ValueError(
                                             '{}'.format(len(key))
                                             + 'keys found for variable '
                                             + '{} it={} rl={} c={}'.format(
                                                 v, iit, rl, c)
-                                            + ' found: {}'.format(key), 
-                                            flush=True)
+                                            + ' found: {}'.format(key))
                                     else:
                                         key = key[0]
                                 else:
@@ -2112,8 +2113,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                         + 'keys found for variable '
                                         + '{} it={} rl={} c={}'.format(
                                             v, iit, rl, c)
-                                        + ' found: {}'.format(key), 
-                                        flush=True)
+                                        + ' found: {}'.format(key))
                             else:
                                 key = key[0]
                             
@@ -2251,7 +2251,9 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
 
                     for v in var:
                         varkeys = [k for k in relevant_keys 
-                                   if parse_hdf5_key(k)['variable'] == v]
+                                   if (parse_hdf5_key(k)['variable'] == v
+                                       or parse_hdf5_key(k)[
+                                           'combined variable name'] == v)]
                         for c in crange:
                             if nochunks:
                                 key = varkeys
@@ -2275,16 +2277,14 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                                     v = mult_vars[0]
 
                                     key = [k for k in varkeys
-                                           if ((parse_hdf5_key(k)['variable'] 
-                                                == v))]
-                                    if len(key) == 1:
+                                           if v in k]
+                                    if len(key) != 1:
                                         raise ValueError(
                                             '{}'.format(len(key))
                                             + 'keys found for variable '
                                             + '{} it={} rl={} c={}'.format(
                                                 v, iit, rl, c)
-                                            + ' found: {}'.format(key), 
-                                            flush=True)
+                                            + ' found: {}'.format(key))
                                     else:
                                         key = key[0]
                                 else:
@@ -2293,8 +2293,7 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
                                         + 'keys found for variable '
                                         + '{} it={} rl={} c={}'.format(
                                             v, iit, rl, c)
-                                        + ' found: {}'.format(key), 
-                                        flush=True)
+                                        + ' found: {}'.format(key))
                             else:
                                 key = key[0]
                             
