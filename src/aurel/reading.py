@@ -1480,6 +1480,8 @@ def get_content(param, **kwargs):
         vars_and_files = {}
         processed_groups = {}  # Track which groups we've already read
         h5files = glob.glob(path+'*.h5')
+        # skip checkpoint files
+        h5files = [f for f in h5files if 'checkpoint.chkpt' not in f]
         for filepath in h5files:
             file_info = parse_h5file(filepath)
 
@@ -2130,7 +2132,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                                   ghost_x:-ghost_x]
                             iorigin = tuple(f[key].attrs['iorigin'])
                             var_chunks[iit].setdefault(v, {})[iorigin] = var_array
-                            del var
+                            del var_array
                     if collect_time:
                         time += [f[key].attrs['time']]
                 collect_time = False # only do this in one file
