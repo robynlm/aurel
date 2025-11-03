@@ -263,7 +263,7 @@ def read_aurel_data(param, **kwargs):
     # Always include time coordinate in variables to read
     var += ['t']
     # Initialize data dictionary with empty lists for each variable
-    data = {'it': it, **{v: [] for v in var}}
+    data = {'it': np.array(it), **{v: [] for v in var}}
     
     # Read data for each requested iteration
     for it_index, iit in enumerate(it):
@@ -1940,7 +1940,7 @@ def read_ET_variables(param, var, vars_and_files, **kwargs):
         print('read_ET_variables was given the vars:', var, flush=True)
     
     # data to be returned
-    data = {'it':it, 't':[]}
+    data = {'it':np.array(it), 't':[]}
     
     # are the chunks together in one file or one file per chunk?
     first_var = list(vars_and_files.keys())[0]
@@ -2214,7 +2214,7 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
         i += 1
 
     # data to be returned
-    data = {'it':it, 't':[]}
+    data = {'it':np.array(it), 't':[]}
     for iit in it:
         if veryverbose:
             print('Reading checkpoint for it={}'.format(iit), flush=True)

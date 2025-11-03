@@ -357,6 +357,12 @@ BSSNOK curvature
 
 **s_Gamma_bssnok**: ${}^{(3)}\tilde{\Gamma}^i$ Conformal connection functions with spatial indice up
 
+**dts_Gamma_bssnok**: $\partial_t {}^{(3)}\tilde{\Gamma}^i$ Coordinate time derivative of conformal connection functions with spatial indice up
+
+**s_Ricci_down3_bssnok**: ${}^{(3)}\tilde{R}_{ij}$ Ricci tensor of conformal spatial metric with spatial indices down
+
+**s_RicciS_bssnok**: ${}^{(3)}\tilde{R}$ Ricci scalar of conformal spatial metric
+
 **s_Ricci_down3_phi**: ${}^{(3)}R^{\phi}_{ij}$ Ricci terms that depend on the conformal function $\phi$
 
 Weyl decomposition

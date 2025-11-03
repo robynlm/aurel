@@ -25,6 +25,7 @@ import numpy as np
 import scipy
 from IPython.display import display, Latex
 from . import maths
+is_notebook = 'ipykernel' in sys.modules
 
 # Descriptions for each AurelCore.data entry and function
 # assumed variables need to be listed in docs/source/source/generate_rst.py
@@ -346,6 +347,13 @@ class AurelCore():
         aurel.finitedifference.FiniteDifference
     verbose : bool
         If True, display messages about the calculations.
+    fancy_print : bool
+        If True, display messages in a fancy ipython format, 
+        else normal print is used. Default is True.
+    clear_cache_every_nbr_calc : int
+        Number of calculations before clearing the cache. Default is 20.
+    memory_threshold_inGB : int
+        Memory threshold in GB for clearing the cache. Default is 4 GB.
     Lambda : float, optional, also attribute
         Cosmological constant. Default is 0.0.
     tetrad : str, optional, also attribute
@@ -368,17 +376,10 @@ class AurelCore():
         (*dict*) - Dictionary where all the variables are stored.
     data_shape : tuple
         (*tuple*) - Shape of the data arrays: (Nx, Ny, Nz)
-    fancy_print : bool
-        (*bool*) - If True, display messages in a fancy ipython format, 
-        else normal print is used. Default is True.
     kappa : float
         (*float*) - Einstein's constant with G = c = 1. Default is 8 * pi.
     calculation_count : int
         (*int*) - Number of calculations performed.
-    clear_cache_every_nbr_calc : int
-        (*int*) - Number of calculations before clearing the cache.
-    memory_threshold_inGB : int
-        (*int*) - Memory threshold in GB for clearing the cache.
     last_accessed : dict
         (*dict*) - Dictionary to keep track of when each variable was 
         last accessed.
@@ -387,7 +388,7 @@ class AurelCore():
         for cache cleanup. To never delete a variable, set its importance to 0.
     """
     
-    def __init__(self, fd, verbose=True, **kwargs):
+    def __init__(self, fd, **kwargs):
         """Initialize the AurelCore class."""
 
         self.param = fd.param
@@ -395,10 +396,14 @@ class AurelCore():
         self.data_shape = (self.param['Nx'], 
                            self.param['Ny'], 
                            self.param['Nz'])
-        self.verbose = verbose
-        self.fancy_print = True
 
         # Kwargs or use defaults
+        self.verbose = kwargs.get('verbose', True)
+        self.fancy_print = kwargs.get('fancy_print', True)
+        self.clear_cache_every_nbr_calc = kwargs.get(
+            'clear_cache_every_nbr_calc', 20)
+        self.memory_threshold_inGB = kwargs.get(
+            'memory_threshold_inGB', 4)
         self.Lambda = kwargs.get('Lambda', 0.0)
         self.tetrad = kwargs.get('tetrad', "quasi-Kinnersley")
         self.lmax = kwargs.get('lmax', 8)
@@ -407,6 +412,10 @@ class AurelCore():
                     abs(np.min(self.fd.yarray)), abs(np.max(self.fd.yarray)),
                     abs(np.min(self.fd.zarray)), abs(np.max(self.fd.zarray))]
                     ) * 0.9])
+        # Convert extract_radii to list if it's a single number
+        if isinstance(self.extract_radii, (int, float)):
+            self.extract_radii = [self.extract_radii]
+        
         self.interp_method = kwargs.get('interp_method', 'linear')
         
         # Save any additional kwargs as attributes
@@ -426,8 +435,6 @@ class AurelCore():
 
         # To clean up cache
         self.calculation_count = 0
-        self.clear_cache_every_nbr_calc = 20
-        self.memory_threshold_inGB = 4 # GB
         self.last_accessed = {}
 
         # Importance of each variable for cache cleanup
@@ -442,8 +449,11 @@ class AurelCore():
     def myprint(self, message):
         """Print a message with a fancy format."""
         if self.verbose:
-            if self.fancy_print:
-                display(Latex(message))
+            if is_notebook:
+                if self.fancy_print:
+                    display(Latex(message))
+                else:
+                    print(message, flush=True)
             else:
                 print(message, flush=True)
 
@@ -1678,10 +1688,6 @@ class AurelCore():
         dtheta = np.diff(theta)[0]
         dphi = np.diff(phi)[0]
         
-        # Reconstruct full box
-        coord, Psi4r = self.fd.reconstruct(np.real(self["Weyl_Psi"][4]))
-        coord, Psi4i = self.fd.reconstruct(np.imag(self["Weyl_Psi"][4]))
-        
         psi4lm = {radius:{} for radius in self.extract_radii}
         for radius in self.extract_radii:
             # Points on sphere
@@ -1695,9 +1701,13 @@ class AurelCore():
             
             # Interpolation functions
             interp_real = scipy.interpolate.RegularGridInterpolator(
-                coord, Psi4r, method=self.interp_method)
+                (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
+                np.real(self["Weyl_Psi"][4]), 
+                method=self.interp_method)
             interp_imag = scipy.interpolate.RegularGridInterpolator(
-                coord, Psi4i, method=self.interp_method)
+                (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
+                np.imag(self["Weyl_Psi"][4]), 
+                method=self.interp_method)
             psi4_sphere = (interp_real(points_sphere) 
                         + 1j * interp_imag(points_sphere))
             psi4_sphere = psi4_sphere.reshape(theta2.shape)
