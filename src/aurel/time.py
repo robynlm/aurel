@@ -7,9 +7,16 @@ and applying statistical estimation functions to 3D arrays.
 import numpy as np
 from . import core
 import inspect
-try:
-    from tqdm.notebook import tqdm
-except ImportError:
+import sys
+is_notebook = 'ipykernel' in sys.modules
+
+# Import appropriate tqdm version
+if is_notebook:
+    try:
+        from tqdm.notebook import tqdm
+    except ImportError:
+        from tqdm import tqdm
+else:
     from tqdm import tqdm
 
 # Dictionary of available estimation functions for 3D arrays

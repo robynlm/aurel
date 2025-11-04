@@ -1687,6 +1687,16 @@ class AurelCore():
         phi = 2 * np.pi * np.arange(0.5, Nphi+1.5, 1) / (Nphi+1)
         dtheta = np.diff(theta)[0]
         dphi = np.diff(phi)[0]
+            
+        # Interpolation functions
+        interp_real = scipy.interpolate.RegularGridInterpolator(
+            (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
+            np.real(self["Weyl_Psi"][4]), 
+            method=self.interp_method)
+        interp_imag = scipy.interpolate.RegularGridInterpolator(
+            (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
+            np.imag(self["Weyl_Psi"][4]), 
+            method=self.interp_method)
         
         psi4lm = {radius:{} for radius in self.extract_radii}
         for radius in self.extract_radii:
@@ -1699,21 +1709,13 @@ class AurelCore():
                                     y_sphere.flatten(), 
                                     z_sphere.flatten()), axis=-1)
             
-            # Interpolation functions
-            interp_real = scipy.interpolate.RegularGridInterpolator(
-                (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
-                np.real(self["Weyl_Psi"][4]), 
-                method=self.interp_method)
-            interp_imag = scipy.interpolate.RegularGridInterpolator(
-                (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
-                np.imag(self["Weyl_Psi"][4]), 
-                method=self.interp_method)
+            # Interpolate Psi4 on sphere
             psi4_sphere = (interp_real(points_sphere) 
                         + 1j * interp_imag(points_sphere))
             psi4_sphere = psi4_sphere.reshape(theta2.shape)
             
             # Spherical harmonic decomposition
-            for l in range(self.lmax):
+            for l in range(self.lmax+1):
                 for m in range(-l, l+1):
                     psi4lm[radius][l,m] = np.sum(
                         np.conj(maths.sYlm(-2, l, m, theta2, phi2)) 
