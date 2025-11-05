@@ -76,8 +76,10 @@ def print_subsec(title, subsecvars, allfunctions, varsdone):
         if ((name in allfunctions) 
             and (name in subsecvars) 
             and (name not in varsdone)):
-            # Check if the function is in `allfunctions`
-            f.write(f"**{name}**: {core.descriptions[name]}\n\n")
+            # Add a reference label that matches what Sphinx expects for the class method
+            f.write(f".. _aurel.core.AurelCore.{name}:\n\n")
+            # Link directly to the source code in _modules
+            f.write(f"`{name} <../_modules/aurel/core.html#AurelCore.{name}>`_: {core.descriptions[name]}\n\n")
             varsdone.append(name)
     return varsdone
 
@@ -85,8 +87,18 @@ def print_subsec(title, subsecvars, allfunctions, varsdone):
 with open(output_file, "w") as f:
     f.write("aurel.core\n")
     f.write("##########\n\n")
-    f.write(".. automodule:: aurel.core\n")
+    f.write(".. automodule:: aurel.core\n\n")
+    
+    # Add hidden section FIRST for viewcode anchors (wrapped in hidden div)
+    # This creates the autodoc anchors that [source] links need
+    members_list = ", ".join(core.descriptions.keys())
+    f.write(".. raw:: html\n\n")
+    f.write("   <div style='display: none;' aria-hidden='true'>\n\n")
+    f.write(".. autoclass:: aurel.core.AurelCore\n")
+    f.write(f"   :members: {members_list}\n")
     f.write("   :noindex:\n\n")
+    f.write(".. raw:: html\n\n")
+    f.write("   </div>\n\n")
 
     f.write(".. _descriptions_list:\n\n")
     # Add a section for functions listed in `descriptions`
@@ -100,7 +112,6 @@ with open(output_file, "w") as f:
     f.write("Assumed quantities\n")
     f.write("==================\n\n")
     f.write('If not defined, vacuum Minkowski is assumed for the definition of the following quantities:\n\n')
-    f.write(r"$\Lambda = 0$, the Cosmological constant, to change this do **AurelCore.Lambda = ...** before running calculations"+"\n\n")
     f.write(r'**alpha**: $\alpha = 1$, the lapse, to change this do **AurelCore.data["alpha"] = ...** before running calculations'+"\n\n")
     f.write(r"**dtalpha**: $\partial_t \alpha = 0$, the time derivative of the lapse"+"\n\n")
     f.write(r"**betax, betay, betaz**: $\beta^i = 0$, the shift vector with spatial indices up"+"\n\n")
@@ -157,9 +168,14 @@ with open(output_file, "w") as f:
         f.write("Need to update `docs/source/source/generate_rst.py`\n\n")
         print_subsec("", core.descriptions, allfunctions, varsdone)
 
-    # Add a section for other functions
-    f.write("AurelCore\n")
-    f.write("*********\n\n")
+    # Add a section for other functions (AurelCore members that aren't in descriptions)
+    f.write("AurelCore Methods\n")
+    f.write("*****************\n\n")
+    
+    # Build exclude-members list from descriptions keys  
+    exclude_list = ", ".join(core.descriptions.keys())
+    
     f.write(".. autoclass:: aurel.core.AurelCore\n")
     f.write("   :show-inheritance:\n")
     f.write("   :members:\n")
+    f.write(f"   :exclude-members: {exclude_list}\n\n")
