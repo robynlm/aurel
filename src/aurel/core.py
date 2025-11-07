@@ -1816,10 +1816,10 @@ class AurelCore():
             self["uup4"], self["uup4"], self["st_Weyl_down4"], LCuudd4)
     
     def bweyl_n_down3(self):
-        LCuud3 = np.einsum('ae..., bf..., d..., defc... -> abc...', 
-                        self["gup4"], self["gup4"], self["nup4"], 
-                        self.levicivita_down4())[1:, 1:, 1:]
-            
+        LCuud3 = np.einsum('ae..., bf..., efc... -> abc...', 
+                        self["gammaup3"], self["gammaup3"], 
+                        self.levicivita_down3())
+        
         dKdown = self.s_covd(self["Kdown3"], 'dd')
         Bterm1 = np.einsum('cdb..., cda... -> ab...', LCuud3, dKdown)
 
@@ -2273,7 +2273,7 @@ class AurelCore():
         So this function only applied to those three tensors.
         """
         if 'betaup3' not in self.data or 'betax' not in self.data:
-            self.myprint("Using $\beta^i = 0$ shortcut for s_to_st")
+            self.myprint(r"Using $\beta^i = 0$ shortcut for s_to_st")
             f00 = np.zeros(self.data_shape)
             f0k = np.zeros(
                 (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
