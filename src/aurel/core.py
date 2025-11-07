@@ -356,6 +356,8 @@ class AurelCore():
         Memory threshold in GB for clearing the cache. Default is 4 GB.
     Lambda : float, optional, also attribute
         Cosmological constant. Default is 0.0.
+    vaccum : bool, optional, also attribute
+        If True, assume vacuum spacetime (no matter). Default is False.
     tetrad : str, optional, also attribute
         Tetrad choice for Weyl scalar calculations.
         Default is "quasi-Kinnersley". Any other value provides ...
@@ -405,6 +407,7 @@ class AurelCore():
         self.memory_threshold_inGB = kwargs.get(
             'memory_threshold_inGB', 4)
         self.Lambda = kwargs.get('Lambda', 0.0)
+        self.vaccum = kwargs.get('vaccum', False)
         self.tetrad = kwargs.get('tetrad', "quasi-Kinnersley")
         self.lmax = kwargs.get('lmax', 8)
         self.extract_radii = kwargs.get('extract_radii', [
@@ -749,16 +752,20 @@ class AurelCore():
         return self.trace3(self["Kdown3"])
     
     def dtKtrace(self):
-        return (
+        dtK = (
             self.Lie_beta(self["Ktrace"], '')
             - np.einsum('ij..., ij... -> ...', 
                          self["gammaup3"], self["DDalpha"])
             + self["alpha"] * (
                 self["A2_bssnok"]
-                + (1/3) * self["Ktrace"]**2)
-            + 0.5 * self.kappa * self["alpha"] * (
+                + (1/3) * self["Ktrace"]**2))
+        if self.vaccum:
+            self.myprint('Using vacuum shortcut for dtKtrace')
+            return dtK
+        else:
+            return dtK + 0.5 * self.kappa * self["alpha"] * (
                 self["rho_n"] + self["Stresstrace_n"] 
-                - 2 * (self.Lambda / self.kappa)))
+                - 2 * (self.Lambda / self.kappa))
     
     def Adown3(self):
         return self.tracefree3(self["Kdown3"])
@@ -776,10 +783,16 @@ class AurelCore():
     def dtAdown3_bssnok(self):
         # Eq 11.38 Baumgarte & Shapiro
         Ricci = self["s_Ricci_down3_bssnok"] + self["s_Ricci_down3_phi"]
-        innerterm = self.tracefree3(
-            - self["DDalpha"]
-            + self["alpha"] * Ricci
-            - self["alpha"] * self.kappa * self["Stressdown3_n"])
+        if self.vaccum:
+            self.myprint('Using vacuum shortcut for dtAdown3_bssnok')
+            innerterm = self.tracefree3(
+                - self["DDalpha"]
+                + self["alpha"] * Ricci)
+        else:
+            innerterm = self.tracefree3(
+                - self["DDalpha"]
+                + self["alpha"] * Ricci
+                - self["alpha"] * self.kappa * self["Stressdown3_n"])
         AAterm = np.einsum(
             'ia..., bj..., ab... -> ij...',
             self["Adown3_bssnok"], self["Adown3_bssnok"], 
@@ -1434,10 +1447,13 @@ class AurelCore():
                         Riemann_ssss, self["betaup3"], self["betaup3"])
         + self["alpha"]**2 * (
             self["s_Ricci_down3"]
-            - self["st_Ricci_down3"]
             - np.einsum('ib..., ja..., ab... -> ij...', 
                         Kdown4, Kdown4, self["gup4"])[1:,1:]
             + self["Kdown3"] * self["Ktrace"]))
+        if self.vaccum:
+            self.myprint('Using vacuum shortcut for st_Riemann_down4')
+        else:
+            Riemann_stst += - self["alpha"]**2 * self["st_Ricci_down3"]
             
         # put it all together
         R = maths.populate_4Riemann(
@@ -1517,9 +1533,12 @@ class AurelCore():
                                                     self["gammaup3_bssnok"], 
                                                     self.fd.d3_scalar(
                                                         self["Ktrace"]))
-        Gamma += (- 2 * self.kappa * self["alpha"] 
-                  * np.exp(4 * self["phi_bssnok"]) 
-                  * self["fluxup3_n"])
+        if self.vaccum:
+            self.myprint('Using vacuum shortcut for dts_Gamma_bssnok')
+        else:
+            Gamma += (- 2 * self.kappa * self["alpha"] 
+                    * np.exp(4 * self["phi_bssnok"]) 
+                    * self["fluxup3_n"])
         return Gamma
     
     def s_Ricci_down3_bssnok(self):
@@ -1571,21 +1590,32 @@ class AurelCore():
     
     # Constraints
     def Hamiltonian(self):
-        return (self["s_RicciS"] 
+        Ham = (self["s_RicciS"] 
                 + self["Ktrace"]**2 
                 - np.einsum('ij..., ij... -> ...', 
-                            self["Kdown3"], self["Kup3"])
+                            self["Kdown3"], self["Kup3"]))
+        if self.vaccum:
+            self.myprint('Using vacuum shortcut for Hamiltonian')
+            return Ham
+        else:
+            return (Ham
                 - 2 * self.kappa * self["rho_n"] 
                 - 2 * self.Lambda)
     
     def Hamiltonian_Escale(self):
-        return np.sqrt(abs(
+        HamE = (
             self["s_RicciS"]**2 
             + self["Ktrace"]**4 
             + np.einsum('ij..., ij... -> ...', 
-                        self["Kdown3"], self["Kup3"])**2 
-            + (2 * self.kappa * self["rho_n"])**2 
-            + (2 * self.Lambda)**2))
+                        self["Kdown3"], self["Kup3"])**2 )
+        if self.vaccum:
+            self.myprint('Using vacuum shortcut for Hamiltonian_Escale')
+            return np.sqrt(abs(HamE))
+        else:
+            return np.sqrt(abs(
+                HamE 
+                + (2 * self.kappa * self["rho_n"])**2 
+                + (2 * self.Lambda)**2))
     
     def Momentumup3(self):
         if "Momentumx" in self.data.keys():
@@ -1594,8 +1624,12 @@ class AurelCore():
         else:
             CovD_term = self.s_covd(
                 self["Kup3"] - self["gammaup3"] * self["Ktrace"], 'uu')
-            return (np.einsum('bab... -> a...', CovD_term) 
-                    - self.kappa * self["fluxup3_n"])
+            Mom = np.einsum('bab... -> a...', CovD_term)
+            if self.vaccum:
+                self.myprint('Using vacuum shortcut for Momentumup3')
+                return Mom
+            else:
+                return (Mom - self.kappa * self["fluxup3_n"])
     
     def Momentum_Escale(self):
         DdKdd = self.s_covd(self["Kdown3"], 'dd')
@@ -1606,28 +1640,36 @@ class AurelCore():
                          DKd, self["gammaup3"], DKd)
         DdK2 = np.einsum('a..., ad..., d... -> ...', 
                          DdK, self["gammaup3"], DdK)
-        Eflux2 = ((self.kappa**2)
+        if self.vaccum:
+            self.myprint('Using vacuum shortcut for Momentum_Escale')
+            return np.sqrt(abs(DKd2 + DdK2))
+        else:
+            Eflux2 = ((self.kappa**2)
                   * np.einsum('a..., a... -> ...', 
                               self["fluxup3_n"], self["fluxdown3_n"]))
-        return np.sqrt(abs(DKd2 + DdK2 + Eflux2))
+            return np.sqrt(abs(DKd2 + DdK2 + Eflux2))
     
     # === Gravito-electromagnetism quantities
     def st_Weyl_down4(self): 
         if "st_Riemann_down4" in self.data.keys():            
             Cdown = self["st_Riemann_down4"]
-            for a in range(4):
-                for b in range(4):
-                    for c in range(4):
-                        for d in range(4):
-                            Cdown[a,b,c,d] += (
-            - 0.5 * (self["gdown4"][a,c] * self["st_Ricci_down4"][d,b]
-                       - self["gdown4"][a,d] * self["st_Ricci_down4"][c,b]
-                       + self["gdown4"][b,c] * self["st_Ricci_down4"][d,a]
-                       - self["gdown4"][b,d] * self["st_Ricci_down4"][c,a])
-            + (1/6) * self["st_RicciS"] * (
-                self["gdown4"][a,c] * self["gdown4"][d,b]
-                - self["gdown4"][a,d] * self["gdown4"][c,b]))
-            return Cdown
+            if self.vaccum:
+                self.myprint('Using vacuum shortcut for st_Weyl_down4')
+                return Cdown
+            else:
+                for a in range(4):
+                    for b in range(4):
+                        for c in range(4):
+                            for d in range(4):
+                                Cdown[a,b,c,d] += (
+                - 0.5 * (self["gdown4"][a,c] * self["st_Ricci_down4"][d,b]
+                        - self["gdown4"][a,d] * self["st_Ricci_down4"][c,b]
+                        + self["gdown4"][b,c] * self["st_Ricci_down4"][d,a]
+                        - self["gdown4"][b,d] * self["st_Ricci_down4"][c,a])
+                + (1/6) * self["st_RicciS"] * (
+                    self["gdown4"][a,c] * self["gdown4"][d,b]
+                    - self["gdown4"][a,d] * self["gdown4"][c,b]))
+                return Cdown
         else:
             Endown4 = self.s_to_st(self["eweyl_n_down3"])
             Bndown4 = self.s_to_st(self["bweyl_n_down3"])
@@ -1751,11 +1793,16 @@ class AurelCore():
         KKterm = np.einsum(
             'ia..., bj..., ab... -> ij...', 
             self["Kdown3"], self["Kdown3"], self["gammaup3"])
-        return (
-            self.tracefree3(self["s_Ricci_down3"])
-            + self.tracefree3(self["Ktrace"]*self["Kdown3"])
-            - self.tracefree3(KKterm)
-            - 0.5 * self.kappa * self.tracefree3(self["Stressdown3_n"]))
+        Edown = self.tracefree3(self["s_Ricci_down3"]
+                                + self["Ktrace"]*self["Kdown3"]
+                                - KKterm)
+        if self.vaccum:
+            self.myprint('Using vacuum shortcut for eweyl_n_down3')
+            return Edown
+        else:
+            return (Edown
+                    - 0.5 * self.kappa * self.tracefree3(self["Stressdown3_n"])
+                    )
     
     def bweyl_u_down4(self):
         LCuudd4 = np.einsum(
