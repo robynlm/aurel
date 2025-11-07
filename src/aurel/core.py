@@ -912,7 +912,10 @@ class AurelCore():
         return maths.inverse4(self["gdown4"])
 
     def gdet(self):
-        return maths.determinant4(self["gdown4"])
+        if 'gdown4' in self.data:
+            return maths.determinant4(self["gdown4"])
+        else:
+            return - self["alpha"]**2 * self["gammadet"]
     
     # Null ray expansion
     def null_ray_exp_out(self):
