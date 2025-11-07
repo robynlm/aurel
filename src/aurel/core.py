@@ -2269,9 +2269,15 @@ class AurelCore():
         $K^{\alpha\beta}$. 
         So this function only applied to those three tensors.
         """
-        f00 = np.einsum('i..., j..., ij... -> ...', 
-                        self["betaup3"], self["betaup3"], fdown3)
-        f0k = np.einsum('i..., ik... -> k...', self["betaup3"], fdown3)
+        if 'betaup3' not in self.data or 'betax' not in self.data:
+            self.myprint("Using $\beta^i = 0$ shortcut for s_to_st")
+            f00 = np.zeros(self.data_shape)
+            f0k = np.zeros(
+                (3, self.param['Nx'], self.param['Ny'], self.param['Nz']))
+        else:
+            f00 = np.einsum('i..., j..., ij... -> ...', 
+                            self["betaup3"], self["betaup3"], fdown3)
+            f0k = np.einsum('i..., ik... -> k...', self["betaup3"], fdown3)
         fdown4 = np.array([[f00, f0k[0], f0k[1], f0k[2]],
                            [f0k[0], fdown3[0, 0], fdown3[0, 1], fdown3[0, 2]],
                            [f0k[1], fdown3[1, 0], fdown3[1, 1], fdown3[1, 2]],
