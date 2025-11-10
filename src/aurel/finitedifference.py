@@ -172,6 +172,10 @@ class FiniteDifference():
     ----------
     xarray, yarray, zarray : numpy.ndarray
         (*numpy.ndarray*) - 1D arrays of x, y, and z coordinates.
+    xmin, ymin, zmin : float
+        (*float*) - Minimum x, y, and z coordinates.
+    xmax, ymax, zmax : float
+        (*float*) - Maximum x, y, and z coordinates.
     Nx, Ny, Nz : int
         (*int*) - Number of data points in x, y, and z directions.
     ixcenter, iycenter, izcenter : int
@@ -211,6 +215,10 @@ class FiniteDifference():
         self.inverse_dy = 1 / self.param['dy']
         self.inverse_dz = 1 / self.param['dz']
 
+        self.xmin = self.param['xmin']
+        self.ymin = self.param['ymin']
+        self.zmin = self.param['zmin']
+
         self.xarray = np.arange(
             self.param['xmin'], 
             self.param['xmin'] + self.param['Nx'] * self.param['dx'], 
@@ -223,6 +231,10 @@ class FiniteDifference():
             self.param['zmin'], 
             self.param['zmin'] + self.param['Nz'] * self.param['dz'], 
             self.param['dz'])
+        
+        self.xmax = self.xarray[-1]
+        self.ymax = self.yarray[-1]
+        self.zmax = self.zarray[-1]
         
         self.Nx = len(self.xarray)
         self.Ny = len(self.yarray)
