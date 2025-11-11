@@ -2272,7 +2272,7 @@ class AurelCore():
         $K^{\alpha\beta}$. 
         So this function only applied to those three tensors.
         """
-        if 'betaup3' not in self.data or 'betax' not in self.data:
+        if ('betaup3' not in self.data) and ('betax' not in self.data):
             self.myprint(r"Using $\beta^i = 0$ shortcut for s_to_st")
             f00 = np.zeros(self.data_shape)
             f0k = np.zeros(
