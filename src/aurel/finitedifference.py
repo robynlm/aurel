@@ -289,52 +289,60 @@ class FiniteDifference():
     def d3(self, f, idx, N):
         """Apply the finite difference scheme to the whole data grid."""
         if self.boundary == 'periodic':
-            # Periodic boundaries are used.
-            # The grid is extended along the x direction by the 
-            # FD mask number of points from the opposite edge.
-            flong = np.concatenate((
-                f[-self.mask_len:, :, :], 
-                f, 
-                f[:self.mask_len, :, :]), 
-                axis=0)
-            # excluding the edge points.  We retrieve shape (Nx, Ny, Nz).
-            
-            return fd_map(
-                self.centered, flong, idx, 
-                self.mask_len, N+self.mask_len)
+            return self.d3_periodic(f, idx, N)
         elif self.boundary =='symmetric':
-            # Symmetric boundaries are used.
-            # The grid is extended along the x direction by the 
-            # FD mask number of points from the opposite edge.
-            iend = N - 1
-            flong = np.concatenate((
-                f[1:1+self.mask_len, :, :][::-1, :, :], 
-                f, 
-                f[iend-self.mask_len:iend, :, :][::-1, :, :]), 
-                axis=0)
-            return fd_map(
-                self.centered, flong, idx, 
-                self.mask_len, N+self.mask_len)
+            return self.d3_symmetric(f, idx, N)
         else:
-            # There are no periodic boundaries so a combination
-            # of backward centered and forward schemes are used.
-            # lhs : Apply the forward FD scheme to the edge points in the x
-            # direction that can not use the centered FD scheme.
-            lhs = fd_map(
-                self.forward, f, idx,
-                0, self.mask_len)
-            # Apply the centered FD scheme to all points not affected
-            # by the boundary condition.
-            central_part = fd_map(
-                self.centered, f, idx, 
-                self.mask_len, N - self.mask_len)
-            # rhs : Apply the forward FD scheme to the edge points in the x
-            # direction that can not use the centered FD scheme.
-            rhs = fd_map(
-                self.backward, f, idx, 
-                N - self.mask_len, N)
-            # Concatenate all the points together
-            return np.concatenate((lhs, central_part, rhs), axis=0)
+            return self.d3_onesided(f, idx, N)
+    
+    def d3_periodic(self, f, idx, N):
+        """Apply the finite difference scheme with periodic boundaries."""
+        # The grid is extended along the x direction by the 
+        # FD mask number of points from the opposite edge.
+        flong = np.concatenate((
+            f[-self.mask_len:, :, :], 
+            f, 
+            f[:self.mask_len, :, :]), 
+            axis=0)
+        # excluding the edge points.  We retrieve shape (Nx, Ny, Nz).
+        return fd_map(
+            self.centered, flong, idx, 
+            self.mask_len, N+self.mask_len)
+    
+    def d3_symmetric(self, f, idx, N):
+        """Apply the finite difference scheme with symmetric boundaries."""
+        # The grid is extended along the x direction by the 
+        # FD mask number of points from the opposite edge.
+        iend = N - 1
+        flong = np.concatenate((
+            f[1:1+self.mask_len, :, :][::-1, :, :], 
+            f, 
+            f[iend-self.mask_len:iend, :, :][::-1, :, :]), 
+            axis=0)
+        return fd_map(
+            self.centered, flong, idx, 
+            self.mask_len, N+self.mask_len)
+    
+    def d3_onesided(self, f, idx, N):
+        """Apply the finite difference scheme with one-sided boundaries."""
+        # Combination of backward centered and forward schemes are used.
+        # lhs : Apply the forward FD scheme to the edge points in the x
+        # direction that can not use the centered FD scheme.
+        lhs = fd_map(
+            self.forward, f, idx,
+            0, self.mask_len)
+        # Apply the centered FD scheme to all points not affected
+        # by the boundary condition.
+        central_part = fd_map(
+            self.centered, f, idx, 
+            self.mask_len, N - self.mask_len)
+        # rhs : Apply the forward FD scheme to the edge points in the x
+        # direction that can not use the centered FD scheme.
+        rhs = fd_map(
+            self.backward, f, idx, 
+            N - self.mask_len, N)
+        # Concatenate all the points together
+        return np.concatenate((lhs, central_part, rhs), axis=0)
     
     def d3x(self, f): 
         r"""Derivative along x of a scalar: $\partial_x (f)$."""
