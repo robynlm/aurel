@@ -252,7 +252,7 @@ class FiniteDifference():
         # radius
         self.r = np.sqrt(self.x*self.x + self.y*self.y + self.z*self.z)
 
-        # azimuth
+        # azimuth -pi to pi
         self.phi = np.sign(self.y) * np.arccos(
             maths.safe_division(
                 self.x, np.sqrt(self.x*self.x + self.y*self.y)))
@@ -260,7 +260,7 @@ class FiniteDifference():
                                np.sign(self.x)<0)
         self.phi[mask] = np.pi
 
-        # inclination
+        # inclination 0 to pi
         self.theta = np.arccos(maths.safe_division(self.z, self.r))
         self.spherical_coords = np.array([self.r, self.phi, self.theta])
 
@@ -300,9 +300,7 @@ class FiniteDifference():
         # The grid is extended along the x direction by the 
         # FD mask number of points from the opposite edge.
         flong = np.concatenate((
-            f[-self.mask_len:, :, :], 
-            f, 
-            f[:self.mask_len, :, :]), 
+            f[-self.mask_len:], f, f[:self.mask_len]), 
             axis=0)
         # excluding the edge points.  We retrieve shape (Nx, Ny, Nz).
         return fd_map(
@@ -315,9 +313,7 @@ class FiniteDifference():
         # FD mask number of points from the opposite edge.
         iend = N - 1
         flong = np.concatenate((
-            f[1:1+self.mask_len, :, :][::-1, :, :], 
-            f, 
-            f[iend-self.mask_len:iend, :, :][::-1, :, :]), 
+            f[1:1+self.mask_len][::-1], f, f[iend-self.mask_len:iend][::-1]), 
             axis=0)
         return fd_map(
             self.centered, flong, idx, 
