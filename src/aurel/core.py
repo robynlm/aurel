@@ -1756,12 +1756,12 @@ class AurelCore():
             psi4_sphere = (
                 numerical.interpolate(
                     np.real(self["Weyl_Psi"][4]), 
-                    self.fd.self.cartesian_coords_array,
+                    self.fd.cartesian_coords_array,
                     points_sphere, 
                     method=self.interp_method)
                 + 1j * numerical.interpolate(
                     np.imag(self["Weyl_Psi"][4]), 
-                    self.fd.self.cartesian_coords_array,
+                    self.fd.cartesian_coords_array,
                     points_sphere, 
                     method=self.interp_method)
                 )
