@@ -1748,9 +1748,7 @@ class AurelCore():
             x_sphere = (radius * np.sin(theta2) * np.cos(phi2))
             y_sphere = (radius * np.sin(theta2) * np.sin(phi2))
             z_sphere = (radius * np.cos(theta2))
-            points_sphere = np.stack((x_sphere.flatten(), 
-                                    y_sphere.flatten(), 
-                                    z_sphere.flatten()), axis=-1)
+            points_sphere = (x_sphere, y_sphere, z_sphere)
             
             # Interpolate Psi4 on sphere
             psi4_sphere = (
