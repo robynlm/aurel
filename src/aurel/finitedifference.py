@@ -24,6 +24,25 @@ from . import maths
 ###############################################################################
 # Finite differencing schemes.
 ###############################################################################
+# FD coefficients listed in doi:10.1090/S0025-5718-1988-0935077-0
+
+# 2nd order
+def fd2_backward(f, i, inverse_dx):
+    """2nd order backward finite difference scheme."""
+    return ((3/2) * f[i]
+            + (-2) * f[i-1]
+            + (1/2) * f[i-2]) * inverse_dx
+
+def fd2_centered(f, i, inverse_dx):
+    """2nd order centered finite difference scheme."""
+    return ((-1/2) * f[i-1]
+            + (1/2) * f[i+1]) * inverse_dx
+
+def fd2_forward(f, i, inverse_dx):
+    """2nd order forward finite difference scheme."""
+    return ((-3/2) * f[i]
+            + (2) * f[i+1]
+            + (-1/2) * f[i+2]) * inverse_dx
 
 # 4th order
 def fd4_backward(f, i, inverse_dx):
@@ -166,7 +185,7 @@ class FiniteDifference():
         otherwise a combination of forward + centered + backward
         FD schemes are used.
     fd_order : int, default 4
-        4, 6 or 8 order of FD schemes used.
+        2, 4, 6 or 8 order of FD schemes used.
 
     Attributes
     ----------
@@ -231,6 +250,8 @@ class FiniteDifference():
             self.param['zmin'], 
             self.param['zmin'] + self.param['Nz'] * self.param['dz'], 
             self.param['dz'])
+        self.cartesian_coords_array = np.array([
+            self.xarray, self.yarray, self.zarray])
         
         self.xmax = self.xarray[-1]
         self.ymax = self.yarray[-1]
@@ -258,7 +279,7 @@ class FiniteDifference():
                 self.x, np.sqrt(self.x*self.x + self.y*self.y)))
         mask = np.logical_and(np.sign(self.y) == 0.0, 
                                np.sign(self.x)<0)
-        self.phi[mask] = np.pi
+        self.phi[mask] = -np.pi
 
         # inclination 0 to pi
         self.theta = np.arccos(maths.safe_division(self.z, self.r))
@@ -270,21 +291,26 @@ class FiniteDifference():
             self.backward = fd8_backward
             self.centered = fd8_centered
             self.forward = fd8_forward
-            self.mask_len = 4
         elif self.fd_order == 6:
             if self.verbose:
                 print("6th order finite difference schemes are defined")
             self.backward = fd6_backward
             self.centered = fd6_centered
             self.forward = fd6_forward
-            self.mask_len = 3
+        elif self.fd_order == 2:
+            if self.verbose:
+                print("2nd order finite difference schemes are defined")
+            self.backward = fd2_backward
+            self.centered = fd2_centered
+            self.forward = fd2_forward
         else:
+            self.fd_order = 4
             if self.verbose:
                 print("4th order finite difference schemes are defined")
             self.backward = fd4_backward
             self.centered = fd4_centered
             self.forward = fd4_forward
-            self.mask_len = 2
+        self.mask_len = int(self.fd_order / 1)
 
     def d3(self, f, idx, N):
         """Apply the finite difference scheme to the whole data grid."""

@@ -2,12 +2,13 @@
 numerical.py
 
 This module contains numerical methods for various calculations.
-So far it only contains the bisection method for finding roots of a function.
 """
 
+import numpy as np
+import scipy
+
 def dichotomy(y_wanted, function, lower_bound, upper_bound, tolerance):
-    """
-    Find the root of a function using the bisection method.
+    """Find the root of a function using the bisection method.
 
     Numerically solving for x: function(x) = y_wanted
 
@@ -46,3 +47,40 @@ def dichotomy(y_wanted, function, lower_bound, upper_bound, tolerance):
             x_mid = (x_low + x_upp) / 2
             y_mid = function(x_mid)
     return x_mid
+
+def interpolate(val, grid_points, target_points, method='linear'):
+    """Interpolate scalar field from one grid to a new grid.
+
+    Parameters
+    ----------
+    val : ndarray
+        Scalar field values on the regular grid. Shape should match the grid 
+        dimensions.
+    grid_points : tuple of ndarray
+        Tuple of coordinate arrays defining the regular grid 
+        coordinates. Each array should be 1D.
+    target_points : tuple of ndarray
+        Tuple of target coordinate positions. Arrays can be any shape but must
+        have matching dimensions.
+    method : str, optional
+        Interpolation method used. See 
+        `scipy.interpolate.RegularGridInterpolator documentation <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html>`_
+
+    Returns
+    -------
+    ndarray
+        Interpolated values at the target points, with the same shape as the 
+        target coordinate arrays.
+    """
+    target_flat = []
+    for x in target_points:
+        target_flat += [x.flatten()]
+    
+    # Flatten target points and stack into (N, 3) array for interpolator
+    target_shape = target_points[0].shape
+    points_flat = np.stack(target_flat, axis=-1)
+    
+    # Create interpolator and evaluate
+    interpolator = scipy.interpolate.RegularGridInterpolator(
+        grid_points, val, method=method)
+    return interpolator(points_flat).reshape(target_shape)

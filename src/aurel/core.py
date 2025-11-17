@@ -22,9 +22,9 @@ This module is the main event. It contains:
 
 import sys
 import numpy as np
-import scipy
 from IPython.display import display, Latex
 from . import maths
+from . import numerical
 is_notebook = 'ipykernel' in sys.modules
 
 # Descriptions for each AurelCore.data entry and function
@@ -367,7 +367,8 @@ class AurelCore():
         List of extraction radii for spherical harmonic decompositions.
         Default is [0.9 * max radius in the grid].
     interp_method : str, optional, also attribute
-        Interpolation method for scipy.interpolate.RegularGridInterpolator.
+        Interpolation method for 
+        `scipy.interpolate.RegularGridInterpolator <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html>`_.
         Default is 'linear'.
 
     Attributes
@@ -1724,29 +1725,26 @@ class AurelCore():
         self.myprint(f"Scipy interpolation method is set to"
                      + f" AurelCore.interp_method = {self.interp_method}")
         
-        # Spherical sampling points
+        # Uniform sampling of spherical points
+        # Inclination points
         Ntheta = np.max([np.min([self.fd.Nx, self.fd.Ny, self.fd.Nz]), 
                          self.lmax + 1])
+        theta2_array = np.pi * np.arange(0.5, Ntheta+1.5, 1) / (Ntheta+1)
+        dtheta = np.diff(theta2_array)[0]
+
+        # Azimuthal points
         Nphi = 2 * Ntheta
-        theta = np.pi * np.arange(0.5, Ntheta+1.5, 1) / (Ntheta+1)
-        phi = 2 * np.pi * np.arange(0.5, Nphi+1.5, 1) / (Nphi+1)
-        dtheta = np.diff(theta)[0]
-        dphi = np.diff(phi)[0]
-            
-        # Interpolation functions
-        interp_real = scipy.interpolate.RegularGridInterpolator(
-            (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
-            np.real(self["Weyl_Psi"][4]), 
-            method=self.interp_method)
-        interp_imag = scipy.interpolate.RegularGridInterpolator(
-            (self.fd.xarray, self.fd.yarray, self.fd.zarray), 
-            np.imag(self["Weyl_Psi"][4]), 
-            method=self.interp_method)
+        phi2_array = 2 * np.pi * np.arange(0.5, Nphi+1.5, 1) / (Nphi+1)
+        dphi = np.diff(phi2_array)[0]
+
+        # 2D spherical grid
+        theta2, phi2 = np.meshgrid(theta2_array, phi2_array, indexing='ij')
         
-        psi4lm = {radius:{} for radius in self.extract_radii}
+        # For each extraction radius, interpolate Psi4 and decompose in
+        psi4lm = {}
         for radius in self.extract_radii:
+
             # Points on sphere
-            theta2, phi2 = np.meshgrid(theta, phi, indexing='ij')
             x_sphere = (radius * np.sin(theta2) * np.cos(phi2))
             y_sphere = (radius * np.sin(theta2) * np.sin(phi2))
             z_sphere = (radius * np.cos(theta2))
@@ -1755,17 +1753,23 @@ class AurelCore():
                                     z_sphere.flatten()), axis=-1)
             
             # Interpolate Psi4 on sphere
-            psi4_sphere = (interp_real(points_sphere) 
-                        + 1j * interp_imag(points_sphere))
-            psi4_sphere = psi4_sphere.reshape(theta2.shape)
+            psi4_sphere = (
+                numerical.interpolate(
+                    np.real(self["Weyl_Psi"][4]), 
+                    self.fd.self.cartesian_coords_array,
+                    points_sphere, 
+                    method=self.interp_method)
+                + 1j * numerical.interpolate(
+                    np.imag(self["Weyl_Psi"][4]), 
+                    self.fd.self.cartesian_coords_array,
+                    points_sphere, 
+                    method=self.interp_method)
+                )
             
             # Spherical harmonic decomposition
-            for l in range(self.lmax+1):
-                for m in range(-l, l+1):
-                    psi4lm[radius][l,m] = np.sum(
-                        np.conj(maths.sYlm(-2, l, m, theta2, phi2)) 
-                        * psi4_sphere 
-                        * np.sin(theta2) * dtheta * dphi)
+            psi4lm[radius] = maths.sYlm_coefficients(
+                -2, self.lmax, psi4_sphere, 
+                theta2, phi2, np.sin(theta2) * dtheta, dphi)
         
         return psi4lm
     

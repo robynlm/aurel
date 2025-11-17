@@ -19,12 +19,12 @@ def getcomponents3(f):
     
     Parameters
     ----------
-    f : (3, 3, Nx, Ny, Nz) array_like or list of 6 components [xx, xy, xz, yy, yz, zz]
+    f : (3, 3, ...) array_like or list of 6 components [xx, xy, xz, yy, yz, zz]
     
     Returns
     -------
     [xx, xy, xz, yy, yz, zz]: list
-        Each element is (Nx, Ny, Nz) array_like
+        Each element is (...) array_like
     """
     if isinstance(f, list):
         return f
@@ -39,12 +39,12 @@ def getcomponents4(f):
     
     Parameters
     ----------
-    f : (4, 4, Nx, Ny, Nz) array_like or list of 10 components [tt, tx, ty, tz, xx, xy, xz, yy, yz, zz]
+    f : (4, 4, ...) array_like or list of 10 components [tt, tx, ty, tz, xx, xy, xz, yy, yz, zz]
     
     Returns
     -------
     [tt, tx, ty, tz, xx, xy, xz, yy, yz, zz]: list
-            Each element is (Nx, Ny, Nz) array_like
+            Each element is (...) array_like
     """
     if isinstance(f, list):
         return f
@@ -73,7 +73,7 @@ def format_rank2_4(f):
 def determinant3(f):
     """Determinant 3x3 matrice in every position of the data grid."""
     xx, xy, xz, yy, yz, zz = getcomponents3(f)
-    return -xz*xz*yy + 2*xy*xz*yz - xx*yz*yz - xy*xy*zz + xx*yy*zz       
+    return -xz*xz*yy + 2*xy*xz*yz - xx*yz*yz - xy*xy*zz + xx*yy*zz
 
 def determinant4(f):
     """Determinant of a 4x4 matrice in every position of the data grid."""
@@ -201,13 +201,92 @@ def factorial(n):
         return sc.factorial(n)
     
 def sYlm(s, l, m, theta, phi):
-    """Spin-weighted spherical harmonics"""
+    """Spin-weighted spherical harmonics ${}_sY_{lm}$, Eq 3.1 of https://doi.org/10.1063/1.1705135
+    
+    Parameters
+    ----------
+    s : int
+        Spin weight.
+    l : int
+        Degree.
+    m : int
+        Order.
+    theta : ndarray
+        Inclination/polar angle grid.
+    phi : ndarray
+        Azimuthal angle grid.
+    
+    Returns
+    -------
+    sYlm : ndarray
+        Spin-weighted spherical harmonics on the (theta, phi) grid.
+    """
     fac = np.sqrt(factorial(l + m) * factorial(l - m) * (2*l + 1)
                   /(factorial(l + s) * factorial(l - s) * 4 * np.pi))
     sumY = 0
+    costh2 = np.cos(theta/2)
+    sinth2 = np.sin(theta/2)
     for r in range(max(m - s, 0), min(l + m, l - s) + 1):
-        cos = np.cos(theta/2)**(2*r + s - m)
-        sin = np.sin(theta/2)**(2*l - 2*r - s + m)
+        cos = costh2**(2*r + s - m)
+        sin = sinth2**(2*l - 2*r - s + m)
         sumY += (sc.binom(l-s, r) * sc.binom(l+s, r+s-m) 
-              * ((-1)**(l - r - s)) * np.exp(1j * m * phi) * cos * sin)
+            * ((-1)**(l - r - s)) * np.exp(1j * m * phi) * cos * sin)
     return fac * sumY
+    
+def sYlm_coefficients(s, lmax, f, theta, phi, dtheta_weight, dphi):
+    """Coefficients of spin-weighted spherical harmonics decomposition of f
+    
+    Parameters
+    ----------
+    s : int
+        Spin weight.
+    lmax : int
+        Maximum l in the expansion.
+    f : ndarray
+        Spin-weighted function on the (theta, phi) grid.
+    theta, phi : ndarray
+        Angular grids.
+    dtheta_weight : ndarray
+        Weights for integration over theta, e.g. including sin(theta), 
+        depending on sampling scheme.
+    dphi : float
+        Step size in phi direction.
+    
+    Returns
+    -------
+    alm : dict[l,m]
+        Harmonic coefficients.
+    """
+    alm = {}
+    for l in range(lmax+1):
+        for m in range(-l, l+1):
+            alm[l,m] = np.sum(
+                np.conj(sYlm(s, l, m, theta, phi)) 
+                * f
+                * dtheta_weight * dphi)
+    return alm
+
+def sYlm_reconstruct(s, lmax, alm, theta, phi):
+    """Reconstruct a spin-weighted function from its harmonic coefficients.
+    
+    Parameters
+    ----------
+    s : int
+        Spin weight.
+    lmax : int
+        Maximum l in the expansion.
+    alm : dict[l,m]
+        Harmonic coefficients.
+    theta, phi : ndarray
+        Angular grids.
+    
+    Returns
+    -------
+    f : ndarray
+        Reconstructed spin-weighted function on the (theta, phi) grid.
+    """
+    f = np.zeros_like(theta, dtype=complex)
+    for l in range(lmax + 1):
+        for m in range(-l, l + 1):
+            f += alm[l, m] * sYlm(s, l, m, theta, phi)
+    return f
