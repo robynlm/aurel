@@ -363,9 +363,12 @@ class AurelCore():
         Default is "quasi-Kinnersley". Any other value provides ...
     lmax : int, optional, also attribute
         Maximum l value for spherical harmonic decompositions. Default is 8.
+    center : tuple, optional, also attribute
+        Center of the Psi4_lm sphere.
+        Default is (0.0, 0.0, 0.0).
     extract_radii : list, optional, also attribute
         List of extraction radii for spherical harmonic decompositions.
-        Default is [0.9 * max radius in the grid].
+        Default is [0.9 * min radius in the grid].
     interp_method : str, optional, also attribute
         Interpolation method for 
         `scipy.interpolate.RegularGridInterpolator <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html>`_.
@@ -411,11 +414,13 @@ class AurelCore():
         self.vaccum = kwargs.get('vaccum', False)
         self.tetrad = kwargs.get('tetrad', "quasi-Kinnersley")
         self.lmax = kwargs.get('lmax', 8)
-        self.extract_radii = kwargs.get('extract_radii', [
-            np.min([abs(np.min(self.fd.xarray)), abs(np.max(self.fd.xarray)),
-                    abs(np.min(self.fd.yarray)), abs(np.max(self.fd.yarray)),
-                    abs(np.min(self.fd.zarray)), abs(np.max(self.fd.zarray))]
-                    ) * 0.9])
+        self.center = kwargs.get('center', (0.0, 0.0, 0.0))
+        min_box_radius = np.min(abs(np.array([
+            self.fd.xmin - self.center[0], self.fd.xmax - self.center[0], 
+            self.fd.ymin - self.center[1], self.fd.ymax - self.center[1], 
+            self.fd.zmin - self.center[2], self.fd.zmax - self.center[2]])))
+        self.extract_radii = kwargs.get('extract_radii', 
+                                        [min_box_radius * 0.9])
         # Convert extract_radii to list if it's a single number
         if isinstance(self.extract_radii, (int, float)):
             self.extract_radii = [self.extract_radii]
@@ -1722,6 +1727,8 @@ class AurelCore():
                      + f" AurelCore.lmax = {self.lmax}")
         self.myprint(f"Extraction radii set to AurelCore.extract_radii"
                      + f" = {self.extract_radii}")
+        self.myprint(f"Center of extraction sphere set to"
+                     + f" AurelCore.center = {self.center}")
         self.myprint(f"Scipy interpolation method is set to"
                      + f" AurelCore.interp_method = {self.interp_method}")
         
@@ -1731,35 +1738,39 @@ class AurelCore():
                          self.lmax + 1])
         theta2_array = np.pi * np.arange(0.5, Ntheta+1.5, 1) / (Ntheta+1)
         dtheta = np.diff(theta2_array)[0]
-
+        
         # Azimuthal points
         Nphi = 2 * Ntheta
         phi2_array = 2 * np.pi * np.arange(0.5, Nphi+1.5, 1) / (Nphi+1)
         dphi = np.diff(phi2_array)[0]
-
+        
         # 2D spherical grid
         theta2, phi2 = np.meshgrid(theta2_array, phi2_array, indexing='ij')
+        
+        # Shift grid around sphere center
+        shifted_grid = np.array([
+            self.fd.xarray - self.center[0],
+            self.fd.yarray - self.center[1],
+            self.fd.zarray - self.center[2]])
         
         # For each extraction radius, interpolate Psi4 and decompose in
         psi4lm = {}
         for radius in self.extract_radii:
-
+            
             # Points on sphere
-            x_sphere = (radius * np.sin(theta2) * np.cos(phi2))
-            y_sphere = (radius * np.sin(theta2) * np.sin(phi2))
-            z_sphere = (radius * np.cos(theta2))
-            points_sphere = (x_sphere, y_sphere, z_sphere)
+            points_sphere = self.fd.spherical_to_cartesian(
+                radius, theta2, phi2)
             
             # Interpolate Psi4 on sphere
             psi4_sphere = (
                 numerical.interpolate(
                     np.real(self["Weyl_Psi"][4]), 
-                    self.fd.cartesian_coords_array,
+                    shifted_grid,
                     points_sphere, 
                     method=self.interp_method)
                 + 1j * numerical.interpolate(
                     np.imag(self["Weyl_Psi"][4]), 
-                    self.fd.cartesian_coords_array,
+                    shifted_grid,
                     points_sphere, 
                     method=self.interp_method)
                 )
