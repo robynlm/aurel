@@ -2,3 +2,4 @@ sphinx              # for building docs
 sphinx-rtd-theme    # theme for sphinx
 sphinx-math-dollar  # for math in docs
 myst_nb             # for jupyter notebooks in docs
+sphinx-design       # for dropdown elements in docs

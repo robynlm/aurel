@@ -18,13 +18,15 @@ copyright = '2025, Robyn L. Munoz'
 author = 'Robyn L. Munoz'
 release = 'May 2025'
 
+# Also update docs/requirements.txt
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'sphinx_math_dollar', 
     'sphinx.ext.mathjax',
-    'myst_nb'
+    'myst_nb',
+    'sphinx_design'
 ]
 
 # notebooks, rendering latex maths
