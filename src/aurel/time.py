@@ -7,9 +7,21 @@ and applying statistical estimation functions to 3D arrays.
 import numpy as np
 from . import core
 import inspect
-try:
-    from tqdm.notebook import tqdm
-except ImportError:
+import sys
+
+# Check if running in a notebook
+is_notebook = 'ipykernel' in sys.modules
+# Check if stdout is a terminal (not redirected to a file)
+is_terminal = sys.stdout.isatty() if hasattr(sys.stdout, 'isatty') else False
+disable_tqdm = not is_notebook and not is_terminal
+
+# Import appropriate tqdm version
+if is_notebook:
+    try:
+        from tqdm.notebook import tqdm
+    except ImportError:
+        from tqdm import tqdm
+else:
     from tqdm import tqdm
 
 # Dictionary of available estimation functions for 3D arrays
@@ -115,8 +127,8 @@ def over_time(data, fd, vars=[], estimates=[],
                 if func_name not in data:
                     try:
                         validate_variable_function(
-                            function, func_name, fd, 
-                            verbose=verbose, veryverbose=False)
+                            function, func_name, fd,
+                            verbose, False, rel_kwargs)
                         cleaned_vars += [{func_name: function}]
                     except ValueError as e:
                         print(f"Error: {e}")
@@ -208,9 +220,16 @@ def over_time(data, fd, vars=[], estimates=[],
             if verbose:
                 print("Now processing remaining time steps sequentially",
                     flush=True)
+            
+            # When redirected, replace \r with \n so progress appears on new lines
+            tqdm_kwargs = {} if not disable_tqdm else {
+                'file': type('', (), {
+                    'write': lambda self, s: sys.stdout.write(s.replace('\r', '\n')), 
+                    'flush': lambda self: sys.stdout.flush()})()
+            }
             results = [process_single_timestep(item, fd, vars, estimates, 
                                                 veryverbose, scalarkeys, rel_kwargs)
-                        for item in tqdm(input_data_list[1:])]
+                        for item in tqdm(input_data_list[1:], **tqdm_kwargs)]
             # Combine and sort the results by temporal_key key
             data_list += results
         del input_data_list
@@ -455,8 +474,8 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
         print(f"✓ Custom function '{func_name}' validated successfully")
     return True
 
-def validate_variable_function(func, func_name, fd, 
-                               verbose=True, veryverbose=False):
+def validate_variable_function(func, func_name, fd,
+                               verbose, veryverbose, rel_kwargs):
     """Validate that variable function has correct signature and behaviour.
     
     Parameters
@@ -467,11 +486,12 @@ def validate_variable_function(func, func_name, fd,
         Name of the function for error messages
     fd : FiniteDifference
         Finite difference object to get grid dimensions
-    verbose : bool, optional
+    verbose : bool
         If True, prints debug information about the validation process. 
-        Default Ture.
-    veryverbose : bool, optional
-        If True, prints aurelcore verbose information. Default False.
+    veryverbose : bool
+        If True, prints aurelcore verbose information.
+    rel_kwargs : dict
+        Additional parameters passed to AurelCore initialization.
         
     Returns
     -------
@@ -495,7 +515,7 @@ def validate_variable_function(func, func_name, fd,
         )
     
     # Test with dummy AurelCore instance
-    rel = core.AurelCore(fd, verbose=veryverbose)
+    rel = core.AurelCore(fd, verbose=veryverbose, **rel_kwargs)
     try:
         rel.data[func_name] = func(rel)
     except Exception as e:

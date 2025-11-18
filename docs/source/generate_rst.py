@@ -17,19 +17,21 @@ output_file = os.path.join(output_dir, "source/core.rst")
 
 gamma = ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz', 
          'gammadown3', 'gammaup3', 
-         'gammadown3_bssnok', 'dtgammadown3_bssnok', 
          'dtgammaup3', 
-         'gammaup3_bssnok', 
-         'gammadet', 'psi_bssnok', 'dtphi_bssnok', 'phi_bssnok', 
+         'gammadet',  
          'gammadown4', 'gammaup4']
+metric_bssnok = ['gammadown3_bssnok', 'dtgammadown3_bssnok',
+                 'gammaup3_bssnok', 'psi_bssnok', 'dtphi_bssnok', 'phi_bssnok']
 extcurv = ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz', 
            'Kdown3', 'Kup3', 'Ktrace', 'dtKtrace',
-           'Adown3', 'Aup3', 'A2', 'A2_bssnok',
+           'Adown3', 'Aup3', 'A2']
+extcurv_bssnok = ['A2_bssnok',
            'Adown3_bssnok', 'dtAdown3_bssnok', 'Aup3_bssnok']
 lapse = ['alpha', 'dtalpha', 'DDalpha']
 shift = ['betax', 'betay', 'betaz',
          'dtbetax', 'dtbetay', 'dtbetaz',
          'betaup3', 'dtbetaup3', 'betadown3', 'betamag']
+time = ['dttau']
 enne = ['nup4', 'ndown4']
 gee = ['gdown4', 'gup4', 'gdet']
 nullrayexp = ['null_ray_exp_out', 'null_ray_exp_in']
@@ -49,12 +51,16 @@ conserv = ['conserved_D', 'conserved_E', 'conserved_Sdown4',
 kinema = ['st_covd_udown4', 'accelerationdown4', 'accelerationup4', 
           's_covd_udown4', 'thetadown4', 'theta', 'sheardown4', 'shear2',
           'omegadown4', 'omega2']
-s_curv = ['s_RicciS_u', 's_Gamma_udd3', 's_Gamma_bssnok', 's_Riemann_uddd3', 
-    's_Riemann_down3', 's_Ricci_down3', 's_RicciS']
+s_curv = ['s_RicciS_u', 's_Gamma_udd3', 's_Riemann_uddd3', 
+          's_Riemann_down3', 's_Ricci_down3', 's_RicciS']
 st_curv = ['st_Gamma_udd4', 'st_Riemann_uddd4',
     'st_Riemann_down4', 'st_Riemann_uudd4',
     'st_Ricci_down4', 'st_Ricci_down3',
     'st_RicciS', 'Einsteindown4', 'Kretschmann']
+curv_bssnok = ['s_Gamma_udd3_bssnok', 
+          's_Gamma_bssnok', 'dts_Gamma_bssnok', 
+          's_Ricci_down3_bssnok', 's_RicciS_bssnok',
+          's_Ricci_down3_phi']
 constraints = ['Hamiltonian', 'Hamiltonian_Escale',
     'Momentumup3', 'Momentum_Escale']
 gravimag = ['st_Weyl_down4', 'Weyl_Psi', 'Psi4_lm', 'Weyl_invariants',
@@ -70,8 +76,10 @@ def print_subsec(title, subsecvars, allfunctions, varsdone):
         if ((name in allfunctions) 
             and (name in subsecvars) 
             and (name not in varsdone)):
-            # Check if the function is in `allfunctions`
-            f.write(f"**{name}**: {core.descriptions[name]}\n\n")
+            # Add a reference label that matches what Sphinx expects for the class method
+            f.write(f".. _aurel.core.AurelCore.{name}:\n\n")
+            # Link directly to the source code in _modules
+            f.write(f"`{name} <../_modules/aurel/core.html#AurelCore.{name}>`_: {core.descriptions[name]}\n\n")
             varsdone.append(name)
     return varsdone
 
@@ -79,8 +87,18 @@ def print_subsec(title, subsecvars, allfunctions, varsdone):
 with open(output_file, "w") as f:
     f.write("aurel.core\n")
     f.write("##########\n\n")
-    f.write(".. automodule:: aurel.core\n")
+    f.write(".. automodule:: aurel.core\n\n")
+    
+    # Add hidden section FIRST for viewcode anchors (wrapped in hidden div)
+    # This creates the autodoc anchors that [source] links need
+    members_list = ", ".join(core.descriptions.keys())
+    f.write(".. raw:: html\n\n")
+    f.write("   <div style='display: none;' aria-hidden='true'>\n\n")
+    f.write(".. autoclass:: aurel.core.AurelCore\n")
+    f.write(f"   :members: {members_list}\n")
     f.write("   :noindex:\n\n")
+    f.write(".. raw:: html\n\n")
+    f.write("   </div>\n\n")
 
     f.write(".. _descriptions_list:\n\n")
     # Add a section for functions listed in `descriptions`
@@ -94,7 +112,6 @@ with open(output_file, "w") as f:
     f.write("Assumed quantities\n")
     f.write("==================\n\n")
     f.write('If not defined, vacuum Minkowski is assumed for the definition of the following quantities:\n\n')
-    f.write(r"$\Lambda = 0$, the Cosmological constant, to change this do **AurelCore.Lambda = ...** before running calculations"+"\n\n")
     f.write(r'**alpha**: $\alpha = 1$, the lapse, to change this do **AurelCore.data["alpha"] = ...** before running calculations'+"\n\n")
     f.write(r"**dtalpha**: $\partial_t \alpha = 0$, the time derivative of the lapse"+"\n\n")
     f.write(r"**betax, betay, betaz**: $\beta^i = 0$, the shift vector with spatial indices up"+"\n\n")
@@ -109,12 +126,15 @@ with open(output_file, "w") as f:
 
     f.write("Metric quantities\n")
     f.write("=================\n\n")
-    print_subsec("Spatial metric", gamma, allfunctions, varsdone)
-    print_subsec("Extrinsic curvature", extcurv, allfunctions, varsdone)
     print_subsec("Lapse", lapse, allfunctions, varsdone)
     print_subsec("Shift", shift, allfunctions, varsdone)
     print_subsec("Timelike normal vector", enne, allfunctions, varsdone)
+    print_subsec("Spatial metric", gamma, allfunctions, varsdone)
     print_subsec("Spacetime metric", gee, allfunctions, varsdone)
+    print_subsec("BSSNOK metric", metric_bssnok, allfunctions, varsdone)
+    print_subsec("Extrinsic curvature", extcurv, allfunctions, varsdone)
+    print_subsec("BSSNOK extrinsic curvature", extcurv_bssnok, allfunctions, varsdone)
+    print_subsec("Proper time", time, allfunctions, varsdone)
 
     f.write("Matter quantities\n")
     f.write("=================\n\n")
@@ -131,6 +151,7 @@ with open(output_file, "w") as f:
     f.write("====================\n\n")
     print_subsec("Spatial curvature", s_curv, allfunctions, varsdone)
     print_subsec("Spacetime curvature", st_curv, allfunctions, varsdone)
+    print_subsec("BSSNOK curvature", curv_bssnok, allfunctions, varsdone)
     print_subsec("Weyl decomposition", gravimag, allfunctions, varsdone)
 
     f.write("Null ray expansion\n")
@@ -147,9 +168,14 @@ with open(output_file, "w") as f:
         f.write("Need to update `docs/source/source/generate_rst.py`\n\n")
         print_subsec("", core.descriptions, allfunctions, varsdone)
 
-    # Add a section for other functions
-    f.write("AurelCore\n")
-    f.write("*********\n\n")
+    # Add a section for other functions (AurelCore members that aren't in descriptions)
+    f.write("AurelCore Methods\n")
+    f.write("*****************\n\n")
+    
+    # Build exclude-members list from descriptions keys  
+    exclude_list = ", ".join(core.descriptions.keys())
+    
     f.write(".. autoclass:: aurel.core.AurelCore\n")
     f.write("   :show-inheritance:\n")
     f.write("   :members:\n")
+    f.write(f"   :exclude-members: {exclude_list}\n\n")

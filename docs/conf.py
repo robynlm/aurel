@@ -2,7 +2,6 @@ import os
 import sys
 import re
 import subprocess
-import glob
 
 # Add the src directory to the Python path
 sys.path.insert(0, os.path.abspath('../src'))
@@ -19,13 +18,15 @@ copyright = '2025, Robyn L. Munoz'
 author = 'Robyn L. Munoz'
 release = 'May 2025'
 
+# Also update docs/requirements.txt
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'sphinx_math_dollar', 
     'sphinx.ext.mathjax',
-    'myst_nb'
+    'myst_nb',
+    'sphinx_design'
 ]
 
 # notebooks, rendering latex maths
@@ -63,16 +64,6 @@ html_css_files = [
 ]
 
 autodoc_typehints = "none"
-# Skip describing functions in core.descriptions
-def skip_member_handler(app, what, name, obj, skip, options):
-    # List of functions to skip
-    functions_to_skip = ["func"]+list(core.descriptions.keys())
-    # Check if the function belongs to the specified modules and should be skipped
-    if ((name in functions_to_skip) 
-        and (getattr(obj, "__module__", None) in ["aurel.core", "aurel.coreanalytic"])):
-        print(f"Skipping: {name} in module {obj.__module__}")
-        return True  # Skip this function
-    return skip
 
 # Render LateX in notebook outputs
 def process_notebook_source(app, docname, source):
@@ -137,7 +128,6 @@ def process_notebook_source(app, docname, source):
         source[0] = content
 
 def setup(app):
-    app.connect("autodoc-skip-member", skip_member_handler)
     app.connect('source-read', process_notebook_source)
 
 subprocess.run(["python3", "source/generate_rst.py"])

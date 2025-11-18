@@ -6,13 +6,14 @@ derivatives of scalar or tensor fields on 3D grids.
 
 It contains the following classes and functions:
 
-- 4th, 6th, and 8th order finite difference schemes for backward,
+- 2nd, 4th, 6th, and 8th order finite difference schemes for backward,
   centered, and forward differences.
 
 - FiniteDifference: A class that applies finite difference schemes to
   3D data grids.
 
-  - Provides Cartesian and Spherical coordinates.
+  - Provides Cartesian and Spherical coordinates, and function to convert
+    between them.
   - Functions for computing the spatial derivatives of rank 0, 1, and 2
     tensors along the x, y, and z axes.
   - Function for removing points affected by the boundary condition.
@@ -24,6 +25,25 @@ from . import maths
 ###############################################################################
 # Finite differencing schemes.
 ###############################################################################
+# FD coefficients listed in doi:10.1090/S0025-5718-1988-0935077-0
+
+# 2nd order
+def fd2_backward(f, i, inverse_dx):
+    """2nd order backward finite difference scheme."""
+    return ((3/2) * f[i]
+            + (-2) * f[i-1]
+            + (1/2) * f[i-2]) * inverse_dx
+
+def fd2_centered(f, i, inverse_dx):
+    """2nd order centered finite difference scheme."""
+    return ((-1/2) * f[i-1]
+            + (1/2) * f[i+1]) * inverse_dx
+
+def fd2_forward(f, i, inverse_dx):
+    """2nd order forward finite difference scheme."""
+    return ((-3/2) * f[i]
+            + (2) * f[i+1]
+            + (-1/2) * f[i+2]) * inverse_dx
 
 # 4th order
 def fd4_backward(f, i, inverse_dx):
@@ -132,6 +152,16 @@ def map2(func, f):
                       for j in range(dimj)] 
                       for k in range(dimk)])
 
+def map3(func, f):
+    """Map a function over the three indices of a rank 3 tensor."""
+    dimk = np.shape(f)[0]
+    dimj = np.shape(f)[1]
+    dimi = np.shape(f)[2]
+    return np.array([[[func(f[k, j, i]) 
+                       for i in range(dimi)]
+                       for j in range(dimj)] 
+                       for k in range(dimk)])
+
 ###############################################################################
 # Finite differencing class applying the schemes to data grid.
 ###############################################################################
@@ -156,12 +186,18 @@ class FiniteDifference():
         otherwise a combination of forward + centered + backward
         FD schemes are used.
     fd_order : int, default 4
-        4, 6 or 8 order of FD schemes used.
+        2, 4, 6 or 8 order of FD schemes used.
 
     Attributes
     ----------
     xarray, yarray, zarray : numpy.ndarray
         (*numpy.ndarray*) - 1D arrays of x, y, and z coordinates.
+    cartesian_coords_array : numpy.ndarray
+        (*numpy.ndarray*) - 1D arrays of x, y, and z coordinates.
+    xmin, ymin, zmin : float
+        (*float*) - Minimum x, y, and z coordinates.
+    xmax, ymax, zmax : float
+        (*float*) - Maximum x, y, and z coordinates.
     Nx, Ny, Nz : int
         (*int*) - Number of data points in x, y, and z directions.
     ixcenter, iycenter, izcenter : int
@@ -171,10 +207,10 @@ class FiniteDifference():
     cartesian_coords : numpy.ndarray
         (*numpy.ndarray*) - 3D array of x, y, and z coordinates.
     r, phi, theta : numpy.ndarray
-        (*numpy.ndarray*) - 3D arrays of radius, azimuth, and inclination 
+        (*numpy.ndarray*) - 3D arrays of radius, inclination/polar and azimuth 
         coordinates.
     spherical_coords : numpy.ndarray
-        (*numpy.ndarray*) - 3D array of radius, azimuth, and inclination 
+        (*numpy.ndarray*) - 3D array of radius, inclination/polar and azimuth 
         coordinates.
     mask_len : int
         (*int*) - Length of the finite difference mask.
@@ -201,6 +237,10 @@ class FiniteDifference():
         self.inverse_dy = 1 / self.param['dy']
         self.inverse_dz = 1 / self.param['dz']
 
+        self.xmin = self.param['xmin']
+        self.ymin = self.param['ymin']
+        self.zmin = self.param['zmin']
+
         self.xarray = np.arange(
             self.param['xmin'], 
             self.param['xmin'] + self.param['Nx'] * self.param['dx'], 
@@ -213,6 +253,12 @@ class FiniteDifference():
             self.param['zmin'], 
             self.param['zmin'] + self.param['Nz'] * self.param['dz'], 
             self.param['dz'])
+        self.cartesian_coords_array = np.array([
+            self.xarray, self.yarray, self.zarray])
+        
+        self.xmax = self.xarray[-1]
+        self.ymax = self.yarray[-1]
+        self.zmax = self.zarray[-1]
         
         self.Nx = len(self.xarray)
         self.Ny = len(self.yarray)
@@ -227,19 +273,8 @@ class FiniteDifference():
             indexing='ij')
         self.cartesian_coords = np.array([self.x, self.y, self.z])
 
-        # radius
-        self.r = np.sqrt(self.x*self.x + self.y*self.y + self.z*self.z)
-
-        # azimuth
-        self.phi = np.sign(self.y) * np.arccos(
-            maths.safe_division(
-                self.x, np.sqrt(self.x*self.x + self.y*self.y)))
-        mask = np.logical_and(np.sign(self.y) == 0.0, 
-                               np.sign(self.x)<0)
-        self.phi[mask] = np.pi
-
-        # inclination
-        self.theta = np.arccos(maths.safe_division(self.z, self.r))
+        self.r, self.theta, self.phi = self.cartesian_to_spherical(
+            self.x, self.y, self.z)
         self.spherical_coords = np.array([self.r, self.phi, self.theta])
 
         if self.fd_order == 8:
@@ -248,71 +283,80 @@ class FiniteDifference():
             self.backward = fd8_backward
             self.centered = fd8_centered
             self.forward = fd8_forward
-            self.mask_len = 4
         elif self.fd_order == 6:
             if self.verbose:
                 print("6th order finite difference schemes are defined")
             self.backward = fd6_backward
             self.centered = fd6_centered
             self.forward = fd6_forward
-            self.mask_len = 3
+        elif self.fd_order == 2:
+            if self.verbose:
+                print("2nd order finite difference schemes are defined")
+            self.backward = fd2_backward
+            self.centered = fd2_centered
+            self.forward = fd2_forward
         else:
+            self.fd_order = 4
             if self.verbose:
                 print("4th order finite difference schemes are defined")
             self.backward = fd4_backward
             self.centered = fd4_centered
             self.forward = fd4_forward
-            self.mask_len = 2
+        self.mask_len = int(self.fd_order / 1)
 
     def d3(self, f, idx, N):
         """Apply the finite difference scheme to the whole data grid."""
         if self.boundary == 'periodic':
-            # Periodic boundaries are used.
-            # The grid is extended along the x direction by the 
-            # FD mask number of points from the opposite edge.
-            flong = np.concatenate((
-                f[-self.mask_len:, :, :], 
-                f, 
-                f[:self.mask_len, :, :]), 
-                axis=0)
-            # excluding the edge points.  We retrieve shape (Nx, Ny, Nz).
-            
-            return fd_map(
-                self.centered, flong, idx, 
-                self.mask_len, N+self.mask_len)
+            return self.d3_periodic(f, idx, N)
         elif self.boundary =='symmetric':
-            # Symmetric boundaries are used.
-            # The grid is extended along the x direction by the 
-            # FD mask number of points from the opposite edge.
-            iend = N - 1
-            flong = np.concatenate((
-                f[1:1+self.mask_len, :, :][::-1, :, :], 
-                f, 
-                f[iend-self.mask_len:iend, :, :][::-1, :, :]), 
-                axis=0)
-            return fd_map(
-                self.centered, flong, idx, 
-                self.mask_len, N+self.mask_len)
+            return self.d3_symmetric(f, idx, N)
         else:
-            # There are no periodic boundaries so a combination
-            # of backward centered and forward schemes are used.
-            # lhs : Apply the forward FD scheme to the edge points in the x
-            # direction that can not use the centered FD scheme.
-            lhs = fd_map(
-                self.forward, f, idx,
-                0, self.mask_len)
-            # Apply the centered FD scheme to all points not affected
-            # by the boundary condition.
-            central_part = fd_map(
-                self.centered, f, idx, 
-                self.mask_len, N - self.mask_len)
-            # rhs : Apply the forward FD scheme to the edge points in the x
-            # direction that can not use the centered FD scheme.
-            rhs = fd_map(
-                self.backward, f, idx, 
-                N - self.mask_len, N)
-            # Concatenate all the points together
-            return np.concatenate((lhs, central_part, rhs), axis=0)
+            return self.d3_onesided(f, idx, N)
+    
+    def d3_periodic(self, f, idx, N):
+        """Apply the finite difference scheme with periodic boundaries."""
+        # The grid is extended along the x direction by the 
+        # FD mask number of points from the opposite edge.
+        flong = np.concatenate((
+            f[-self.mask_len:], f, f[:self.mask_len]), 
+            axis=0)
+        # excluding the edge points.  We retrieve shape (Nx, Ny, Nz).
+        return fd_map(
+            self.centered, flong, idx, 
+            self.mask_len, N+self.mask_len)
+    
+    def d3_symmetric(self, f, idx, N):
+        """Apply the finite difference scheme with symmetric boundaries."""
+        # The grid is extended along the x direction by the 
+        # FD mask number of points from the opposite edge.
+        iend = N - 1
+        flong = np.concatenate((
+            f[1:1+self.mask_len][::-1], f, f[iend-self.mask_len:iend][::-1]), 
+            axis=0)
+        return fd_map(
+            self.centered, flong, idx, 
+            self.mask_len, N+self.mask_len)
+    
+    def d3_onesided(self, f, idx, N):
+        """Apply the finite difference scheme with one-sided boundaries."""
+        # Combination of backward centered and forward schemes are used.
+        # lhs : Apply the forward FD scheme to the edge points in the x
+        # direction that can not use the centered FD scheme.
+        lhs = fd_map(
+            self.forward, f, idx,
+            0, self.mask_len)
+        # Apply the centered FD scheme to all points not affected
+        # by the boundary condition.
+        central_part = fd_map(
+            self.centered, f, idx, 
+            self.mask_len, N - self.mask_len)
+        # rhs : Apply the forward FD scheme to the edge points in the x
+        # direction that can not use the centered FD scheme.
+        rhs = fd_map(
+            self.backward, f, idx, 
+            N - self.mask_len, N)
+        # Concatenate all the points together
+        return np.concatenate((lhs, central_part, rhs), axis=0)
     
     def d3x(self, f): 
         r"""Derivative along x of a scalar: $\partial_x (f)$."""
@@ -388,6 +432,71 @@ class FiniteDifference():
         $\partial_z (f_{kj})$ or $\partial_z (f^{kj})$ 
         or $\partial_z (f^{k}_{j})$."""
         return map2(self.d3z, f)
+    
+    def d3_rank3tensor(self, f):
+        r"""Spatial derivatives of a spatial rank 3 tensor."""
+        return np.array(
+            [self.d3x_rank3tensor(f),
+             self.d3y_rank3tensor(f),
+             self.d3z_rank3tensor(f)])
+    
+    def d3x_rank3tensor(self, f):
+        r"""Spatial derivatives along x of a spatial rank 3 tensor."""
+        return map3(self.d3x, f)
+    
+    def d3y_rank3tensor(self, f):
+        r"""Spatial derivatives along y of a spatial rank 3 tensor."""
+        return map3(self.d3y, f)
+    
+    def d3z_rank3tensor(self, f):
+        r"""Spatial derivatives along z of a spatial rank 3 tensor."""
+        return map3(self.d3z, f)
+    
+    def cartesian_to_spherical(self, x, y, z):
+        """Convert Cartesian coordinates to Spherical coordinates.
+        
+        Parameters
+        ----------
+        x, y, z : numpy.ndarray
+            arrays of Cartesian coordinates.
+        
+        Returns
+        -------
+        r, theta, phi : numpy.ndarray
+            arrays of radius, inclination/polar and azimuth coordinates.
+        """
+        # radius
+        r = np.sqrt(x*x + y*y + z*z)
+
+        # azimuth -pi to pi
+        phi = np.sign(y) * np.arccos(
+            maths.safe_division(self.x, np.sqrt(x*x + y*y)))
+        mask = np.logical_and(np.sign(y) == 0.0, np.sign(x)<0)
+        phi[mask] = -np.pi
+
+        # inclination 0 to pi
+        theta = np.arccos(maths.safe_division(z, r))
+        return r, theta, phi
+    
+    def spherical_to_cartesian(self, r, theta, phi):
+        """Convert Spherical coordinates to Cartesian coordinates.
+        
+        Parameters
+        ----------
+        r, theta, phi : numpy.ndarray
+            arrays of radius, inclination/polar and 
+            azimuth coordinates.
+        
+        Returns
+        -------
+        x, y, z : numpy.ndarray
+            arrays of Cartesian coordinates.
+        
+        """
+        x = r * np.sin(theta) * np.cos(phi)
+        y = r * np.sin(theta) * np.sin(phi)
+        z = r * np.cos(theta)
+        return x, y, z
     
     def cutoffmask(self, f):
         """Remove boundary points, for when FDs were applied once."""
@@ -487,118 +596,4 @@ class FiniteDifference():
             f[isx, isy, 
               isz-2*self.mask_len-b: isz+2*self.mask_len+1+b] = np.nan
         return f
-    
-    def reconstruct(self, data):
-        """If partial simulation box with symmetries, reconstruct full box"""
 
-        # If the lower boundary is shifted
-        shift = [0]*3
-        reflect = [False]*3
-        rotate = False
-        keys =  list(self.param.keys())
-        for i, coord in enumerate(['x', 'y', 'z']):
-            if f'boundary_shiftout_{coord}_lower' in keys:
-                shift[i] = self.param[f'boundary_shiftout_{coord}_lower']
-            if f'reflection_{coord}' in keys:
-                reflect[i] = self.param[f'reflection_{coord}']
-        if 'list_of_thorns' in keys:
-            if 'RotatingSymmetry180' in self.param['list_of_thorns']:
-                rotate = True
-        if self.veryverbose:
-            print('input data shape:', np.shape(data), flush=True)
-            print('shift:', shift, flush=True)
-            print('reflect:', reflect, flush=True)
-            print('rotate:', rotate, flush=True)
-
-        # === Reconstruction x direction
-        if self.param['xmin'] == 0:
-            Nx, Ny, Nz = np.shape(data)
-
-            # depending on boundary conditions, rotate/flip grid
-            if reflect[0]:
-                rdata = data[::-1, :, :]
-            elif rotate and reflect[1]:
-                rdata = data[::-1, :, ::-1]
-            elif rotate and reflect[2]:
-                rdata = data[::-1, ::-1, :]
-            else:
-                rdata = data
-
-            # join sections together
-            datax = np.concatenate(
-                [rdata, 
-                 data[shift[0]:,:,:]], axis=0)
-            
-            # extend the coordinate axis
-            xarray = np.concatenate(
-                [ - np.arange(self.dx * (1 - shift[0]), 
-                              (Nx + 1 - shift[0]) * self.dx, 
-                              self.dx)[::-1], 
-                 self.xarray[shift[0]:]])
-        else:
-            datax = data
-            xarray = self.xarray
-
-        # === Reconstruction y direction
-        if self.param['ymin'] == 0:
-            Nx, Ny, Nz = np.shape(datax)
-
-            # depending on boundary conditions, rotate/flip grid
-            if reflect[1]:
-                rdata = datax[:, ::-1, :]
-            elif rotate and reflect[0]:
-                rdata = datax[:, ::-1, ::-1]
-            elif rotate and reflect[2]:
-                rdata = datax[::-1, ::-1, :]
-            else:
-                rdata = datax
-
-            # join sections together
-            datay = np.concatenate(
-                [rdata, 
-                 datax[:, shift[1]:, :]], axis=1)
-            
-            # extend the coordinate axis
-            yarray = np.concatenate(
-                [ - np.arange(self.dy * (1 - shift[1]), 
-                              (Ny + 1 - shift[1]) * self.dy, 
-                              self.dy)[::-1], 
-                 self.yarray[shift[1]:]])
-        else:
-            datay = datax
-            yarray = self.yarray
-
-        # === Reconstruction z direction
-        if self.param['zmin'] == 0:
-            Nx, Ny, Nz = np.shape(datay)
-
-            # depending on boundary conditions, rotate/flip grid
-            if reflect[2]:
-                rdata = datay[:, :, ::-1]
-            elif rotate and reflect[0]:
-                rdata = datay[:, ::-1, ::-1]
-            elif rotate and reflect[1]:
-                rdata = datay[::-1, :, ::-1]
-            else:
-                rdata = datay
-
-            # join sections together
-            dataz = np.concatenate(
-                [rdata, 
-                 datay[:, :, shift[2]:]], axis=2)
-            
-            # extend the coordinate axis
-            zarray = np.concatenate(
-                [ - np.arange(self.dz * (1 - shift[2]),
-                              (Nz + 1 - shift[2]) * self.dz,
-                              self.dz)[::-1], 
-                 self.zarray[shift[2]:]])
-        else:
-            dataz = datay
-            zarray = self.zarray
-
-        if self.veryverbose:
-            print('output data shape:', np.shape(dataz), flush=True)
-            print('len x, y, z:', len(xarray), len(yarray), len(zarray), flush=True)
-
-        return (xarray, yarray, zarray), dataz

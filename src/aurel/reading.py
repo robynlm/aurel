@@ -140,6 +140,10 @@ def read_data(param, **kwargs):
         files, then saves newly read ET data to per-iteration files.
         When False, reads exclusively from ET files.
 
+    usecheckpoints : bool, optional
+        For ET data: whether to use checkpoint iterations if available. 
+        Default False.
+
     verbose : bool, optional
         Print detailed progress information. Default False.
 
@@ -159,6 +163,12 @@ def read_data(param, **kwargs):
                 ...
             }
     """
+    it = sorted(list(set(kwargs.get('it', [0]))))
+    if len(it) == 0:
+        raise ValueError(
+            'it can not be an empty list. '
+            + 'Please provide at least one iteration number to read.')
+
     # Determine data format and route to appropriate reader
     # Einstein Toolkit data has 'simulation' key in parameters
     if 'simulation' in param.keys():
@@ -218,7 +228,7 @@ def read_aurel_data(param, **kwargs):
             }
     """
     # Extract reading parameters with defaults
-    it = np.sort(list(set(kwargs.get('it', [0]))))
+    it = sorted(list(set(kwargs.get('it', [0]))))
     rl = kwargs.get('rl', 0)
     restart = kwargs.get('restart', 0)
     var = list(set(kwargs.get('vars', [])))
@@ -253,7 +263,7 @@ def read_aurel_data(param, **kwargs):
     # Always include time coordinate in variables to read
     var += ['t']
     # Initialize data dictionary with empty lists for each variable
-    data = {'it': it, **{v: [] for v in var}}
+    data = {'it': np.array(it), **{v: [] for v in var}}
     
     # Read data for each requested iteration
     for it_index, iit in enumerate(it):
@@ -348,7 +358,7 @@ def save_data(param, data, **kwargs):
     - Skips variables with None values
     """
     vars = kwargs.get('vars', [])
-    it = np.sort(kwargs.get('it', [0]))
+    it = sorted(list(set(kwargs.get('it', [0]))))
     rl = kwargs.get('rl', 0)
     restart = kwargs.get('restart', 0)
 
@@ -418,8 +428,14 @@ aurel_to_ET_varnames = {
     'press' : ['press'],
     'w_lorentz' : ['w_lorentz'],
     'velup3' : ['vel[0]', 'vel[1]', 'vel[2]'],
+    'velx' : ['vel[0]'],
+    'vely' : ['vel[1]'],
+    'velz' : ['vel[2]'],
     'Hamiltonian' : ['H'],
     'Momentumup3' : ['M1', 'M2', 'M3'],
+    'Momentumx' : ['M1'],
+    'Momentumy' : ['M2'],
+    'Momentumz' : ['M3'],
     'Weyl_Psi' : ['Psi4r', 'Psi4i'],
     'Weyl_Psi4r' : ['Psi4r'],
     'Weyl_Psi4i' : ['Psi4i']
@@ -535,14 +551,18 @@ def parse_hdf5_key(key):
             'tl': int(match.group(4)),
             'm': 0 if match.group(5) else None,
             'rl': int(match.group(7)) if match.group(7) else None,
-            'c': int(match.group(9)) if match.group(9) else None
+            'c': int(match.group(9)) if match.group(9) else None,
+            'combined variable name': match.group(1) + '::' + match.group(2)
         }
     return None
 
 # Regex for HDF5 filenames: matches both single-variable and group files
 # Examples: "rho.xyz.h5", "admbase-metric.file_123.xyz.h5"
 rx_h5file = re.compile(
-    r"^(([a-zA-Z0-9_]+)-)?([a-zA-Z0-9\[\]_]+)(.xyz)?(.file_[\d]+)?(.xyz)?.h5$")
+    r"^(([a-zA-Z0-9_]+)-)?([a-zA-Z0-9\[\]_]+)(.xyz)?(.file_(\d+))?(.xyz)?.h5$")
+
+rx_checkpoint = re.compile(
+    r"^checkpoint\.chkpt\.it_(\d+)(\.file_(\d+))?.h5$")
 
 def parse_h5file(filepath):
     """Parse HDF5 filename into its components.
@@ -567,9 +587,15 @@ def parse_h5file(filepath):
                 'thorn': str or None,       # e.g., 'admbase' or None  
                 'variable_or_group': str,   # e.g., 'metric' or 'rho'
                 'xyz_prefix': str or None,  # e.g., '.xyz' or None
-                'file_number': str or None, # e.g., '.file_123' or None
+                'chunk_number': int or None # e.g., 123 or None (from file_nbr)
                 'xyz_suffix': str or None,  # e.g., '.xyz' or None
                 'is_group_file': bool,      # True -> a grouped variable file
+            }
+
+        And if it is a checkpoint file::
+
+            {
+                'iteration': int,        # e.g., 1000
                 'chunk_number': int or None # e.g., 123 or None (from file_nbr)
             }
 
@@ -581,35 +607,31 @@ def parse_h5file(filepath):
     else:
         filename = filepath
     
+    match_checkpoint = rx_checkpoint.match(filename)
     match = rx_h5file.match(filename)
-    if match:
+    if match_checkpoint:
+        iteration = int(match_checkpoint.group(1))
+        chunk_number = int(match_checkpoint.group(3))
+        return {'iteration': iteration,
+                'chunk_number': chunk_number}
+    elif match:
         thorn_group_with_dash = match.group(1)  # e.g., "admbase-" or None
         thorn_name = match.group(2)             # e.g., "admbase" or None
         variable_or_group_name = match.group(3) # e.g., "metric" or "rho"
         xyz_prefix = match.group(4)             # e.g., ".xyz" or None
-        file_number = match.group(5)            # e.g., ".file_123" or None
-        xyz_suffix = match.group(6)             # e.g., ".xyz" or None
+        chunk_number = int(match.group(6))      # e.g., "123" or None
+        xyz_suffix = match.group(7)             # e.g., ".xyz" or None
         
         base_name = f"{thorn_group_with_dash}{variable_or_group_name}"
-
-        # Extract chunk number if present
-        chunk_number = None
-        if file_number:
-            try:
-                chunk_number = int(file_number.split('_')[1])
-            except (IndexError, ValueError):
-                pass
-        
         return {
             'thorn_with_dash': thorn_group_with_dash,
             'thorn': thorn_name,
             'variable_or_group': variable_or_group_name,
             'base_name': base_name,
             'xyz_prefix': xyz_prefix,
-            'file_number': file_number,
+            'chunk_number': chunk_number,
             'xyz_suffix': xyz_suffix,
-            'group_file': thorn_group_with_dash is not None,
-            'chunk_number': chunk_number
+            'group_file': thorn_group_with_dash is not None
         }
     return None
 
@@ -647,8 +669,6 @@ def parameters(simname):
             'simulation' : str, Data format identifier ('ET')
 
             'simpath' : str, Path to simulation root directory
-
-            'datapath' : str, Path to output-0000 data directory
             
         Grid Parameters:
             'xmin', 'xmax', 'Lx', 'Nx', 'dx' : float/int, minimum, maximum, 
@@ -686,19 +706,20 @@ def parameters(simname):
             +'Please set it to the path of your simulations.'
             +'`export SIMLOC="/path/to/simulations/"`')
     for simloc in simlocs:
-        parampath = (simloc + parameters['simname'] 
-                     + '/output-0000/' + parameters['simname'] + '.par')
-        if os.path.isfile(parampath):
+        param_files = sorted(glob.glob(simloc + parameters['simname'] 
+                                       + '/output-*/' 
+                                       + parameters['simname'] + '.par'))
+        if param_files:
+            parampath = param_files[0]
             founddata = True
-            # save paths of files
             parameters['simpath'] = simloc
-            parameters['datapath'] = (parameters['simpath'] 
-                                      + parameters['simname'] 
-                                      + '/output-0000/' 
+            parameters['datapath'] = (simloc + parameters['simname'] 
+                                      + '/output-0000/'
                                       + parameters['simname'] + '/')
             break
     if not founddata:
-        raise ValueError('Could not find simulation: ' + simname)
+        raise ValueError('Could not find simulation parameter file for: ' 
+                         + simname)
 
     # save all parameters
     lines = bash('cat ' + parampath).split('\n') # read file
@@ -822,6 +843,7 @@ def iterations(param, **kwargs):
                     'rl = 0': [itmin, itmax, dit],
                     'rl = 1': [itmin, itmax, dit],
                     ...
+                    'checkpoints': [it1, it2, ...]
                 },
                 ...
                 'overall': {
@@ -840,6 +862,7 @@ def iterations(param, **kwargs):
         it = 0 -> 1000
         rl = 0 at it = np.arange(0, 1000, 2)
         rl = 1 at it = np.arange(0, 1000, 1)
+        Checkpoints available at its: [0, 10, ...]
         === restart 1
         ...
 
@@ -887,7 +910,7 @@ def iterations(param, **kwargs):
         output_pattern = re.compile(r'^output-(\d+)$')
         relevant_files = [file for file in files 
                           if output_pattern.match(file)]
-        all_restarts = np.sort([int(fl.split('-')[1]) 
+        all_restarts = sorted([int(fl.split('-')[1]) 
                                 for fl in relevant_files])
 
         # Determine which restarts need processing
@@ -960,11 +983,13 @@ def iterations(param, **kwargs):
                                       + ' can be read', flush=True)
                             with h5py.File(file_for_it, 'r') as f:
                                 fkeys = list(f.keys())
+                            file_to_read = True
                             break
                         except OSError:
                             if verbose:
                                 print('ERROR: Could not read ' 
                                       + file_for_it, flush=True)
+                            file_to_read = False
                             continue
                 else:
                     for var_to_read in files_with_single_var:
@@ -976,70 +1001,108 @@ def iterations(param, **kwargs):
                                         + ' can be read', flush=True)
                                 with h5py.File(file_for_it, 'r') as f:
                                     fkeys = list(f.keys())
+                                file_to_read = True
                                 break
                             except OSError:
                                 if verbose:
                                     print('ERROR: Could not read ' 
                                         + file_for_it, flush=True)
-                            continue
-                saveprint(it_file, 'Reading iterations in: '
-                         + file_for_it, verbose=verbose_file)
-                with h5py.File(file_for_it, 'r') as f:
-                    
-                    # only consider one of the variables in this file
-                    fkeys = list(f.keys())
-                    varkey = parse_hdf5_key(fkeys[0])['variable']
-                    if verbose: print(f'Checking variable {varkey}')
+                                file_to_read = False
+                                continue
+                if file_to_read:
+                    saveprint(it_file, 'Reading iterations in: '
+                            + file_for_it, verbose=verbose_file)
+                    with h5py.File(file_for_it, 'r') as f:
                         
-                    # all the keys of this variable
-                    fkeys = [k for k in fkeys if varkey in k]
-                    
-                    # all the iterations
-                    allits = np.sort([parse_hdf5_key(k)['it'] for k in fkeys])
-                    saveprint(
-                        it_file, 
-                        'it = {} -> {}'.format(np.min(allits), np.max(allits)), 
-                        verbose=verbose_file)
-                    its_available[restart]['its available'] = [
-                        np.min(allits), np.max(allits)]
-                        
-                    # maximum refinement level present
-                    rlmax = np.max([parse_hdf5_key(k)['rl'] for k in fkeys])
-                    
-                    # for each refinement level
-                    for rl in range(rlmax+1):
-                        # take the corresponding keys
-                        keysrl = [k for k in fkeys 
-                                  if parse_hdf5_key(k)['rl'] == rl]
-    
-                        if keysrl!=[]:
-                            # Check if there are chunk numbers
-                            if parse_hdf5_key(keysrl[0])['c'] is not None:
-                                cs = list(set([parse_hdf5_key(k)['c'] 
-                                               for k in keysrl]))
-                                chosen_c = ' c=' + str(np.sort(cs)[-1])
-                            else:
-                                chosen_c = ''
-                            keysrl = [k for k in keysrl if chosen_c in k]
+                        # only consider one of the variables in this file
+                        fkeys = list(f.keys())
+                        for fk in fkeys:
+                            varkey = parse_hdf5_key(fk)
+                            if varkey is not None:
+                                varkey = varkey['variable']
+                                break
+                        if verbose: print(f'Checking variable {varkey}')
                             
-                            # and look at what iterations they have
-                            allits = np.sort([parse_hdf5_key(k)['it'] 
-                                              for k in keysrl])
-
-                            rlkey = 'rl = {}'.format(rl)
-                            if len(allits)>1:
-                                itkey = 'it = np.arange({}, {}, {})'.format(
-                                    np.min(allits), np.max(allits), 
-                                    np.diff(allits)[0])
-                                its_available[restart][rlkey] = [
-                                    np.min(allits), np.max(allits), 
-                                    np.diff(allits)[0]]
-                            else:
-                                itkey = 'it = {}'.format(allits)
-                                its_available[restart][rlkey] = allits
-                            saveprint(it_file, rlkey+' at '+itkey, 
-                                      verbose=verbose_file)
+                        # all the keys of this variable
+                        fkeys = [k for k in fkeys if varkey in k]
+                        
+                        # all the iterations
+                        allits = np.sort([parse_hdf5_key(k)['it'] 
+                                          for k in fkeys])
+                        saveprint(
+                            it_file, 
+                            'it = {} -> {}'.format(
+                                np.min(allits), np.max(allits)), 
+                            verbose=verbose_file)
+                        its_available[restart]['its available'] = [
+                            np.min(allits), np.max(allits)]
+                            
+                        # maximum refinement level present
+                        rlmax = np.max([parse_hdf5_key(k)['rl'] 
+                                        for k in fkeys])
+                        
+                        # for each refinement level
+                        for rl in range(rlmax+1):
+                            # take the corresponding keys
+                            keysrl = [k for k in fkeys 
+                                    if parse_hdf5_key(k)['rl'] == rl]
+        
+                            if keysrl!=[]:
+                                # Check if there are chunk numbers
+                                if parse_hdf5_key(keysrl[0])['c'] is not None:
+                                    cs = list(set([parse_hdf5_key(k)['c'] 
+                                                for k in keysrl]))
+                                    chosen_c = ' c=' + str(np.sort(cs)[-1])
+                                else:
+                                    chosen_c = ''
+                                keysrl = [k for k in keysrl if chosen_c in k]
                                 
+                                # and look at what iterations they have
+                                allits = np.sort([parse_hdf5_key(k)['it'] 
+                                                for k in keysrl])
+
+                                rlkey = 'rl = {}'.format(rl)
+                                if len(allits)>1:
+                                    itkey = 'it = np.arange({}, {}, {})'.format(
+                                        np.min(allits), np.max(allits), 
+                                        np.diff(allits)[0])
+                                    its_available[restart][rlkey] = [
+                                        np.min(allits), np.max(allits), 
+                                        np.diff(allits)[0]]
+                                else:
+                                    itkey = 'it = {}'.format(allits)
+                                    its_available[restart][rlkey] = allits
+                                saveprint(it_file, rlkey+' at '+itkey, 
+                                        verbose=verbose_file)
+            
+            # List checkpoints available
+            checkpoint_files = glob.glob(
+                param['simpath'] + param['simname']
+                + '/output-{:04d}/'.format(restart)
+                + param['simname'] + '/checkpoint.chkpt.it_*.h5')
+            if checkpoint_files != []:
+                if 'file_' in checkpoint_files[0]:
+                    checkpoint_files = [
+                        cf for cf in checkpoint_files if '.file_0.' in cf]
+                
+            checkpoint_its = []
+            for chkfile in checkpoint_files:
+                chk_it = int(chkfile.split('checkpoint.chkpt.it_')[1].split('.')[0])
+                checkpoint_its += [chk_it]
+            checkpoint_its = sorted(list(set(checkpoint_its)))
+
+            if 'its available' not in its_available[restart].keys():
+                its_available[restart]['its available'] = [
+                    np.min(checkpoint_its), np.max(checkpoint_its)]
+                saveprint(it_file, 'it = {} -> {}'.format(
+                    np.min(checkpoint_its), np.max(checkpoint_its)), 
+                    verbose=verbose_file)
+
+            its_available[restart]['checkpoints'] = checkpoint_its
+            saveprint(it_file, 
+                      'Checkpoints available at its: {}'.format(
+                          list(checkpoint_its)),
+                          verbose=verbose_file)
         # Overall iterations
         its_available = collect_overall_iterations(its_available, verbose_file)
         return its_available
@@ -1082,6 +1145,7 @@ def read_iterations(param, **kwargs):
                     'rl = 0': [itmin, itmax, dit],
                     'rl = 1': [itmin, itmax, dit],
                     ...
+                    'checkpoints': [it1, it2, ...]
                 },
                 ...
             }
@@ -1138,6 +1202,16 @@ def read_iterations(param, **kwargs):
                     else:
                         it_list = [int(l.split('[')[1].split(']')[0])]
                         its_available[restart_nbr][rlkey] = it_list
+                
+                elif 'Checkpoints available at its' in l:
+                    chk_its = l.split('Checkpoints available at its: ')[1]
+                    chk_its = chk_its.replace('[', '').replace(']', '')
+                    if chk_its.strip() == '':
+                        its_available[restart_nbr]['checkpoints'] = []
+                    else:
+                        chk_its = [int(it.strip()) for it in chk_its.split(',')]
+                        its_available[restart_nbr]['checkpoints'] = chk_its
+
             return its_available
 
 def collect_overall_iterations(its_available, verbose):
@@ -1176,6 +1250,15 @@ def collect_overall_iterations(its_available, verbose):
                 }
             }
     """
+    # Find maximum refinement level across all restarts
+    rlmax = 0
+    for restart in list(its_available.keys()):
+        for key in list(its_available[restart].keys()):
+            if 'rl = ' in key:
+                rl = int(key.split('rl = ')[1])
+                if rl > rlmax:
+                    rlmax = rl
+
     # First collect all the iterations, gradually merging them together
     # Start with base level then gradually increment to consider them all
     rl = 0
@@ -1275,6 +1358,10 @@ def collect_overall_iterations(its_available, verbose):
                 # Print overall iterations of said refinement level
                 print(rlkey, 'at it =', it_situation_string, flush=True)
         rl += 1
+        if rl > rlmax:
+            rl_to_do = False
+        else:
+            rl_to_do = True
     return its_available
 
 known_groups = {
@@ -1393,8 +1480,11 @@ def get_content(param, **kwargs):
         vars_and_files = {}
         processed_groups = {}  # Track which groups we've already read
         h5files = glob.glob(path+'*.h5')
+        # skip checkpoint files
+        h5files = [f for f in h5files if 'checkpoint.chkpt' not in f]
         for filepath in h5files:
             file_info = parse_h5file(filepath)
+
             if file_info is not None:
                 if veryverbose:
                     print('Processing: ', filepath, flush=True)
@@ -1430,7 +1520,6 @@ def get_content(param, **kwargs):
                                              if parse_hdf5_key(k) is not None}
                                 varnames = list(variables)
                                 processed_groups[base_name] = varnames
-                            #varnames = processed_groups[base_name]   #???
                     else:
                         # We've already processed this group 
                         # - reuse the variable names
@@ -1502,12 +1591,12 @@ def read_ET_data(param, **kwargs):
     - **Missing Data Handling**: Fills gaps by reading from original ET files
     - **Variable Mapping**: Handles Aurel to Einstein Toolkit name conversions
     - **Caching Strategy**: Saves data in optimized format for future access
-
+    
     Parameters
     ----------
     param : dict
         Simulation parameters from `parameters()` function.
-
+    
     Other Parameters
     ----------------
     it : list of int, optional
@@ -1516,26 +1605,30 @@ def read_ET_data(param, **kwargs):
     vars : list of str, optional.
         Variables in Aurel format. Default [] (all available). 
         Examples: ['rho', 'Kdown3'], ['gammadown3', 'alpha']
-            
+    
     restart : int, optional
         Specific restart to read from. 
         Default -1 (auto-detect).
-            
+    
     split_per_it : bool, optional
         Use cached per-iteration files when available and save read data
         in per-iteration files. Default True.
-            
+    
+    usecheckpoints : bool, optional
+        For ET data: whether to use checkpoint iterations if available. 
+        Default False.
+    
     verbose : bool, optional
         Print progress information. Default True.
-            
+    
     veryverbose : bool, optional
         Print detailed debugging information. Default False.
-
+    
     Returns
     -------
     dict
         Simulation data dictionary with structure::
-
+        
             {
                 'it': [iteration_numbers],
                 't': [time_values],
@@ -1543,11 +1636,11 @@ def read_ET_data(param, **kwargs):
                 'var2': [data_arrays],
                 ...
             }
-
+    
     Notes
     -----
     Processing Workflow:
-
+    
     1. **Iteration Location**: Determines which restart contains each iteration
     2. **Cache Reading**: Loads available data from per-iteration files  
     3. **Gap Detection**: Identifies missing iterations/variables
@@ -1556,10 +1649,11 @@ def read_ET_data(param, **kwargs):
     6. **Cache Update**: Saves newly-read data for future access
     """
     # reading kwargs
-    it = np.sort(kwargs.get('it', [0]))
+    it = sorted(list(set(kwargs.get('it', [0]))))
     var = kwargs.get('vars', [])
     restart = kwargs.get('restart', -1)
     split_per_it = kwargs.get('split_per_it', True)
+    usecheckpoints = kwargs.get('usecheckpoints', False)
     verbose = kwargs.get('verbose', True)
     veryverbose = kwargs.get('veryverbose', False)
 
@@ -1571,7 +1665,21 @@ def read_ET_data(param, **kwargs):
     # use user provided restart
     if restart >= 0:
         restarts_available = [restart]
-        its_available[restart]['it to do'] = list(it)
+        its_available[restart]['it to do'] = []
+        for iit in it:
+            if usecheckpoints:
+                if 'checkpoints' in list(its_available[restart]):
+                    if iit in its_available[restart]['checkpoints']:
+                        its_available[restart]['it to do'] += [iit]
+            else:
+                if 'its available' in list(its_available[restart]):
+                    if len(its_available[restart]['its available']) ==1:
+                        if iit == its_available[restart]['its available'][0]:
+                            its_available[restart]['it to do'] += [iit]
+                    else:
+                        itmin, itmax = its_available[restart]['its available']
+                        if ((itmin <= iit) and (iit <= itmax)):
+                            its_available[restart]['it to do'] += [iit]
     # find restart myself
     elif restart == -1:
         restarts_available = list(its_available.keys())
@@ -1583,16 +1691,26 @@ def read_ET_data(param, **kwargs):
         # reverse order so that I'm always taking the most recent iteration
         for iit in it[::-1]:
             for restart in list(its_available.keys())[::-1]:
-                if 'its available' not in list(its_available[restart]):
-                    it_in_restart = False
-                else:
-                    # is this iteration available within this restart?
-                    if len(its_available[restart]['its available']) ==1:
-                        it_in_restart = (
-                            iit == its_available[restart]['its available'][0])
+                if usecheckpoints:
+                    if 'checkpoints' not in list(its_available[restart]):
+                        it_in_restart = False
                     else:
-                        itmin, itmax = its_available[restart]['its available']
-                        it_in_restart = ((itmin <= iit) and (iit <= itmax))
+                        # is this iteration a checkpoint within this restart?
+                        if iit in its_available[restart]['checkpoints']:
+                            it_in_restart = True
+                        else:
+                            it_in_restart = False
+                else:
+                    if 'its available' not in list(its_available[restart]):
+                        it_in_restart = False
+                    else:
+                        # is this iteration available within this restart?
+                        if len(its_available[restart]['its available']) ==1:
+                            it_in_restart = (
+                                iit == its_available[restart]['its available'][0])
+                        else:
+                            itmin, itmax = its_available[restart]['its available']
+                            it_in_restart = ((itmin <= iit) and (iit <= itmax))
                 if it_in_restart:
                     its_available[restart]['it to do'] += [iit]
                     # I found it, so break to not go through the other restart
@@ -1637,114 +1755,135 @@ def read_ET_data(param, **kwargs):
                 print('vars to get {}:'.format(var), flush=True)
             if veryverbose:
                 print('its to get {}:'.format(it), flush=True)
-            
-            # ====== directly read and provide the data
-            if not split_per_it:
-                datar[restart] = read_ET_variables(
-                    param, var, vars_and_files, **kwargs)
-                
-            # ====== combination of Einstein Toolkit data and aurel data
-            # + save into it files for quicker reading next time
+
+            # ====== checkpoints
+            if usecheckpoints:
+                datar[restart] = read_ET_checkpoints(param, var, **kwargs)
             else:
-                # ====== change variable names to scalar elements
-                avar = transform_vars_tensor_to_scalar(var)
-                kwargs['vars'] = avar
-
-                # =============================================================
-                # ======= Get variables from split iterations files
-                # Read in data
-                datar[restart] = read_aurel_data(param, **kwargs)
-                if verbose:
-                    verbose_cleaned_dict = {
-                        k: v for k, v in datar[restart].items() 
-                        if (not (isinstance(v, list) 
-                                    and all(x is None for x in v))
-                            and k!='it')}
-                    print('Data read from split iterations:', 
-                            list(verbose_cleaned_dict.keys()), flush=True)
+            
+                # ====== directly read and provide the data
+                if not split_per_it:
+                    datar[restart] = read_ET_variables(
+                        param, var, vars_and_files, **kwargs)
                     
-                # Find iterations missing
-                avart = avar + ['t']
-                its_missing = {v: [] for v in avart}
-                for it_idx, iit in enumerate(it):
-                    for av in avart:
-                        # Include it if it's not present
-                        if datar[restart][av][it_idx] is None:
-                            its_missing[av] += [iit]
-                        # Do a set to not have repeats
-                        its_missing[av] = list(set(its_missing[av]))
-                # Need to sort because of the set
-                for av in avart:
-                    its_missing[av] = list(np.sort(its_missing[av]))
+                # ====== combination of Einstein Toolkit data and aurel data
+                # + save into it files for quicker reading next time
+                else:
+                    # ====== change variable names to scalar elements
+                    avar = transform_vars_tensor_to_scalar(var)
+                    kwargs['vars'] = avar
 
-                # Verbose update
-                if veryverbose:
-                    verbose_clean_its_missing = {
-                        k:v for k, v in its_missing.items() if v!= []}
-                    print('Iterations missing:', 
-                            verbose_clean_its_missing, flush=True)
-                            
-
-                # =============================================================
-                # ======== Collect missing data from ET data
-                ETread_vars = []
-                verbose_saved_vars = []
-                for v in var:
-                    # collect missing iterations
-                    avar = transform_vars_tensor_to_scalar([v])
-                    its_temp = [item for av in avar 
-                                for item in its_missing[av]]
-                    its_temp = list(set(its_temp))
-                    # if there are missing iterations
-                    if its_temp != []:
-                        kwargs['it'] = its_temp
-                        # retrieve missing iterations
-                        data_temp = read_ET_variables(
-                                param, [v], vars_and_files, **kwargs)
-                        # verbose update
-                        ETread_vars += list(data_temp.keys())
-                        if veryverbose:
-                            print('Data read from ET files:', 
-                                    v, list(data_temp.keys()), flush=True)
-                        # update the data with the missing iterations
-                        avart = avar + ['t']
+                    # =========================================================
+                    # ======= Get variables from split iterations files
+                    # Read in data
+                    datar[restart] = read_aurel_data(param, **kwargs)
+                    if verbose:
+                        verbose_cleaned_dict = {
+                            k: v for k, v in datar[restart].items() 
+                            if (not (isinstance(v, list) 
+                                        and all(x is None for x in v))
+                                and k!='it')}
+                        print('Data read from split iterations:', 
+                                list(verbose_cleaned_dict.keys()), flush=True)
+                        
+                    # Find iterations missing
+                    avart = avar + ['t']
+                    its_missing = {v: [] for v in avart}
+                    for it_idx, iit in enumerate(it):
                         for av in avart:
-                            if data_temp[av] is not None:
-                                for iidx, iit in enumerate(it):
-                                    if iit in its_missing[av]:
-                                        iidxtem = np.argmin(np.abs(
-                                            data_temp['it'] - iit))
-                                        datar[restart][av][iidx] = (
-                                            data_temp[av][iidxtem])
-                                        # don't save this iteration
-                                        if (data_temp[av][iidxtem] is None
-                                            or av == 't'):
-                                            its_missing[av].remove(iit)
-                                            
-                                if its_missing[av] != []:
-                                    # save the missing iterations
-                                    # and save them individually
-                                    kwargs['it'] = its_missing[av]
-                                    kwargs['vars'] = [av]
-                                    verbose_saved_vars += [av]
-                                    if veryverbose:
-                                        print(
-                                            'Saving data for {}'.format(av)
-                                            + ' at it = {}'.format(
-                                                its_missing[av]), 
-                                            flush=True)
-                                    save_data(
-                                        param, data_temp,
-                                        **kwargs)
-                if verbose:
-                    ETread_vars = list(set(ETread_vars))
-                    verbose_saved_vars = list(set(verbose_saved_vars))
-                    if ETread_vars != []:
-                        print('Variables read from ET files:', 
-                            ETread_vars, flush=True)
-                    if verbose_saved_vars != []:
-                        print('Variables saved to split iterations files:',
-                            verbose_saved_vars, flush=True)
+                            # Include it if it's not present
+                            if datar[restart][av][it_idx] is None:
+                                its_missing[av] += [iit]
+                            # Do a set to not have repeats
+                            its_missing[av] = list(set(its_missing[av]))
+                    # Need to sort because of the set
+                    for av in avart:
+                        its_missing[av] = list(np.sort(its_missing[av]))
+
+                    # Verbose update
+                    if veryverbose:
+                        verbose_clean_its_missing = {
+                            k:v for k, v in its_missing.items() if v!= []}
+                        print('Iterations missing:', 
+                                verbose_clean_its_missing, flush=True)
+                                
+
+                    # =========================================================
+                    # ======== Collect missing data from ET data
+                    ETread_vars = []
+                    verbose_saved_vars = []
+
+                    # if variables not grouped, read, join and save them
+                    # one by one
+                    variables_grouped = False
+                    for vgroup in vars_and_files.keys():
+                        if len(vgroup) > 1:
+                            variables_grouped = True
+                            break
+                    if not variables_grouped:
+                        newvar = []
+                        for v in var:
+                            av = transform_vars_tensor_to_scalar([v])
+                            newvar += av
+                        var = newvar.copy()
+
+                    # Now process each variable
+                    for v in var:
+                        # collect missing iterations
+                        avar = transform_vars_tensor_to_scalar([v])
+                        its_temp = [item for av in avar 
+                                    for item in its_missing[av]]
+                        its_temp = list(set(its_temp))
+                        # if there are missing iterations
+                        if its_temp != []:
+                            kwargs['it'] = its_temp
+                            # retrieve missing iterations
+                            data_temp = read_ET_variables(
+                                    param, [v], vars_and_files, **kwargs)
+                            # verbose update
+                            ETread_vars += list(data_temp.keys())
+                            if veryverbose:
+                                print('Data read from ET files:', 
+                                        v, list(data_temp.keys()), flush=True)
+                            # update the data with the missing iterations
+                            avart = avar + ['t']
+                            for av in avart:
+                                if data_temp[av] is not None:
+                                    for iidx, iit in enumerate(it):
+                                        if iit in its_missing[av]:
+                                            iidxtem = np.argmin(np.abs(
+                                                data_temp['it'] - iit))
+                                            datar[restart][av][iidx] = (
+                                                data_temp[av][iidxtem])
+                                            # don't save this iteration
+                                            if (data_temp[av][iidxtem] is None
+                                                or av == 't'):
+                                                its_missing[av].remove(iit)
+                                                
+                                    if its_missing[av] != []:
+                                        # save the missing iterations
+                                        # and save them individually
+                                        kwargs['it'] = its_missing[av]
+                                        kwargs['vars'] = [av]
+                                        verbose_saved_vars += [av]
+                                        if veryverbose:
+                                            print(
+                                                'Saving data for {}'.format(av)
+                                                + ' at it = {}'.format(
+                                                    its_missing[av]), 
+                                                flush=True)
+                                        save_data(
+                                            param, data_temp,
+                                            **kwargs)
+                    if verbose:
+                        ETread_vars = list(set(ETread_vars))
+                        verbose_saved_vars = list(set(verbose_saved_vars))
+                        if ETread_vars != []:
+                            print('Variables read from ET files:', 
+                                ETread_vars, flush=True)
+                        if verbose_saved_vars != []:
+                            print('Variables saved to split iterations files:',
+                                verbose_saved_vars, flush=True)
     
     # create ultimate data dictionary (flattening datar)
     if veryverbose:
@@ -1794,14 +1933,14 @@ def read_ET_variables(param, var, vars_and_files, **kwargs):
         A dictionary containing the data from the simulation output files.
         dict.keys() = ['it', 't', var[0], var[1], ...]
     """
-    it = np.sort(kwargs.get('it', [0]))
+    it = sorted(list(set(kwargs.get('it', [0]))))
     veryverbose = kwargs.get('veryverbose', False)
 
     if veryverbose:
         print('read_ET_variables was given the vars:', var, flush=True)
     
     # data to be returned
-    data = {'it':it, 't':[]}
+    data = {'it':np.array(it), 't':[]}
     
     # are the chunks together in one file or one file per chunk?
     first_var = list(vars_and_files.keys())[0]
@@ -1813,7 +1952,7 @@ def read_ET_variables(param, var, vars_and_files, **kwargs):
     else:
         cmax = 'in file'
 
-    # Transalte var names from aurel to ET
+    # Translate var names from aurel to ET
     var_ET = transform_vars_aurel_to_ET(var)
     if veryverbose:
         print('In read_ET_variables looking for variables:', 
@@ -1882,7 +2021,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
         dict.keys() = ['it', 't', var]
     """
 
-    it = np.sort(kwargs.get('it', [0]))
+    it = sorted(list(set(kwargs.get('it', [0]))))
     rl = kwargs.get('rl', 0)
     veryextraverbose = kwargs.get('veryextraverbose', False)
 
@@ -1890,7 +2029,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
         print('read_ET_group_or_var(variables, files, cmax) activated with:', 
               variables, files, cmax, flush=True)
     
-    var_chunks = {iit:{v:{} for v in variables} for iit in it}
+    var_chunks = {iit:{} for iit in it}
     
     # also collect time while you're at it
     time = []
@@ -1938,14 +2077,44 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                      if ((parse_hdf5_key(k)['c'] == c))]
                              
                         # For each component
-                        for v in variables:
+                        for vi, v in enumerate(variables):
                             # the full key to use
                             key = [k for k in relevant_keys_with_c
-                                   if ((parse_hdf5_key(k)['variable'] == v))]
+                                   if (parse_hdf5_key(k)['variable'] == v
+                                       or parse_hdf5_key(k)[
+                                           'combined variable name'] == v)]
                             # should be only one key
                             if len(key) != 1:
-                                print('Error: {} keys found:'.format(len(key)),
-                                      key, flush=True)
+                                other = [k.split(' it=')[1] for k in key]
+                                is_rest_same = (sum(
+                                    [other[i] == other[i+1] 
+                                     for i in range(len(other)-1)]) 
+                                     == (len(other)-1))
+                                if is_rest_same:
+                                    mult_vars = [k.split(' it=')[0] 
+                                                 for k in key]
+                                    variables[vi] = mult_vars[0]
+                                    variables += mult_vars[1:]
+                                    v = mult_vars[0]
+
+                                    key = [k for k in relevant_keys_with_c
+                                           if v in k]
+                                    if len(key) != 1:
+                                        raise ValueError(
+                                            '{}'.format(len(key))
+                                            + ' keys found for variable '
+                                            + '{} it={} rl={} c={}'.format(
+                                                v, iit, rl, c)
+                                            + ' found: {}'.format(key))
+                                    else:
+                                        key = key[0]
+                                else:
+                                    raise ValueError(
+                                        '{}'.format(len(key))
+                                        + ' keys found for variable '
+                                        + '{} it={} rl={} c={}'.format(
+                                            v, iit, rl, c)
+                                        + ' found: {}'.format(key))
                             else:
                                 key = key[0]
                             
@@ -1953,17 +2122,17 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                             if veryextraverbose:
                                 print('Reading key = {}'.format(key), 
                                       flush=True)
-                            var = np.array(f[key])
+                            var_array = np.array(f[key])
                             # Cut off ghost grid points
                             ghost_x = f[key].attrs['cctk_nghostzones'][0]
                             ghost_y = f[key].attrs['cctk_nghostzones'][1]
                             ghost_z = f[key].attrs['cctk_nghostzones'][2]
-                            var = var[ghost_z:-ghost_z, 
-                                      ghost_y:-ghost_y, 
-                                      ghost_x:-ghost_x]
+                            var_array = var_array[ghost_z:-ghost_z, 
+                                                  ghost_y:-ghost_y, 
+                                                  ghost_x:-ghost_x]
                             iorigin = tuple(f[key].attrs['iorigin'])
-                            var_chunks[iit][v][iorigin] = var
-                            del var
+                            var_chunks[iit].setdefault(v, {})[iorigin] = var_array
+                            del var_array
                     if collect_time:
                         time += [f[key].attrs['time']]
                 collect_time = False # only do this in one file
@@ -1976,6 +2145,9 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
     var = {}
     for iit in it:
         for v in variables:
+            if veryextraverbose:
+                print('Joining chunks for {} at it = {}'.format(v, iit), 
+                      flush=True)
             aurel_v = transform_vars_ET_to_aurel(v)
             varlist = var.setdefault(aurel_v, [])
             varlist += [fixij(join_chunks(
@@ -1983,6 +2155,185 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
         var['t'] = time
         
     return var
+
+def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
+    """Read the data from Einstein Toolkit simulation checkpoint files.
+    
+    Parameters
+    ----------
+    param : dict
+        The parameters of the simulation.
+    var : list
+        The variables to read from the simulation checkpoint files.
+    it : list
+        The iterations to read from the simulation checkpoint files.
+    restart : int
+        The restart number to read from.
+    rl : int
+        The refinement level to read from the simulation checkpoint files.
+
+    Other Parameters
+    ----------------
+    verbose : bool, optional
+        Print progress information. Default True.
+        
+    Returns
+    -------
+    dict
+        A dictionary containing the data from the simulation checkpoint files.
+        dict.keys() = ['it', 't', var[0], var[1], ...]
+    """
+    it = sorted(list(set(it)))
+    var = transform_vars_aurel_to_ET(var)
+    verbose = kwargs.get('verbose', True)
+    veryverbose = kwargs.get('veryverbose', False)
+    veryextraverbose = kwargs.get('veryextraverbose', False)
+
+    if verbose:
+        print('Using checkpoints for restart {}'.format(restart), flush=True)
+
+    checkpoint_files = glob.glob(
+        param['simpath'] + param['simname']
+        + '/output-{:04d}/'.format(restart)
+        + param['simname'] + '/checkpoint.chkpt.it_*.h5')
+    
+    # find cmax
+    it0_file = []
+    i = 0
+    while it0_file == []:
+        it0 = it[i]
+        it0_file = [cf for cf in checkpoint_files 
+                    if f"it_{it0}." in cf]
+        if len(it0_file) == 0:
+            pass
+        elif len(it0_file) == 1:
+            cmax = 'in file'
+        else:
+            cmax = np.max([parse_h5file(cf)['chunk_number'] 
+                           for cf in it0_file])
+        i += 1
+
+    # data to be returned
+    data = {'it':np.array(it), 't':[]}
+    for iit in it:
+        if veryverbose:
+            print('Reading checkpoint for it={}'.format(iit), flush=True)
+        it_file = [cf for cf in checkpoint_files 
+                    if f"it_{iit}." in cf]
+        if it_file != []:
+            collect_time = True
+            var_chunks = {}
+            for file in it_file:
+                with h5py.File(file, 'r') as f:
+                    if veryextraverbose:
+                        print('Reading checkpoint file: {}'.format(file), 
+                            flush=True)
+                        
+                    # keys 
+                    file_keys = [k for k in f.keys() 
+                                 if parse_hdf5_key(k) is not None]
+                    relevant_keys = [k for k in file_keys 
+                                     if ((parse_hdf5_key(k)['it'] == iit)
+                                     and (parse_hdf5_key(k)['rl'] == rl)
+                                     and (parse_hdf5_key(k)['tl'] == 0))]
+                    
+                    # max number of chunks
+                    if cmax == 'in file':
+                        if 'c=' in relevant_keys[0]:
+                            nochunks = False
+                            actual_cmax = np.max(
+                                [parse_hdf5_key(k)['c'] 
+                                 for k in relevant_keys])
+                        else:
+                            nochunks = True
+                            actual_cmax = 0
+                        crange = np.arange(actual_cmax+1)
+                    else:
+                        nochunks = False
+                        actual_cmax = cmax
+                        crange = [parse_h5file(file)['chunk_number']]
+
+                    for vi, v in enumerate(var):
+                        varkeys = [k for k in relevant_keys 
+                                   if (parse_hdf5_key(k)['variable'] == v
+                                       or parse_hdf5_key(k)[
+                                           'combined variable name'] == v)]
+                        for c in crange:
+                            if nochunks:
+                                key = varkeys
+                            else:
+                                key = [k for k in varkeys 
+                                        if parse_hdf5_key(k)['c'] == c]
+                                
+                            # should be only one key
+                            if len(key) != 1:
+                                other = [k.split(' it=')[1] for k in key]
+                                is_rest_same = (sum(
+                                    [other[i] == other[i+1] 
+                                     for i in range(len(other)-1)]) 
+                                     == (len(other)-1))
+                                if is_rest_same:
+                                    mult_vars = [k.split(' it=')[0] 
+                                                 for k in key]
+                                    var[vi] = mult_vars[0]
+                                    var += mult_vars[1:]
+                                    v = mult_vars[0]
+
+                                    key = [k for k in varkeys
+                                           if v in k]
+                                    if len(key) != 1:
+                                        raise ValueError(
+                                            '{}'.format(len(key))
+                                            + ' keys found for variable '
+                                            + '{} it={} rl={} c={}'.format(
+                                                v, iit, rl, c)
+                                            + ' found: {}'.format(key))
+                                    else:
+                                        key = key[0]
+                                else:
+                                    raise ValueError(
+                                        '{}'.format(len(key))
+                                        + ' keys found for variable '
+                                        + '{} it={} rl={} c={}'.format(
+                                            v, iit, rl, c)
+                                        + ' found: {}'.format(key))
+                            else:
+                                key = key[0]
+                            
+                            # Read in the variable
+                            if veryextraverbose:
+                                print('Reading key = {}'.format(key), 
+                                      flush=True)
+                            var_array = np.array(f[key])
+
+                            # Cut off ghost grid points
+                            ghost_x = f[key].attrs['cctk_nghostzones'][0]
+                            ghost_y = f[key].attrs['cctk_nghostzones'][1]
+                            ghost_z = f[key].attrs['cctk_nghostzones'][2]
+                            var_array = var_array[ghost_z:-ghost_z, 
+                                                  ghost_y:-ghost_y, 
+                                                  ghost_x:-ghost_x]
+                            iorigin = tuple(f[key].attrs['iorigin'])
+                            var_chunks.setdefault(v, {})[iorigin] = var_array
+                        
+                    if collect_time:
+                        data['t'] += [f[key].attrs['time']]
+                        collect_time = False
+                    
+            # Join chunks, fix indexing and save in data dictionary
+            for v in var:
+                if veryextraverbose:
+                    print('Joining chunks for {} at it = {}'.format(v, iit), 
+                          flush=True)
+                aurel_v = transform_vars_ET_to_aurel(v)
+                varlist = data.setdefault(aurel_v, [])
+                varlist += [fixij(join_chunks(
+                            var_chunks[v], **kwargs))]
+        else:
+            print('Could not find checkpoint file for'
+                    + ' it={}'.format(iit), flush=True)
+                           
+    return data
 
 def fixij(f):
     """Fix the x-z indexing as you read in the data."""
@@ -2019,7 +2370,6 @@ def join_chunks(cut_data, **kwargs):
               flush=True)
         for i, k in enumerate(all_keys):
             print(i, k, np.shape(cut_data[k]))
-        print()
     # =================
     if cmax == 0:
         uncut_data = cut_data[all_keys[0]]
@@ -2069,7 +2419,6 @@ def join_chunks(cut_data, **kwargs):
             print(' === Key and shape after 1st append', flush=True)
             for i, k in enumerate(all_keys):
                 print(i, k, np.shape(ndata[k]), flush=True)
-            print()
 
         # --- Append along axis = 1
         if veryextraverbose:
@@ -2107,7 +2456,6 @@ def join_chunks(cut_data, **kwargs):
             print(' === Key and shape after 2nd append', flush=True)
             for i, k in enumerate(all_keys):
                 print(i, k, np.shape(nndata[k]), flush=True)
-            print()
                 
         # --- Append along axis = 0
         if veryextraverbose:
