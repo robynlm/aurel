@@ -1,4 +1,4 @@
-__version__ = "0.0.post7"
+__version__ = "0.0.post8"
 from .coreanalytic import *
 from .core import *
 from .finitedifference import *
