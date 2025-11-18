@@ -10,6 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
 
   
@@ -19,6 +20,7 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -53,12 +55,15 @@
 <li class="toctree-l2"><a class="reference internal" href="#descriptions">descriptions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#assumed-quantities">Assumed quantities</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#metric-quantities">Metric quantities</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#spatial-metric">Spatial metric</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#extrinsic-curvature">Extrinsic curvature</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#lapse">Lapse</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#shift">Shift</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#timelike-normal-vector">Timelike normal vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#spatial-metric">Spatial metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#spacetime-metric">Spacetime metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bssnok-metric">BSSNOK metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#extrinsic-curvature">Extrinsic curvature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bssnok-extrinsic-curvature">BSSNOK extrinsic curvature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#proper-time">Proper time</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#matter-quantities">Matter quantities</a><ul>
@@ -73,6 +78,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#curvature-quantities">Curvature quantities</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#spatial-curvature">Spatial curvature</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#spacetime-curvature">Spacetime curvature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bssnok-curvature">BSSNOK curvature</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#weyl-decomposition">Weyl decomposition</a></li>
 </ul>
 </li>
@@ -80,16 +86,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#constraints">Constraints</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#aurelcore">AurelCore</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aurelcore-methods">AurelCore Methods</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.core.AurelCore"><code class="docutils literal notranslate"><span class="pre">AurelCore</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.param"><code class="docutils literal notranslate"><span class="pre">AurelCore.param</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.data"><code class="docutils literal notranslate"><span class="pre">AurelCore.data</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.data_shape"><code class="docutils literal notranslate"><span class="pre">AurelCore.data_shape</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.fancy_print"><code class="docutils literal notranslate"><span class="pre">AurelCore.fancy_print</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.kappa"><code class="docutils literal notranslate"><span class="pre">AurelCore.kappa</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.calculation_count"><code class="docutils literal notranslate"><span class="pre">AurelCore.calculation_count</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.clear_cache_every_nbr_calc"><code class="docutils literal notranslate"><span class="pre">AurelCore.clear_cache_every_nbr_calc</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.memory_threshold_inGB"><code class="docutils literal notranslate"><span class="pre">AurelCore.memory_threshold_inGB</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.last_accessed"><code class="docutils literal notranslate"><span class="pre">AurelCore.last_accessed</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.var_importance"><code class="docutils literal notranslate"><span class="pre">AurelCore.var_importance</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.Lie_beta"><code class="docutils literal notranslate"><span class="pre">AurelCore.Lie_beta()</span></code></a></li>
@@ -135,7 +138,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#working-on-an-hpc">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
 </ul>
@@ -173,8 +177,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="aurel-core">
-<h1>aurel.core<a class="headerlink" href="#aurel-core" title="Link to this heading"></a></h1>
+  <section id="module-aurel.core">
+<span id="aurel-core"></span><h1>aurel.core<a class="headerlink" href="#module-aurel.core" title="Link to this heading"></a></h1>
 <p>core.py</p>
 <dl>
 <dt>This module is the main event. It contains:</dt><dd><ul>
@@ -200,12 +204,978 @@ saves it in the AurelCore.data dictionary.</p></li>
 </ul>
 </dd>
 </dl>
-<section id="descriptions">
+<div style='display: none;' aria-hidden='true'><dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aurel.core.</span></span><span class="sig-name descname"><span class="pre">AurelCore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class able to calculate any variable in aurel.descriptions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fd</strong> (<a class="reference internal" href="finitedifference.html#aurel.finitedifference.FiniteDifference" title="aurel.finitedifference.FiniteDifference"><em>FiniteDifference</em></a>) – aurel.finitedifference.FiniteDifference</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If True, display messages about the calculations.</p></li>
+<li><p><strong>fancy_print</strong> (<em>bool</em>) – If True, display messages in a fancy ipython format,
+else normal print is used. Default is True.</p></li>
+<li><p><strong>clear_cache_every_nbr_calc</strong> (<em>int</em>) – Number of calculations before clearing the cache. Default is 20.</p></li>
+<li><p><strong>memory_threshold_inGB</strong> (<em>int</em>) – Memory threshold in GB for clearing the cache. Default is 4 GB.</p></li>
+<li><p><strong>Lambda</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – Cosmological constant. Default is 0.0.</p></li>
+<li><p><strong>vaccum</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – If True, assume vacuum spacetime (no matter). Default is False.</p></li>
+<li><p><strong>tetrad</strong> (<em>str</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – Tetrad choice for Weyl scalar calculations.
+Default is “quasi-Kinnersley”. Any other value provides …</p></li>
+<li><p><strong>lmax</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – Maximum l value for spherical harmonic decompositions. Default is 8.</p></li>
+<li><p><strong>center</strong> (<em>tuple</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – Center of the Psi4_lm sphere.
+Default is (0.0, 0.0, 0.0).</p></li>
+<li><p><strong>extract_radii</strong> (<em>list</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – List of extraction radii for spherical harmonic decompositions.
+Default is [0.9 * min radius in the grid].</p></li>
+<li><p><strong>interp_method</strong> (<em>str</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – Interpolation method for
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html">scipy.interpolate.RegularGridInterpolator</a>.
+Default is ‘linear’.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">param</span></span></dt>
+<dd><p>(<em>dict</em>) - Dictionary containing the data grid parameters, from fd.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">data</span></span></dt>
+<dd><p>(<em>dict</em>) - Dictionary where all the variables are stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">data_shape</span></span></dt>
+<dd><p>(<em>tuple</em>) - Shape of the data arrays: (Nx, Ny, Nz)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">kappa</span></span></dt>
+<dd><p>(<em>float</em>) - Einstein’s constant with G = c = 1. Default is 8 * pi.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculation_count</span></span></dt>
+<dd><p>(<em>int</em>) - Number of calculations performed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">last_accessed</span></span></dt>
+<dd><p>(<em>dict</em>) - Dictionary to keep track of when each variable was
+last accessed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">var_importance</span></span></dt>
+<dd><p>(<em>dict</em>) - Dictionary to keep track of the importance of each variable
+for cache cleanup. To never delete a variable, set its importance to 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">A2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.A2"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(A^2\)</span> Magnitude of traceless part of the extrinsic curvature</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">A2_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.A2_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\tilde{A}^2\)</span> Magnitude of conformal traceless part of the extrinsic curvature</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Adown3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Adown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(A_{ij}\)</span> Traceless part of the extrinsic curvature with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Adown3_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Adown3_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\tilde{A}_{ij}\)</span> Conformal traceless part of the extrinsic curvature with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Aup3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Aup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(A^{ij}\)</span> Traceless part of the extrinsic curvature with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Aup3_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Aup3_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\tilde{A}^{ij}\)</span> Conformal traceless part of the extrinsic curvature with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">DDalpha</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.DDalpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>D_iD_jalpha$ Spatial covariant second derivative of the lapse with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Einsteindown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Einsteindown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(G_{\alpha\beta}\)</span> Einstein tensor with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Hamiltonian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Hamiltonian"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\mathcal{H}\)</span> Hamilonian constraint</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Hamiltonian_Escale</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Hamiltonian_Escale"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>[<span class="math notranslate nohighlight">\(\mathcal{H}\)</span>] Hamilonian constraint energy scale</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Kdown3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Kdown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(K_{ij}\)</span> Extrinsic curvature with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Kretschmann</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Kretschmann"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}\)</span> Kretschmann scalar</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Ktrace</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Ktrace"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(K = \gamma^{ij}K_{ij}\)</span> Trace of extrinsic curvature</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Kup3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Kup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(K^{ij}\)</span> Extrinsic curvature with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Momentum_Escale</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Momentum_Escale"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>[<span class="math notranslate nohighlight">\(\mathcal{M}\)</span>] Momentum constraint energy scale</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Momentumup3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Momentumup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\mathcal{M}^i\)</span> Momentum constraint with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Psi4_lm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Psi4_lm"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\Psi_4^{l,m}\)</span> List of dictionaries of spin weighted spherical harmonic decomposition of the 4th Weyl scalar. Control with AurelCore.lmax, extract_radii, and interp_method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Stressdown3_n</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Stressdown3_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(S^{\{n\}}_{ij}\)</span> Stress tensor in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Stresstrace_n</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Stresstrace_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(S^{\{n\}}\)</span> Trace of Stress tensor in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Stressup3_n</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Stressup3_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(S^{\{n\}ij}\)</span> Stress tensor in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Tdown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Tdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(T_{\mu\nu}\)</span> Energy-stress tensor with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Ttrace</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Ttrace"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(T\)</span> Trace of the energy-stress tensor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Tup4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Tup4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(T^{\mu\nu}\)</span> Energy-stress tensor with spacetime indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Weyl_Psi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Weyl_Psi"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4\)</span> List of Weyl scalars for an null vector base defined with AurelCore.tetrad</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Weyl_invariants</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Weyl_invariants"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(I, \; J, \; L, \; K, \; N\)</span> Dictionary of Weyl invariants</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">accelerationdown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.accelerationdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(a_{\mu}\)</span> Acceleration of the fluid with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">accelerationup4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.accelerationup4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(a^{\mu}\)</span> Acceleration of the fluid with spacetime indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">alpha</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\alpha\)</span> Lapse. I assume <span class="math notranslate nohighlight">\(\alpha=1\)</span>, if not then please define AurelCore.data[‘alpha’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">angmomdown3_n</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.angmomdown3_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(J^{\{n\}}_{i}\)</span> Angular momentum density in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">angmomup3_n</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.angmomup3_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(J^{\{n\}i}\)</span> Angular momentum density in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">anisotropic_press_down3_n</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.anisotropic_press_down3_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\pi^{\{n\}_{ij}}\)</span> Anisotropic pressure in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">betadown3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.betadown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\beta_{i}\)</span> Shift vector with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">betamag</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.betamag"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\beta_{i}\beta^{i}\)</span> Magnitude of shift vector</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">betaup3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.betaup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\beta^{i}\)</span> Shift vector with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">betax</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.betax"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\beta^{x}\)</span> x component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\beta^{x}=0\)</span>, if not then please define AurelCore.data[‘betax’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">betay</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.betay"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\beta^{y}\)</span> y component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\beta^{y}=0\)</span>, if not then please define AurelCore.data[‘betay’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">betaz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.betaz"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\beta^{z}\)</span> z component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\beta^{z}=0\)</span>, if not then please define AurelCore.data[‘betaz’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">bweyl_n_down3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.bweyl_n_down3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(B^{\{n\}}_{ij}\)</span> Magnetic part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(n^{\mu}\)</span> with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">bweyl_u_down4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.bweyl_u_down4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(B^{\{u\}}_{\alpha\beta}\)</span> Magnetic part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(u^{\mu}\)</span> with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">conserved_D</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.conserved_D"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(D\)</span> Conserved mass-energy density in Wilson’s formalism</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">conserved_E</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.conserved_E"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(E\)</span> Conserved internal energy density in Wilson’s formalism</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">conserved_Sdown3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.conserved_Sdown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(S_{i}\)</span> Conserved energy flux (or momentum density) in Wilson’s formalism with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">conserved_Sdown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.conserved_Sdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(S_{\mu}\)</span> Conserved energy flux (or momentum density) in Wilson’s formalism with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">conserved_Sup3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.conserved_Sup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(S^{i}\)</span> Conserved energy flux (or momentum density) in Wilson’s formalism with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">conserved_Sup4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.conserved_Sup4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(S^{\mu}\)</span> Conserved energy flux (or momentum density) in Wilson’s formalism with spacetime indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">dtAdown3_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.dtAdown3_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\partial_t \tilde{A}_{ij}\)</span> Coordinate time derivative of conformal traceless part of the extrinsic curvature with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">dtKtrace</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.dtKtrace"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\partial_t K\)</span> Coordinate time derivative of the trace of extrinsic curvature</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">dtalpha</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.dtalpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\partial_t \alpha\)</span> Coordinate time derivative of the lapse. I assume <span class="math notranslate nohighlight">\(\partial_t \alpha=0\)</span>, if not then please define AurelCore.data[‘dtalpha’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">dtbetaup3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.dtbetaup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\partial_t\beta^{i}\)</span> Coordinate time derivative of the shift vector with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">dtbetax</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.dtbetax"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\partial_t\beta^{x}\)</span> Coordinate time derivative of the x component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\partial_t\beta^{x}=0\)</span>, if not then please define AurelCore.data[‘dtbetax’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">dtbetay</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.dtbetay"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\partial_t\beta^{y}\)</span> Coordinate time derivative of the y component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\partial_t\beta^{y}=0\)</span>, if not then please define AurelCore.data[‘dtbetay’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">dtbetaz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.dtbetaz"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\partial_t\beta^{z}\)</span> Coordinate time derivative of the z component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\partial_t\beta^{z}=0\)</span>, if not then please define AurelCore.data[‘dtbetaz’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">dtconserved</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.dtconserved"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\partial_t D, \; \partial_t E, \partial_t S_{i}\)</span> List of coordinate time derivatives of conserved rest mass-energy density, internal energy density and energy flux (or momentum density) with spatial indices down in Wilson’s formalism</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">dtgammadown3_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.dtgammadown3_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\partial_t \tilde{\gamma}_{ij}\)</span> Coordinate time derivative of conformal spatial metric with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">dtgammaup3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.dtgammaup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\partial_t \gamma^{ij}\)</span> Coordinate time derivative of spatial metric with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">dtphi_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.dtphi_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\partial_t \phi\)</span> Coordinate time derivative of BSSNOK <span class="math notranslate nohighlight">\(\phi\)</span> conformal factor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">dts_Gamma_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.dts_Gamma_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\partial_t {}^{(3)}\tilde{\Gamma}^i\)</span> Coordinate time derivative of conformal connection functions with spatial indice up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">dttau</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.dttau"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\partial_t \tau\)</span> Coordinate time derivative of proper time</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">enthalpy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.enthalpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(h\)</span> Specific enthalpy of the fluid</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">eps</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.eps"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\epsilon\)</span> Specific internal energy. I assume <span class="math notranslate nohighlight">\(\epsilon=0\)</span>, if not then please define AurelCore.data[‘eps’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">eweyl_n_down3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.eweyl_n_down3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(E^{\{n\}}_{ij}\)</span> Electric part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(n^{\mu}\)</span> with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">eweyl_u_down4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.eweyl_u_down4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(E^{\{u\}}_{\alpha\beta}\)</span> Electric part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(u^{\mu}\)</span> with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fluxdown3_n</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.fluxdown3_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(S^{\{n\}}_{i}\)</span> Energy flux (or momentum density) in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fluxup3_n</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.fluxup3_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(S^{\{n\}i}\)</span> Energy flux (or momentum density) in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fluxup3_n_fromMom</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.fluxup3_n_fromMom"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(S^{\{n\}i}\)</span> Energy flux (or momentum density) in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices up computed from the Momentum constraint</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gammadet</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gammadet"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\gamma\)</span> Determinant of spatial metric</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gammadown3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gammadown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\gamma_{ij}\)</span> Spatial metric with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gammadown3_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gammadown3_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\tilde{\gamma}_{ij}\)</span> Conformal spatial metric with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gammadown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gammadown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\gamma_{\mu\nu}\)</span> Spatial metric with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gammaup3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gammaup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\gamma^{ij}\)</span> Spatial metric with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gammaup3_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gammaup3_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\tilde{\gamma}^{ij}\)</span> Conformal spatial metric with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gammaup4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gammaup4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\gamma^{\mu\nu}\)</span> Spatial metric with spacetime indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gdet</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gdet"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g\)</span> Determinant of spacetime metric</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gdown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g_{\mu\nu}\)</span> Spacetime metric with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gup4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gup4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g^{\mu\nu}\)</span> Spacetime metric with spacetime indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gxx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gxx"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g_{xx}\)</span> Metric with xx indices down. I assume <span class="math notranslate nohighlight">\(g_{xx}=1\)</span>, if not then please define AurelCore.data[‘gxx’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gxy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gxy"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g_{xy}\)</span> Metric with xy indices down. I assume <span class="math notranslate nohighlight">\(g_{xy}=0\)</span>, if not then please define AurelCore.data[‘gxy’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gxz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gxz"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g_{xz}\)</span> Metric with xz indices down. I assume <span class="math notranslate nohighlight">\(g_{xz}=0\)</span>, if not then please define AurelCore.data[‘gxz’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gyy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gyy"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g_{yy}\)</span> Metric with yy indices down. I assume <span class="math notranslate nohighlight">\(g_{yy}=1\)</span>, if not then please define AurelCore.data[‘gyy’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gyz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g_{yz}\)</span> Metric with yz indices down. I assume <span class="math notranslate nohighlight">\(g_{yz}=0\)</span>, if not then please define AurelCore.data[‘gyz’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gzz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gzz"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g_{zz}\)</span> Metric with zz indices down. I assume <span class="math notranslate nohighlight">\(g_{zz}=1\)</span>, if not then please define AurelCore.data[‘gzz’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">hdet</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.hdet"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(h\)</span> Determinant of spatial part of spatial metric orthonormal to fluid flow</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">hdown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.hdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(h_{\mu\nu}\)</span> Spatial metric orthonomal to fluid flow with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">hmixed4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.hmixed4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({h^{\mu}}_{\nu}\)</span> Spatial metric orthonomal to fluid flow with mixed spacetime indices</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">hup4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.hup4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(h^{\mu\nu}\)</span> Spatial metric orthonomal to fluid flow with spacetime indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">kxx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.kxx"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(K_{xx}\)</span> Extrinsic curvature with xx indices down. I assume <span class="math notranslate nohighlight">\(K_{xx}=0\)</span>, if not then please define AurelCore.data[‘kxx’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">kxy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.kxy"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(K_{xy}\)</span> Extrinsic curvature with xy indices down. I assume <span class="math notranslate nohighlight">\(K_{xy}=0\)</span>, if not then please define AurelCore.data[‘kxy’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">kxz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.kxz"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(K_{xz}\)</span> Extrinsic curvature with xz indices down. I assume <span class="math notranslate nohighlight">\(K_{xz}=0\)</span>, if not then please define AurelCore.data[‘kxz’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">kyy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.kyy"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(K_{yy}\)</span> Extrinsic curvature with yy indices down. I assume <span class="math notranslate nohighlight">\(K_{yy}=0\)</span>, if not then please define AurelCore.data[‘kyy’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">kyz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.kyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(K_{yz}\)</span> Extrinsic curvature with yz indices down. I assume <span class="math notranslate nohighlight">\(K_{yz}=0\)</span>, if not then please define AurelCore.data[‘kyz’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">kzz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.kzz"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(K_{zz}\)</span> Extrinsic curvature with zz indices down. I assume <span class="math notranslate nohighlight">\(K_{zz}=0\)</span>, if not then please define AurelCore.data[‘kzz’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">ndown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.ndown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(n_{\mu}\)</span> Timelike vector normal to the spatial metric with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">null_ray_exp_in</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.null_ray_exp_in"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\Theta_{in}\)</span> List of expansion of null rays radially going in</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">null_ray_exp_out</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.null_ray_exp_out"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\Theta_{out}\)</span> List of expansion of null rays radially going out</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">nup4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.nup4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(n^{\mu}\)</span> Timelike vector normal to the spatial metric with spacetime indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">omega2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.omega2"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\omega^2\)</span> Magnitude of fluid vorticity</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">omegadown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.omegadown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\omega_{\mu\nu}\)</span> Fluid vorticity tensor with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">phi_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.phi_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\phi = \ln(\gamma^{1/12})\)</span> BSSNOK conformal factor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">press</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.press"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(p\)</span> Pressure. I assume <span class="math notranslate nohighlight">\(p=0\)</span>, if not then please define AurelCore.data[‘press’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">press_n</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.press_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(p^{\{n\}}\)</span> Pressure in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">psi_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.psi_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\psi = \gamma^{1/12}\)</span> BSSNOK conformal factor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">rho</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.rho"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\rho\)</span> Energy density</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">rho0</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.rho0"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\rho_0\)</span> Rest mass energy density. I assume <span class="math notranslate nohighlight">\(\rho_0=0\)</span>, if not then please define AurelCore.data[‘rho0’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">rho_n</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.rho_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\rho^{\{n\}}\)</span> Energy density in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">rho_n_fromHam</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.rho_n_fromHam"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\rho^{\{n\}}\)</span> Energy density in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame computed from the Hamiltonian constraint</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">s_Gamma_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.s_Gamma_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(3)}\tilde{\Gamma}^i\)</span> Conformal connection functions with spatial indice up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">s_Gamma_udd3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.s_Gamma_udd3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(3)}{\Gamma^{k}}_{ij}\)</span> Christoffel symbols of spatial metric with mixed spatial indices</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">s_Gamma_udd3_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.s_Gamma_udd3_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(3)}{\tilde{\Gamma}^{k}}_{ij}\)</span> Christoffel symbols of conformal spatial metric with mixed spatial indices</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">s_RicciS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.s_RicciS"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(3)}R\)</span> Ricci scalar of spatial metric</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">s_RicciS_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.s_RicciS_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(3)}\tilde{R}\)</span> Ricci scalar of conformal spatial metric</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">s_RicciS_u</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.s_RicciS_u"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(3)}R^{\{u\}}\)</span> Ricci scalar of the spatial metric orthonormal to fluid flow</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">s_Ricci_down3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.s_Ricci_down3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(3)}R_{ij}\)</span> Ricci tensor of spatial metric with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">s_Ricci_down3_bssnok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.s_Ricci_down3_bssnok"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(3)}\tilde{R}_{ij}\)</span> Ricci tensor of conformal spatial metric with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">s_Ricci_down3_phi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.s_Ricci_down3_phi"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(3)}R^{\phi}_{ij}\)</span> Ricci terms that depend on the conformal function <span class="math notranslate nohighlight">\(\phi\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">s_Riemann_down3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.s_Riemann_down3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(3)}R_{ijkl}\)</span> Riemann tensor of spatial metric with all spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">s_Riemann_uddd3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.s_Riemann_uddd3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(3)}{R^{i}}_{jkl}\)</span> Riemann tensor of spatial metric with mixed spatial indices</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">s_covd_udown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.s_covd_udown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\mathcal{D}^{\{u\}}_{\mu} u_{\nu}\)</span> Spatial covariant derivative of Lagrangian fluid four velocity with spacetime indices down, with respect to spatial hypersurfaces orthonormal to the fluid flow</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">shear2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.shear2"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\sigma^2\)</span> Magnitude of fluid shear</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">sheardown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.sheardown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\sigma_{\mu\nu}\)</span> Fluid shear tensor with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">st_Gamma_udd4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.st_Gamma_udd4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(4)}{\Gamma^{\alpha}}_{\mu\nu}\)</span> Christoffel symbols of spacetime metric with mixed spacetime indices</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">st_RicciS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.st_RicciS"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(4)}R\)</span> Ricci scalar of spacetime metric</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">st_Ricci_down3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.st_Ricci_down3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(4)}R_{ij}\)</span> Ricci tensor of spacetime metric with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">st_Ricci_down4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.st_Ricci_down4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(4)}R_{\alpha\beta}\)</span> Ricci tensor of spacetime metric with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">st_Riemann_down4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.st_Riemann_down4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(4)}R_{\alpha\beta\mu\nu}\)</span> Riemann tensor of spacetime metric with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">st_Riemann_uddd4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.st_Riemann_uddd4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(4)}{R^{\alpha}}_{\beta\mu\nu}\)</span> Riemann tensor of spacetime metric with mixed spacetime indices</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">st_Riemann_uudd4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.st_Riemann_uudd4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\({}^{(4)}{R^{\alpha\beta}}_{\mu\nu}\)</span> Riemann tensor of spacetime metric with mixed spacetime indices</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">st_Weyl_down4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.st_Weyl_down4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(C_{\alpha\beta\mu\nu}\)</span> Weyl tensor of spacetime metric with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">st_covd_udown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.st_covd_udown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\nabla_{\mu} u_{\nu}\)</span> Spacetime covariant derivative of Lagrangian fluid four velocity with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">theta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.theta"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\Theta\)</span> Fluid expansion scalar</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">thetadown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.thetadown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\Theta_{\mu\nu}\)</span> Fluid expansion tensor with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">udown3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.udown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(u_\mu\)</span> Lagrangian fluid four velocity with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">udown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.udown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(u_\mu\)</span> Lagrangian fluid four velocity with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">uup0</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.uup0"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(u^t\)</span> Lagrangian fluid four velocity with time indice up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">uup3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.uup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(u^i\)</span> Lagrangian fluid four velocity with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">uup4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.uup4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(u^\mu\)</span> Lagrangian fluid four velocity with spacetime indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">veldown3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.veldown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(v_i\)</span> Eulerian fluid three velocity with spatial indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">veldown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.veldown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(v_\mu\)</span> Eulerian fluid three velocity with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">velup3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.velup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(v^i\)</span> Eulerian fluid three velocity with spatial indices up.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">velup4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.velup4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(v^\mu\)</span> Eulerian fluid three velocity with spacetime indices up.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">velx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.velx"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(v^x\)</span> x component of Eulerian fluid three velocity with indice up. I assume <span class="math notranslate nohighlight">\(v^x=0\)</span>, if not then please define AurelCore.data[‘velx’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">vely</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.vely"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(v^y\)</span> y component of Eulerian fluid three velocity with indice up. I assume <span class="math notranslate nohighlight">\(v^y=0\)</span>, if not then please define AurelCore.data[‘vely’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">velz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.velz"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(v^z\)</span> z component of Eulerian fluid three velocity with indice up. I assume <span class="math notranslate nohighlight">\(v^z=0\)</span>, if not then please define AurelCore.data[‘velz’] = …</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">w_lorentz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.w_lorentz"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(W\)</span> Lorentz factor. I assume <span class="math notranslate nohighlight">\(W=1\)</span>, if not then please define AurelCore.data[‘w_lorentz’] = …</p>
+</dd></dl>
+
+</dd></dl>
+
+</div><section id="descriptions">
 <span id="descriptions-list"></span><h2>descriptions<a class="headerlink" href="#descriptions" title="Link to this heading"></a></h2>
 <section id="assumed-quantities">
 <span id="id1"></span><h3>Assumed quantities<a class="headerlink" href="#assumed-quantities" title="Link to this heading"></a></h3>
 <p>If not defined, vacuum Minkowski is assumed for the definition of the following quantities:</p>
-<p><span class="math notranslate nohighlight">\(\Lambda = 0\)</span>, the Cosmological constant, to change this do <strong>AurelCore.Lambda = …</strong> before running calculations</p>
 <p><strong>alpha</strong>: <span class="math notranslate nohighlight">\(\alpha = 1\)</span>, the lapse, to change this do <strong>AurelCore.data[“alpha”] = …</strong> before running calculations</p>
 <p><strong>dtalpha</strong>: <span class="math notranslate nohighlight">\(\partial_t \alpha = 0\)</span>, the time derivative of the lapse</p>
 <p><strong>betax, betay, betaz</strong>: <span class="math notranslate nohighlight">\(\beta^i = 0\)</span>, the shift vector with spatial indices up</p>
@@ -220,76 +1190,86 @@ saves it in the AurelCore.data dictionary.</p></li>
 </section>
 <section id="metric-quantities">
 <h3>Metric quantities<a class="headerlink" href="#metric-quantities" title="Link to this heading"></a></h3>
-<section id="spatial-metric">
-<h4>Spatial metric<a class="headerlink" href="#spatial-metric" title="Link to this heading"></a></h4>
-<p><strong>gxx</strong>: <span class="math notranslate nohighlight">\(g_{xx}\)</span> Metric with xx indices down. I assume <span class="math notranslate nohighlight">\(g_{xx}=1\)</span>, if not then please define AurelCore.data[‘gxx’] = …</p>
-<p><strong>gxy</strong>: <span class="math notranslate nohighlight">\(g_{xy}\)</span> Metric with xy indices down. I assume <span class="math notranslate nohighlight">\(g_{xy}=0\)</span>, if not then please define AurelCore.data[‘gxy’] = …</p>
-<p><strong>gxz</strong>: <span class="math notranslate nohighlight">\(g_{xz}\)</span> Metric with xz indices down. I assume <span class="math notranslate nohighlight">\(g_{xz}=0\)</span>, if not then please define AurelCore.data[‘gxz’] = …</p>
-<p><strong>gyy</strong>: <span class="math notranslate nohighlight">\(g_{yy}\)</span> Metric with yy indices down. I assume <span class="math notranslate nohighlight">\(g_{yy}=1\)</span>, if not then please define AurelCore.data[‘gyy’] = …</p>
-<p><strong>gyz</strong>: <span class="math notranslate nohighlight">\(g_{yz}\)</span> Metric with yz indices down. I assume <span class="math notranslate nohighlight">\(g_{yz}=0\)</span>, if not then please define AurelCore.data[‘gyz’] = …</p>
-<p><strong>gzz</strong>: <span class="math notranslate nohighlight">\(g_{zz}\)</span> Metric with zz indices down. I assume <span class="math notranslate nohighlight">\(g_{zz}=1\)</span>, if not then please define AurelCore.data[‘gzz’] = …</p>
-<p><strong>gammadown3</strong>: <span class="math notranslate nohighlight">\(\gamma_{ij}\)</span> Spatial metric with spatial indices down</p>
-<p><strong>gammadown3_bssnok</strong>: <span class="math notranslate nohighlight">\(\tilde{\gamma}_{ij}\)</span> Conformal spatial metric with spatial indices down</p>
-<p><strong>dtgammadown3_bssnok</strong>: <span class="math notranslate nohighlight">\(\partial_t \tilde{\gamma}_{ij}\)</span> Coordinate time derivative of conformal spatial metric with spatial indices down</p>
-<p><strong>gammaup3</strong>: <span class="math notranslate nohighlight">\(\gamma^{ij}\)</span> Spatial metric with spatial indices up</p>
-<p><strong>dtgammaup3</strong>: <span class="math notranslate nohighlight">\(\partial_t \gamma^{ij}\)</span> Coordinate time derivative of spatial metric with spatial indices up</p>
-<p><strong>gammaup3_bssnok</strong>: <span class="math notranslate nohighlight">\(\tilde{\gamma}^{ij}\)</span> Conformal spatial metric with spatial indices up</p>
-<p><strong>gammadet</strong>: <span class="math notranslate nohighlight">\(\gamma\)</span> Determinant of spatial metric</p>
-<p><strong>psi_bssnok</strong>: <span class="math notranslate nohighlight">\(\psi = \gamma^{1/12}\)</span> BSSNOK conformal factor</p>
-<p><strong>phi_bssnok</strong>: <span class="math notranslate nohighlight">\(\phi = \ln(\gamma^{1/12})\)</span> BSSNOK conformal factor</p>
-<p><strong>dtphi_bssnok</strong>: <span class="math notranslate nohighlight">\(\partial_t \phi\)</span> Coordinate time derivative of BSSNOK <span class="math notranslate nohighlight">\(\phi\)</span> conformal factor</p>
-<p><strong>gammadown4</strong>: <span class="math notranslate nohighlight">\(\gamma_{\mu\nu}\)</span> Spatial metric with spacetime indices down</p>
-<p><strong>gammaup4</strong>: <span class="math notranslate nohighlight">\(\gamma^{\mu\nu}\)</span> Spatial metric with spacetime indices up</p>
-</section>
-<section id="extrinsic-curvature">
-<h4>Extrinsic curvature<a class="headerlink" href="#extrinsic-curvature" title="Link to this heading"></a></h4>
-<p><strong>kxx</strong>: <span class="math notranslate nohighlight">\(K_{xx}\)</span> Extrinsic curvature with xx indices down. I assume <span class="math notranslate nohighlight">\(K_{xx}=0\)</span>, if not then please define AurelCore.data[‘kxx’] = …</p>
-<p><strong>kxy</strong>: <span class="math notranslate nohighlight">\(K_{xy}\)</span> Extrinsic curvature with xy indices down. I assume <span class="math notranslate nohighlight">\(K_{xy}=0\)</span>, if not then please define AurelCore.data[‘kxy’] = …</p>
-<p><strong>kxz</strong>: <span class="math notranslate nohighlight">\(K_{xz}\)</span> Extrinsic curvature with xz indices down. I assume <span class="math notranslate nohighlight">\(K_{xz}=0\)</span>, if not then please define AurelCore.data[‘kxz’] = …</p>
-<p><strong>kyy</strong>: <span class="math notranslate nohighlight">\(K_{yy}\)</span> Extrinsic curvature with yy indices down. I assume <span class="math notranslate nohighlight">\(K_{yy}=0\)</span>, if not then please define AurelCore.data[‘kyy’] = …</p>
-<p><strong>kyz</strong>: <span class="math notranslate nohighlight">\(K_{yz}\)</span> Extrinsic curvature with yz indices down. I assume <span class="math notranslate nohighlight">\(K_{yz}=0\)</span>, if not then please define AurelCore.data[‘kyz’] = …</p>
-<p><strong>kzz</strong>: <span class="math notranslate nohighlight">\(K_{zz}\)</span> Extrinsic curvature with zz indices down. I assume <span class="math notranslate nohighlight">\(K_{zz}=0\)</span>, if not then please define AurelCore.data[‘kzz’] = …</p>
-<p><strong>Kdown3</strong>: <span class="math notranslate nohighlight">\(K_{ij}\)</span> Extrinsic curvature with spatial indices down</p>
-<p><strong>Kup3</strong>: <span class="math notranslate nohighlight">\(K^{ij}\)</span> Extrinsic curvature with spatial indices up</p>
-<p><strong>Ktrace</strong>: <span class="math notranslate nohighlight">\(K = \gamma^{ij}K_{ij}\)</span> Trace of extrinsic curvature</p>
-<p><strong>dtKtrace</strong>: <span class="math notranslate nohighlight">\(\partial_t K\)</span> Coordinate time derivative of the trace of extrinsic curvature</p>
-<p><strong>Adown3</strong>: <span class="math notranslate nohighlight">\(A_{ij}\)</span> Traceless part of the extrinsic curvature with spatial indices down</p>
-<p><strong>Aup3</strong>: <span class="math notranslate nohighlight">\(A^{ij}\)</span> Traceless part of the extrinsic curvature with spatial indices up</p>
-<p><strong>A2</strong>: <span class="math notranslate nohighlight">\(A^2\)</span> Magnitude of traceless part of the extrinsic curvature</p>
-<p><strong>Adown3_bssnok</strong>: <span class="math notranslate nohighlight">\(\tilde{A}_{ij}\)</span> Conformal traceless part of the extrinsic curvature with spatial indices down</p>
-<p><strong>dtAdown3_bssnok</strong>: <span class="math notranslate nohighlight">\(\partial_t \tilde{A}_{ij}\)</span> Coordinate time derivative of conformal traceless part of the extrinsic curvature with spatial indices down</p>
-<p><strong>Aup3_bssnok</strong>: <span class="math notranslate nohighlight">\(\tilde{A}^{ij}\)</span> Conformal traceless part of the extrinsic curvature with spatial indices up</p>
-<p><strong>A2_bssnok</strong>: <span class="math notranslate nohighlight">\(\tilde{A}^2\)</span> Magnitude of conformal traceless part of the extrinsic curvature</p>
-</section>
 <section id="lapse">
 <h4>Lapse<a class="headerlink" href="#lapse" title="Link to this heading"></a></h4>
-<p><strong>alpha</strong>: <span class="math notranslate nohighlight">\(\alpha\)</span> Lapse. I assume <span class="math notranslate nohighlight">\(\alpha=1\)</span>, if not then please define AurelCore.data[‘alpha’] = …</p>
-<p><strong>dtalpha</strong>: <span class="math notranslate nohighlight">\(\partial_t \alpha\)</span> Coordinate time derivative of the lapse. I assume <span class="math notranslate nohighlight">\(\partial_t \alpha=0\)</span>, if not then please define AurelCore.data[‘dtalpha’] = …</p>
-<p><strong>DDalpha</strong>: D_iD_jalpha$ Spatial covariant second derivative of the lapse with spatial indices down</p>
+<p id="aurel-core-aurelcore-alpha"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.alpha">alpha</a>: <span class="math notranslate nohighlight">\(\alpha\)</span> Lapse. I assume <span class="math notranslate nohighlight">\(\alpha=1\)</span>, if not then please define AurelCore.data[‘alpha’] = …</p>
+<p id="aurel-core-aurelcore-dtalpha"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dtalpha">dtalpha</a>: <span class="math notranslate nohighlight">\(\partial_t \alpha\)</span> Coordinate time derivative of the lapse. I assume <span class="math notranslate nohighlight">\(\partial_t \alpha=0\)</span>, if not then please define AurelCore.data[‘dtalpha’] = …</p>
+<p id="aurel-core-aurelcore-ddalpha"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.DDalpha">DDalpha</a>: D_iD_jalpha$ Spatial covariant second derivative of the lapse with spatial indices down</p>
 </section>
 <section id="shift">
 <h4>Shift<a class="headerlink" href="#shift" title="Link to this heading"></a></h4>
-<p><strong>betax</strong>: <span class="math notranslate nohighlight">\(\beta^{x}\)</span> x component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\beta^{x}=0\)</span>, if not then please define AurelCore.data[‘betax’] = …</p>
-<p><strong>betay</strong>: <span class="math notranslate nohighlight">\(\beta^{y}\)</span> y component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\beta^{y}=0\)</span>, if not then please define AurelCore.data[‘betay’] = …</p>
-<p><strong>betaz</strong>: <span class="math notranslate nohighlight">\(\beta^{z}\)</span> z component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\beta^{z}=0\)</span>, if not then please define AurelCore.data[‘betaz’] = …</p>
-<p><strong>betaup3</strong>: <span class="math notranslate nohighlight">\(\beta^{i}\)</span> Shift vector with spatial indices up</p>
-<p><strong>dtbetax</strong>: <span class="math notranslate nohighlight">\(\partial_t\beta^{x}\)</span> Coordinate time derivative of the x component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\partial_t\beta^{x}=0\)</span>, if not then please define AurelCore.data[‘dtbetax’] = …</p>
-<p><strong>dtbetay</strong>: <span class="math notranslate nohighlight">\(\partial_t\beta^{y}\)</span> Coordinate time derivative of the y component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\partial_t\beta^{y}=0\)</span>, if not then please define AurelCore.data[‘dtbetay’] = …</p>
-<p><strong>dtbetaz</strong>: <span class="math notranslate nohighlight">\(\partial_t\beta^{z}\)</span> Coordinate time derivative of the z component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\partial_t\beta^{z}=0\)</span>, if not then please define AurelCore.data[‘dtbetaz’] = …</p>
-<p><strong>dtbetaup3</strong>: <span class="math notranslate nohighlight">\(\partial_t\beta^{i}\)</span> Coordinate time derivative of the shift vector with spatial indices up</p>
-<p><strong>betadown3</strong>: <span class="math notranslate nohighlight">\(\beta_{i}\)</span> Shift vector with spatial indices down</p>
-<p><strong>betamag</strong>: <span class="math notranslate nohighlight">\(\beta_{i}\beta^{i}\)</span> Magnitude of shift vector</p>
+<p id="aurel-core-aurelcore-betax"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.betax">betax</a>: <span class="math notranslate nohighlight">\(\beta^{x}\)</span> x component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\beta^{x}=0\)</span>, if not then please define AurelCore.data[‘betax’] = …</p>
+<p id="aurel-core-aurelcore-betay"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.betay">betay</a>: <span class="math notranslate nohighlight">\(\beta^{y}\)</span> y component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\beta^{y}=0\)</span>, if not then please define AurelCore.data[‘betay’] = …</p>
+<p id="aurel-core-aurelcore-betaz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.betaz">betaz</a>: <span class="math notranslate nohighlight">\(\beta^{z}\)</span> z component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\beta^{z}=0\)</span>, if not then please define AurelCore.data[‘betaz’] = …</p>
+<p id="aurel-core-aurelcore-betaup3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.betaup3">betaup3</a>: <span class="math notranslate nohighlight">\(\beta^{i}\)</span> Shift vector with spatial indices up</p>
+<p id="aurel-core-aurelcore-dtbetax"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dtbetax">dtbetax</a>: <span class="math notranslate nohighlight">\(\partial_t\beta^{x}\)</span> Coordinate time derivative of the x component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\partial_t\beta^{x}=0\)</span>, if not then please define AurelCore.data[‘dtbetax’] = …</p>
+<p id="aurel-core-aurelcore-dtbetay"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dtbetay">dtbetay</a>: <span class="math notranslate nohighlight">\(\partial_t\beta^{y}\)</span> Coordinate time derivative of the y component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\partial_t\beta^{y}=0\)</span>, if not then please define AurelCore.data[‘dtbetay’] = …</p>
+<p id="aurel-core-aurelcore-dtbetaz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dtbetaz">dtbetaz</a>: <span class="math notranslate nohighlight">\(\partial_t\beta^{z}\)</span> Coordinate time derivative of the z component of the shift vector with indices up. I assume <span class="math notranslate nohighlight">\(\partial_t\beta^{z}=0\)</span>, if not then please define AurelCore.data[‘dtbetaz’] = …</p>
+<p id="aurel-core-aurelcore-dtbetaup3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dtbetaup3">dtbetaup3</a>: <span class="math notranslate nohighlight">\(\partial_t\beta^{i}\)</span> Coordinate time derivative of the shift vector with spatial indices up</p>
+<p id="aurel-core-aurelcore-betadown3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.betadown3">betadown3</a>: <span class="math notranslate nohighlight">\(\beta_{i}\)</span> Shift vector with spatial indices down</p>
+<p id="aurel-core-aurelcore-betamag"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.betamag">betamag</a>: <span class="math notranslate nohighlight">\(\beta_{i}\beta^{i}\)</span> Magnitude of shift vector</p>
 </section>
 <section id="timelike-normal-vector">
 <h4>Timelike normal vector<a class="headerlink" href="#timelike-normal-vector" title="Link to this heading"></a></h4>
-<p><strong>nup4</strong>: <span class="math notranslate nohighlight">\(n^{\mu}\)</span> Timelike vector normal to the spatial metric with spacetime indices up</p>
-<p><strong>ndown4</strong>: <span class="math notranslate nohighlight">\(n_{\mu}\)</span> Timelike vector normal to the spatial metric with spacetime indices down</p>
+<p id="aurel-core-aurelcore-nup4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.nup4">nup4</a>: <span class="math notranslate nohighlight">\(n^{\mu}\)</span> Timelike vector normal to the spatial metric with spacetime indices up</p>
+<p id="aurel-core-aurelcore-ndown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.ndown4">ndown4</a>: <span class="math notranslate nohighlight">\(n_{\mu}\)</span> Timelike vector normal to the spatial metric with spacetime indices down</p>
+</section>
+<section id="spatial-metric">
+<h4>Spatial metric<a class="headerlink" href="#spatial-metric" title="Link to this heading"></a></h4>
+<p id="aurel-core-aurelcore-gxx"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gxx">gxx</a>: <span class="math notranslate nohighlight">\(g_{xx}\)</span> Metric with xx indices down. I assume <span class="math notranslate nohighlight">\(g_{xx}=1\)</span>, if not then please define AurelCore.data[‘gxx’] = …</p>
+<p id="aurel-core-aurelcore-gxy"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gxy">gxy</a>: <span class="math notranslate nohighlight">\(g_{xy}\)</span> Metric with xy indices down. I assume <span class="math notranslate nohighlight">\(g_{xy}=0\)</span>, if not then please define AurelCore.data[‘gxy’] = …</p>
+<p id="aurel-core-aurelcore-gxz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gxz">gxz</a>: <span class="math notranslate nohighlight">\(g_{xz}\)</span> Metric with xz indices down. I assume <span class="math notranslate nohighlight">\(g_{xz}=0\)</span>, if not then please define AurelCore.data[‘gxz’] = …</p>
+<p id="aurel-core-aurelcore-gyy"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gyy">gyy</a>: <span class="math notranslate nohighlight">\(g_{yy}\)</span> Metric with yy indices down. I assume <span class="math notranslate nohighlight">\(g_{yy}=1\)</span>, if not then please define AurelCore.data[‘gyy’] = …</p>
+<p id="aurel-core-aurelcore-gyz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gyz">gyz</a>: <span class="math notranslate nohighlight">\(g_{yz}\)</span> Metric with yz indices down. I assume <span class="math notranslate nohighlight">\(g_{yz}=0\)</span>, if not then please define AurelCore.data[‘gyz’] = …</p>
+<p id="aurel-core-aurelcore-gzz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gzz">gzz</a>: <span class="math notranslate nohighlight">\(g_{zz}\)</span> Metric with zz indices down. I assume <span class="math notranslate nohighlight">\(g_{zz}=1\)</span>, if not then please define AurelCore.data[‘gzz’] = …</p>
+<p id="aurel-core-aurelcore-gammadown3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gammadown3">gammadown3</a>: <span class="math notranslate nohighlight">\(\gamma_{ij}\)</span> Spatial metric with spatial indices down</p>
+<p id="aurel-core-aurelcore-gammaup3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gammaup3">gammaup3</a>: <span class="math notranslate nohighlight">\(\gamma^{ij}\)</span> Spatial metric with spatial indices up</p>
+<p id="aurel-core-aurelcore-dtgammaup3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dtgammaup3">dtgammaup3</a>: <span class="math notranslate nohighlight">\(\partial_t \gamma^{ij}\)</span> Coordinate time derivative of spatial metric with spatial indices up</p>
+<p id="aurel-core-aurelcore-gammadet"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gammadet">gammadet</a>: <span class="math notranslate nohighlight">\(\gamma\)</span> Determinant of spatial metric</p>
+<p id="aurel-core-aurelcore-gammadown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gammadown4">gammadown4</a>: <span class="math notranslate nohighlight">\(\gamma_{\mu\nu}\)</span> Spatial metric with spacetime indices down</p>
+<p id="aurel-core-aurelcore-gammaup4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gammaup4">gammaup4</a>: <span class="math notranslate nohighlight">\(\gamma^{\mu\nu}\)</span> Spatial metric with spacetime indices up</p>
 </section>
 <section id="spacetime-metric">
 <h4>Spacetime metric<a class="headerlink" href="#spacetime-metric" title="Link to this heading"></a></h4>
-<p><strong>gdown4</strong>: <span class="math notranslate nohighlight">\(g_{\mu\nu}\)</span> Spacetime metric with spacetime indices down</p>
-<p><strong>gup4</strong>: <span class="math notranslate nohighlight">\(g^{\mu\nu}\)</span> Spacetime metric with spacetime indices up</p>
-<p><strong>gdet</strong>: <span class="math notranslate nohighlight">\(g\)</span> Determinant of spacetime metric</p>
+<p id="aurel-core-aurelcore-gdown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gdown4">gdown4</a>: <span class="math notranslate nohighlight">\(g_{\mu\nu}\)</span> Spacetime metric with spacetime indices down</p>
+<p id="aurel-core-aurelcore-gup4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gup4">gup4</a>: <span class="math notranslate nohighlight">\(g^{\mu\nu}\)</span> Spacetime metric with spacetime indices up</p>
+<p id="aurel-core-aurelcore-gdet"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gdet">gdet</a>: <span class="math notranslate nohighlight">\(g\)</span> Determinant of spacetime metric</p>
+</section>
+<section id="bssnok-metric">
+<h4>BSSNOK metric<a class="headerlink" href="#bssnok-metric" title="Link to this heading"></a></h4>
+<p id="aurel-core-aurelcore-psi-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.psi_bssnok">psi_bssnok</a>: <span class="math notranslate nohighlight">\(\psi = \gamma^{1/12}\)</span> BSSNOK conformal factor</p>
+<p id="aurel-core-aurelcore-phi-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.phi_bssnok">phi_bssnok</a>: <span class="math notranslate nohighlight">\(\phi = \ln(\gamma^{1/12})\)</span> BSSNOK conformal factor</p>
+<p id="aurel-core-aurelcore-dtphi-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dtphi_bssnok">dtphi_bssnok</a>: <span class="math notranslate nohighlight">\(\partial_t \phi\)</span> Coordinate time derivative of BSSNOK <span class="math notranslate nohighlight">\(\phi\)</span> conformal factor</p>
+<p id="aurel-core-aurelcore-gammadown3-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gammadown3_bssnok">gammadown3_bssnok</a>: <span class="math notranslate nohighlight">\(\tilde{\gamma}_{ij}\)</span> Conformal spatial metric with spatial indices down</p>
+<p id="aurel-core-aurelcore-gammaup3-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gammaup3_bssnok">gammaup3_bssnok</a>: <span class="math notranslate nohighlight">\(\tilde{\gamma}^{ij}\)</span> Conformal spatial metric with spatial indices up</p>
+<p id="aurel-core-aurelcore-dtgammadown3-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dtgammadown3_bssnok">dtgammadown3_bssnok</a>: <span class="math notranslate nohighlight">\(\partial_t \tilde{\gamma}_{ij}\)</span> Coordinate time derivative of conformal spatial metric with spatial indices down</p>
+</section>
+<section id="extrinsic-curvature">
+<h4>Extrinsic curvature<a class="headerlink" href="#extrinsic-curvature" title="Link to this heading"></a></h4>
+<p id="aurel-core-aurelcore-kxx"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.kxx">kxx</a>: <span class="math notranslate nohighlight">\(K_{xx}\)</span> Extrinsic curvature with xx indices down. I assume <span class="math notranslate nohighlight">\(K_{xx}=0\)</span>, if not then please define AurelCore.data[‘kxx’] = …</p>
+<p id="aurel-core-aurelcore-kxy"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.kxy">kxy</a>: <span class="math notranslate nohighlight">\(K_{xy}\)</span> Extrinsic curvature with xy indices down. I assume <span class="math notranslate nohighlight">\(K_{xy}=0\)</span>, if not then please define AurelCore.data[‘kxy’] = …</p>
+<p id="aurel-core-aurelcore-kxz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.kxz">kxz</a>: <span class="math notranslate nohighlight">\(K_{xz}\)</span> Extrinsic curvature with xz indices down. I assume <span class="math notranslate nohighlight">\(K_{xz}=0\)</span>, if not then please define AurelCore.data[‘kxz’] = …</p>
+<p id="aurel-core-aurelcore-kyy"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.kyy">kyy</a>: <span class="math notranslate nohighlight">\(K_{yy}\)</span> Extrinsic curvature with yy indices down. I assume <span class="math notranslate nohighlight">\(K_{yy}=0\)</span>, if not then please define AurelCore.data[‘kyy’] = …</p>
+<p id="aurel-core-aurelcore-kyz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.kyz">kyz</a>: <span class="math notranslate nohighlight">\(K_{yz}\)</span> Extrinsic curvature with yz indices down. I assume <span class="math notranslate nohighlight">\(K_{yz}=0\)</span>, if not then please define AurelCore.data[‘kyz’] = …</p>
+<p id="aurel-core-aurelcore-kzz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.kzz">kzz</a>: <span class="math notranslate nohighlight">\(K_{zz}\)</span> Extrinsic curvature with zz indices down. I assume <span class="math notranslate nohighlight">\(K_{zz}=0\)</span>, if not then please define AurelCore.data[‘kzz’] = …</p>
+<p id="aurel-core-aurelcore-kdown3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Kdown3">Kdown3</a>: <span class="math notranslate nohighlight">\(K_{ij}\)</span> Extrinsic curvature with spatial indices down</p>
+<p id="aurel-core-aurelcore-kup3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Kup3">Kup3</a>: <span class="math notranslate nohighlight">\(K^{ij}\)</span> Extrinsic curvature with spatial indices up</p>
+<p id="aurel-core-aurelcore-ktrace"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Ktrace">Ktrace</a>: <span class="math notranslate nohighlight">\(K = \gamma^{ij}K_{ij}\)</span> Trace of extrinsic curvature</p>
+<p id="aurel-core-aurelcore-dtktrace"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dtKtrace">dtKtrace</a>: <span class="math notranslate nohighlight">\(\partial_t K\)</span> Coordinate time derivative of the trace of extrinsic curvature</p>
+<p id="aurel-core-aurelcore-adown3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Adown3">Adown3</a>: <span class="math notranslate nohighlight">\(A_{ij}\)</span> Traceless part of the extrinsic curvature with spatial indices down</p>
+<p id="aurel-core-aurelcore-aup3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Aup3">Aup3</a>: <span class="math notranslate nohighlight">\(A^{ij}\)</span> Traceless part of the extrinsic curvature with spatial indices up</p>
+<p id="aurel-core-aurelcore-a2"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.A2">A2</a>: <span class="math notranslate nohighlight">\(A^2\)</span> Magnitude of traceless part of the extrinsic curvature</p>
+</section>
+<section id="bssnok-extrinsic-curvature">
+<h4>BSSNOK extrinsic curvature<a class="headerlink" href="#bssnok-extrinsic-curvature" title="Link to this heading"></a></h4>
+<p id="aurel-core-aurelcore-adown3-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Adown3_bssnok">Adown3_bssnok</a>: <span class="math notranslate nohighlight">\(\tilde{A}_{ij}\)</span> Conformal traceless part of the extrinsic curvature with spatial indices down</p>
+<p id="aurel-core-aurelcore-aup3-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Aup3_bssnok">Aup3_bssnok</a>: <span class="math notranslate nohighlight">\(\tilde{A}^{ij}\)</span> Conformal traceless part of the extrinsic curvature with spatial indices up</p>
+<p id="aurel-core-aurelcore-a2-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.A2_bssnok">A2_bssnok</a>: <span class="math notranslate nohighlight">\(\tilde{A}^2\)</span> Magnitude of conformal traceless part of the extrinsic curvature</p>
+<p id="aurel-core-aurelcore-dtadown3-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dtAdown3_bssnok">dtAdown3_bssnok</a>: <span class="math notranslate nohighlight">\(\partial_t \tilde{A}_{ij}\)</span> Coordinate time derivative of conformal traceless part of the extrinsic curvature with spatial indices down</p>
+</section>
+<section id="proper-time">
+<h4>Proper time<a class="headerlink" href="#proper-time" title="Link to this heading"></a></h4>
+<p id="aurel-core-aurelcore-dttau"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dttau">dttau</a>: <span class="math notranslate nohighlight">\(\partial_t \tau\)</span> Coordinate time derivative of proper time</p>
 </section>
 </section>
 <section id="matter-quantities">
@@ -298,130 +1278,139 @@ saves it in the AurelCore.data dictionary.</p></li>
 <p>Lagrangian observer follows <span class="math notranslate nohighlight">\(u^\mu\)</span></p>
 <section id="lagrangian-matter-variables">
 <h4>Lagrangian matter variables<a class="headerlink" href="#lagrangian-matter-variables" title="Link to this heading"></a></h4>
-<p><strong>rho0</strong>: <span class="math notranslate nohighlight">\(\rho_0\)</span> Rest mass energy density. I assume <span class="math notranslate nohighlight">\(\rho_0=0\)</span>, if not then please define AurelCore.data[‘rho0’] = …</p>
-<p><strong>press</strong>: <span class="math notranslate nohighlight">\(p\)</span> Pressure. I assume <span class="math notranslate nohighlight">\(p=0\)</span>, if not then please define AurelCore.data[‘press’] = …</p>
-<p><strong>eps</strong>: <span class="math notranslate nohighlight">\(\epsilon\)</span> Specific internal energy. I assume <span class="math notranslate nohighlight">\(\epsilon=0\)</span>, if not then please define AurelCore.data[‘eps’] = …</p>
-<p><strong>rho</strong>: <span class="math notranslate nohighlight">\(\rho\)</span> Energy density</p>
-<p><strong>enthalpy</strong>: <span class="math notranslate nohighlight">\(h\)</span> Specific enthalpy of the fluid</p>
+<p id="aurel-core-aurelcore-rho0"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.rho0">rho0</a>: <span class="math notranslate nohighlight">\(\rho_0\)</span> Rest mass energy density. I assume <span class="math notranslate nohighlight">\(\rho_0=0\)</span>, if not then please define AurelCore.data[‘rho0’] = …</p>
+<p id="aurel-core-aurelcore-press"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.press">press</a>: <span class="math notranslate nohighlight">\(p\)</span> Pressure. I assume <span class="math notranslate nohighlight">\(p=0\)</span>, if not then please define AurelCore.data[‘press’] = …</p>
+<p id="aurel-core-aurelcore-eps"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.eps">eps</a>: <span class="math notranslate nohighlight">\(\epsilon\)</span> Specific internal energy. I assume <span class="math notranslate nohighlight">\(\epsilon=0\)</span>, if not then please define AurelCore.data[‘eps’] = …</p>
+<p id="aurel-core-aurelcore-rho"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.rho">rho</a>: <span class="math notranslate nohighlight">\(\rho\)</span> Energy density</p>
+<p id="aurel-core-aurelcore-enthalpy"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.enthalpy">enthalpy</a>: <span class="math notranslate nohighlight">\(h\)</span> Specific enthalpy of the fluid</p>
 </section>
 <section id="fluid-velocity">
 <h4>Fluid velocity<a class="headerlink" href="#fluid-velocity" title="Link to this heading"></a></h4>
-<p><strong>w_lorentz</strong>: <span class="math notranslate nohighlight">\(W\)</span> Lorentz factor. I assume <span class="math notranslate nohighlight">\(W=1\)</span>, if not then please define AurelCore.data[‘w_lorentz’] = …</p>
-<p><strong>velx</strong>: <span class="math notranslate nohighlight">\(v^x\)</span> x component of Eulerian fluid three velocity with indice up. I assume <span class="math notranslate nohighlight">\(v^x=0\)</span>, if not then please define AurelCore.data[‘velx’] = …</p>
-<p><strong>vely</strong>: <span class="math notranslate nohighlight">\(v^y\)</span> y component of Eulerian fluid three velocity with indice up. I assume <span class="math notranslate nohighlight">\(v^y=0\)</span>, if not then please define AurelCore.data[‘vely’] = …</p>
-<p><strong>velz</strong>: <span class="math notranslate nohighlight">\(v^z\)</span> z component of Eulerian fluid three velocity with indice up. I assume <span class="math notranslate nohighlight">\(v^z=0\)</span>, if not then please define AurelCore.data[‘velz’] = …</p>
-<p><strong>velup3</strong>: <span class="math notranslate nohighlight">\(v^i\)</span> Eulerian fluid three velocity with spatial indices up.</p>
-<p><strong>velup4</strong>: <span class="math notranslate nohighlight">\(v^\mu\)</span> Eulerian fluid three velocity with spacetime indices up.</p>
-<p><strong>veldown3</strong>: <span class="math notranslate nohighlight">\(v_i\)</span> Eulerian fluid three velocity with spatial indices down</p>
-<p><strong>veldown4</strong>: <span class="math notranslate nohighlight">\(v_\mu\)</span> Eulerian fluid three velocity with spacetime indices down</p>
-<p><strong>uup0</strong>: <span class="math notranslate nohighlight">\(u^t\)</span> Lagrangian fluid four velocity with time indice up</p>
-<p><strong>uup3</strong>: <span class="math notranslate nohighlight">\(u^i\)</span> Lagrangian fluid four velocity with spatial indices up</p>
-<p><strong>uup4</strong>: <span class="math notranslate nohighlight">\(u^\mu\)</span> Lagrangian fluid four velocity with spacetime indices up</p>
-<p><strong>udown3</strong>: <span class="math notranslate nohighlight">\(u_\mu\)</span> Lagrangian fluid four velocity with spatial indices down</p>
-<p><strong>udown4</strong>: <span class="math notranslate nohighlight">\(u_\mu\)</span> Lagrangian fluid four velocity with spacetime indices down</p>
-<p><strong>hdown4</strong>: <span class="math notranslate nohighlight">\(h_{\mu\nu}\)</span> Spatial metric orthonomal to fluid flow with spacetime indices down</p>
-<p><strong>hdet</strong>: <span class="math notranslate nohighlight">\(h\)</span> Determinant of spatial part of spatial metric orthonormal to fluid flow</p>
-<p><strong>hmixed4</strong>: <span class="math notranslate nohighlight">\({h^{\mu}}_{\nu}\)</span> Spatial metric orthonomal to fluid flow with mixed spacetime indices</p>
-<p><strong>hup4</strong>: <span class="math notranslate nohighlight">\(h^{\mu\nu}\)</span> Spatial metric orthonomal to fluid flow with spacetime indices up</p>
+<p id="aurel-core-aurelcore-w-lorentz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.w_lorentz">w_lorentz</a>: <span class="math notranslate nohighlight">\(W\)</span> Lorentz factor. I assume <span class="math notranslate nohighlight">\(W=1\)</span>, if not then please define AurelCore.data[‘w_lorentz’] = …</p>
+<p id="aurel-core-aurelcore-velx"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.velx">velx</a>: <span class="math notranslate nohighlight">\(v^x\)</span> x component of Eulerian fluid three velocity with indice up. I assume <span class="math notranslate nohighlight">\(v^x=0\)</span>, if not then please define AurelCore.data[‘velx’] = …</p>
+<p id="aurel-core-aurelcore-vely"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.vely">vely</a>: <span class="math notranslate nohighlight">\(v^y\)</span> y component of Eulerian fluid three velocity with indice up. I assume <span class="math notranslate nohighlight">\(v^y=0\)</span>, if not then please define AurelCore.data[‘vely’] = …</p>
+<p id="aurel-core-aurelcore-velz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.velz">velz</a>: <span class="math notranslate nohighlight">\(v^z\)</span> z component of Eulerian fluid three velocity with indice up. I assume <span class="math notranslate nohighlight">\(v^z=0\)</span>, if not then please define AurelCore.data[‘velz’] = …</p>
+<p id="aurel-core-aurelcore-velup3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.velup3">velup3</a>: <span class="math notranslate nohighlight">\(v^i\)</span> Eulerian fluid three velocity with spatial indices up.</p>
+<p id="aurel-core-aurelcore-velup4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.velup4">velup4</a>: <span class="math notranslate nohighlight">\(v^\mu\)</span> Eulerian fluid three velocity with spacetime indices up.</p>
+<p id="aurel-core-aurelcore-veldown3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.veldown3">veldown3</a>: <span class="math notranslate nohighlight">\(v_i\)</span> Eulerian fluid three velocity with spatial indices down</p>
+<p id="aurel-core-aurelcore-veldown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.veldown4">veldown4</a>: <span class="math notranslate nohighlight">\(v_\mu\)</span> Eulerian fluid three velocity with spacetime indices down</p>
+<p id="aurel-core-aurelcore-uup0"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.uup0">uup0</a>: <span class="math notranslate nohighlight">\(u^t\)</span> Lagrangian fluid four velocity with time indice up</p>
+<p id="aurel-core-aurelcore-uup3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.uup3">uup3</a>: <span class="math notranslate nohighlight">\(u^i\)</span> Lagrangian fluid four velocity with spatial indices up</p>
+<p id="aurel-core-aurelcore-uup4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.uup4">uup4</a>: <span class="math notranslate nohighlight">\(u^\mu\)</span> Lagrangian fluid four velocity with spacetime indices up</p>
+<p id="aurel-core-aurelcore-udown3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.udown3">udown3</a>: <span class="math notranslate nohighlight">\(u_\mu\)</span> Lagrangian fluid four velocity with spatial indices down</p>
+<p id="aurel-core-aurelcore-udown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.udown4">udown4</a>: <span class="math notranslate nohighlight">\(u_\mu\)</span> Lagrangian fluid four velocity with spacetime indices down</p>
+<p id="aurel-core-aurelcore-hdown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.hdown4">hdown4</a>: <span class="math notranslate nohighlight">\(h_{\mu\nu}\)</span> Spatial metric orthonomal to fluid flow with spacetime indices down</p>
+<p id="aurel-core-aurelcore-hdet"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.hdet">hdet</a>: <span class="math notranslate nohighlight">\(h\)</span> Determinant of spatial part of spatial metric orthonormal to fluid flow</p>
+<p id="aurel-core-aurelcore-hmixed4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.hmixed4">hmixed4</a>: <span class="math notranslate nohighlight">\({h^{\mu}}_{\nu}\)</span> Spatial metric orthonomal to fluid flow with mixed spacetime indices</p>
+<p id="aurel-core-aurelcore-hup4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.hup4">hup4</a>: <span class="math notranslate nohighlight">\(h^{\mu\nu}\)</span> Spatial metric orthonomal to fluid flow with spacetime indices up</p>
 </section>
 <section id="energy-stress-tensor">
 <h4>Energy-stress tensor<a class="headerlink" href="#energy-stress-tensor" title="Link to this heading"></a></h4>
-<p><strong>Tdown4</strong>: <span class="math notranslate nohighlight">\(T_{\mu\nu}\)</span> Energy-stress tensor with spacetime indices down</p>
-<p><strong>Tup4</strong>: <span class="math notranslate nohighlight">\(T^{\mu\nu}\)</span> Energy-stress tensor with spacetime indices up</p>
-<p><strong>Ttrace</strong>: <span class="math notranslate nohighlight">\(T\)</span> Trace of the energy-stress tensor</p>
+<p id="aurel-core-aurelcore-tdown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Tdown4">Tdown4</a>: <span class="math notranslate nohighlight">\(T_{\mu\nu}\)</span> Energy-stress tensor with spacetime indices down</p>
+<p id="aurel-core-aurelcore-tup4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Tup4">Tup4</a>: <span class="math notranslate nohighlight">\(T^{\mu\nu}\)</span> Energy-stress tensor with spacetime indices up</p>
+<p id="aurel-core-aurelcore-ttrace"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Ttrace">Ttrace</a>: <span class="math notranslate nohighlight">\(T\)</span> Trace of the energy-stress tensor</p>
 </section>
 <section id="eulerian-matter-variables">
 <h4>Eulerian matter variables<a class="headerlink" href="#eulerian-matter-variables" title="Link to this heading"></a></h4>
-<p><strong>rho_n</strong>: <span class="math notranslate nohighlight">\(\rho^{\{n\}}\)</span> Energy density in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame</p>
-<p><strong>fluxup3_n</strong>: <span class="math notranslate nohighlight">\(S^{\{n\}i}\)</span> Energy flux (or momentum density) in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices up</p>
-<p><strong>fluxdown3_n</strong>: <span class="math notranslate nohighlight">\(S^{\{n\}}_{i}\)</span> Energy flux (or momentum density) in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices down</p>
-<p><strong>angmomup3_n</strong>: <span class="math notranslate nohighlight">\(J^{\{n\}i}\)</span> Angular momentum density in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices up</p>
-<p><strong>angmomdown3_n</strong>: <span class="math notranslate nohighlight">\(J^{\{n\}}_{i}\)</span> Angular momentum density in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices down</p>
-<p><strong>Stressup3_n</strong>: <span class="math notranslate nohighlight">\(S^{\{n\}ij}\)</span> Stress tensor in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices up</p>
-<p><strong>Stressdown3_n</strong>: <span class="math notranslate nohighlight">\(S^{\{n\}}_{ij}\)</span> Stress tensor in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices down</p>
-<p><strong>Stresstrace_n</strong>: <span class="math notranslate nohighlight">\(S^{\{n\}}\)</span> Trace of Stress tensor in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame</p>
-<p><strong>press_n</strong>: <span class="math notranslate nohighlight">\(p^{\{n\}}\)</span> Pressure in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame</p>
-<p><strong>anisotropic_press_down3_n</strong>: <span class="math notranslate nohighlight">\(\pi^{\{n\}_{ij}}\)</span> Anisotropic pressure in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices down</p>
-<p><strong>rho_n_fromHam</strong>: <span class="math notranslate nohighlight">\(\rho^{\{n\}}\)</span> Energy density in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame computed from the Hamiltonian constraint</p>
-<p><strong>fluxup3_n_fromMom</strong>: <span class="math notranslate nohighlight">\(S^{\{n\}i}\)</span> Energy flux (or momentum density) in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices up computed from the Momentum constraint</p>
+<p id="aurel-core-aurelcore-rho-n"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.rho_n">rho_n</a>: <span class="math notranslate nohighlight">\(\rho^{\{n\}}\)</span> Energy density in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame</p>
+<p id="aurel-core-aurelcore-fluxup3-n"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.fluxup3_n">fluxup3_n</a>: <span class="math notranslate nohighlight">\(S^{\{n\}i}\)</span> Energy flux (or momentum density) in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices up</p>
+<p id="aurel-core-aurelcore-fluxdown3-n"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.fluxdown3_n">fluxdown3_n</a>: <span class="math notranslate nohighlight">\(S^{\{n\}}_{i}\)</span> Energy flux (or momentum density) in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices down</p>
+<p id="aurel-core-aurelcore-angmomup3-n"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.angmomup3_n">angmomup3_n</a>: <span class="math notranslate nohighlight">\(J^{\{n\}i}\)</span> Angular momentum density in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices up</p>
+<p id="aurel-core-aurelcore-angmomdown3-n"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.angmomdown3_n">angmomdown3_n</a>: <span class="math notranslate nohighlight">\(J^{\{n\}}_{i}\)</span> Angular momentum density in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices down</p>
+<p id="aurel-core-aurelcore-stressup3-n"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Stressup3_n">Stressup3_n</a>: <span class="math notranslate nohighlight">\(S^{\{n\}ij}\)</span> Stress tensor in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices up</p>
+<p id="aurel-core-aurelcore-stressdown3-n"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Stressdown3_n">Stressdown3_n</a>: <span class="math notranslate nohighlight">\(S^{\{n\}}_{ij}\)</span> Stress tensor in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices down</p>
+<p id="aurel-core-aurelcore-stresstrace-n"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Stresstrace_n">Stresstrace_n</a>: <span class="math notranslate nohighlight">\(S^{\{n\}}\)</span> Trace of Stress tensor in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame</p>
+<p id="aurel-core-aurelcore-press-n"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.press_n">press_n</a>: <span class="math notranslate nohighlight">\(p^{\{n\}}\)</span> Pressure in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame</p>
+<p id="aurel-core-aurelcore-anisotropic-press-down3-n"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.anisotropic_press_down3_n">anisotropic_press_down3_n</a>: <span class="math notranslate nohighlight">\(\pi^{\{n\}_{ij}}\)</span> Anisotropic pressure in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices down</p>
+<p id="aurel-core-aurelcore-rho-n-fromham"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.rho_n_fromHam">rho_n_fromHam</a>: <span class="math notranslate nohighlight">\(\rho^{\{n\}}\)</span> Energy density in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame computed from the Hamiltonian constraint</p>
+<p id="aurel-core-aurelcore-fluxup3-n-frommom"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.fluxup3_n_fromMom">fluxup3_n_fromMom</a>: <span class="math notranslate nohighlight">\(S^{\{n\}i}\)</span> Energy flux (or momentum density) in the <span class="math notranslate nohighlight">\(n^\mu\)</span> frame with spatial indices up computed from the Momentum constraint</p>
 </section>
 <section id="conserved-variables">
 <h4>Conserved variables<a class="headerlink" href="#conserved-variables" title="Link to this heading"></a></h4>
-<p><strong>conserved_D</strong>: <span class="math notranslate nohighlight">\(D\)</span> Conserved mass-energy density in Wilson’s formalism</p>
-<p><strong>conserved_E</strong>: <span class="math notranslate nohighlight">\(E\)</span> Conserved internal energy density in Wilson’s formalism</p>
-<p><strong>conserved_Sdown4</strong>: <span class="math notranslate nohighlight">\(S_{\mu}\)</span> Conserved energy flux (or momentum density) in Wilson’s formalism with spacetime indices down</p>
-<p><strong>conserved_Sdown3</strong>: <span class="math notranslate nohighlight">\(S_{i}\)</span> Conserved energy flux (or momentum density) in Wilson’s formalism with spatial indices down</p>
-<p><strong>conserved_Sup4</strong>: <span class="math notranslate nohighlight">\(S^{\mu}\)</span> Conserved energy flux (or momentum density) in Wilson’s formalism with spacetime indices up</p>
-<p><strong>conserved_Sup3</strong>: <span class="math notranslate nohighlight">\(S^{i}\)</span> Conserved energy flux (or momentum density) in Wilson’s formalism with spatial indices up</p>
-<p><strong>dtconserved</strong>: <span class="math notranslate nohighlight">\(\partial_t D, \; \partial_t E, \partial_t S_{i}\)</span> List of coordinate time derivatives of conserved rest mass-energy density, internal energy density and energy flux (or momentum density) with spatial indices down in Wilson’s formalism</p>
+<p id="aurel-core-aurelcore-conserved-d"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.conserved_D">conserved_D</a>: <span class="math notranslate nohighlight">\(D\)</span> Conserved mass-energy density in Wilson’s formalism</p>
+<p id="aurel-core-aurelcore-conserved-e"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.conserved_E">conserved_E</a>: <span class="math notranslate nohighlight">\(E\)</span> Conserved internal energy density in Wilson’s formalism</p>
+<p id="aurel-core-aurelcore-conserved-sdown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.conserved_Sdown4">conserved_Sdown4</a>: <span class="math notranslate nohighlight">\(S_{\mu}\)</span> Conserved energy flux (or momentum density) in Wilson’s formalism with spacetime indices down</p>
+<p id="aurel-core-aurelcore-conserved-sdown3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.conserved_Sdown3">conserved_Sdown3</a>: <span class="math notranslate nohighlight">\(S_{i}\)</span> Conserved energy flux (or momentum density) in Wilson’s formalism with spatial indices down</p>
+<p id="aurel-core-aurelcore-conserved-sup4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.conserved_Sup4">conserved_Sup4</a>: <span class="math notranslate nohighlight">\(S^{\mu}\)</span> Conserved energy flux (or momentum density) in Wilson’s formalism with spacetime indices up</p>
+<p id="aurel-core-aurelcore-conserved-sup3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.conserved_Sup3">conserved_Sup3</a>: <span class="math notranslate nohighlight">\(S^{i}\)</span> Conserved energy flux (or momentum density) in Wilson’s formalism with spatial indices up</p>
+<p id="aurel-core-aurelcore-dtconserved"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dtconserved">dtconserved</a>: <span class="math notranslate nohighlight">\(\partial_t D, \; \partial_t E, \partial_t S_{i}\)</span> List of coordinate time derivatives of conserved rest mass-energy density, internal energy density and energy flux (or momentum density) with spatial indices down in Wilson’s formalism</p>
 </section>
 <section id="kinematic-variables">
 <h4>Kinematic variables<a class="headerlink" href="#kinematic-variables" title="Link to this heading"></a></h4>
-<p><strong>st_covd_udown4</strong>: <span class="math notranslate nohighlight">\(\nabla_{\mu} u_{\nu}\)</span> Spacetime covariant derivative of Lagrangian fluid four velocity with spacetime indices down</p>
-<p><strong>accelerationdown4</strong>: <span class="math notranslate nohighlight">\(a_{\mu}\)</span> Acceleration of the fluid with spacetime indices down</p>
-<p><strong>accelerationup4</strong>: <span class="math notranslate nohighlight">\(a^{\mu}\)</span> Acceleration of the fluid with spacetime indices up</p>
-<p><strong>s_covd_udown4</strong>: <span class="math notranslate nohighlight">\(\mathcal{D}^{\{u\}}_{\mu} u_{\nu}\)</span> Spatial covariant derivative of Lagrangian fluid four velocity with spacetime indices down, with respect to spatial hypersurfaces orthonormal to the fluid flow</p>
-<p><strong>thetadown4</strong>: <span class="math notranslate nohighlight">\(\Theta_{\mu\nu}\)</span> Fluid expansion tensor with spacetime indices down</p>
-<p><strong>theta</strong>: <span class="math notranslate nohighlight">\(\Theta\)</span> Fluid expansion scalar</p>
-<p><strong>sheardown4</strong>: <span class="math notranslate nohighlight">\(\sigma_{\mu\nu}\)</span> Fluid shear tensor with spacetime indices down</p>
-<p><strong>shear2</strong>: <span class="math notranslate nohighlight">\(\sigma^2\)</span> Magnitude of fluid shear</p>
-<p><strong>omegadown4</strong>: <span class="math notranslate nohighlight">\(\omega_{\mu\nu}\)</span> Fluid vorticity tensor with spacetime indices down</p>
-<p><strong>omega2</strong>: <span class="math notranslate nohighlight">\(\omega^2\)</span> Magnitude of fluid vorticity</p>
+<p id="aurel-core-aurelcore-st-covd-udown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.st_covd_udown4">st_covd_udown4</a>: <span class="math notranslate nohighlight">\(\nabla_{\mu} u_{\nu}\)</span> Spacetime covariant derivative of Lagrangian fluid four velocity with spacetime indices down</p>
+<p id="aurel-core-aurelcore-accelerationdown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.accelerationdown4">accelerationdown4</a>: <span class="math notranslate nohighlight">\(a_{\mu}\)</span> Acceleration of the fluid with spacetime indices down</p>
+<p id="aurel-core-aurelcore-accelerationup4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.accelerationup4">accelerationup4</a>: <span class="math notranslate nohighlight">\(a^{\mu}\)</span> Acceleration of the fluid with spacetime indices up</p>
+<p id="aurel-core-aurelcore-s-covd-udown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_covd_udown4">s_covd_udown4</a>: <span class="math notranslate nohighlight">\(\mathcal{D}^{\{u\}}_{\mu} u_{\nu}\)</span> Spatial covariant derivative of Lagrangian fluid four velocity with spacetime indices down, with respect to spatial hypersurfaces orthonormal to the fluid flow</p>
+<p id="aurel-core-aurelcore-thetadown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.thetadown4">thetadown4</a>: <span class="math notranslate nohighlight">\(\Theta_{\mu\nu}\)</span> Fluid expansion tensor with spacetime indices down</p>
+<p id="aurel-core-aurelcore-theta"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.theta">theta</a>: <span class="math notranslate nohighlight">\(\Theta\)</span> Fluid expansion scalar</p>
+<p id="aurel-core-aurelcore-sheardown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.sheardown4">sheardown4</a>: <span class="math notranslate nohighlight">\(\sigma_{\mu\nu}\)</span> Fluid shear tensor with spacetime indices down</p>
+<p id="aurel-core-aurelcore-shear2"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.shear2">shear2</a>: <span class="math notranslate nohighlight">\(\sigma^2\)</span> Magnitude of fluid shear</p>
+<p id="aurel-core-aurelcore-omegadown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.omegadown4">omegadown4</a>: <span class="math notranslate nohighlight">\(\omega_{\mu\nu}\)</span> Fluid vorticity tensor with spacetime indices down</p>
+<p id="aurel-core-aurelcore-omega2"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.omega2">omega2</a>: <span class="math notranslate nohighlight">\(\omega^2\)</span> Magnitude of fluid vorticity</p>
 </section>
 </section>
 <section id="curvature-quantities">
 <h3>Curvature quantities<a class="headerlink" href="#curvature-quantities" title="Link to this heading"></a></h3>
 <section id="spatial-curvature">
 <h4>Spatial curvature<a class="headerlink" href="#spatial-curvature" title="Link to this heading"></a></h4>
-<p><strong>s_RicciS_u</strong>: <span class="math notranslate nohighlight">\({}^{(3)}R^{\{u\}}\)</span> Ricci scalar of the spatial metric orthonormal to fluid flow</p>
-<p><strong>s_Gamma_udd3</strong>: <span class="math notranslate nohighlight">\({}^{(3)}{\Gamma^{k}}_{ij}\)</span> Christoffel symbols of spatial metric with mixed spatial indices</p>
-<p><strong>s_Gamma_bssnok</strong>: <span class="math notranslate nohighlight">\(\tilde{\Gamma}^i\)</span> Conformal connection functions with spatial indice up</p>
-<p><strong>s_Riemann_uddd3</strong>: <span class="math notranslate nohighlight">\({}^{(3)}{R^{i}}_{jkl}\)</span> Riemann tensor of spatial metric with mixed spatial indices</p>
-<p><strong>s_Riemann_down3</strong>: <span class="math notranslate nohighlight">\({}^{(3)}R_{ijkl}\)</span> Riemann tensor of spatial metric with all spatial indices down</p>
-<p><strong>s_Ricci_down3</strong>: <span class="math notranslate nohighlight">\({}^{(3)}R_{ij}\)</span> Ricci tensor of spatial metric with spatial indices down</p>
-<p><strong>s_RicciS</strong>: <span class="math notranslate nohighlight">\({}^{(3)}R\)</span> Ricci scalar of spatial metric</p>
+<p id="aurel-core-aurelcore-s-riccis-u"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_RicciS_u">s_RicciS_u</a>: <span class="math notranslate nohighlight">\({}^{(3)}R^{\{u\}}\)</span> Ricci scalar of the spatial metric orthonormal to fluid flow</p>
+<p id="aurel-core-aurelcore-s-gamma-udd3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_Gamma_udd3">s_Gamma_udd3</a>: <span class="math notranslate nohighlight">\({}^{(3)}{\Gamma^{k}}_{ij}\)</span> Christoffel symbols of spatial metric with mixed spatial indices</p>
+<p id="aurel-core-aurelcore-s-riemann-uddd3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_Riemann_uddd3">s_Riemann_uddd3</a>: <span class="math notranslate nohighlight">\({}^{(3)}{R^{i}}_{jkl}\)</span> Riemann tensor of spatial metric with mixed spatial indices</p>
+<p id="aurel-core-aurelcore-s-riemann-down3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_Riemann_down3">s_Riemann_down3</a>: <span class="math notranslate nohighlight">\({}^{(3)}R_{ijkl}\)</span> Riemann tensor of spatial metric with all spatial indices down</p>
+<p id="aurel-core-aurelcore-s-ricci-down3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_Ricci_down3">s_Ricci_down3</a>: <span class="math notranslate nohighlight">\({}^{(3)}R_{ij}\)</span> Ricci tensor of spatial metric with spatial indices down</p>
+<p id="aurel-core-aurelcore-s-riccis"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_RicciS">s_RicciS</a>: <span class="math notranslate nohighlight">\({}^{(3)}R\)</span> Ricci scalar of spatial metric</p>
 </section>
 <section id="spacetime-curvature">
 <h4>Spacetime curvature<a class="headerlink" href="#spacetime-curvature" title="Link to this heading"></a></h4>
-<p><strong>st_Gamma_udd4</strong>: <span class="math notranslate nohighlight">\({}^{(4)}{\Gamma^{\alpha}}_{\mu\nu}\)</span> Christoffel symbols of spacetime metric with mixed spacetime indices</p>
-<p><strong>st_Riemann_uddd4</strong>: <span class="math notranslate nohighlight">\({}^{(4)}{R^{\alpha}}_{\beta\mu\nu}\)</span> Riemann tensor of spacetime metric with mixed spacetime indices</p>
-<p><strong>st_Riemann_down4</strong>: <span class="math notranslate nohighlight">\({}^{(4)}R_{\alpha\beta\mu\nu}\)</span> Riemann tensor of spacetime metric with spacetime indices down</p>
-<p><strong>st_Riemann_uudd4</strong>: <span class="math notranslate nohighlight">\({}^{(4)}{R^{\alpha\beta}}_{\mu\nu}\)</span> Riemann tensor of spacetime metric with mixed spacetime indices</p>
-<p><strong>st_Ricci_down4</strong>: <span class="math notranslate nohighlight">\({}^{(4)}R_{\alpha\beta}\)</span> Ricci tensor of spacetime metric with spacetime indices down</p>
-<p><strong>st_Ricci_down3</strong>: <span class="math notranslate nohighlight">\({}^{(4)}R_{ij}\)</span> Ricci tensor of spacetime metric with spatial indices down</p>
-<p><strong>st_RicciS</strong>: <span class="math notranslate nohighlight">\({}^{(4)}R\)</span> Ricci scalar of spacetime metric</p>
-<p><strong>Einsteindown4</strong>: <span class="math notranslate nohighlight">\(G_{\alpha\beta}\)</span> Einstein tensor with spacetime indices down</p>
-<p><strong>Kretschmann</strong>: <span class="math notranslate nohighlight">\(K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}\)</span> Kretschmann scalar</p>
+<p id="aurel-core-aurelcore-st-gamma-udd4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.st_Gamma_udd4">st_Gamma_udd4</a>: <span class="math notranslate nohighlight">\({}^{(4)}{\Gamma^{\alpha}}_{\mu\nu}\)</span> Christoffel symbols of spacetime metric with mixed spacetime indices</p>
+<p id="aurel-core-aurelcore-st-riemann-uddd4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.st_Riemann_uddd4">st_Riemann_uddd4</a>: <span class="math notranslate nohighlight">\({}^{(4)}{R^{\alpha}}_{\beta\mu\nu}\)</span> Riemann tensor of spacetime metric with mixed spacetime indices</p>
+<p id="aurel-core-aurelcore-st-riemann-down4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.st_Riemann_down4">st_Riemann_down4</a>: <span class="math notranslate nohighlight">\({}^{(4)}R_{\alpha\beta\mu\nu}\)</span> Riemann tensor of spacetime metric with spacetime indices down</p>
+<p id="aurel-core-aurelcore-st-riemann-uudd4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.st_Riemann_uudd4">st_Riemann_uudd4</a>: <span class="math notranslate nohighlight">\({}^{(4)}{R^{\alpha\beta}}_{\mu\nu}\)</span> Riemann tensor of spacetime metric with mixed spacetime indices</p>
+<p id="aurel-core-aurelcore-st-ricci-down4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.st_Ricci_down4">st_Ricci_down4</a>: <span class="math notranslate nohighlight">\({}^{(4)}R_{\alpha\beta}\)</span> Ricci tensor of spacetime metric with spacetime indices down</p>
+<p id="aurel-core-aurelcore-st-ricci-down3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.st_Ricci_down3">st_Ricci_down3</a>: <span class="math notranslate nohighlight">\({}^{(4)}R_{ij}\)</span> Ricci tensor of spacetime metric with spatial indices down</p>
+<p id="aurel-core-aurelcore-st-riccis"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.st_RicciS">st_RicciS</a>: <span class="math notranslate nohighlight">\({}^{(4)}R\)</span> Ricci scalar of spacetime metric</p>
+<p id="aurel-core-aurelcore-einsteindown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Einsteindown4">Einsteindown4</a>: <span class="math notranslate nohighlight">\(G_{\alpha\beta}\)</span> Einstein tensor with spacetime indices down</p>
+<p id="aurel-core-aurelcore-kretschmann"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Kretschmann">Kretschmann</a>: <span class="math notranslate nohighlight">\(K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}\)</span> Kretschmann scalar</p>
+</section>
+<section id="bssnok-curvature">
+<h4>BSSNOK curvature<a class="headerlink" href="#bssnok-curvature" title="Link to this heading"></a></h4>
+<p id="aurel-core-aurelcore-s-gamma-udd3-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_Gamma_udd3_bssnok">s_Gamma_udd3_bssnok</a>: <span class="math notranslate nohighlight">\({}^{(3)}{\tilde{\Gamma}^{k}}_{ij}\)</span> Christoffel symbols of conformal spatial metric with mixed spatial indices</p>
+<p id="aurel-core-aurelcore-s-gamma-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_Gamma_bssnok">s_Gamma_bssnok</a>: <span class="math notranslate nohighlight">\({}^{(3)}\tilde{\Gamma}^i\)</span> Conformal connection functions with spatial indice up</p>
+<p id="aurel-core-aurelcore-dts-gamma-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dts_Gamma_bssnok">dts_Gamma_bssnok</a>: <span class="math notranslate nohighlight">\(\partial_t {}^{(3)}\tilde{\Gamma}^i\)</span> Coordinate time derivative of conformal connection functions with spatial indice up</p>
+<p id="aurel-core-aurelcore-s-ricci-down3-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_Ricci_down3_bssnok">s_Ricci_down3_bssnok</a>: <span class="math notranslate nohighlight">\({}^{(3)}\tilde{R}_{ij}\)</span> Ricci tensor of conformal spatial metric with spatial indices down</p>
+<p id="aurel-core-aurelcore-s-riccis-bssnok"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_RicciS_bssnok">s_RicciS_bssnok</a>: <span class="math notranslate nohighlight">\({}^{(3)}\tilde{R}\)</span> Ricci scalar of conformal spatial metric</p>
+<p id="aurel-core-aurelcore-s-ricci-down3-phi"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_Ricci_down3_phi">s_Ricci_down3_phi</a>: <span class="math notranslate nohighlight">\({}^{(3)}R^{\phi}_{ij}\)</span> Ricci terms that depend on the conformal function <span class="math notranslate nohighlight">\(\phi\)</span></p>
 </section>
 <section id="weyl-decomposition">
 <h4>Weyl decomposition<a class="headerlink" href="#weyl-decomposition" title="Link to this heading"></a></h4>
-<p><strong>st_Weyl_down4</strong>: <span class="math notranslate nohighlight">\(C_{\alpha\beta\mu\nu}\)</span> Weyl tensor of spacetime metric with spacetime indices down</p>
-<p><strong>Weyl_Psi</strong>: <span class="math notranslate nohighlight">\(\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4\)</span> List of Weyl scalars for an null vector base defined with AurelCore.tetrad_to_use</p>
-<p><strong>Weyl_invariants</strong>: <span class="math notranslate nohighlight">\(I, \; J, \; L, \; K, \; N\)</span> Dictionary of Weyl invariants</p>
-<p><strong>eweyl_u_down4</strong>: <span class="math notranslate nohighlight">\(E^{\{u\}}_{\alpha\beta}\)</span> Electric part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(u^{\mu}\)</span> with spacetime indices down</p>
-<p><strong>eweyl_n_down3</strong>: <span class="math notranslate nohighlight">\(E^{\{n\}}_{ij}\)</span> Electric part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(n^{\mu}\)</span> with spatial indices down</p>
-<p><strong>bweyl_u_down4</strong>: <span class="math notranslate nohighlight">\(B^{\{u\}}_{\alpha\beta}\)</span> Magnetic part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(u^{\mu}\)</span> with spacetime indices down</p>
-<p><strong>bweyl_n_down3</strong>: <span class="math notranslate nohighlight">\(B^{\{n\}}_{ij}\)</span> Magnetic part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(n^{\mu}\)</span> with spatial indices down</p>
+<p id="aurel-core-aurelcore-st-weyl-down4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.st_Weyl_down4">st_Weyl_down4</a>: <span class="math notranslate nohighlight">\(C_{\alpha\beta\mu\nu}\)</span> Weyl tensor of spacetime metric with spacetime indices down</p>
+<p id="aurel-core-aurelcore-weyl-psi"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Weyl_Psi">Weyl_Psi</a>: <span class="math notranslate nohighlight">\(\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4\)</span> List of Weyl scalars for an null vector base defined with AurelCore.tetrad</p>
+<p id="aurel-core-aurelcore-psi4-lm"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Psi4_lm">Psi4_lm</a>: <span class="math notranslate nohighlight">\(\Psi_4^{l,m}\)</span> List of dictionaries of spin weighted spherical harmonic decomposition of the 4th Weyl scalar. Control with AurelCore.lmax, extract_radii, and interp_method.</p>
+<p id="aurel-core-aurelcore-weyl-invariants"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Weyl_invariants">Weyl_invariants</a>: <span class="math notranslate nohighlight">\(I, \; J, \; L, \; K, \; N\)</span> Dictionary of Weyl invariants</p>
+<p id="aurel-core-aurelcore-eweyl-u-down4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.eweyl_u_down4">eweyl_u_down4</a>: <span class="math notranslate nohighlight">\(E^{\{u\}}_{\alpha\beta}\)</span> Electric part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(u^{\mu}\)</span> with spacetime indices down</p>
+<p id="aurel-core-aurelcore-eweyl-n-down3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.eweyl_n_down3">eweyl_n_down3</a>: <span class="math notranslate nohighlight">\(E^{\{n\}}_{ij}\)</span> Electric part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(n^{\mu}\)</span> with spatial indices down</p>
+<p id="aurel-core-aurelcore-bweyl-u-down4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.bweyl_u_down4">bweyl_u_down4</a>: <span class="math notranslate nohighlight">\(B^{\{u\}}_{\alpha\beta}\)</span> Magnetic part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(u^{\mu}\)</span> with spacetime indices down</p>
+<p id="aurel-core-aurelcore-bweyl-n-down3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.bweyl_n_down3">bweyl_n_down3</a>: <span class="math notranslate nohighlight">\(B^{\{n\}}_{ij}\)</span> Magnetic part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(n^{\mu}\)</span> with spatial indices down</p>
 </section>
 </section>
 <section id="null-ray-expansion">
 <h3>Null ray expansion<a class="headerlink" href="#null-ray-expansion" title="Link to this heading"></a></h3>
-<p><strong>null_ray_exp_out</strong>: <span class="math notranslate nohighlight">\(\Theta_{out}\)</span> List of expansion of null rays radially going out</p>
-<p><strong>null_ray_exp_in</strong>: <span class="math notranslate nohighlight">\(\Theta_{in}\)</span> List of expansion of null rays radially going in</p>
+<p id="aurel-core-aurelcore-null-ray-exp-out"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.null_ray_exp_out">null_ray_exp_out</a>: <span class="math notranslate nohighlight">\(\Theta_{out}\)</span> List of expansion of null rays radially going out</p>
+<p id="aurel-core-aurelcore-null-ray-exp-in"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.null_ray_exp_in">null_ray_exp_in</a>: <span class="math notranslate nohighlight">\(\Theta_{in}\)</span> List of expansion of null rays radially going in</p>
 </section>
 <section id="constraints">
 <h3>Constraints<a class="headerlink" href="#constraints" title="Link to this heading"></a></h3>
-<p><strong>Hamiltonian</strong>: <span class="math notranslate nohighlight">\(\mathcal{H}\)</span> Hamilonian constraint</p>
-<p><strong>Hamiltonian_Escale</strong>: [<span class="math notranslate nohighlight">\(\mathcal{H}\)</span>] Hamilonian constraint energy scale</p>
-<p><strong>Momentumup3</strong>: <span class="math notranslate nohighlight">\(\mathcal{M}^i\)</span> Momentum constraint with spatial indices up</p>
-<p><strong>Momentum_Escale</strong>: [<span class="math notranslate nohighlight">\(\mathcal{M}\)</span>] Momentum constraint energy scale</p>
+<p id="aurel-core-aurelcore-hamiltonian"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Hamiltonian">Hamiltonian</a>: <span class="math notranslate nohighlight">\(\mathcal{H}\)</span> Hamilonian constraint</p>
+<p id="aurel-core-aurelcore-hamiltonian-escale"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Hamiltonian_Escale">Hamiltonian_Escale</a>: [<span class="math notranslate nohighlight">\(\mathcal{H}\)</span>] Hamilonian constraint energy scale</p>
+<p id="aurel-core-aurelcore-momentumup3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Momentumup3">Momentumup3</a>: <span class="math notranslate nohighlight">\(\mathcal{M}^i\)</span> Momentum constraint with spatial indices up</p>
+<p id="aurel-core-aurelcore-momentum-escale"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Momentum_Escale">Momentum_Escale</a>: [<span class="math notranslate nohighlight">\(\mathcal{M}\)</span>] Momentum constraint energy scale</p>
 </section>
 </section>
-<section id="aurelcore">
-<h2>AurelCore<a class="headerlink" href="#aurelcore" title="Link to this heading"></a></h2>
+<section id="aurelcore-methods">
+<h2>AurelCore Methods<a class="headerlink" href="#aurelcore-methods" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="aurel.core.AurelCore">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aurel.core.</span></span><span class="sig-name descname"><span class="pre">AurelCore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.core.AurelCore" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aurel.core.</span></span><span class="sig-name descname"><span class="pre">AurelCore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.core.AurelCore" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class able to calculate any variable in aurel.descriptions.</p>
 <dl class="field-list simple">
@@ -429,9 +1418,23 @@ saves it in the AurelCore.data dictionary.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fd</strong> (<a class="reference internal" href="finitedifference.html#aurel.finitedifference.FiniteDifference" title="aurel.finitedifference.FiniteDifference"><em>FiniteDifference</em></a>) – aurel.finitedifference.FiniteDifference</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – If True, display messages about the calculations.</p></li>
+<li><p><strong>fancy_print</strong> (<em>bool</em>) – If True, display messages in a fancy ipython format,
+else normal print is used. Default is True.</p></li>
+<li><p><strong>clear_cache_every_nbr_calc</strong> (<em>int</em>) – Number of calculations before clearing the cache. Default is 20.</p></li>
+<li><p><strong>memory_threshold_inGB</strong> (<em>int</em>) – Memory threshold in GB for clearing the cache. Default is 4 GB.</p></li>
 <li><p><strong>Lambda</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – Cosmological constant. Default is 0.0.</p></li>
-<li><p><strong>tetrad_to_use</strong> (<em>str</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – Tetrad choice for Weyl scalar calculations.
+<li><p><strong>vaccum</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – If True, assume vacuum spacetime (no matter). Default is False.</p></li>
+<li><p><strong>tetrad</strong> (<em>str</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – Tetrad choice for Weyl scalar calculations.
 Default is “quasi-Kinnersley”. Any other value provides …</p></li>
+<li><p><strong>lmax</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – Maximum l value for spherical harmonic decompositions. Default is 8.</p></li>
+<li><p><strong>center</strong> (<em>tuple</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – Center of the Psi4_lm sphere.
+Default is (0.0, 0.0, 0.0).</p></li>
+<li><p><strong>extract_radii</strong> (<em>list</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – List of extraction radii for spherical harmonic decompositions.
+Default is [0.9 * min radius in the grid].</p></li>
+<li><p><strong>interp_method</strong> (<em>str</em><em>, </em><em>optional</em><em>, </em><em>also attribute</em>) – <p>Interpolation method for
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html">scipy.interpolate.RegularGridInterpolator</a>.
+Default is ‘linear’.</p>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -469,18 +1472,6 @@ Default is “quasi-Kinnersley”. Any other value provides …</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="aurel.core.AurelCore.fancy_print">
-<span class="sig-name descname"><span class="pre">fancy_print</span></span><a class="headerlink" href="#aurel.core.AurelCore.fancy_print" title="Link to this definition"></a></dt>
-<dd><p>(<em>bool</em>) - If True, display messages in a fancy ipython format,
-else normal print is used. Default is True.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="aurel.core.AurelCore.kappa">
 <span class="sig-name descname"><span class="pre">kappa</span></span><a class="headerlink" href="#aurel.core.AurelCore.kappa" title="Link to this definition"></a></dt>
 <dd><p>(<em>float</em>) - Einstein’s constant with G = c = 1. Default is 8 * pi.</p>
@@ -495,28 +1486,6 @@ else normal print is used. Default is True.</p>
 <dt class="sig sig-object py" id="aurel.core.AurelCore.calculation_count">
 <span class="sig-name descname"><span class="pre">calculation_count</span></span><a class="headerlink" href="#aurel.core.AurelCore.calculation_count" title="Link to this definition"></a></dt>
 <dd><p>(<em>int</em>) - Number of calculations performed.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="aurel.core.AurelCore.clear_cache_every_nbr_calc">
-<span class="sig-name descname"><span class="pre">clear_cache_every_nbr_calc</span></span><a class="headerlink" href="#aurel.core.AurelCore.clear_cache_every_nbr_calc" title="Link to this definition"></a></dt>
-<dd><p>(<em>int</em>) - Number of calculations before clearing the cache.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="aurel.core.AurelCore.memory_threshold_inGB">
-<span class="sig-name descname"><span class="pre">memory_threshold_inGB</span></span><a class="headerlink" href="#aurel.core.AurelCore.memory_threshold_inGB" title="Link to this definition"></a></dt>
-<dd><p>(<em>int</em>) - Memory threshold in GB for clearing the cache.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -808,7 +1777,7 @@ So this function only applied to those three tensors.</p>
 <span class="sig-name descname"><span class="pre">tetrad_base</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.tetrad_base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.core.AurelCore.tetrad_base" title="Link to this definition"></a></dt>
 <dd><p>Return an quasi-Kinnersley or arbitrary tetrad base.</p>
 <dl class="simple">
-<dt>if AurelCore.tetrad_to_use == “quasi-Kinnersley”:</dt><dd><p>Which is the default, because the tetrad_to_use is set to
+<dt>if AurelCore.tetrad == “quasi-Kinnersley”:</dt><dd><p>Which is the default, because the tetrad is set to
 “quasi-Kinnersley” in the init.
 Then quasi-Kinnersley tetrad is returned where the first tetrad
 is the normal to the hypersurface <span class="math notranslate nohighlight">\(n^\mu\)</span>.</p>

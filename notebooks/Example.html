@@ -10,6 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
 
   
@@ -19,13 +20,14 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Example over time" href="Example_over_time.html" />
-    <link rel="prev" title="Working on an HPC" href="../source/advice.html" /> 
+    <link rel="prev" title="Development version" href="../source/advice.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -60,7 +62,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/advice.html#citation">Citation</a></li>
 </ul>
@@ -521,7 +524,7 @@ The timesteps can then be treated independently.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[]
-[&#39;gxx&#39;, &#39;gxy&#39;, &#39;gxz&#39;, &#39;gyy&#39;, &#39;gyz&#39;, &#39;gzz&#39;, &#39;gammadown3&#39;, &#39;gammadown3_bssnok&#39;, &#39;dtgammadown3_bssnok&#39;, &#39;gammaup3&#39;, &#39;dtgammaup3&#39;, &#39;gammaup3_bssnok&#39;, &#39;gammadet&#39;, &#39;psi_bssnok&#39;, &#39;phi_bssnok&#39;, &#39;dtphi_bssnok&#39;, &#39;gammadown4&#39;, &#39;gammaup4&#39;, &#39;kxx&#39;, &#39;kxy&#39;, &#39;kxz&#39;, &#39;kyy&#39;, &#39;kyz&#39;, &#39;kzz&#39;, &#39;Kdown3&#39;, &#39;Kup3&#39;, &#39;Ktrace&#39;, &#39;dtKtrace&#39;, &#39;Adown3&#39;, &#39;Aup3&#39;, &#39;A2&#39;, &#39;Adown3_bssnok&#39;, &#39;dtAdown3_bssnok&#39;, &#39;Aup3_bssnok&#39;, &#39;A2_bssnok&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;DDalpha&#39;, &#39;betax&#39;, &#39;betay&#39;, &#39;betaz&#39;, &#39;betaup3&#39;, &#39;dtbetax&#39;, &#39;dtbetay&#39;, &#39;dtbetaz&#39;, &#39;dtbetaup3&#39;, &#39;betadown3&#39;, &#39;betamag&#39;, &#39;nup4&#39;, &#39;ndown4&#39;, &#39;gdown4&#39;, &#39;gup4&#39;, &#39;gdet&#39;, &#39;null_ray_exp_out&#39;, &#39;null_ray_exp_in&#39;, &#39;rho0&#39;, &#39;press&#39;, &#39;eps&#39;, &#39;rho&#39;, &#39;enthalpy&#39;, &#39;w_lorentz&#39;, &#39;velx&#39;, &#39;vely&#39;, &#39;velz&#39;, &#39;velup3&#39;, &#39;velup4&#39;, &#39;veldown3&#39;, &#39;veldown4&#39;, &#39;uup0&#39;, &#39;uup3&#39;, &#39;uup4&#39;, &#39;udown3&#39;, &#39;udown4&#39;, &#39;hdown4&#39;, &#39;hdet&#39;, &#39;hmixed4&#39;, &#39;hup4&#39;, &#39;Tdown4&#39;, &#39;Tup4&#39;, &#39;Ttrace&#39;, &#39;rho_n&#39;, &#39;fluxup3_n&#39;, &#39;fluxdown3_n&#39;, &#39;angmomup3_n&#39;, &#39;angmomdown3_n&#39;, &#39;Stressup3_n&#39;, &#39;Stressdown3_n&#39;, &#39;Stresstrace_n&#39;, &#39;press_n&#39;, &#39;anisotropic_press_down3_n&#39;, &#39;rho_n_fromHam&#39;, &#39;fluxup3_n_fromMom&#39;, &#39;conserved_D&#39;, &#39;conserved_E&#39;, &#39;conserved_Sdown4&#39;, &#39;conserved_Sdown3&#39;, &#39;conserved_Sup4&#39;, &#39;conserved_Sup3&#39;, &#39;dtconserved&#39;, &#39;st_covd_udown4&#39;, &#39;accelerationdown4&#39;, &#39;accelerationup4&#39;, &#39;s_covd_udown4&#39;, &#39;thetadown4&#39;, &#39;theta&#39;, &#39;sheardown4&#39;, &#39;shear2&#39;, &#39;omegadown4&#39;, &#39;omega2&#39;, &#39;s_RicciS_u&#39;, &#39;s_Gamma_udd3&#39;, &#39;s_Gamma_bssnok&#39;, &#39;s_Riemann_uddd3&#39;, &#39;s_Riemann_down3&#39;, &#39;s_Ricci_down3&#39;, &#39;s_RicciS&#39;, &#39;st_Gamma_udd4&#39;, &#39;st_Riemann_uddd4&#39;, &#39;st_Riemann_down4&#39;, &#39;st_Riemann_uudd4&#39;, &#39;st_Ricci_down4&#39;, &#39;st_Ricci_down3&#39;, &#39;st_RicciS&#39;, &#39;Einsteindown4&#39;, &#39;Kretschmann&#39;, &#39;Hamiltonian&#39;, &#39;Hamiltonian_Escale&#39;, &#39;Momentumup3&#39;, &#39;Momentum_Escale&#39;, &#39;st_Weyl_down4&#39;, &#39;Weyl_Psi&#39;, &#39;Weyl_invariants&#39;, &#39;eweyl_u_down4&#39;, &#39;eweyl_n_down3&#39;, &#39;bweyl_u_down4&#39;, &#39;bweyl_n_down3&#39;]
+[&#39;gxx&#39;, &#39;gxy&#39;, &#39;gxz&#39;, &#39;gyy&#39;, &#39;gyz&#39;, &#39;gzz&#39;, &#39;gammadown3&#39;, &#39;gammaup3&#39;, &#39;dtgammaup3&#39;, &#39;gammadet&#39;, &#39;gammadown4&#39;, &#39;gammaup4&#39;, &#39;psi_bssnok&#39;, &#39;phi_bssnok&#39;, &#39;dtphi_bssnok&#39;, &#39;gammadown3_bssnok&#39;, &#39;gammaup3_bssnok&#39;, &#39;dtgammadown3_bssnok&#39;, &#39;kxx&#39;, &#39;kxy&#39;, &#39;kxz&#39;, &#39;kyy&#39;, &#39;kyz&#39;, &#39;kzz&#39;, &#39;Kdown3&#39;, &#39;Kup3&#39;, &#39;Ktrace&#39;, &#39;dtKtrace&#39;, &#39;Adown3&#39;, &#39;Aup3&#39;, &#39;A2&#39;, &#39;Adown3_bssnok&#39;, &#39;Aup3_bssnok&#39;, &#39;A2_bssnok&#39;, &#39;dtAdown3_bssnok&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;DDalpha&#39;, &#39;betax&#39;, &#39;betay&#39;, &#39;betaz&#39;, &#39;betaup3&#39;, &#39;dtbetax&#39;, &#39;dtbetay&#39;, &#39;dtbetaz&#39;, &#39;dtbetaup3&#39;, &#39;betadown3&#39;, &#39;betamag&#39;, &#39;dttau&#39;, &#39;nup4&#39;, &#39;ndown4&#39;, &#39;gdown4&#39;, &#39;gup4&#39;, &#39;gdet&#39;, &#39;null_ray_exp_out&#39;, &#39;null_ray_exp_in&#39;, &#39;rho0&#39;, &#39;press&#39;, &#39;eps&#39;, &#39;rho&#39;, &#39;enthalpy&#39;, &#39;w_lorentz&#39;, &#39;velx&#39;, &#39;vely&#39;, &#39;velz&#39;, &#39;velup3&#39;, &#39;velup4&#39;, &#39;veldown3&#39;, &#39;veldown4&#39;, &#39;uup0&#39;, &#39;uup3&#39;, &#39;uup4&#39;, &#39;udown3&#39;, &#39;udown4&#39;, &#39;hdown4&#39;, &#39;hdet&#39;, &#39;hmixed4&#39;, &#39;hup4&#39;, &#39;Tdown4&#39;, &#39;Tup4&#39;, &#39;Ttrace&#39;, &#39;rho_n&#39;, &#39;fluxup3_n&#39;, &#39;fluxdown3_n&#39;, &#39;angmomup3_n&#39;, &#39;angmomdown3_n&#39;, &#39;Stressup3_n&#39;, &#39;Stressdown3_n&#39;, &#39;Stresstrace_n&#39;, &#39;press_n&#39;, &#39;anisotropic_press_down3_n&#39;, &#39;rho_n_fromHam&#39;, &#39;fluxup3_n_fromMom&#39;, &#39;conserved_D&#39;, &#39;conserved_E&#39;, &#39;conserved_Sdown4&#39;, &#39;conserved_Sdown3&#39;, &#39;conserved_Sup4&#39;, &#39;conserved_Sup3&#39;, &#39;dtconserved&#39;, &#39;st_covd_udown4&#39;, &#39;accelerationdown4&#39;, &#39;accelerationup4&#39;, &#39;s_covd_udown4&#39;, &#39;thetadown4&#39;, &#39;theta&#39;, &#39;sheardown4&#39;, &#39;shear2&#39;, &#39;omegadown4&#39;, &#39;omega2&#39;, &#39;s_RicciS_u&#39;, &#39;s_Gamma_udd3&#39;, &#39;s_Riemann_uddd3&#39;, &#39;s_Riemann_down3&#39;, &#39;s_Ricci_down3&#39;, &#39;s_RicciS&#39;, &#39;st_Gamma_udd4&#39;, &#39;st_Riemann_uddd4&#39;, &#39;st_Riemann_down4&#39;, &#39;st_Riemann_uudd4&#39;, &#39;st_Ricci_down4&#39;, &#39;st_Ricci_down3&#39;, &#39;st_RicciS&#39;, &#39;Einsteindown4&#39;, &#39;Kretschmann&#39;, &#39;s_Gamma_udd3_bssnok&#39;, &#39;s_Gamma_bssnok&#39;, &#39;s_Ricci_down3_phi&#39;, &#39;Hamiltonian&#39;, &#39;Hamiltonian_Escale&#39;, &#39;Momentumup3&#39;, &#39;Momentum_Escale&#39;, &#39;st_Weyl_down4&#39;, &#39;Weyl_Psi&#39;, &#39;Psi4_lm&#39;, &#39;Weyl_invariants&#39;, &#39;eweyl_u_down4&#39;, &#39;eweyl_n_down3&#39;, &#39;bweyl_u_down4&#39;, &#39;bweyl_n_down3&#39;]
 </pre></div>
 </div>
 </div>
@@ -604,7 +607,7 @@ Determinant of the spatial metric:  1.0
 This is because the automatic recursive process will only go down to what it needs for the specific calculation requested.</p>
 <section id="weyl-scalars-and-petrov-classification">
 <h4>Weyl Scalars and Petrov Classification<a class="headerlink" href="#weyl-scalars-and-petrov-classification" title="Link to this heading"></a></h4>
-<p>Call the Weyl scalars with “Weyl_Psi”, this gives a list whose elements correspond to the <span class="math notranslate nohighlight">\(\Psi_i\)</span> Weyl scalars computed with the quasi-kinnersley tetrad. Default AurelCore.tetrad_to_use = “quasi-kinnersley”, another option is to set it to another string and it will use an orthonormal tetrad base aligned with the Cartesian coordinates.</p>
+<p>Call the Weyl scalars with “Weyl_Psi”, this gives a list whose elements correspond to the <span class="math notranslate nohighlight">\(\Psi_i\)</span> Weyl scalars computed with the quasi-kinnersley tetrad. Default AurelCore.tetrad = “quasi-kinnersley”, another option is to set it to another string and it will use an orthonormal tetrad base aligned with the Cartesian coordinates.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loop through the 5 scalars</span>
@@ -617,7 +620,7 @@ This is because the automatic recursive process will only go down to what it nee
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tetrad is set to AurelCore.tetrad_to_use = quasi-Kinnersley
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tetrad is set to AurelCore.tetrad = quasi-Kinnersley
 Calculated alpha: $\alpha$ Lapse. I assume $\alpha=1$, if not then please define AurelCore.data[&#39;alpha&#39;] = ... 
 Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
 Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
@@ -650,7 +653,7 @@ CLEAN-UP: Removed 6 items
 CLEAN-UP: data size after cleanup: 234.00 MB
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
 Calculated st_Weyl_down4: $C_{\alpha\beta\mu\nu}$ Weyl tensor of spacetime metric with spacetime indices down
-Calculated Weyl_Psi: $\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$ List of Weyl scalars for an null vector base defined with AurelCore.tetrad_to_use
+Calculated Weyl_Psi: $\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$ List of Weyl scalars for an null vector base defined with AurelCore.tetrad
 mean(abs(Psi_0)) =  -0.056854352588593  + i( 0.0004337842600139842 )
 mean(abs(Psi_1)) =  0.00036435542405428644  + i( 0.0005091692783650128 )
 mean(abs(Psi_2)) =  0.0011930336565166956  + i( -0.004897107788552394 )
@@ -680,7 +683,7 @@ cutoffmask2(f) method of aurel.finitedifference.FiniteDifference instance
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">del</span> <span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi&quot;</span><span class="p">],</span> <span class="n">rel</span><span class="o">.</span><span class="n">last_accessed</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi&quot;</span><span class="p">]</span>
-<span class="n">rel</span><span class="o">.</span><span class="n">tetrad_to_use</span> <span class="o">=</span> <span class="s1">&#39;not Kinnersley&#39;</span>
+<span class="n">rel</span><span class="o">.</span><span class="n">tetrad</span> <span class="o">=</span> <span class="s1">&#39;not Kinnersley&#39;</span>
 <span class="c1"># Loop through the 5 scalars</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
     <span class="n">Psi</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask2</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
@@ -691,8 +694,8 @@ cutoffmask2(f) method of aurel.finitedifference.FiniteDifference instance
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tetrad is set to AurelCore.tetrad_to_use = not Kinnersley
-Calculated Weyl_Psi: $\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$ List of Weyl scalars for an null vector base defined with AurelCore.tetrad_to_use
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tetrad is set to AurelCore.tetrad = not Kinnersley
+Calculated Weyl_Psi: $\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$ List of Weyl scalars for an null vector base defined with AurelCore.tetrad
 mean(abs(Psi_0)) =  0.2499500983725248  + i( -2.750832833501293e-05 )
 mean(abs(Psi_1)) =  8.2494878838321e-17  + i( 2.561661433370836e-16 )
 mean(abs(Psi_2)) =  8.306760178328783e-06  + i( -1.2493610844711934e-05 )
@@ -766,7 +769,7 @@ So after <strong>AurelCore.clear_cache_every_nbr_calc</strong> (= 20 default) nu
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../source/advice.html" class="btn btn-neutral float-left" title="Working on an HPC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../source/advice.html" class="btn btn-neutral float-left" title="Development version" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="Example_over_time.html" class="btn btn-neutral float-right" title="Example over time" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

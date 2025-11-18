@@ -6,10 +6,11 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Working on an HPC &mdash; aurel May 2025 documentation</title>
+  <title>Development version &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
 
   
@@ -19,6 +20,7 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -58,7 +60,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Working on an HPC</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#working-on-an-hpc">Working on an HPC</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#create-a-virtual-environment">Create a virtual environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#jupyter-notebook">Jupyter notebook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#python-script">Python script</a></li>
@@ -91,7 +94,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Working on an HPC</li>
+      <li class="breadcrumb-item active">Development version</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/source/advice.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -101,7 +104,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="working-on-an-hpc">
+  <section id="development-version">
+<span id="dev-version"></span><h1>Development version<a class="headerlink" href="#development-version" title="Link to this heading"></a></h1>
+<p>Install the development version of aurel with pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/robynlm/aurel.git@development
+</pre></div>
+</div>
+</section>
+<section id="working-on-an-hpc">
 <h1>Working on an HPC<a class="headerlink" href="#working-on-an-hpc" title="Link to this heading"></a></h1>
 <p>While HPCs won’t let you install packages globally, you can still use aurel.
 You just need to create a virtual environment and install aurel there.</p>
@@ -116,7 +126,9 @@ You just need to create a virtual environment and install aurel there.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>aurel
 </pre></div>
 </div>
-<p>and install any other packages you may use.</p>
+<p>or the <a class="reference internal" href="#dev-version"><span class="std std-ref">Development version</span></a>.
+You should be able to find the package in <cite>myenv/lib/pythonX.X/site-packages/aurel</cite>.
+Acompanying required packages will be installed automatically, but at this point you should also install any other python packages you tipycally use.</p>
 </section>
 <section id="jupyter-notebook">
 <h2>Jupyter notebook<a class="headerlink" href="#jupyter-notebook" title="Link to this heading"></a></h2>
@@ -158,32 +170,39 @@ for generated data.</p></li>
 <section id="citation">
 <h1>Citation<a class="headerlink" href="#citation" title="Link to this heading"></a></h1>
 <p>If you use aurel in your work, please cite it as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@misc</span><span class="p">{</span><span class="n">aurel2025</span><span class="p">,</span>
-  <span class="n">title</span>     <span class="o">=</span> <span class="p">{</span><span class="n">Aurel</span><span class="p">:</span> <span class="n">A</span> <span class="n">Python</span> <span class="n">package</span> <span class="k">for</span> <span class="n">automatic</span> <span class="n">relativistic</span> <span class="n">calculations</span><span class="p">},</span>
-  <span class="n">author</span>    <span class="o">=</span> <span class="p">{</span><span class="n">Munoz</span><span class="p">,</span> <span class="n">Robyn</span> <span class="n">L</span><span class="o">.</span><span class="p">},</span>
-  <span class="n">publisher</span> <span class="o">=</span> <span class="p">{</span><span class="n">GitHub</span><span class="p">},</span>
-  <span class="n">year</span>      <span class="o">=</span> <span class="p">{</span><span class="mi">2025</span><span class="p">},</span>
-  <span class="n">url</span>       <span class="o">=</span> <span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">robynlm</span><span class="o">/</span><span class="n">aurel</span><span class="p">}}</span>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Munoz, R. L. (2025). Aurel: A Python package for automatic relativistic calculations. <em>GitHub</em>. <a class="reference external" href="https://github.com/robynlm/aurel">https://github.com/robynlm/aurel</a></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@misc</span><span class="p">{</span><span class="nl">aurel2025</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Aurel: A Python package for automatic relativistic calculations}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{Munoz, Robyn L.}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{GitHub}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{2025}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{https://github.com/robynlm/aurel}</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>This code is not published yet, so to add to citation count please also
-include:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@article</span><span class="p">{</span><span class="n">R</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Munoz_M</span><span class="o">.</span><span class="n">Bruni_2023</span><span class="p">,</span>
-  <span class="n">title</span>     <span class="o">=</span> <span class="p">{</span><span class="n">EBWeyl</span><span class="p">:</span> <span class="n">a</span> <span class="n">Code</span> <span class="n">to</span> <span class="n">Invariantly</span> <span class="n">Characterize</span> <span class="n">Numerical</span> <span class="n">Spacetimes</span><span class="p">},</span>
-  <span class="n">author</span>    <span class="o">=</span> <span class="p">{</span><span class="n">Munoz</span><span class="p">,</span> <span class="n">Robyn</span> <span class="n">L</span><span class="o">.</span> <span class="ow">and</span> <span class="n">Bruni</span><span class="p">,</span> <span class="n">Marco</span><span class="p">},</span>
-  <span class="n">journal</span>   <span class="o">=</span> <span class="p">{</span><span class="n">Classical</span> <span class="ow">and</span> <span class="n">Quantum</span> <span class="n">Gravity</span><span class="p">},</span>
-  <span class="n">volume</span>    <span class="o">=</span> <span class="p">{</span><span class="mi">40</span><span class="p">},</span>
-  <span class="n">number</span>    <span class="o">=</span> <span class="p">{</span><span class="mi">13</span><span class="p">},</span>
-  <span class="n">pages</span>     <span class="o">=</span> <span class="p">{</span><span class="mi">135010</span><span class="p">},</span>
-  <span class="n">year</span>      <span class="o">=</span> <span class="p">{</span><span class="mi">2023</span><span class="p">},</span>
-  <span class="n">month</span>     <span class="o">=</span> <span class="p">{</span><span class="n">jun</span><span class="p">},</span>
-  <span class="n">doi</span>       <span class="o">=</span> <span class="p">{</span><span class="mf">10.1088</span><span class="o">/</span><span class="mi">1361</span><span class="o">-</span><span class="mi">6382</span><span class="o">/</span><span class="n">acd6cf</span><span class="p">},</span>
-  <span class="n">archivePrefix</span> <span class="o">=</span> <span class="p">{</span><span class="n">arXiv</span><span class="p">},</span>
-  <span class="n">eprint</span>    <span class="o">=</span> <span class="p">{</span><span class="mf">2211.08133</span><span class="p">},</span>
-  <span class="n">primaryClass</span> <span class="o">=</span> <span class="p">{</span><span class="n">gr</span><span class="o">-</span><span class="n">qc</span><span class="p">}}</span>
+</div>
+</details><p>This code is not published yet, so to add to citation count please also include:</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Munoz, R. L., &amp; Bruni, M. (2023). EBWeyl: a Code to Invariantly Characterize Numerical Spacetimes. <em>Classical and Quantum Gravity</em>, 40(13), 135010. <a class="reference external" href="https://doi.org/10.1088/1361-6382/acd6cf">https://doi.org/10.1088/1361-6382/acd6cf</a></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">R.L.Munoz_M.Bruni_2023</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{EBWeyl: a Code to Invariantly Characterize Numerical Spacetimes}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{Munoz, Robyn L. and Bruni, Marco}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="s">{Classical and Quantum Gravity}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">volume</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{40}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">number</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{13}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{135010}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{2023}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">month</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{jun}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">doi</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{10.1088/1361-6382/acd6cf}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">archivePrefix</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">eprint</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{2211.08133}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">primaryClass</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{gr-qc}</span><span class="p">}</span>
 </pre></div>
 </div>
-</section>
+</div>
+</details></section>
 
 
            </div>

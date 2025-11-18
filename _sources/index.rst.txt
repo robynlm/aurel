@@ -40,7 +40,8 @@ Install aurel using `pip <https://pip.pypa.io/en/stable/installation/>`_:
 
    pip install aurel
 
-all other required packages will be installed automatically.
+all other required packages will be installed automatically. 
+Or get the :ref:`dev_version`.
 
 Getting started
 ---------------

@@ -10,6 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
 
   
@@ -19,6 +20,7 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -60,7 +62,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/advice.html#citation">Citation</a></li>
 </ul>
@@ -190,7 +193,7 @@ Calculated null_ray_exp_in: $\Theta_{in}$ List of expansion of null rays radiall
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "62123c83781f4b2ba51095ff483613b8", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "37e1785415de48b482683f24a38b316e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;]
 </pre></div>
 </div>
@@ -367,13 +370,53 @@ Calculated and freezed variable &#39;backreaction&#39; in AurelCore
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "76177009efe84cba912c8c1ffc4169c9", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b3725997535344719a8ed8deb2e4530f", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;]
 Backreaction values: [-3.55271368e-15 -1.62832710e-15  0.00000000e+00  0.00000000e+00
  -2.59052039e-16  0.00000000e+00 -8.07271281e-33 -5.55111512e-17
   1.85037171e-17  7.40148683e-17  3.70074342e-17 -9.25185854e-18
   4.62592927e-17 -1.85037171e-17 -9.25185854e-18  4.16333634e-17
  -9.47791116e-34  9.25185854e-18  2.77555756e-17  1.85037171e-17]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example of custom function with custom extra kwarg</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">custom_function</span><span class="p">(</span><span class="n">rel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Example function &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">rel</span><span class="p">[</span><span class="s1">&#39;gdet&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">rel</span><span class="o">.</span><span class="n">my_value</span>
+
+<span class="c1"># Custom function are passed as dict with name and function</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;custom_function&#39;</span><span class="p">:</span> <span class="n">custom_function</span><span class="p">}],</span> 
+                       <span class="n">Lambda</span><span class="o">=</span><span class="n">sol</span><span class="o">.</span><span class="n">Lambda</span><span class="p">,</span> <span class="n">my_value</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data keys:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Validating variable function &#39;custom_function&#39;...
+✓ Custom function &#39;custom_function&#39; validated successfully
+Processing t = 1.0
+
+Cosmological constant set to AurelCore.Lambda = 1.04e-07
+Calculating custom variable &#39;custom_function&#39;...
+
+Calculated alpha: $\alpha$ Lapse. I assume $\alpha=1$, if not then please define AurelCore.data[&#39;alpha&#39;] = ... 
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gdet: $g$ Determinant of spacetime metric
+Calculated and freezed variable &#39;custom_function&#39; in AurelCore
+Now processing remaining time steps sequentially
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d36d52c0bf0047f1b5ccba31dcceac9b", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;custom_function&#39;]
 </pre></div>
 </div>
 </div>
@@ -409,8 +452,8 @@ Processing estimation item: max
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ee3e3bfc40bb46eab4dc02ec6f85ce2e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
-Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;rho0_max&#39;, &#39;null_ray_exp_in_max&#39;]
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c2565d71f043459f8c7c05b28eca3a45", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;custom_function&#39;, &#39;rho0_max&#39;, &#39;null_ray_exp_in_max&#39;, &#39;custom_function_max&#39;]
 </pre></div>
 </div>
 </div>
@@ -437,8 +480,8 @@ Processing estimation item: max
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d9fde7ba075c4c09b8b01976c9b258aa", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
-Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;rho0_max&#39;, &#39;null_ray_exp_in_max&#39;, &#39;Ktrace&#39;, &#39;Ktrace_max&#39;]
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5de412cded894e5cb1745479759d51a0", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;custom_function&#39;, &#39;rho0_max&#39;, &#39;null_ray_exp_in_max&#39;, &#39;custom_function_max&#39;, &#39;Ktrace&#39;, &#39;Ktrace_max&#39;]
 </pre></div>
 </div>
 </div>
@@ -469,8 +512,8 @@ Processing estimation item: range
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "70ca32433cb842879404b8620660d84c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
-Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;rho0_max&#39;, &#39;null_ray_exp_in_max&#39;, &#39;Ktrace&#39;, &#39;Ktrace_max&#39;, &#39;rho0_range&#39;, &#39;null_ray_exp_in_range&#39;, &#39;Ktrace_range&#39;]
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6123bf7a16944983b079b18bfbabec69", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;custom_function&#39;, &#39;rho0_max&#39;, &#39;null_ray_exp_in_max&#39;, &#39;custom_function_max&#39;, &#39;Ktrace&#39;, &#39;Ktrace_max&#39;, &#39;rho0_range&#39;, &#39;null_ray_exp_in_range&#39;, &#39;custom_function_range&#39;, &#39;Ktrace_range&#39;]
 </pre></div>
 </div>
 </div>

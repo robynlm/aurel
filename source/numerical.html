@@ -10,6 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
 
   
@@ -19,6 +20,7 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -53,6 +55,7 @@
 <li class="toctree-l1"><a class="reference internal" href="maths.html">aurel.maths</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">aurel.numerical</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.numerical.dichotomy"><code class="docutils literal notranslate"><span class="pre">dichotomy()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.numerical.interpolate"><code class="docutils literal notranslate"><span class="pre">interpolate()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="reading.html">aurel.reading</a></li>
@@ -61,7 +64,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#working-on-an-hpc">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
 </ul>
@@ -102,8 +106,7 @@
   <section id="module-aurel.numerical">
 <span id="aurel-numerical"></span><h1>aurel.numerical<a class="headerlink" href="#module-aurel.numerical" title="Link to this heading"></a></h1>
 <p>numerical.py</p>
-<p>This module contains numerical methods for various calculations.
-So far it only contains the bisection method for finding roots of a function.</p>
+<p>This module contains numerical methods for various calculations.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.numerical.dichotomy">
 <span class="sig-prename descclassname"><span class="pre">aurel.numerical.</span></span><span class="sig-name descname"><span class="pre">dichotomy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_wanted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/numerical.html#dichotomy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.numerical.dichotomy" title="Link to this definition"></a></dt>
@@ -124,6 +127,33 @@ So far it only contains the bisection method for finding roots of a function.</p
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.numerical.interpolate">
+<span class="sig-prename descclassname"><span class="pre">aurel.numerical.</span></span><span class="sig-name descname"><span class="pre">interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/numerical.html#interpolate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.numerical.interpolate" title="Link to this definition"></a></dt>
+<dd><p>Interpolate scalar field from one grid to a new grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>val</strong> (<em>ndarray</em>) – Scalar field values on the regular grid. Shape should match the grid
+dimensions.</p></li>
+<li><p><strong>grid_points</strong> (<em>tuple</em><em> of </em><em>ndarray</em>) – Tuple of coordinate arrays defining the regular grid
+coordinates. Each array should be 1D.</p></li>
+<li><p><strong>target_points</strong> (<em>tuple</em><em> of </em><em>ndarray</em>) – Tuple of target coordinate positions. Arrays can be any shape but must
+have matching dimensions.</p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>optional</em>) – Interpolation method used. See
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html">scipy.interpolate.RegularGridInterpolator documentation</a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Interpolated values at the target points, with the same shape as the
+target coordinate arrays.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
 </dd>
 </dl>
 </dd></dl>

@@ -10,6 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
 
   
@@ -19,6 +20,9 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -54,6 +58,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#aurel.maths.antisymmetrise_tensor"><code class="docutils literal notranslate"><span class="pre">antisymmetrise_tensor()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.maths.determinant3"><code class="docutils literal notranslate"><span class="pre">determinant3()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.maths.determinant4"><code class="docutils literal notranslate"><span class="pre">determinant4()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.maths.factorial"><code class="docutils literal notranslate"><span class="pre">factorial()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.maths.format_rank2_3"><code class="docutils literal notranslate"><span class="pre">format_rank2_3()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.maths.format_rank2_4"><code class="docutils literal notranslate"><span class="pre">format_rank2_4()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.maths.getcomponents3"><code class="docutils literal notranslate"><span class="pre">getcomponents3()</span></code></a></li>
@@ -61,6 +66,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#aurel.maths.inverse3"><code class="docutils literal notranslate"><span class="pre">inverse3()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.maths.inverse4"><code class="docutils literal notranslate"><span class="pre">inverse4()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.maths.populate_4Riemann"><code class="docutils literal notranslate"><span class="pre">populate_4Riemann()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.maths.sYlm"><code class="docutils literal notranslate"><span class="pre">sYlm()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.maths.sYlm_coefficients"><code class="docutils literal notranslate"><span class="pre">sYlm_coefficients()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.maths.sYlm_reconstruct"><code class="docutils literal notranslate"><span class="pre">sYlm_reconstruct()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.maths.safe_division"><code class="docutils literal notranslate"><span class="pre">safe_division()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.maths.symmetrise_tensor"><code class="docutils literal notranslate"><span class="pre">symmetrise_tensor()</span></code></a></li>
 </ul>
@@ -72,7 +80,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#working-on-an-hpc">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
 </ul>
@@ -141,6 +150,12 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="aurel.maths.factorial">
+<span class="sig-prename descclassname"><span class="pre">aurel.maths.</span></span><span class="sig-name descname"><span class="pre">factorial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/maths.html#factorial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.maths.factorial" title="Link to this definition"></a></dt>
+<dd><p>Returns the factorial of n</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="aurel.maths.format_rank2_3">
 <span class="sig-prename descclassname"><span class="pre">aurel.maths.</span></span><span class="sig-name descname"><span class="pre">format_rank2_3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/maths.html#format_rank2_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.maths.format_rank2_3" title="Link to this definition"></a></dt>
 <dd><p>Format a rank 2 tensor with 3D indices into a 3x3 array.</p>
@@ -159,10 +174,10 @@
 <p>This assumes this tensor is symmetric.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>f</strong> (<em>(</em><em>3</em><em>, </em><em>3</em><em>, </em><em>Nx</em><em>, </em><em>Ny</em><em>, </em><em>Nz</em><em>) </em><em>array_like</em><em> or </em><em>list</em><em> of </em><em>6 components</em><em> [</em><em>xx</em><em>, </em><em>xy</em><em>, </em><em>xz</em><em>, </em><em>yy</em><em>, </em><em>yz</em><em>, </em><em>zz</em><em>]</em>)</p>
+<dd class="field-odd"><p><strong>f</strong> (<em>(</em><em>3</em><em>, </em><em>3</em><em>, </em><em>...</em><em>) </em><em>array_like</em><em> or </em><em>list</em><em> of </em><em>6 components</em><em> [</em><em>xx</em><em>, </em><em>xy</em><em>, </em><em>xz</em><em>, </em><em>yy</em><em>, </em><em>yz</em><em>, </em><em>zz</em><em>]</em>)</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>[xx, xy, xz, yy, yz, zz]</strong> – Each element is (Nx, Ny, Nz) array_like</p>
+<dd class="field-even"><p><strong>[xx, xy, xz, yy, yz, zz]</strong> – Each element is (…) array_like</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
@@ -177,10 +192,10 @@
 <p>This assumes this tensor is symmetric.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>f</strong> (<em>(</em><em>4</em><em>, </em><em>4</em><em>, </em><em>Nx</em><em>, </em><em>Ny</em><em>, </em><em>Nz</em><em>) </em><em>array_like</em><em> or </em><em>list</em><em> of </em><em>10 components</em><em> [</em><em>tt</em><em>, </em><em>tx</em><em>, </em><em>ty</em><em>, </em><em>tz</em><em>, </em><em>xx</em><em>, </em><em>xy</em><em>, </em><em>xz</em><em>, </em><em>yy</em><em>, </em><em>yz</em><em>, </em><em>zz</em><em>]</em>)</p>
+<dd class="field-odd"><p><strong>f</strong> (<em>(</em><em>4</em><em>, </em><em>4</em><em>, </em><em>...</em><em>) </em><em>array_like</em><em> or </em><em>list</em><em> of </em><em>10 components</em><em> [</em><em>tt</em><em>, </em><em>tx</em><em>, </em><em>ty</em><em>, </em><em>tz</em><em>, </em><em>xx</em><em>, </em><em>xy</em><em>, </em><em>xz</em><em>, </em><em>yy</em><em>, </em><em>yz</em><em>, </em><em>zz</em><em>]</em>)</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>[tt, tx, ty, tz, xx, xy, xz, yy, yz, zz]</strong> – Each element is (Nx, Ny, Nz) array_like</p>
+<dd class="field-even"><p><strong>[tt, tx, ty, tz, xx, xy, xz, yy, yz, zz]</strong> – Each element is (…) array_like</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
@@ -204,6 +219,78 @@
 <dt class="sig sig-object py" id="aurel.maths.populate_4Riemann">
 <span class="sig-prename descclassname"><span class="pre">aurel.maths.</span></span><span class="sig-name descname"><span class="pre">populate_4Riemann</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Riemann_ssss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Riemann_ssst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Riemann_stst</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/maths.html#populate_4Riemann"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.maths.populate_4Riemann" title="Link to this definition"></a></dt>
 <dd><p>Populate the 4Riemann tensor with R_ssss, R_ssst, and R_stst</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.maths.sYlm">
+<span class="sig-prename descclassname"><span class="pre">aurel.maths.</span></span><span class="sig-name descname"><span class="pre">sYlm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/maths.html#sYlm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.maths.sYlm" title="Link to this definition"></a></dt>
+<dd><p>Spin-weighted spherical harmonics <span class="math notranslate nohighlight">\({}_sY_{lm}\)</span>, Eq 3.1 of <a class="reference external" href="https://doi.org/10.1063/1.1705135">https://doi.org/10.1063/1.1705135</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>int</em>) – Spin weight.</p></li>
+<li><p><strong>l</strong> (<em>int</em>) – Degree.</p></li>
+<li><p><strong>m</strong> (<em>int</em>) – Order.</p></li>
+<li><p><strong>theta</strong> (<em>ndarray</em>) – Inclination/polar angle grid.</p></li>
+<li><p><strong>phi</strong> (<em>ndarray</em>) – Azimuthal angle grid.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>sYlm</strong> – Spin-weighted spherical harmonics on the (theta, phi) grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.maths.sYlm_coefficients">
+<span class="sig-prename descclassname"><span class="pre">aurel.maths.</span></span><span class="sig-name descname"><span class="pre">sYlm_coefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtheta_weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dphi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/maths.html#sYlm_coefficients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.maths.sYlm_coefficients" title="Link to this definition"></a></dt>
+<dd><p>Coefficients of spin-weighted spherical harmonics decomposition of f</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>int</em>) – Spin weight.</p></li>
+<li><p><strong>lmax</strong> (<em>int</em>) – Maximum l in the expansion.</p></li>
+<li><p><strong>f</strong> (<em>ndarray</em>) – Spin-weighted function on the (theta, phi) grid.</p></li>
+<li><p><strong>theta</strong> (<em>ndarray</em>) – Angular grids.</p></li>
+<li><p><strong>phi</strong> (<em>ndarray</em>) – Angular grids.</p></li>
+<li><p><strong>dtheta_weight</strong> (<em>ndarray</em>) – Weights for integration over theta, e.g. including sin(theta),
+depending on sampling scheme.</p></li>
+<li><p><strong>dphi</strong> (<em>float</em>) – Step size in phi direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>alm</strong> – Harmonic coefficients.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[l,m]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.maths.sYlm_reconstruct">
+<span class="sig-prename descclassname"><span class="pre">aurel.maths.</span></span><span class="sig-name descname"><span class="pre">sYlm_reconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/maths.html#sYlm_reconstruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.maths.sYlm_reconstruct" title="Link to this definition"></a></dt>
+<dd><p>Reconstruct a spin-weighted function from its harmonic coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>int</em>) – Spin weight.</p></li>
+<li><p><strong>lmax</strong> (<em>int</em>) – Maximum l in the expansion.</p></li>
+<li><p><strong>alm</strong> (<em>dict</em><em>[</em><em>l</em><em>,</em><em>m</em><em>]</em>) – Harmonic coefficients.</p></li>
+<li><p><strong>theta</strong> (<em>ndarray</em>) – Angular grids.</p></li>
+<li><p><strong>phi</strong> (<em>ndarray</em>) – Angular grids.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>f</strong> – Reconstructed spin-weighted function on the (theta, phi) grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

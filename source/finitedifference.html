@@ -10,6 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
 
   
@@ -19,6 +20,7 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -53,29 +55,41 @@
 <li class="toctree-l1"><a class="reference internal" href="coreanalytic.html">aurel.coreanalytic</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">aurel.finitedifference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference"><code class="docutils literal notranslate"><span class="pre">FiniteDifference</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.cartesian_coords_array"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.cartesian_coords_array</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.cartesian_coords"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.cartesian_coords</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.spherical_coords"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.spherical_coords</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.mask_len"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.mask_len</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.cartesian_to_spherical"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.cartesian_to_spherical()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.cutoffmask"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.cutoffmask()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.cutoffmask2"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.cutoffmask2()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3_onesided"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3_onesided()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3_periodic"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3_periodic()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3_rank1tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3_rank1tensor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3_rank2tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3_rank2tensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3_rank3tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3_rank3tensor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3_scalar"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3_scalar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3_symmetric"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3_symmetric()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3x"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3x()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3x_rank1tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3x_rank1tensor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3x_rank2tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3x_rank2tensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3x_rank3tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3x_rank3tensor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3y"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3y()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3y_rank1tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3y_rank1tensor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3y_rank2tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3y_rank2tensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3y_rank3tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3y_rank3tensor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3z"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3z()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3z_rank1tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3z_rank1tensor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3z_rank2tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3z_rank2tensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.d3z_rank3tensor"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.d3z_rank3tensor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.excision"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.excision()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.excision2"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.excision2()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.reconstruct"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.reconstruct()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aurel.finitedifference.FiniteDifference.spherical_to_cartesian"><code class="docutils literal notranslate"><span class="pre">FiniteDifference.spherical_to_cartesian()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.fd2_backward"><code class="docutils literal notranslate"><span class="pre">fd2_backward()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.fd2_centered"><code class="docutils literal notranslate"><span class="pre">fd2_centered()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.fd2_forward"><code class="docutils literal notranslate"><span class="pre">fd2_forward()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.fd4_backward"><code class="docutils literal notranslate"><span class="pre">fd4_backward()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.fd4_centered"><code class="docutils literal notranslate"><span class="pre">fd4_centered()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.fd4_forward"><code class="docutils literal notranslate"><span class="pre">fd4_forward()</span></code></a></li>
@@ -88,6 +102,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.fd_map"><code class="docutils literal notranslate"><span class="pre">fd_map()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.map1"><code class="docutils literal notranslate"><span class="pre">map1()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.map2"><code class="docutils literal notranslate"><span class="pre">map2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.finitedifference.map3"><code class="docutils literal notranslate"><span class="pre">map3()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="maths.html">aurel.maths</a></li>
@@ -98,7 +113,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#working-on-an-hpc">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
 </ul>
@@ -143,12 +159,13 @@
 derivatives of scalar or tensor fields on 3D grids.</p>
 <p>It contains the following classes and functions:</p>
 <ul class="simple">
-<li><p>4th, 6th, and 8th order finite difference schemes for backward,
+<li><p>2nd, 4th, 6th, and 8th order finite difference schemes for backward,
 centered, and forward differences.</p></li>
 <li><p>FiniteDifference: A class that applies finite difference schemes to
 3D data grids.</p>
 <ul>
-<li><p>Provides Cartesian and Spherical coordinates.</p></li>
+<li><p>Provides Cartesian and Spherical coordinates, and function to convert
+between them.</p></li>
 <li><p>Functions for computing the spatial derivatives of rank 0, 1, and 2
 tensors along the x, y, and z axes.</p></li>
 <li><p>Function for removing points affected by the boundary condition.</p></li>
@@ -172,7 +189,7 @@ tensors along the x, y, and z axes.</p></li>
 If ‘periodic’ or ‘symmetric’ a centered FD scheme is used,
 otherwise a combination of forward + centered + backward
 FD schemes are used.</p></li>
-<li><p><strong>fd_order</strong> (<em>int</em><em>, </em><em>default 4</em>) – 4, 6 or 8 order of FD schemes used.</p></li>
+<li><p><strong>fd_order</strong> (<em>int</em><em>, </em><em>default 4</em>) – 2, 4, 6 or 8 order of FD schemes used.</p></li>
 </ul>
 </dd>
 </dl>
@@ -183,6 +200,39 @@ FD schemes are used.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.cartesian_coords_array">
+<span class="sig-name descname"><span class="pre">cartesian_coords_array</span></span><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.cartesian_coords_array" title="Link to this definition"></a></dt>
+<dd><p>(<em>numpy.ndarray</em>) - 1D arrays of x, y, and z coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">xmin,</span> <span class="pre">ymin,</span> <span class="pre">zmin</span></span></dt>
+<dd><p>(<em>float</em>) - Minimum x, y, and z coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">xmax,</span> <span class="pre">ymax,</span> <span class="pre">zmax</span></span></dt>
+<dd><p>(<em>float</em>) - Maximum x, y, and z coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -234,7 +284,7 @@ FD schemes are used.</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">r,</span> <span class="pre">phi,</span> <span class="pre">theta</span></span></dt>
-<dd><p>(<em>numpy.ndarray</em>) - 3D arrays of radius, azimuth, and inclination
+<dd><p>(<em>numpy.ndarray</em>) - 3D arrays of radius, inclination/polar and azimuth
 coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -246,7 +296,7 @@ coordinates.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.spherical_coords">
 <span class="sig-name descname"><span class="pre">spherical_coords</span></span><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.spherical_coords" title="Link to this definition"></a></dt>
-<dd><p>(<em>numpy.ndarray</em>) - 3D array of radius, azimuth, and inclination
+<dd><p>(<em>numpy.ndarray</em>) - 3D array of radius, inclination/polar and azimuth
 coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -262,6 +312,27 @@ coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.cartesian_to_spherical">
+<span class="sig-name descname"><span class="pre">cartesian_to_spherical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.cartesian_to_spherical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.cartesian_to_spherical" title="Link to this definition"></a></dt>
+<dd><p>Convert Cartesian coordinates to Spherical coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em>) – arrays of Cartesian coordinates.</p></li>
+<li><p><strong>y</strong> (<em>numpy.ndarray</em>) – arrays of Cartesian coordinates.</p></li>
+<li><p><strong>z</strong> (<em>numpy.ndarray</em>) – arrays of Cartesian coordinates.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>r, theta, phi</strong> – arrays of radius, inclination/polar and azimuth coordinates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -285,6 +356,18 @@ coordinates.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3_onesided">
+<span class="sig-name descname"><span class="pre">d3_onesided</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3_onesided"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3_onesided" title="Link to this definition"></a></dt>
+<dd><p>Apply the finite difference scheme with one-sided boundaries.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3_periodic">
+<span class="sig-name descname"><span class="pre">d3_periodic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3_periodic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3_periodic" title="Link to this definition"></a></dt>
+<dd><p>Apply the finite difference scheme with periodic boundaries.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3_rank1tensor">
 <span class="sig-name descname"><span class="pre">d3_rank1tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3_rank1tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3_rank1tensor" title="Link to this definition"></a></dt>
 <dd><p>Spatial derivatives of a spatial rank 1 tensor:
@@ -300,10 +383,22 @@ or <span class="math notranslate nohighlight">\(\partial_i (f^{k}_{j})\)</span>.
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3_rank3tensor">
+<span class="sig-name descname"><span class="pre">d3_rank3tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3_rank3tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3_rank3tensor" title="Link to this definition"></a></dt>
+<dd><p>Spatial derivatives of a spatial rank 3 tensor.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3_scalar">
 <span class="sig-name descname"><span class="pre">d3_scalar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3_scalar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3_scalar" title="Link to this definition"></a></dt>
 <dd><p>Spatial derivatives of a scalar:
 <span class="math notranslate nohighlight">\(\partial_i (f)\)</span>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3_symmetric">
+<span class="sig-name descname"><span class="pre">d3_symmetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3_symmetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3_symmetric" title="Link to this definition"></a></dt>
+<dd><p>Apply the finite difference scheme with symmetric boundaries.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -328,6 +423,12 @@ or <span class="math notranslate nohighlight">\(\partial_x (f^{k}_{j})\)</span>.
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3x_rank3tensor">
+<span class="sig-name descname"><span class="pre">d3x_rank3tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3x_rank3tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3x_rank3tensor" title="Link to this definition"></a></dt>
+<dd><p>Spatial derivatives along x of a spatial rank 3 tensor.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3y">
 <span class="sig-name descname"><span class="pre">d3y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3y"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3y" title="Link to this definition"></a></dt>
 <dd><p>Derivative along y of a scalar: <span class="math notranslate nohighlight">\(\partial_y (f)\)</span>.</p>
@@ -346,6 +447,12 @@ or <span class="math notranslate nohighlight">\(\partial_x (f^{k}_{j})\)</span>.
 <dd><p>Spatial derivatives along y of a spatial rank 2 tensor:
 <span class="math notranslate nohighlight">\(\partial_y (f_{kj})\)</span> or <span class="math notranslate nohighlight">\(\partial_y (f^{kj})\)</span>
 or <span class="math notranslate nohighlight">\(\partial_y (f^{k}_{j})\)</span>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3y_rank3tensor">
+<span class="sig-name descname"><span class="pre">d3y_rank3tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3y_rank3tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3y_rank3tensor" title="Link to this definition"></a></dt>
+<dd><p>Spatial derivatives along y of a spatial rank 3 tensor.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -370,6 +477,12 @@ or <span class="math notranslate nohighlight">\(\partial_z (f^{k}_{j})\)</span>.
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3z_rank3tensor">
+<span class="sig-name descname"><span class="pre">d3z_rank3tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3z_rank3tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3z_rank3tensor" title="Link to this definition"></a></dt>
+<dd><p>Spatial derivatives along z of a spatial rank 3 tensor.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.excision">
 <span class="sig-name descname"><span class="pre">excision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">finput</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isingularity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'find'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.excision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.excision" title="Link to this definition"></a></dt>
 <dd><p>Excision of the singularity, for when FDs were applied once.</p>
@@ -382,11 +495,47 @@ or <span class="math notranslate nohighlight">\(\partial_z (f^{k}_{j})\)</span>.
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.reconstruct">
-<span class="sig-name descname"><span class="pre">reconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.reconstruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.reconstruct" title="Link to this definition"></a></dt>
-<dd><p>If partial simulation box with symmetries, reconstruct full box</p>
+<dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.spherical_to_cartesian">
+<span class="sig-name descname"><span class="pre">spherical_to_cartesian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.spherical_to_cartesian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.spherical_to_cartesian" title="Link to this definition"></a></dt>
+<dd><p>Convert Spherical coordinates to Cartesian coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>numpy.ndarray</em>) – arrays of radius, inclination/polar and
+azimuth coordinates.</p></li>
+<li><p><strong>theta</strong> (<em>numpy.ndarray</em>) – arrays of radius, inclination/polar and
+azimuth coordinates.</p></li>
+<li><p><strong>phi</strong> (<em>numpy.ndarray</em>) – arrays of radius, inclination/polar and
+azimuth coordinates.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>x, y, z</strong> – arrays of Cartesian coordinates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.finitedifference.fd2_backward">
+<span class="sig-prename descclassname"><span class="pre">aurel.finitedifference.</span></span><span class="sig-name descname"><span class="pre">fd2_backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inverse_dx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#fd2_backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.fd2_backward" title="Link to this definition"></a></dt>
+<dd><p>2nd order backward finite difference scheme.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.finitedifference.fd2_centered">
+<span class="sig-prename descclassname"><span class="pre">aurel.finitedifference.</span></span><span class="sig-name descname"><span class="pre">fd2_centered</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inverse_dx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#fd2_centered"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.fd2_centered" title="Link to this definition"></a></dt>
+<dd><p>2nd order centered finite difference scheme.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.finitedifference.fd2_forward">
+<span class="sig-prename descclassname"><span class="pre">aurel.finitedifference.</span></span><span class="sig-name descname"><span class="pre">fd2_forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inverse_dx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#fd2_forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.fd2_forward" title="Link to this definition"></a></dt>
+<dd><p>2nd order forward finite difference scheme.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -459,6 +608,12 @@ or <span class="math notranslate nohighlight">\(\partial_z (f^{k}_{j})\)</span>.
 <dt class="sig sig-object py" id="aurel.finitedifference.map2">
 <span class="sig-prename descclassname"><span class="pre">aurel.finitedifference.</span></span><span class="sig-name descname"><span class="pre">map2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#map2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.map2" title="Link to this definition"></a></dt>
 <dd><p>Map a function over the two indices of a rank 2 tensor.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aurel.finitedifference.map3">
+<span class="sig-prename descclassname"><span class="pre">aurel.finitedifference.</span></span><span class="sig-name descname"><span class="pre">map3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#map3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.map3" title="Link to this definition"></a></dt>
+<dd><p>Map a function over the three indices of a rank 3 tensor.</p>
 </dd></dl>
 
 </section>

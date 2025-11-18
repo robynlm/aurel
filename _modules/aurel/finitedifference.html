@@ -9,6 +9,7 @@
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=0e075184" />
 
   
@@ -18,6 +19,7 @@
       <script src="../../_static/documentation_options.js?v=8d170800"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -55,7 +57,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#citation">Citation</a></li>
 </ul>
@@ -102,13 +105,14 @@
 
 <span class="sd">It contains the following classes and functions:</span>
 
-<span class="sd">- 4th, 6th, and 8th order finite difference schemes for backward,</span>
+<span class="sd">- 2nd, 4th, 6th, and 8th order finite difference schemes for backward,</span>
 <span class="sd">  centered, and forward differences.</span>
 
 <span class="sd">- FiniteDifference: A class that applies finite difference schemes to</span>
 <span class="sd">  3D data grids.</span>
 
-<span class="sd">  - Provides Cartesian and Spherical coordinates.</span>
+<span class="sd">  - Provides Cartesian and Spherical coordinates, and function to convert</span>
+<span class="sd">    between them.</span>
 <span class="sd">  - Functions for computing the spatial derivatives of rank 0, 1, and 2</span>
 <span class="sd">    tensors along the x, y, and z axes.</span>
 <span class="sd">  - Function for removing points affected by the boundary condition.</span>
@@ -120,6 +124,34 @@
 <span class="c1">###############################################################################</span>
 <span class="c1"># Finite differencing schemes.</span>
 <span class="c1">###############################################################################</span>
+<span class="c1"># FD coefficients listed in doi:10.1090/S0025-5718-1988-0935077-0</span>
+
+<span class="c1"># 2nd order</span>
+<div class="viewcode-block" id="fd2_backward">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.fd2_backward">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fd2_backward</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">inverse_dx</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2nd order backward finite difference scheme.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">((</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="n">inverse_dx</span></div>
+
+
+<div class="viewcode-block" id="fd2_centered">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.fd2_centered">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fd2_centered</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">inverse_dx</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2nd order centered finite difference scheme.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">inverse_dx</span></div>
+
+
+<div class="viewcode-block" id="fd2_forward">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.fd2_forward">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fd2_forward</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">inverse_dx</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2nd order forward finite difference scheme.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">((</span><span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="o">+</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="n">inverse_dx</span></div>
+
 
 <span class="c1"># 4th order</span>
 <div class="viewcode-block" id="fd4_backward">
@@ -264,6 +296,19 @@
                       <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dimk</span><span class="p">)])</span></div>
 
 
+<div class="viewcode-block" id="map3">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.map3">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">map3</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map a function over the three indices of a rank 3 tensor.&quot;&quot;&quot;</span>
+    <span class="n">dimk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dimj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dimi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[[</span><span class="n">func</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span> 
+                       <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dimi</span><span class="p">)]</span>
+                       <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dimj</span><span class="p">)]</span> 
+                       <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dimk</span><span class="p">)])</span></div>
+
+
 <span class="c1">###############################################################################</span>
 <span class="c1"># Finite differencing class applying the schemes to data grid.</span>
 <span class="c1">###############################################################################</span>
@@ -290,12 +335,18 @@
 <span class="sd">        otherwise a combination of forward + centered + backward</span>
 <span class="sd">        FD schemes are used.</span>
 <span class="sd">    fd_order : int, default 4</span>
-<span class="sd">        4, 6 or 8 order of FD schemes used.</span>
+<span class="sd">        2, 4, 6 or 8 order of FD schemes used.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    xarray, yarray, zarray : numpy.ndarray</span>
 <span class="sd">        (*numpy.ndarray*) - 1D arrays of x, y, and z coordinates.</span>
+<span class="sd">    cartesian_coords_array : numpy.ndarray</span>
+<span class="sd">        (*numpy.ndarray*) - 1D arrays of x, y, and z coordinates.</span>
+<span class="sd">    xmin, ymin, zmin : float</span>
+<span class="sd">        (*float*) - Minimum x, y, and z coordinates.</span>
+<span class="sd">    xmax, ymax, zmax : float</span>
+<span class="sd">        (*float*) - Maximum x, y, and z coordinates.</span>
 <span class="sd">    Nx, Ny, Nz : int</span>
 <span class="sd">        (*int*) - Number of data points in x, y, and z directions.</span>
 <span class="sd">    ixcenter, iycenter, izcenter : int</span>
@@ -305,10 +356,10 @@
 <span class="sd">    cartesian_coords : numpy.ndarray</span>
 <span class="sd">        (*numpy.ndarray*) - 3D array of x, y, and z coordinates.</span>
 <span class="sd">    r, phi, theta : numpy.ndarray</span>
-<span class="sd">        (*numpy.ndarray*) - 3D arrays of radius, azimuth, and inclination </span>
+<span class="sd">        (*numpy.ndarray*) - 3D arrays of radius, inclination/polar and azimuth </span>
 <span class="sd">        coordinates.</span>
 <span class="sd">    spherical_coords : numpy.ndarray</span>
-<span class="sd">        (*numpy.ndarray*) - 3D array of radius, azimuth, and inclination </span>
+<span class="sd">        (*numpy.ndarray*) - 3D array of radius, inclination/polar and azimuth </span>
 <span class="sd">        coordinates.</span>
 <span class="sd">    mask_len : int</span>
 <span class="sd">        (*int*) - Length of the finite difference mask.</span>
@@ -335,6 +386,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">inverse_dy</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dy&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inverse_dz</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dz&#39;</span><span class="p">]</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;zmin&#39;</span><span class="p">]</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">xarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">],</span> 
             <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">],</span> 
@@ -347,6 +402,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;zmin&#39;</span><span class="p">],</span> 
             <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;zmin&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dz&#39;</span><span class="p">],</span> 
             <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dz&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coords_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zarray</span><span class="p">])</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xarray</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yarray</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zarray</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">Nx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xarray</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ny</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yarray</span><span class="p">)</span>
@@ -361,19 +422,8 @@
             <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">])</span>
 
-        <span class="c1"># radius</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
-
-        <span class="c1"># azimuth</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span>
-            <span class="n">maths</span><span class="o">.</span><span class="n">safe_division</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)))</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">,</span> 
-                               <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
-
-        <span class="c1"># inclination</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">maths</span><span class="o">.</span><span class="n">safe_division</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cartesian_to_spherical</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spherical_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fd_order</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
@@ -382,73 +432,91 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">backward</span> <span class="o">=</span> <span class="n">fd8_backward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">centered</span> <span class="o">=</span> <span class="n">fd8_centered</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="o">=</span> <span class="n">fd8_forward</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">fd_order</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;6th order finite difference schemes are defined&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">backward</span> <span class="o">=</span> <span class="n">fd6_backward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">centered</span> <span class="o">=</span> <span class="n">fd6_centered</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="o">=</span> <span class="n">fd6_forward</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">fd_order</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2nd order finite difference schemes are defined&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">backward</span> <span class="o">=</span> <span class="n">fd2_backward</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">centered</span> <span class="o">=</span> <span class="n">fd2_centered</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="o">=</span> <span class="n">fd2_forward</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fd_order</span> <span class="o">=</span> <span class="mi">4</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;4th order finite difference schemes are defined&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">backward</span> <span class="o">=</span> <span class="n">fd4_backward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">centered</span> <span class="o">=</span> <span class="n">fd4_centered</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="o">=</span> <span class="n">fd4_forward</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fd_order</span> <span class="o">/</span> <span class="mi">1</span><span class="p">)</span>
 
 <div class="viewcode-block" id="FiniteDifference.d3">
 <a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">d3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply the finite difference scheme to the whole data grid.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span> <span class="o">==</span> <span class="s1">&#39;periodic&#39;</span><span class="p">:</span>
-            <span class="c1"># Periodic boundaries are used.</span>
-            <span class="c1"># The grid is extended along the x direction by the </span>
-            <span class="c1"># FD mask number of points from the opposite edge.</span>
-            <span class="n">flong</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span>
-                <span class="n">f</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">:,</span> <span class="p">:,</span> <span class="p">:],</span> 
-                <span class="n">f</span><span class="p">,</span> 
-                <span class="n">f</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]),</span> 
-                <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="c1"># excluding the edge points.  We retrieve shape (Nx, Ny, Nz).</span>
-            
-            <span class="k">return</span> <span class="n">fd_map</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">centered</span><span class="p">,</span> <span class="n">flong</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> 
-                <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">,</span> <span class="n">N</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d3_periodic</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span> <span class="o">==</span><span class="s1">&#39;symmetric&#39;</span><span class="p">:</span>
-            <span class="c1"># Symmetric boundaries are used.</span>
-            <span class="c1"># The grid is extended along the x direction by the </span>
-            <span class="c1"># FD mask number of points from the opposite edge.</span>
-            <span class="n">iend</span> <span class="o">=</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">flong</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span>
-                <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:][::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> 
-                <span class="n">f</span><span class="p">,</span> 
-                <span class="n">f</span><span class="p">[</span><span class="n">iend</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">:</span><span class="n">iend</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:][::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]),</span> 
-                <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">fd_map</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">centered</span><span class="p">,</span> <span class="n">flong</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> 
-                <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">,</span> <span class="n">N</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d3_symmetric</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># There are no periodic boundaries so a combination</span>
-            <span class="c1"># of backward centered and forward schemes are used.</span>
-            <span class="c1"># lhs : Apply the forward FD scheme to the edge points in the x</span>
-            <span class="c1"># direction that can not use the centered FD scheme.</span>
-            <span class="n">lhs</span> <span class="o">=</span> <span class="n">fd_map</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span>
-                <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">)</span>
-            <span class="c1"># Apply the centered FD scheme to all points not affected</span>
-            <span class="c1"># by the boundary condition.</span>
-            <span class="n">central_part</span> <span class="o">=</span> <span class="n">fd_map</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">centered</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> 
-                <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">,</span> <span class="n">N</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">)</span>
-            <span class="c1"># rhs : Apply the forward FD scheme to the edge points in the x</span>
-            <span class="c1"># direction that can not use the centered FD scheme.</span>
-            <span class="n">rhs</span> <span class="o">=</span> <span class="n">fd_map</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">backward</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> 
-                <span class="n">N</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-            <span class="c1"># Concatenate all the points together</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">lhs</span><span class="p">,</span> <span class="n">central_part</span><span class="p">,</span> <span class="n">rhs</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d3_onesided</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="FiniteDifference.d3_periodic">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3_periodic">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">d3_periodic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply the finite difference scheme with periodic boundaries.&quot;&quot;&quot;</span>
+        <span class="c1"># The grid is extended along the x direction by the </span>
+        <span class="c1"># FD mask number of points from the opposite edge.</span>
+        <span class="n">flong</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span>
+            <span class="n">f</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">:],</span> <span class="n">f</span><span class="p">,</span> <span class="n">f</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">]),</span> 
+            <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># excluding the edge points.  We retrieve shape (Nx, Ny, Nz).</span>
+        <span class="k">return</span> <span class="n">fd_map</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">centered</span><span class="p">,</span> <span class="n">flong</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">,</span> <span class="n">N</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="FiniteDifference.d3_symmetric">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3_symmetric">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">d3_symmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply the finite difference scheme with symmetric boundaries.&quot;&quot;&quot;</span>
+        <span class="c1"># The grid is extended along the x direction by the </span>
+        <span class="c1"># FD mask number of points from the opposite edge.</span>
+        <span class="n">iend</span> <span class="o">=</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">flong</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span>
+            <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="n">iend</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">:</span><span class="n">iend</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> 
+            <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fd_map</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">centered</span><span class="p">,</span> <span class="n">flong</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">,</span> <span class="n">N</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="FiniteDifference.d3_onesided">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3_onesided">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">d3_onesided</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply the finite difference scheme with one-sided boundaries.&quot;&quot;&quot;</span>
+        <span class="c1"># Combination of backward centered and forward schemes are used.</span>
+        <span class="c1"># lhs : Apply the forward FD scheme to the edge points in the x</span>
+        <span class="c1"># direction that can not use the centered FD scheme.</span>
+        <span class="n">lhs</span> <span class="o">=</span> <span class="n">fd_map</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">)</span>
+        <span class="c1"># Apply the centered FD scheme to all points not affected</span>
+        <span class="c1"># by the boundary condition.</span>
+        <span class="n">central_part</span> <span class="o">=</span> <span class="n">fd_map</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">centered</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">,</span> <span class="n">N</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">)</span>
+        <span class="c1"># rhs : Apply the forward FD scheme to the edge points in the x</span>
+        <span class="c1"># direction that can not use the centered FD scheme.</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">fd_map</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">backward</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> 
+            <span class="n">N</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="c1"># Concatenate all the points together</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">lhs</span><span class="p">,</span> <span class="n">central_part</span><span class="p">,</span> <span class="n">rhs</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
     
 <div class="viewcode-block" id="FiniteDifference.d3x">
@@ -562,6 +630,89 @@
         <span class="k">return</span> <span class="n">map2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d3z</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
 
     
+<div class="viewcode-block" id="FiniteDifference.d3_rank3tensor">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3_rank3tensor">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">d3_rank3tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Spatial derivatives of a spatial rank 3 tensor.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">d3x_rank3tensor</span><span class="p">(</span><span class="n">f</span><span class="p">),</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">d3y_rank3tensor</span><span class="p">(</span><span class="n">f</span><span class="p">),</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">d3z_rank3tensor</span><span class="p">(</span><span class="n">f</span><span class="p">)])</span></div>
+
+    
+<div class="viewcode-block" id="FiniteDifference.d3x_rank3tensor">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3x_rank3tensor">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">d3x_rank3tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Spatial derivatives along x of a spatial rank 3 tensor.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">map3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d3x</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="FiniteDifference.d3y_rank3tensor">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3y_rank3tensor">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">d3y_rank3tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Spatial derivatives along y of a spatial rank 3 tensor.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">map3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d3y</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="FiniteDifference.d3z_rank3tensor">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3z_rank3tensor">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">d3z_rank3tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Spatial derivatives along z of a spatial rank 3 tensor.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">map3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d3z</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="FiniteDifference.cartesian_to_spherical">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.cartesian_to_spherical">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cartesian_to_spherical</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert Cartesian coordinates to Spherical coordinates.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x, y, z : numpy.ndarray</span>
+<span class="sd">            arrays of Cartesian coordinates.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        r, theta, phi : numpy.ndarray</span>
+<span class="sd">            arrays of radius, inclination/polar and azimuth coordinates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># radius</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="o">*</span><span class="n">z</span><span class="p">)</span>
+
+        <span class="c1"># azimuth -pi to pi</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span>
+            <span class="n">maths</span><span class="o">.</span><span class="n">safe_division</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)))</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+
+        <span class="c1"># inclination 0 to pi</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">maths</span><span class="o">.</span><span class="n">safe_division</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">r</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">r</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span></div>
+
+    
+<div class="viewcode-block" id="FiniteDifference.spherical_to_cartesian">
+<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.spherical_to_cartesian">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">spherical_to_cartesian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert Spherical coordinates to Cartesian coordinates.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        r, theta, phi : numpy.ndarray</span>
+<span class="sd">            arrays of radius, inclination/polar and </span>
+<span class="sd">            azimuth coordinates.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x, y, z : numpy.ndarray</span>
+<span class="sd">            arrays of Cartesian coordinates.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span></div>
+
+    
 <div class="viewcode-block" id="FiniteDifference.cutoffmask">
 <a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.cutoffmask">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">cutoffmask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
@@ -671,125 +822,8 @@
             <span class="n">f</span><span class="p">[</span><span class="n">isx</span><span class="p">,</span> <span class="n">isy</span><span class="p">,</span> 
               <span class="n">isz</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="o">-</span><span class="n">b</span><span class="p">:</span> <span class="n">isz</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
         <span class="k">return</span> <span class="n">f</span></div>
-
-    
-<div class="viewcode-block" id="FiniteDifference.reconstruct">
-<a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.reconstruct">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">reconstruct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;If partial simulation box with symmetries, reconstruct full box&quot;&quot;&quot;</span>
-
-        <span class="c1"># If the lower boundary is shifted</span>
-        <span class="n">shift</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span>
-        <span class="n">reflect</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span>
-        <span class="n">rotate</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">keys</span> <span class="o">=</span>  <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">coord</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]):</span>
-            <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39;boundary_shiftout_</span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s1">_lower&#39;</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
-                <span class="n">shift</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;boundary_shiftout_</span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s1">_lower&#39;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39;reflection_</span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s1">&#39;</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
-                <span class="n">reflect</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;reflection_</span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s1">&#39;list_of_thorns&#39;</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s1">&#39;RotatingSymmetry180&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;list_of_thorns&#39;</span><span class="p">]:</span>
-                <span class="n">rotate</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">veryverbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;input data shape:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;shift:&#39;</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;reflect:&#39;</span><span class="p">,</span> <span class="n">reflect</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rotate:&#39;</span><span class="p">,</span> <span class="n">rotate</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="c1"># === Reconstruction x direction</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-
-            <span class="c1"># depending on boundary conditions, rotate/flip grid</span>
-            <span class="k">if</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="n">rdata</span> <span class="o">=</span> <span class="n">data</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
-            <span class="k">elif</span> <span class="n">rotate</span> <span class="ow">and</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="n">rdata</span> <span class="o">=</span> <span class="n">data</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">elif</span> <span class="n">rotate</span> <span class="ow">and</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
-                <span class="n">rdata</span> <span class="o">=</span> <span class="n">data</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">rdata</span> <span class="o">=</span> <span class="n">data</span>
-
-            <span class="c1"># join sections together</span>
-            <span class="n">datax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
-                <span class="p">[</span><span class="n">rdata</span><span class="p">,</span> 
-                 <span class="n">data</span><span class="p">[</span><span class="n">shift</span><span class="p">[</span><span class="mi">0</span><span class="p">]:,:,:]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            
-            <span class="c1"># extend the coordinate axis</span>
-            <span class="n">xarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
-                <span class="p">[</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">shift</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> 
-                              <span class="p">(</span><span class="n">Nx</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">shift</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> 
-                              <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> 
-                 <span class="bp">self</span><span class="o">.</span><span class="n">xarray</span><span class="p">[</span><span class="n">shift</span><span class="p">[</span><span class="mi">0</span><span class="p">]:]])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">datax</span> <span class="o">=</span> <span class="n">data</span>
-            <span class="n">xarray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xarray</span>
-
-        <span class="c1"># === Reconstruction y direction</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">datax</span><span class="p">)</span>
-
-            <span class="c1"># depending on boundary conditions, rotate/flip grid</span>
-            <span class="k">if</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datax</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
-            <span class="k">elif</span> <span class="n">rotate</span> <span class="ow">and</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datax</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">elif</span> <span class="n">rotate</span> <span class="ow">and</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
-                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datax</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datax</span>
-
-            <span class="c1"># join sections together</span>
-            <span class="n">datay</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
-                <span class="p">[</span><span class="n">rdata</span><span class="p">,</span> 
-                 <span class="n">datax</span><span class="p">[:,</span> <span class="n">shift</span><span class="p">[</span><span class="mi">1</span><span class="p">]:,</span> <span class="p">:]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            
-            <span class="c1"># extend the coordinate axis</span>
-            <span class="n">yarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
-                <span class="p">[</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dy</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">shift</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> 
-                              <span class="p">(</span><span class="n">Ny</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">shift</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> 
-                              <span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> 
-                 <span class="bp">self</span><span class="o">.</span><span class="n">yarray</span><span class="p">[</span><span class="n">shift</span><span class="p">[</span><span class="mi">1</span><span class="p">]:]])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">datay</span> <span class="o">=</span> <span class="n">datax</span>
-            <span class="n">yarray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yarray</span>
-
-        <span class="c1"># === Reconstruction z direction</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;zmin&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">datay</span><span class="p">)</span>
-
-            <span class="c1"># depending on boundary conditions, rotate/flip grid</span>
-            <span class="k">if</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
-                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datay</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">elif</span> <span class="n">rotate</span> <span class="ow">and</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datay</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">elif</span> <span class="n">rotate</span> <span class="ow">and</span> <span class="n">reflect</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datay</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">rdata</span> <span class="o">=</span> <span class="n">datay</span>
-
-            <span class="c1"># join sections together</span>
-            <span class="n">dataz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
-                <span class="p">[</span><span class="n">rdata</span><span class="p">,</span> 
-                 <span class="n">datay</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">shift</span><span class="p">[</span><span class="mi">2</span><span class="p">]:]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-            
-            <span class="c1"># extend the coordinate axis</span>
-            <span class="n">zarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
-                <span class="p">[</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dz</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">shift</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
-                              <span class="p">(</span><span class="n">Nz</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">shift</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-                              <span class="bp">self</span><span class="o">.</span><span class="n">dz</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> 
-                 <span class="bp">self</span><span class="o">.</span><span class="n">zarray</span><span class="p">[</span><span class="n">shift</span><span class="p">[</span><span class="mi">2</span><span class="p">]:]])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">dataz</span> <span class="o">=</span> <span class="n">datay</span>
-            <span class="n">zarray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zarray</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">veryverbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;output data shape:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">dataz</span><span class="p">),</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len x, y, z:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">xarray</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">yarray</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">zarray</span><span class="p">),</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="p">(</span><span class="n">xarray</span><span class="p">,</span> <span class="n">yarray</span><span class="p">,</span> <span class="n">zarray</span><span class="p">),</span> <span class="n">dataz</span></div>
 </div>
+
 
 </pre></div>
 

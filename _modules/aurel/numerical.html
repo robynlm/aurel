@@ -9,6 +9,7 @@
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=0e075184" />
 
   
@@ -18,6 +19,7 @@
       <script src="../../_static/documentation_options.js?v=8d170800"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -55,7 +57,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#citation">Citation</a></li>
 </ul>
@@ -98,14 +101,15 @@
 <span class="sd">numerical.py</span>
 
 <span class="sd">This module contains numerical methods for various calculations.</span>
-<span class="sd">So far it only contains the bisection method for finding roots of a function.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
 
 <div class="viewcode-block" id="dichotomy">
 <a class="viewcode-back" href="../../source/numerical.html#aurel.numerical.dichotomy">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dichotomy</span><span class="p">(</span><span class="n">y_wanted</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Find the root of a function using the bisection method.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find the root of a function using the bisection method.</span>
 
 <span class="sd">    Numerically solving for x: function(x) = y_wanted</span>
 
@@ -144,6 +148,46 @@
             <span class="n">x_mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_low</span> <span class="o">+</span> <span class="n">x_upp</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
             <span class="n">y_mid</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">x_mid</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">x_mid</span></div>
+
+
+<div class="viewcode-block" id="interpolate">
+<a class="viewcode-back" href="../../source/numerical.html#aurel.numerical.interpolate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">interpolate</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">grid_points</span><span class="p">,</span> <span class="n">target_points</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate scalar field from one grid to a new grid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    val : ndarray</span>
+<span class="sd">        Scalar field values on the regular grid. Shape should match the grid </span>
+<span class="sd">        dimensions.</span>
+<span class="sd">    grid_points : tuple of ndarray</span>
+<span class="sd">        Tuple of coordinate arrays defining the regular grid </span>
+<span class="sd">        coordinates. Each array should be 1D.</span>
+<span class="sd">    target_points : tuple of ndarray</span>
+<span class="sd">        Tuple of target coordinate positions. Arrays can be any shape but must</span>
+<span class="sd">        have matching dimensions.</span>
+<span class="sd">    method : str, optional</span>
+<span class="sd">        Interpolation method used. See </span>
+<span class="sd">        `scipy.interpolate.RegularGridInterpolator documentation &lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html&gt;`_</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        Interpolated values at the target points, with the same shape as the </span>
+<span class="sd">        target coordinate arrays.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">target_flat</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">target_points</span><span class="p">:</span>
+        <span class="n">target_flat</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span>
+    
+    <span class="c1"># Flatten target points and stack into (N, 3) array for interpolator</span>
+    <span class="n">target_shape</span> <span class="o">=</span> <span class="n">target_points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">points_flat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">target_flat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># Create interpolator and evaluate</span>
+    <span class="n">interpolator</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">RegularGridInterpolator</span><span class="p">(</span>
+        <span class="n">grid_points</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">interpolator</span><span class="p">(</span><span class="n">points_flat</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">target_shape</span><span class="p">)</span></div>
 
 </pre></div>
 

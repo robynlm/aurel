@@ -10,6 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
 
   
@@ -19,6 +20,7 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -65,7 +67,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#working-on-an-hpc">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
 </ul>
@@ -246,7 +249,7 @@ If <cite>estimates</cite> is provided, additional keys are added with format
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.time.validate_variable_function">
-<span class="sig-prename descclassname"><span class="pre">aurel.time.</span></span><span class="sig-name descname"><span class="pre">validate_variable_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">veryverbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/time.html#validate_variable_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.time.validate_variable_function" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">aurel.time.</span></span><span class="sig-name descname"><span class="pre">validate_variable_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">veryverbose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/time.html#validate_variable_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.time.validate_variable_function" title="Link to this definition"></a></dt>
 <dd><p>Validate that variable function has correct signature and behaviour.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -254,9 +257,9 @@ If <cite>estimates</cite> is provided, additional keys are added with format
 <li><p><strong>func</strong> (<em>callable</em>) – Function to validate</p></li>
 <li><p><strong>func_name</strong> (<em>str</em>) – Name of the function for error messages</p></li>
 <li><p><strong>fd</strong> (<a class="reference internal" href="finitedifference.html#aurel.finitedifference.FiniteDifference" title="aurel.finitedifference.FiniteDifference"><em>FiniteDifference</em></a>) – Finite difference object to get grid dimensions</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints debug information about the validation process.
-Default Ture.</p></li>
-<li><p><strong>veryverbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints aurelcore verbose information. Default False.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If True, prints debug information about the validation process.</p></li>
+<li><p><strong>veryverbose</strong> (<em>bool</em>) – If True, prints aurelcore verbose information.</p></li>
+<li><p><strong>rel_kwargs</strong> (<em>dict</em>) – Additional parameters passed to AurelCore initialization.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

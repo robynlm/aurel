@@ -10,6 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
 
   
@@ -19,6 +20,7 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -64,6 +66,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.parameters"><code class="docutils literal notranslate"><span class="pre">parameters()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.parse_h5file"><code class="docutils literal notranslate"><span class="pre">parse_h5file()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.parse_hdf5_key"><code class="docutils literal notranslate"><span class="pre">parse_hdf5_key()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_ET_checkpoints"><code class="docutils literal notranslate"><span class="pre">read_ET_checkpoints()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_ET_data"><code class="docutils literal notranslate"><span class="pre">read_ET_data()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_ET_group_or_var"><code class="docutils literal notranslate"><span class="pre">read_ET_group_or_var()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.read_ET_variables"><code class="docutils literal notranslate"><span class="pre">read_ET_variables()</span></code></a></li>
@@ -83,7 +86,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="advice.html">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#working-on-an-hpc">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
 </ul>
@@ -314,6 +318,7 @@ Shows contents of iterations.txt file and overall summary.</p></li>
         <span class="s1">&#39;rl = 0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
         <span class="s1">&#39;rl = 1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
         <span class="o">...</span>
+        <span class="s1">&#39;checkpoints&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">it1</span><span class="p">,</span> <span class="n">it2</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
     <span class="p">},</span>
     <span class="o">...</span>
     <span class="s1">&#39;overall&#39;</span><span class="p">:</span> <span class="p">{</span>
@@ -337,6 +342,7 @@ Shows contents of iterations.txt file and overall summary.</p></li>
 <span class="n">it</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">-&gt;</span> <span class="mi">1000</span>
 <span class="n">rl</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">at</span> <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="n">rl</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">Checkpoints</span> <span class="n">available</span> <span class="n">at</span> <span class="n">its</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 <span class="o">===</span> <span class="n">restart</span> <span class="mi">1</span>
 <span class="o">...</span>
 </pre></div>
@@ -396,7 +402,6 @@ Must exist in one of the SIMLOC directories.</p>
 <dt>Core Information:</dt><dd><p>’simname’ : str, Simulation name (input parameter)</p>
 <p>’simulation’ : str, Data format identifier (‘ET’)</p>
 <p>’simpath’ : str, Path to simulation root directory</p>
-<p>’datapath’ : str, Path to output-0000 data directory</p>
 </dd>
 <dt>Grid Parameters:</dt><dd><p>’xmin’, ‘xmax’, ‘Lx’, ‘Nx’, ‘dx’ : float/int, minimum, maximum,
 extent, grid points and spacing. Same for Y and Z-direction
@@ -446,9 +451,15 @@ Otherwise returns dictionary with parsed components:</p>
     <span class="s1">&#39;thorn&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>       <span class="c1"># e.g., &#39;admbase&#39; or None</span>
     <span class="s1">&#39;variable_or_group&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>   <span class="c1"># e.g., &#39;metric&#39; or &#39;rho&#39;</span>
     <span class="s1">&#39;xyz_prefix&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># e.g., &#39;.xyz&#39; or None</span>
-    <span class="s1">&#39;file_number&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> <span class="c1"># e.g., &#39;.file_123&#39; or None</span>
+    <span class="s1">&#39;chunk_number&#39;</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span> <span class="c1"># e.g., 123 or None (from file_nbr)</span>
     <span class="s1">&#39;xyz_suffix&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># e.g., &#39;.xyz&#39; or None</span>
     <span class="s1">&#39;is_group_file&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>      <span class="c1"># True -&gt; a grouped variable file</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>And if it is a checkpoint file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;iteration&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>        <span class="c1"># e.g., 1000</span>
     <span class="s1">&#39;chunk_number&#39;</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span> <span class="c1"># e.g., 123 or None (from file_nbr)</span>
 <span class="p">}</span>
 </pre></div>
@@ -492,6 +503,31 @@ Otherwise returns dictionary with parsed components:</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="aurel.reading.read_ET_checkpoints">
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_ET_checkpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">it</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_ET_checkpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_ET_checkpoints" title="Link to this definition"></a></dt>
+<dd><p>Read the data from Einstein Toolkit simulation checkpoint files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param</strong> (<em>dict</em>) – The parameters of the simulation.</p></li>
+<li><p><strong>var</strong> (<em>list</em>) – The variables to read from the simulation checkpoint files.</p></li>
+<li><p><strong>it</strong> (<em>list</em>) – The iterations to read from the simulation checkpoint files.</p></li>
+<li><p><strong>restart</strong> (<em>int</em>) – The restart number to read from.</p></li>
+<li><p><strong>rl</strong> (<em>int</em>) – The refinement level to read from the simulation checkpoint files.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print progress information. Default True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the data from the simulation checkpoint files.
+dict.keys() = [‘it’, ‘t’, var[0], var[1], …]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="aurel.reading.read_ET_data">
 <span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_ET_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_ET_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_ET_data" title="Link to this definition"></a></dt>
 <dd><p>Read Einstein Toolkit simulation data with intelligent restart handling.</p>
@@ -518,6 +554,8 @@ Examples: [‘rho’, ‘Kdown3’], [‘gammadown3’, ‘alpha’]</p></li>
 Default -1 (auto-detect).</p></li>
 <li><p><strong>split_per_it</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use cached per-iteration files when available and save read data
 in per-iteration files. Default True.</p></li>
+<li><p><strong>usecheckpoints</strong> (<em>bool</em><em>, </em><em>optional</em>) – For ET data: whether to use checkpoint iterations if available.
+Default False.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print progress information. Default True.</p></li>
 <li><p><strong>veryverbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print detailed debugging information. Default False.</p></li>
 </ul>
@@ -677,6 +715,8 @@ Set to specific value to read from that restart only.</p></li>
 When True, reads from cached files and fills missing data from ET
 files, then saves newly read ET data to per-iteration files.
 When False, reads exclusively from ET files.</p></li>
+<li><p><strong>usecheckpoints</strong> (<em>bool</em><em>, </em><em>optional</em>) – For ET data: whether to use checkpoint iterations if available.
+Default False.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print detailed progress information. Default False.</p></li>
 <li><p><strong>veryverbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print very detailed debugging information. Default False.</p></li>
 </ul>
@@ -733,6 +773,7 @@ Also passed to <cite>iterations()</cite>.</p></li>
         <span class="s1">&#39;rl = 0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
         <span class="s1">&#39;rl = 1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
         <span class="o">...</span>
+        <span class="s1">&#39;checkpoints&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">it1</span><span class="p">,</span> <span class="n">it2</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
     <span class="p">},</span>
     <span class="o">...</span>
 <span class="p">}</span>
