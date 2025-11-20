@@ -298,7 +298,7 @@ class FiniteDifference():
             self.backward = fd4_backward
             self.centered = fd4_centered
             self.forward = fd4_forward
-        self.mask_len = int(self.fd_order / 1)
+        self.mask_len = int(self.fd_order / 2)
 
     def d3(self, f, idx, N):
         """Apply the finite difference scheme to the whole data grid."""
