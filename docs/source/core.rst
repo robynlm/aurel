@@ -645,7 +645,7 @@ Weyl decomposition
 
 .. _aurel.core.AurelCore.Psi4_lm:
 
-`Psi4_lm <../_modules/aurel/core.html#AurelCore.Psi4_lm>`_: $\Psi_4^{l,m}$ List of dictionaries of spin weighted spherical harmonic decomposition of the 4th Weyl scalar. Control with AurelCore.lmax, extract_radii, and interp_method.
+`Psi4_lm <../_modules/aurel/core.html#AurelCore.Psi4_lm>`_: $\Psi_4^{l,m}$ List of dictionaries of spin weighted spherical harmonic decomposition of the 4th Weyl scalar. Control with AurelCore.lmax, center, extract_radii, and interp_method.
 
 .. _aurel.core.AurelCore.Weyl_invariants:
 

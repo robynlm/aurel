@@ -151,6 +151,7 @@ functions to calculate your own estimates. See the examples.
    notebooks/ICPertFLRW
    notebooks/Schwarzschild_check
    notebooks/Analytic_check
+   notebooks/Gravitational_Waves
 
 Links
 -----

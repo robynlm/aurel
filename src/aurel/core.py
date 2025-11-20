@@ -317,7 +317,8 @@ descriptions = {
         + r" with AurelCore.tetrad"),
     "Psi4_lm": (r"$\Psi_4^{l,m}$ List of dictionaries of spin weighted"
         + r" spherical harmonic decomposition of the 4th Weyl scalar."
-        + r" Control with AurelCore.lmax, extract_radii, and interp_method."),
+        + r" Control with AurelCore.lmax, center, extract_radii, and"
+        + r" interp_method."),
     "Weyl_invariants": (r"$I, \; J, \; L, \; K, \; N$"
         + r" Dictionary of Weyl invariants"),
     "eweyl_u_down4": (r"$E^{\{u\}}_{\alpha\beta}$ Electric part of the Weyl"
@@ -925,61 +926,25 @@ class AurelCore():
     
     # Null ray expansion
     def null_ray_exp_out(self):
-        # outward pointing unit spatial vector
-        r, phi, theta = self.fd.spherical_coords
-        cosphi = np.cos(phi)
-        sinphi = np.sin(phi)
-        costheta = np.cos(theta)
-        sintheta = np.sin(theta)
-        xynorm = (cosphi**2 * self["gammadown3"][0,0] 
-              + 2 * cosphi * sinphi * self["gammadown3"][0,1]
-              + sinphi**2 * self["gammadown3"][1,1])
-        xyznorm = (
-            sintheta**2 * xynorm 
-            + 2 * costheta * sintheta * (
-                cosphi * self["gammadown3"][0,2]
-                + sinphi * self["gammadown3"][1,2])
-            + costheta**2 * self["gammadown3"][2,2])
-        nfac = maths.safe_division(1, np.sqrt(xyznorm))
-        Sx = cosphi * sintheta * nfac
-        Sy = sinphi * sintheta * nfac
-        Sz = costheta * nfac
-        sup = np.array([Sx, Sy, Sz])
-        
-        # expansion
-        Disi = np.einsum('aa... -> ...', self.s_covd(sup, 'u'))
-        Kss = np.einsum('ij..., i..., j... -> ...', self["Kdown3"], sup, sup)
-        Theta_out = (Disi + Kss - self["Ktrace"])
-        return Theta_out
+        self.myprint(f"Center of extraction sphere set to"
+                     + f" AurelCore.center = {self.center}")
+        r = self.fd.cartesian_to_spherical(
+            self.fd.x - self.center[0], 
+            self.fd.y - self.center[1], 
+            self.fd.z - self.center[2]
+        )[0]
+        return self.null_ray_expansion(r, direction='out')
     
     # Null ray expansion
     def null_ray_exp_in(self):
-        # outward pointing unit spatial vector
-        r, phi, theta = self.fd.spherical_coords
-        cosphi = np.cos(phi)
-        sinphi = np.sin(phi)
-        costheta = np.cos(theta)
-        sintheta = np.sin(theta)
-        xynorm = (cosphi**2 * self["gammadown3"][0,0] 
-              + 2 * cosphi * sinphi * self["gammadown3"][0,1]
-              + sinphi**2 * self["gammadown3"][1,1])
-        xyznorm = (
-            sintheta**2 * xynorm 
-            + 2 * costheta * sintheta * (
-                cosphi * self["gammadown3"][0,2]
-                + sinphi * self["gammadown3"][1,2])
-            + costheta**2 * self["gammadown3"][2,2])
-        nfac = maths.safe_division(1, np.sqrt(xyznorm))
-        Sx = cosphi * sintheta * nfac
-        Sy = sinphi * sintheta * nfac
-        Sz = costheta * nfac
-        sup = np.array([Sx, Sy, Sz])
-        
-        # expansion
-        Disi = np.einsum('aa... -> ...', self.s_covd(sup, 'u'))
-        Kss = np.einsum('ij..., i..., j... -> ...', self["Kdown3"], sup, sup)
-        Theta_in = ( - Disi + Kss - self["Ktrace"])
-        return Theta_in
+        self.myprint(f"Center of extraction sphere set to"
+                     + f" AurelCore.center = {self.center}")
+        r = self.fd.cartesian_to_spherical(
+            self.fd.x - self.center[0], 
+            self.fd.y - self.center[1], 
+            self.fd.z - self.center[2]
+        )[0]
+        return self.null_ray_expansion(r, direction='in')
     
     # === Matter quantities
     # Eulerian observer follows n^mu
@@ -1748,10 +1713,10 @@ class AurelCore():
         theta2, phi2 = np.meshgrid(theta2_array, phi2_array, indexing='ij')
         
         # Shift grid around sphere center
-        shifted_grid = np.array([
+        shifted_grid = (
             self.fd.xarray - self.center[0],
             self.fd.yarray - self.center[1],
-            self.fd.zarray - self.center[2]])
+            self.fd.zarray - self.center[2])
         
         # For each extraction radius, interpolate Psi4 and decompose in
         psi4lm = {}
@@ -1845,6 +1810,26 @@ class AurelCore():
                         self["gammadown3"], Bterm2K)
             
         return Bterm1 + Bterm2
+    
+    ###########################################################################
+
+    def null_ray_expansion(self, F, direction='out'):
+        """Compute the expansion of null rays normal to a surface discribed F"""
+        dF = self.fd.d3_scalar(F)
+        dFmag = np.sqrt(np.einsum('ij..., i..., j... -> ...', 
+                                        self["gammaup3"], dF, dF))
+        sup = maths.safe_division(
+            np.einsum('ij..., j... -> i...', self["gammaup3"], dF),
+            dFmag)
+        Disi = self.s_div(sup, 'u')
+        Kss = np.einsum('ij..., i..., j... -> ...', 
+                        self["Kdown3"], sup, sup)
+        if direction == 'out':
+            return Disi + Kss - self["Ktrace"]
+        elif direction == 'in':
+            return - Disi + Kss - self["Ktrace"]
+        else:
+            raise ValueError("direction must be 'out' or 'in'")
     
     ###########################################################################
     # Tetrads

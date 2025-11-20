@@ -2,10 +2,11 @@
 maths.py 
 
 This module contains functions for manipulating rank 2 tensors, including:
- - extracting components or formatting components into matrices, 
- - computing determinants and inverses,
- - symmetrizing or antisymmetrizing tensors.
+ - extracting components or formatting components into matrices
+ - computing determinants and inverses
+ - symmetrizing or antisymmetrizing tensors
  - safe division 
+ - spin weighted spherical harmonics
 
 """
 

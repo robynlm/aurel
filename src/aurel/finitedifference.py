@@ -192,8 +192,6 @@ class FiniteDifference():
     ----------
     xarray, yarray, zarray : numpy.ndarray
         (*numpy.ndarray*) - 1D arrays of x, y, and z coordinates.
-    cartesian_coords_array : numpy.ndarray
-        (*numpy.ndarray*) - 1D arrays of x, y, and z coordinates.
     xmin, ymin, zmin : float
         (*float*) - Minimum x, y, and z coordinates.
     xmax, ymax, zmax : float
@@ -253,8 +251,6 @@ class FiniteDifference():
             self.param['zmin'], 
             self.param['zmin'] + self.param['Nz'] * self.param['dz'], 
             self.param['dz'])
-        self.cartesian_coords_array = np.array([
-            self.xarray, self.yarray, self.zarray])
         
         self.xmax = self.xarray[-1]
         self.ymax = self.yarray[-1]

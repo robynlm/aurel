@@ -6,11 +6,11 @@ class TestAurelCoreFunctions:
     
     @pytest.fixture(autouse=True)
     def setup(self):
-        L = 30.0
-        N = 39
-        param = { 'Nx': N, 'Ny': N, 'Nz': N, 
-                'xmin': -L/2, 'ymin': -L/2, 'zmin': -L/2, 
-                'dx': L/N, 'dy': L/N, 'dz': L/N}
+        Lx, Ly, Lz = 60.0, 40.0, 30.0
+        Nx, Ny, Nz = 30, 20, 15
+        param = { 'Nx': Nx, 'Ny': Ny, 'Nz': Nz, 
+                'xmin': -Lx/2, 'ymin': -Ly/2, 'zmin': -Lz/2, 
+                'dx': Lx/Nx, 'dy': Ly/Ny, 'dz': Lz/Nz}
         fd = aurel.FiniteDifference(param)
         self.rel = aurel.AurelCore(fd)
 
