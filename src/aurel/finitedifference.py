@@ -466,7 +466,7 @@ class FiniteDifference():
 
         # azimuth -pi to pi
         phi = np.sign(y) * np.arccos(
-            maths.safe_division(self.x, np.sqrt(x*x + y*y)))
+            maths.safe_division(x, np.sqrt(x*x + y*y)))
         mask = np.logical_and(np.sign(y) == 0.0, np.sign(x)<0)
         phi[mask] = -np.pi
 
