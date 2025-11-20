@@ -39,7 +39,7 @@ Acompanying required packages will be installed automatically, but at this point
 Jupyter notebook
 ++++++++++++++++
 
-If you want to use aurel in a jupyter notebook, add your virtual environment as a Jupyter kernel
+If you want to use aurel in a jupyter notebook, while your environment is active, add your virtual environment as a Jupyter kernel
 
 .. code-block:: bash
 
@@ -71,7 +71,7 @@ then in your python script you can have
 Convergence
 -----------
 
-See `Schwarzschild_check notebook <https://github.com/robynlm/aurel/blob/main/notebooks/Schwarzschild_check.ipynb>`_
+See `Schwarzschild_check notebook <https://robynlm.github.io/aurel/notebooks/Schwarzschild_check.html>`_
 
 * Choose the order of the finite difference scheme you want to use,
   this is done by setting the `fd_order` parameter in the 

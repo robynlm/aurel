@@ -70,6 +70,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Schwarzschild_check.html">Schwarzschild check</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Analytic_check.html">Analytic check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Gravitational_Waves.html">Gravitational Waves</a></li>
 </ul>
 
         </div>
@@ -341,8 +342,6 @@
 <span class="sd">    ----------</span>
 <span class="sd">    xarray, yarray, zarray : numpy.ndarray</span>
 <span class="sd">        (*numpy.ndarray*) - 1D arrays of x, y, and z coordinates.</span>
-<span class="sd">    cartesian_coords_array : numpy.ndarray</span>
-<span class="sd">        (*numpy.ndarray*) - 1D arrays of x, y, and z coordinates.</span>
 <span class="sd">    xmin, ymin, zmin : float</span>
 <span class="sd">        (*float*) - Minimum x, y, and z coordinates.</span>
 <span class="sd">    xmax, ymax, zmax : float</span>
@@ -402,8 +401,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;zmin&#39;</span><span class="p">],</span> 
             <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;zmin&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dz&#39;</span><span class="p">],</span> 
             <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;dz&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coords_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zarray</span><span class="p">])</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xarray</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yarray</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -451,7 +448,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">backward</span> <span class="o">=</span> <span class="n">fd4_backward</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">centered</span> <span class="o">=</span> <span class="n">fd4_centered</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="o">=</span> <span class="n">fd4_forward</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fd_order</span> <span class="o">/</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fd_order</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 
 <div class="viewcode-block" id="FiniteDifference.d3">
 <a class="viewcode-back" href="../../source/finitedifference.html#aurel.finitedifference.FiniteDifference.d3">[docs]</a>
@@ -681,7 +678,7 @@
 
         <span class="c1"># azimuth -pi to pi</span>
         <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span>
-            <span class="n">maths</span><span class="o">.</span><span class="n">safe_division</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)))</span>
+            <span class="n">maths</span><span class="o">.</span><span class="n">safe_division</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)))</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
 

@@ -70,6 +70,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Schwarzschild_check.html">Schwarzschild check</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Analytic_check.html">Analytic check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Gravitational_Waves.html">Gravitational Waves</a></li>
 </ul>
 
         </div>
@@ -184,9 +185,20 @@
     <span class="n">target_shape</span> <span class="o">=</span> <span class="n">target_points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">points_flat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">target_flat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
     
+    <span class="c1"># Check that all target points are within grid bounds</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">grid_points</span><span class="p">,</span> <span class="n">target_points</span><span class="p">)):</span>
+        <span class="n">grid_min</span><span class="p">,</span> <span class="n">grid_max</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">grid</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">target_min</span><span class="p">,</span> <span class="n">target_max</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">target</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">target_min</span> <span class="o">&lt;</span> <span class="n">grid_min</span> <span class="ow">or</span> <span class="n">target_max</span> <span class="o">&gt;</span> <span class="n">grid_max</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Target points in dimension </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> are outside grid bounds. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Grid range: [</span><span class="si">{</span><span class="n">grid_min</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">grid_max</span><span class="si">}</span><span class="s2">], &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Target range: [</span><span class="si">{</span><span class="n">target_min</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">target_max</span><span class="si">}</span><span class="s2">]&quot;</span>
+            <span class="p">)</span>
+    
     <span class="c1"># Create interpolator and evaluate</span>
     <span class="n">interpolator</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">RegularGridInterpolator</span><span class="p">(</span>
-        <span class="n">grid_points</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+        <span class="n">grid_points</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">interpolator</span><span class="p">(</span><span class="n">points_flat</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">target_shape</span><span class="p">)</span></div>
 
 </pre></div>

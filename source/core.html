@@ -110,6 +110,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.myprint"><code class="docutils literal notranslate"><span class="pre">AurelCore.myprint()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.norm3"><code class="docutils literal notranslate"><span class="pre">AurelCore.norm3()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.norm4"><code class="docutils literal notranslate"><span class="pre">AurelCore.norm4()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.null_ray_expansion"><code class="docutils literal notranslate"><span class="pre">AurelCore.null_ray_expansion()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.null_vector_base"><code class="docutils literal notranslate"><span class="pre">AurelCore.null_vector_base()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.s_covd"><code class="docutils literal notranslate"><span class="pre">AurelCore.s_covd()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aurel.core.AurelCore.s_curl"><code class="docutils literal notranslate"><span class="pre">AurelCore.s_curl()</span></code></a></li>
@@ -151,6 +152,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/Schwarzschild_check.html">Schwarzschild check</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/Analytic_check.html">Analytic check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Gravitational_Waves.html">Gravitational Waves</a></li>
 </ul>
 
         </div>
@@ -410,7 +412,7 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Psi4_lm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Psi4_lm"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p><span class="math notranslate nohighlight">\(\Psi_4^{l,m}\)</span> List of dictionaries of spin weighted spherical harmonic decomposition of the 4th Weyl scalar. Control with AurelCore.lmax, extract_radii, and interp_method.</p>
+<dd><p><span class="math notranslate nohighlight">\(\Psi_4^{l,m}\)</span> List of dictionaries of spin weighted spherical harmonic decomposition of the 4th Weyl scalar. Control with AurelCore.lmax, center, extract_radii, and interp_method.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1385,7 +1387,7 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 <h4>Weyl decomposition<a class="headerlink" href="#weyl-decomposition" title="Link to this heading"></a></h4>
 <p id="aurel-core-aurelcore-st-weyl-down4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.st_Weyl_down4">st_Weyl_down4</a>: <span class="math notranslate nohighlight">\(C_{\alpha\beta\mu\nu}\)</span> Weyl tensor of spacetime metric with spacetime indices down</p>
 <p id="aurel-core-aurelcore-weyl-psi"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Weyl_Psi">Weyl_Psi</a>: <span class="math notranslate nohighlight">\(\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4\)</span> List of Weyl scalars for an null vector base defined with AurelCore.tetrad</p>
-<p id="aurel-core-aurelcore-psi4-lm"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Psi4_lm">Psi4_lm</a>: <span class="math notranslate nohighlight">\(\Psi_4^{l,m}\)</span> List of dictionaries of spin weighted spherical harmonic decomposition of the 4th Weyl scalar. Control with AurelCore.lmax, extract_radii, and interp_method.</p>
+<p id="aurel-core-aurelcore-psi4-lm"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Psi4_lm">Psi4_lm</a>: <span class="math notranslate nohighlight">\(\Psi_4^{l,m}\)</span> List of dictionaries of spin weighted spherical harmonic decomposition of the 4th Weyl scalar. Control with AurelCore.lmax, center, extract_radii, and interp_method.</p>
 <p id="aurel-core-aurelcore-weyl-invariants"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Weyl_invariants">Weyl_invariants</a>: <span class="math notranslate nohighlight">\(I, \; J, \; L, \; K, \; N\)</span> Dictionary of Weyl invariants</p>
 <p id="aurel-core-aurelcore-eweyl-u-down4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.eweyl_u_down4">eweyl_u_down4</a>: <span class="math notranslate nohighlight">\(E^{\{u\}}_{\alpha\beta}\)</span> Electric part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(u^{\mu}\)</span> with spacetime indices down</p>
 <p id="aurel-core-aurelcore-eweyl-n-down3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.eweyl_n_down3">eweyl_n_down3</a>: <span class="math notranslate nohighlight">\(E^{\{n\}}_{ij}\)</span> Electric part of the Weyl tensor on the hypersurface orthogonal to <span class="math notranslate nohighlight">\(n^{\mu}\)</span> with spatial indices down</p>
@@ -1645,6 +1647,12 @@ each key has a list of values for each iteration.</p></li>
 <dt class="sig sig-object py" id="aurel.core.AurelCore.norm4">
 <span class="sig-name descname"><span class="pre">norm4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.norm4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.core.AurelCore.norm4" title="Link to this definition"></a></dt>
 <dd><p>Compute norm of a 4D rank 1 tensor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aurel.core.AurelCore.null_ray_expansion">
+<span class="sig-name descname"><span class="pre">null_ray_expansion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'out'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.null_ray_expansion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.core.AurelCore.null_ray_expansion" title="Link to this definition"></a></dt>
+<dd><p>Compute the expansion of null rays normal to a surface discribed F</p>
 </dd></dl>
 
 <dl class="py method">
