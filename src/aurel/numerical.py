@@ -80,7 +80,18 @@ def interpolate(val, grid_points, target_points, method='linear'):
     target_shape = target_points[0].shape
     points_flat = np.stack(target_flat, axis=-1)
     
+    # Check that all target points are within grid bounds
+    for i, (grid, target) in enumerate(zip(grid_points, target_points)):
+        grid_min, grid_max = grid.min(), grid.max()
+        target_min, target_max = target.min(), target.max()
+        if target_min < grid_min or target_max > grid_max:
+            raise ValueError(
+                f"Target points in dimension {i} are outside grid bounds. "
+                f"Grid range: [{grid_min}, {grid_max}], "
+                f"Target range: [{target_min}, {target_max}]"
+            )
+    
     # Create interpolator and evaluate
     interpolator = scipy.interpolate.RegularGridInterpolator(
-        grid_points, val, method=method)
+        grid_points, val, method=method, bounds_error=False, fill_value=None)
     return interpolator(points_flat).reshape(target_shape)
