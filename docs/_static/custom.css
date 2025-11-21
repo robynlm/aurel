@@ -2,3 +2,17 @@
 div.rst-content dl.py.attribute .field-list {
     display: none !important;
 }
+
+/* Hide the project name text next to logo */
+.wy-side-nav-search .icon img {
+    display: inline-block !important;
+}
+
+.wy-side-nav-search a.icon::before {
+    content: none !important;
+}
+
+.wy-side-nav-search a.icon {
+    font-size: 0 !important;
+    line-height: 0 !important;
+}

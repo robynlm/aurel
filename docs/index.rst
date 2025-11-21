@@ -1,14 +1,6 @@
 .. aurel documentation master file, created by
    sphinx-quickstart on Tue May 13 10:39:45 2025.
 
-.. image:: _static/aurel.png
-   :alt: aurel logo
-   :width: 250px
-
-.. raw:: html
-
-   <div style="margin-top: 20px;"></div>
-
 Welcome to aurel's documentation! 
 =================================
 

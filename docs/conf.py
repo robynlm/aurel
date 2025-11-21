@@ -58,6 +58,7 @@ exclude_patterns = [
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_logo = '_static/aurel.png'  # Add your logo here
 html_favicon = '_static/favicon.png'
 html_css_files = [
     'custom.css',
