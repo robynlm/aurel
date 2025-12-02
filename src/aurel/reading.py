@@ -547,8 +547,8 @@ def parse_hdf5_key(key):
         return {
             'thorn': match.group(1),
             'variable': match.group(2),
-            'it': int(match.group(3)),
-            'tl': int(match.group(4)),
+            'it': int(match.group(3)) if match.group(3) else None,
+            'tl': int(match.group(4)) if match.group(4) else None,
             'm': 0 if match.group(5) else None,
             'rl': int(match.group(7)) if match.group(7) else None,
             'c': int(match.group(9)) if match.group(9) else None,
@@ -619,7 +619,8 @@ def parse_h5file(filepath):
         thorn_name = match.group(2)             # e.g., "admbase" or None
         variable_or_group_name = match.group(3) # e.g., "metric" or "rho"
         xyz_prefix = match.group(4)             # e.g., ".xyz" or None
-        chunk_number = int(match.group(6))      # e.g., "123" or None
+        chunk_number = int(match.group(6)) if match.group(6) else None
+                                                # e.g., "123" or None
         xyz_suffix = match.group(7)             # e.g., ".xyz" or None
         
         base_name = f"{thorn_group_with_dash}{variable_or_group_name}"
