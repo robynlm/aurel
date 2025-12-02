@@ -610,8 +610,8 @@ def parse_h5file(filepath):
     match_checkpoint = rx_checkpoint.match(filename)
     match = rx_h5file.match(filename)
     if match_checkpoint:
-        iteration = int(match_checkpoint.group(1))
-        chunk_number = int(match_checkpoint.group(3))
+        iteration = int(match_checkpoint.group(1)) if match.group(1) else None
+        chunk_number = int(match_checkpoint.group(3)) if match.group(3) else None
         return {'iteration': iteration,
                 'chunk_number': chunk_number}
     elif match:
