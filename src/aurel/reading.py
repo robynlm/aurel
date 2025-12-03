@@ -35,37 +35,8 @@ import numpy as np
 import glob
 import h5py
 import re
-import subprocess
 import contextlib
 import json
-
-def bash(command):
-    """Execute a bash command and return its output as a string.
-
-    This utility function provides a simple interface for running shell
-    commands from within Python, primarily used for file system operations and
-    parameter file reading in simulation data processing.
-
-    Parameters
-    ----------
-    command : str
-        The bash command to execute.
-
-    Returns
-    -------
-    str
-        The command output as a UTF-8 decoded string with leading/trailing
-        whitespace stripped. Empty string if command produces no output.
-
-    Notes
-    -----
-    This function uses subprocess.check_output() which will raise an exception
-    if the command fails. Consider using appropriate error handling for 
-    production code.
-    """
-    results = subprocess.check_output(command, shell=True)
-    strresults = str(results, 'utf-8').strip()
-    return strresults
 
 aurel_tensor_to_scalar = {
     'gammadown3': ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
@@ -723,7 +694,8 @@ def parameters(simname):
                          + simname)
 
     # save all parameters
-    lines = bash('cat ' + parampath).split('\n') # read file
+    with open(parampath, 'r') as f:
+        lines = f.read().split('\n') # read file
     lines = [l.split('#')[0] for l in lines] # remove comments
     lines = [l for l in lines if l!=''] # remove empty lines
 
@@ -1458,7 +1430,8 @@ def get_content(param, **kwargs):
     if overwrite:
         if verbose:
             print(f"Removing content file from {content_file}...")
-        bash("rm "+content_file)
+        if os.path.exists(content_file):
+            os.remove(content_file)
     
     # Try to load existing content file
     try:
