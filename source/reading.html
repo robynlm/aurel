@@ -11,7 +11,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5a7fad61" />
 
   
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -38,6 +38,7 @@
           
           <a href="../index.html" class="icon icon-home">
             aurel
+              <img src="../_static/aurel.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -57,7 +58,6 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">aurel.reading</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#core-einstein-toolkit-functionality">Core Einstein Toolkit Functionality</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#environment-setup">Environment Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#aurel.reading.bash"><code class="docutils literal notranslate"><span class="pre">bash()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.collect_overall_iterations"><code class="docutils literal notranslate"><span class="pre">collect_overall_iterations()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.fixij"><code class="docutils literal notranslate"><span class="pre">fixij()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aurel.reading.get_content"><code class="docutils literal notranslate"><span class="pre">get_content()</span></code></a></li>
@@ -158,31 +158,6 @@ All other functions are auxiliary utilities for Einstein Toolkit data handling.<
 <div><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SIMLOC=&quot;/path1:/path2:/path3&quot;</span></code></p>
 </div></blockquote>
 </section>
-<dl class="py function">
-<dt class="sig sig-object py" id="aurel.reading.bash">
-<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">bash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#bash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.bash" title="Link to this definition"></a></dt>
-<dd><p>Execute a bash command and return its output as a string.</p>
-<p>This utility function provides a simple interface for running shell
-commands from within Python, primarily used for file system operations and
-parameter file reading in simulation data processing.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>command</strong> (<em>str</em>) – The bash command to execute.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The command output as a UTF-8 decoded string with leading/trailing
-whitespace stripped. Empty string if command produces no output.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>This function uses subprocess.check_output() which will raise an exception
-if the command fails. Consider using appropriate error handling for
-production code.</p>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.reading.collect_overall_iterations">
 <span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">collect_overall_iterations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">its_available</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#collect_overall_iterations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.collect_overall_iterations" title="Link to this definition"></a></dt>

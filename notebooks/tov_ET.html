@@ -11,7 +11,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0e075184" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5a7fad61" />
 
   
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -38,6 +38,7 @@
           
           <a href="../index.html" class="icon icon-home">
             aurel
+              <img src="../_static/aurel.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -177,7 +178,7 @@
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating new iterations file: /Users/rlm36AA/simulations/tov_ET/iterations.txt
 
-Restarts to process: [np.int64(0)]
+Restarts to process: [0]
  === restart 0
 Loading existing content from /Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/content.txt...
 No existing content file found or invalid format. Calculating from scratch...
@@ -190,12 +191,13 @@ Checking variable gyy
 it = 0 -&gt; 409600
 rl = 0 at it = np.arange(0, 409600, 4096)
 rl = 1 at it = np.arange(0, 409600, 4096)
+Checkpoints available at its: []
  === Overall iterations
 rl = 0 at it = np.arange(0, 409600, 4096)
 rl = 1 at it = np.arange(0, 409600, 4096)
 
  == For info
-it_dict : {np.int64(0): {&#39;var available&#39;: [&#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;betaup3&#39;, &#39;dtbetaup3&#39;, &#39;rho0&#39;, &#39;eps&#39;, &#39;press&#39;, &#39;w_lorentz&#39;, &#39;velup3&#39;, &#39;Hamiltonian&#39;, &#39;Momentumup3&#39;, &#39;Weyl_Psi&#39;], &#39;its available&#39;: [np.int64(0), np.int64(409600)], &#39;rl = 0&#39;: [np.int64(0), np.int64(409600), np.int64(4096)], &#39;rl = 1&#39;: [np.int64(0), np.int64(409600), np.int64(4096)]}, &#39;overall&#39;: {&#39;rl = 0&#39;: [[np.int64(0), np.int64(409600), np.int64(4096)]], &#39;rl = 1&#39;: [[np.int64(0), np.int64(409600), np.int64(4096)]]}}
+it_dict : {0: {&#39;var available&#39;: [&#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;betaup3&#39;, &#39;dtbetaup3&#39;, &#39;rho0&#39;, &#39;eps&#39;, &#39;press&#39;, &#39;w_lorentz&#39;, &#39;velup3&#39;, &#39;Hamiltonian&#39;, &#39;Momentumup3&#39;, &#39;Weyl_Psi&#39;], &#39;its available&#39;: [np.int64(0), np.int64(409600)], &#39;rl = 0&#39;: [np.int64(0), np.int64(409600), np.int64(4096)], &#39;rl = 1&#39;: [np.int64(0), np.int64(409600), np.int64(4096)], &#39;checkpoints&#39;: []}, &#39;overall&#39;: {&#39;rl = 0&#39;: [[np.int64(0), np.int64(409600), np.int64(4096)]], &#39;rl = 1&#39;: [[np.int64(0), np.int64(409600), np.int64(4096)]]}}
 content : {(&#39;gyy&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyy.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyy.file_1.h5&#39;], (&#39;kzz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kzz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kzz.file_1.h5&#39;], (&#39;alp&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/alp.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/alp.file_1.h5&#39;], (&#39;dtbetaz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetaz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetaz.file_1.h5&#39;], (&#39;eps&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/eps.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/eps.file_1.h5&#39;], (&#39;gzz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gzz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gzz.file_1.h5&#39;], (&#39;Psi4r&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/Psi4r.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/Psi4r.file_1.h5&#39;], (&#39;kyy&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kyy.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kyy.file_1.h5&#39;], (&#39;vel[0]&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[0].file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[0].file_1.h5&#39;], (&#39;H&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/H.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/H.file_1.h5&#39;], (&#39;dtalp&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtalp.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtalp.file_1.h5&#39;], (&#39;press&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/press.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/press.file_1.h5&#39;], (&#39;M1&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M1.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M1.file_1.h5&#39;], (&#39;kxz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxz.file_1.h5&#39;], (&#39;betaz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betaz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betaz.file_1.h5&#39;], (&#39;gxz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxz.file_1.h5&#39;], (&#39;vel[2]&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[2].file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[2].file_1.h5&#39;], (&#39;kxy&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxy.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxy.file_1.h5&#39;], (&#39;vel[1]&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[1].file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[1].file_1.h5&#39;], (&#39;dtbetax&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetax.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetax.file_1.h5&#39;], (&#39;trK&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/trK.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/trK.file_1.h5&#39;], (&#39;M3&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M3.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M3.file_1.h5&#39;], (&#39;gxy&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxy.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxy.file_1.h5&#39;], (&#39;betay&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betay.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betay.file_1.h5&#39;], (&#39;dtbetay&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetay.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetay.file_1.h5&#39;], (&#39;w_lorentz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/w_lorentz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/w_lorentz.file_1.h5&#39;], (&#39;rho&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/rho.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/rho.file_1.h5&#39;], (&#39;kxx&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxx.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxx.file_1.h5&#39;], (&#39;Psi4i&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/Psi4i.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/Psi4i.file_1.h5&#39;], (&#39;gyz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyz.file_1.h5&#39;], (&#39;M2&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M2.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M2.file_1.h5&#39;], (&#39;gxx&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxx.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxx.file_1.h5&#39;], (&#39;kyz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kyz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kyz.file_1.h5&#39;], (&#39;betax&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betax.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betax.file_1.h5&#39;]}
 </pre></div>
 </div>
@@ -242,11 +244,11 @@ Loaded 34 variables from cache.
  =========== Restart 0:
 vars to get [&#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;betaup3&#39;, &#39;dtbetaup3&#39;, &#39;rho0&#39;, &#39;eps&#39;, &#39;press&#39;, &#39;w_lorentz&#39;, &#39;velup3&#39;, &#39;Hamiltonian&#39;, &#39;Momentumup3&#39;, &#39;Weyl_Psi&#39;]:
 Data read from split iterations: []
-Variables read from ET files: [&#39;betax&#39;, &#39;gxx&#39;, &#39;t&#39;, &#39;gxz&#39;, &#39;Hamiltonian&#39;, &#39;Weyl_Psi4r&#39;, &#39;dtbetax&#39;, &#39;kyy&#39;, &#39;gyz&#39;, &#39;dtbetay&#39;, &#39;press&#39;, &#39;velz&#39;, &#39;Momentumz&#39;, &#39;it&#39;, &#39;kxz&#39;, &#39;kxx&#39;, &#39;dtbetaz&#39;, &#39;Momentumy&#39;, &#39;betaz&#39;, &#39;gyy&#39;, &#39;kzz&#39;, &#39;Weyl_Psi4i&#39;, &#39;betay&#39;, &#39;vely&#39;, &#39;alpha&#39;, &#39;Momentumx&#39;, &#39;dtalpha&#39;, &#39;gzz&#39;, &#39;kyz&#39;, &#39;eps&#39;, &#39;Ktrace&#39;, &#39;velx&#39;, &#39;gxy&#39;, &#39;rho0&#39;, &#39;w_lorentz&#39;, &#39;kxy&#39;]
-Variables saved to split iterations files: [&#39;betax&#39;, &#39;gxz&#39;, &#39;gxx&#39;, &#39;Hamiltonian&#39;, &#39;Weyl_Psi4r&#39;, &#39;dtbetax&#39;, &#39;kyy&#39;, &#39;gyz&#39;, &#39;dtbetay&#39;, &#39;press&#39;, &#39;velz&#39;, &#39;Momentumz&#39;, &#39;kxz&#39;, &#39;kxx&#39;, &#39;dtbetaz&#39;, &#39;Momentumy&#39;, &#39;betaz&#39;, &#39;gyy&#39;, &#39;kzz&#39;, &#39;Weyl_Psi4i&#39;, &#39;betay&#39;, &#39;vely&#39;, &#39;alpha&#39;, &#39;Momentumx&#39;, &#39;dtalpha&#39;, &#39;gzz&#39;, &#39;kyz&#39;, &#39;eps&#39;, &#39;Ktrace&#39;, &#39;velx&#39;, &#39;gxy&#39;, &#39;rho0&#39;, &#39;w_lorentz&#39;, &#39;kxy&#39;]
+Variables read from ET files: [&#39;velz&#39;, &#39;betay&#39;, &#39;eps&#39;, &#39;gyz&#39;, &#39;gxz&#39;, &#39;it&#39;, &#39;kyz&#39;, &#39;t&#39;, &#39;dtbetax&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtbetay&#39;, &#39;Weyl_Psi4i&#39;, &#39;kxz&#39;, &#39;kyy&#39;, &#39;kzz&#39;, &#39;Momentumz&#39;, &#39;betax&#39;, &#39;kxy&#39;, &#39;Weyl_Psi4r&#39;, &#39;dtbetaz&#39;, &#39;gxx&#39;, &#39;press&#39;, &#39;gzz&#39;, &#39;w_lorentz&#39;, &#39;vely&#39;, &#39;dtalpha&#39;, &#39;betaz&#39;, &#39;kxx&#39;, &#39;velx&#39;, &#39;rho0&#39;, &#39;Hamiltonian&#39;, &#39;Momentumy&#39;, &#39;Momentumx&#39;, &#39;gxy&#39;]
+Variables saved to split iterations files: [&#39;velz&#39;, &#39;betay&#39;, &#39;eps&#39;, &#39;gyz&#39;, &#39;gxz&#39;, &#39;kyz&#39;, &#39;dtbetax&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtbetay&#39;, &#39;Weyl_Psi4i&#39;, &#39;kxz&#39;, &#39;kyy&#39;, &#39;kzz&#39;, &#39;Momentumz&#39;, &#39;betax&#39;, &#39;kxy&#39;, &#39;Weyl_Psi4r&#39;, &#39;dtbetaz&#39;, &#39;gxx&#39;, &#39;press&#39;, &#39;gzz&#39;, &#39;w_lorentz&#39;, &#39;vely&#39;, &#39;dtalpha&#39;, &#39;betaz&#39;, &#39;kxx&#39;, &#39;velx&#39;, &#39;rho0&#39;, &#39;Hamiltonian&#39;, &#39;Momentumy&#39;, &#39;Momentumx&#39;, &#39;gxy&#39;]
 
  == Data read from the simulation:
-dict_keys([&#39;it&#39;, &#39;betax&#39;, &#39;gxz&#39;, &#39;gxx&#39;, &#39;Hamiltonian&#39;, &#39;Weyl_Psi4r&#39;, &#39;dtbetax&#39;, &#39;kyy&#39;, &#39;gyz&#39;, &#39;dtbetay&#39;, &#39;press&#39;, &#39;velz&#39;, &#39;Momentumz&#39;, &#39;kxz&#39;, &#39;kxx&#39;, &#39;dtbetaz&#39;, &#39;Momentumy&#39;, &#39;betaz&#39;, &#39;gyy&#39;, &#39;kzz&#39;, &#39;Weyl_Psi4i&#39;, &#39;betay&#39;, &#39;vely&#39;, &#39;alpha&#39;, &#39;Momentumx&#39;, &#39;dtalpha&#39;, &#39;gzz&#39;, &#39;kyz&#39;, &#39;eps&#39;, &#39;Ktrace&#39;, &#39;velx&#39;, &#39;gxy&#39;, &#39;rho0&#39;, &#39;w_lorentz&#39;, &#39;kxy&#39;, &#39;t&#39;])
+dict_keys([&#39;it&#39;, &#39;velz&#39;, &#39;betay&#39;, &#39;eps&#39;, &#39;gyz&#39;, &#39;gxz&#39;, &#39;kyz&#39;, &#39;dtbetax&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtbetay&#39;, &#39;Weyl_Psi4i&#39;, &#39;kxz&#39;, &#39;kyy&#39;, &#39;kzz&#39;, &#39;Momentumz&#39;, &#39;betax&#39;, &#39;kxy&#39;, &#39;Weyl_Psi4r&#39;, &#39;dtbetaz&#39;, &#39;gxx&#39;, &#39;press&#39;, &#39;gzz&#39;, &#39;w_lorentz&#39;, &#39;vely&#39;, &#39;dtalpha&#39;, &#39;betaz&#39;, &#39;kxx&#39;, &#39;velx&#39;, &#39;rho0&#39;, &#39;Hamiltonian&#39;, &#39;Momentumy&#39;, &#39;Momentumx&#39;, &#39;gxy&#39;, &#39;t&#39;])
 it format: type &lt;class &#39;list&#39;&gt; and shape (100,)
 rho0 format: type &lt;class &#39;list&#39;&gt; and shape (100, 12, 12, 12)
 rho0[0] format: type &lt;class &#39;numpy.ndarray&#39;&gt; and shape (12, 12, 12)
@@ -287,13 +289,13 @@ Processing estimation item: max
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "669bf545201e4c15bca09f24acc2c494", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2b6cef7c56274d2f8a74fc6e0fb86b31", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;$max(\\rho_0) / \\rho_0(0)$&#39;)
 </pre></div>
 </div>
-<img alt="../_images/f0f44bb9896c389b7ac907a42c694946c8ac2fe6b7743c5a03c29a0676b9d313.png" src="../_images/f0f44bb9896c389b7ac907a42c694946c8ac2fe6b7743c5a03c29a0676b9d313.png" />
+<img alt="../_images/1ea45a11797ceba75ad42b7b2ed4d00222c578f801a96b108c2385f118c9eb43.png" src="../_images/1ea45a11797ceba75ad42b7b2ed4d00222c578f801a96b108c2385f118c9eb43.png" />
 </div>
 </div>
 <p>How about calculating further terms provided by AurelCore at each time step.</p>
@@ -334,13 +336,13 @@ Processing estimation item: max
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "233907b114894a75873cdc33b50e7a27", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "12eb2c5be1024bcabc9ae89011ce292f", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;max($\\gamma$)&#39;)
 </pre></div>
 </div>
-<img alt="../_images/71f37bb399bd7c32c170c209eb4d3ea14292b1d4b793253a0aa88dc2334daf5f.png" src="../_images/71f37bb399bd7c32c170c209eb4d3ea14292b1d4b793253a0aa88dc2334daf5f.png" />
+<img alt="../_images/5a7881e95bdb95951717ce739441491bce60867c0737a61ceee3b3a8fe125282.png" src="../_images/5a7881e95bdb95951717ce739441491bce60867c0737a61ceee3b3a8fe125282.png" />
 </div>
 </div>
 </section>
@@ -385,8 +387,8 @@ Loaded 34 variables from cache.
  =========== Restart 0:
 vars to get [&#39;rho0&#39;, &#39;gammadown3&#39;]:
 Data read from split iterations: []
-Variables read from ET files: [&#39;gxx&#39;, &#39;t&#39;, &#39;gxz&#39;, &#39;gyy&#39;, &#39;gzz&#39;, &#39;it&#39;, &#39;rho0&#39;, &#39;gxy&#39;, &#39;gyz&#39;]
-Variables saved to split iterations files: [&#39;gxz&#39;, &#39;gxx&#39;, &#39;gyy&#39;, &#39;gzz&#39;, &#39;rho0&#39;, &#39;gxy&#39;, &#39;gyz&#39;]
+Variables read from ET files: [&#39;gyy&#39;, &#39;gxx&#39;, &#39;rho0&#39;, &#39;gzz&#39;, &#39;gyz&#39;, &#39;gxz&#39;, &#39;it&#39;, &#39;gxy&#39;, &#39;t&#39;]
+Variables saved to split iterations files: [&#39;gyy&#39;, &#39;gxx&#39;, &#39;rho0&#39;, &#39;gzz&#39;, &#39;gyz&#39;, &#39;gxz&#39;, &#39;gxy&#39;]
 4th order finite difference schemes are defined
 </pre></div>
 </div>
@@ -408,7 +410,7 @@ Processing estimation item: max
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8bdbceef849a4be69b9bcd8677ebcb13", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4a7fa173cf414cb7bd2e35f29b853c5b", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 </pre></div>
 </div>
 </div>
@@ -440,7 +442,7 @@ Now processing remaining time steps sequentially
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;$max(\\rho_0) / \\rho_0(0)$&#39;)
 </pre></div>
 </div>
-<img alt="../_images/90cfb6cb48ed19bffd8fdfe0afc5b3153b427117730651d1dcc675170b3b4460.png" src="../_images/90cfb6cb48ed19bffd8fdfe0afc5b3153b427117730651d1dcc675170b3b4460.png" />
+<img alt="../_images/8363535a52042eb98122ee6c05c8f39f1da2728af963f4924d91b19ce714f464.png" src="../_images/8363535a52042eb98122ee6c05c8f39f1da2728af963f4924d91b19ce714f464.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -473,7 +475,7 @@ Now processing remaining time steps sequentially
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;max($\\gamma$)&#39;)
 </pre></div>
 </div>
-<img alt="../_images/e300b7b088bc773175009d96b85bf5900e9b22a96e39aaaa7b690ee69050a0fa.png" src="../_images/e300b7b088bc773175009d96b85bf5900e9b22a96e39aaaa7b690ee69050a0fa.png" />
+<img alt="../_images/09a5152cf3ff5994d790a8a9e1c1c3cb43abeb5a0b0b2403e1fe398faf925834.png" src="../_images/09a5152cf3ff5994d790a8a9e1c1c3cb43abeb5a0b0b2403e1fe398faf925834.png" />
 </div>
 </div>
 </section>
