@@ -15,7 +15,7 @@ os.makedirs(output_dir, exist_ok=True)
 # File to write the documentation
 output_file = os.path.join(output_dir, "source/core.rst")
 
-gamma = ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz', 
+gamma = ['gtt', 'gtx', 'gty', 'gtz', 'gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz', 
          'gammadown3', 'gammaup3', 
          'dtgammaup3', 
          'gammadet',  
@@ -62,6 +62,7 @@ curv_bssnok = ['s_Gamma_udd3_bssnok',
           's_Ricci_down3_bssnok', 's_RicciS_bssnok',
           's_Ricci_down3_phi']
 constraints = ['Hamiltonian', 'Hamiltonian_Escale',
+    'Momentumx', 'Momentumy', 'Momentumz',
     'Momentumup3', 'Momentum_Escale']
 gravimag = ['st_Weyl_down4', 'Weyl_Psi', 'Psi4_lm', 'Weyl_invariants',
     'eweyl_u_down4', 'eweyl_n_down3', 'bweyl_u_down4',

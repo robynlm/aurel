@@ -37,7 +37,11 @@ def assumption(keyname, assumption):
     return message
 descriptions = {
     # === Metric quantities
-    # Spatial metric
+    # Full metric
+    "gtt": r"$g_{tt}$ Metric with tt indices down.",
+    "gtx": r"$g_{tx}$ Metric with tx indices down.",
+    "gty": r"$g_{ty}$ Metric with ty indices down.",
+    "gtz": r"$g_{tz}$ Metric with tz indices down.",
     "gxx": (r"$g_{xx}$ Metric with xx indices down." 
         + assumption('gxx', r"$g_{xx}=1$")),
     "gxy": (r"$g_{xy}$ Metric with xy indices down." 
@@ -50,6 +54,7 @@ descriptions = {
         + assumption('gyz', r"$g_{yz}=0$")),
     "gzz": (r"$g_{zz}$ Metric with zz indices down." 
         + assumption('gzz', r"$g_{zz}=1$")),
+    # Spatial metric
     "gammadown3": r"$\gamma_{ij}$ Spatial metric with spatial indices down",
     "gammaup3": r"$\gamma^{ij}$ Spatial metric with spatial indices up",
     "dtgammaup3": (r"$\partial_t \gamma^{ij}$ Coordinate time derivative of"
@@ -304,6 +309,12 @@ descriptions = {
     "Hamiltonian": r"$\mathcal{H}$ Hamilonian constraint",
     "Hamiltonian_Escale": (r"[$\mathcal{H}$] Hamilonian constraint"
         + r" energy scale"),
+    "Momentumx": (r"$\mathcal{M}^x$ Momentum constraint"
+        + r" with x spatial indices up"),
+    "Momentumy": (r"$\mathcal{M}^y$ Momentum constraint"
+        + r" with y spatial indices up"),
+    "Momentumz": (r"$\mathcal{M}^z$ Momentum constraint"
+        + r" with z spatial indices up"),
     "Momentumup3": (r"$\mathcal{M}^i$ Momentum constraint"
         + r" with spatial indices up"),
     "Momentum_Escale": (r"[$\mathcal{M}$] Momentum constraint"
@@ -614,7 +625,31 @@ class AurelCore():
     ###########################################################################
         
     # === Metric quantities
-    # Spatial metric
+    # Full spacetime metric
+    def gtt(self):
+        if 'gdown4' in self.data:
+            return self["gdown4"][0,0]
+        else:
+            return -self["alpha"]**2 + self["betamag"]
+    
+    def gtx(self):
+        if 'gdown4' in self.data:
+            return self["gdown4"][0,1]
+        else:
+            return self["betadown3"][0]
+    
+    def gty(self):
+        if 'gdown4' in self.data:
+            return self["gdown4"][0,2]
+        else:
+            return self["betadown3"][1]
+    
+    def gtz(self):
+        if 'gdown4' in self.data:
+            return self["gdown4"][0,3]
+        else:
+            return self["betadown3"][2]
+    
     def gxx(self):
         if 'gammadown3' in self.data:
             return self["gammadown3"][0,0]
@@ -651,6 +686,7 @@ class AurelCore():
         else:
             return np.ones(self.data_shape)
 
+    # Spatial metric
     def gammadown3(self):
         return maths.format_rank2_3(
             [self["gxx"], self["gxy"], self["gxz"],
@@ -901,12 +937,8 @@ class AurelCore():
     
     # Spacetime metric
     def gdown4(self):
-        g00 = (-self["alpha"]**2 
-               + np.einsum('i..., j..., ij... -> ...', 
-                           self["betaup3"], self["betaup3"], 
-                           self["gammadown3"]))
         return np.array(
-                [[g00, self["betadown3"][0], 
+                [[self["gtt"], self["betadown3"][0], 
                   self["betadown3"][1], self["betadown3"][2]],
                  [self["betadown3"][0], self["gammadown3"][0,0], 
                   self["gammadown3"][0,1], self["gammadown3"][0,2]],
@@ -1590,6 +1622,15 @@ class AurelCore():
                 HamE 
                 + (2 * self.kappa * self["rho_n"])**2 
                 + (2 * self.Lambda)**2))
+    
+    def Momentumx(self):
+        return self["Momentumup3"][0]
+    
+    def Momentumy(self):
+        return self["Momentumup3"][1]
+    
+    def Momentumz(self):
+        return self["Momentumup3"][2]
     
     def Momentumup3(self):
         if "Momentumx" in self.data.keys():
