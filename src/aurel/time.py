@@ -67,8 +67,8 @@ def over_time(data, fd, vars=[], estimates=[],
 
         - str: Names of predefined variables from core.descriptions
         - dict: Custom variable definitions with string keys (variable names)
-          and functions that take an AurelCore instance and return the variable
-          value.
+          and functions that take only an AurelCore instance and return the 
+          variable value.
 
         Default is an empty list, no variable calculations are performed.
     estimates : list of str or dict, optional
@@ -76,7 +76,7 @@ def over_time(data, fd, vars=[], estimates=[],
         Elements can be:
 
         - str: Names of predefined functions from est_functions 
-          ('max', 'mean', 'median', 'min', 'OD', 'UD', ...)
+          ('max', 'mean', 'median', 'min', ...)
         - dict: Custom estimation functions with string keys (function names) 
           and functions that take a scalar 3D array of shape 
           (fd.Nx, fd.Ny, fd.Nz) and return a scalar value.
@@ -91,6 +91,7 @@ def over_time(data, fd, vars=[], estimates=[],
         
         - Lambda : float, cosmological constant
         - tetrad_to_use : str, tetrad choice for Weyl calculations
+        - any other custom parameters required by user-defined functions.
     
     Returns
     -------

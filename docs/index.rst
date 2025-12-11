@@ -59,7 +59,8 @@ and import the AurelCore class:
    rel = aurel.AurelCore(fd)
 
 At this point you need to provide the spacetime metric, extrinsic curvature
-and matter fields, see :ref:`assumed_quantities`.
+and matter fields, see :ref:`assumed_quantities`, where these would otherwise 
+be assumed to correspond to Minkowski vaccum.
 These are passed as numpy arrays to aurel in the following way:
 
 .. code-block:: python
