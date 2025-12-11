@@ -355,6 +355,226 @@ class TestOverTimeFunction:
         assert result['Ktrace'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
         assert result['Ktrace_max'].shape == (self.Nt,)
         assert result['Ktrace_mean'].shape == (self.Nt,)
+    
+    def test_sequential_vars_then_estimates_only(self):
+        """Test calling over_time first with vars, then with only estimates."""
+        # First call: compute variables without estimates
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=['gammadet', 'Ktrace'], 
+            estimates=[],
+            verbose=False
+        )
+        
+        # Verify variables exist but no estimates
+        assert 'gammadet' in result.keys()
+        assert 'Ktrace' in result.keys()
+        assert 'gammadet_max' not in result.keys()
+        assert 'Ktrace_max' not in result.keys()
+        
+        # Second call: compute estimates only (no new vars)
+        result = aurel.over_time(
+            result, 
+            self.fd, 
+            vars=[], 
+            estimates=['max', 'min', 'mean'],
+            verbose=False
+        )
+        
+        # Verify variables still exist and now have estimates
+        assert 'gammadet' in result.keys()
+        assert 'Ktrace' in result.keys()
+        assert 'gammadet_max' in result.keys()
+        assert 'gammadet_min' in result.keys()
+        assert 'gammadet_mean' in result.keys()
+        assert 'Ktrace_max' in result.keys()
+        assert 'Ktrace_min' in result.keys()
+        assert 'Ktrace_mean' in result.keys()
+        
+        # Verify input scalar (rho) also got estimates
+        assert 'rho_max' in result.keys()
+        assert 'rho_min' in result.keys()
+        assert 'rho_mean' in result.keys()
+        
+        # Verify shapes
+        assert result['gammadet'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
+        assert result['Ktrace'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
+        assert result['gammadet_max'].shape == (self.Nt,)
+        assert result['Ktrace_max'].shape == (self.Nt,)
+        assert result['rho_max'].shape == (self.Nt,)
+    
+    def test_sequential_custom_vars_and_estimates(self):
+        """Test sequential calls with custom variables and custom estimates."""
+        def custom_var1(rel):
+            """Custom variable: trace of gamma."""
+            return rel['gxx'] + rel['gyy'] + rel['gzz']
+        
+        def custom_var2(rel):
+            """Custom variable: squared rho."""
+            return rel['rho'] ** 2
+        
+        def custom_est1(array):
+            """Custom estimate: center value."""
+            Nx, Ny, Nz = np.shape(array)
+            return array[Nx // 2, Ny // 2, Nz // 2]
+        
+        def custom_est2(array):
+            """Custom estimate: corner value."""
+            return array[0, 0, 0]
+        
+        # First call: compute first custom var with builtin estimate
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=['gammadet', {'gamma_trace': custom_var1}], 
+            estimates=['max'],
+            verbose=False
+        )
+        
+        # Verify first custom var and estimate exist
+        assert 'gammadet' in result.keys()
+        assert 'gammadet_max' in result.keys()
+        assert 'gamma_trace' in result.keys()
+        assert 'gamma_trace_max' in result.keys()
+        
+        # Second call: add second custom var with first custom estimate
+        result = aurel.over_time(
+            result, 
+            self.fd, 
+            vars=['Ktrace', {'rho_squared': custom_var2}], 
+            verbose=False
+        )
+        assert 'gammadet' in result.keys()
+        assert 'gammadet_max' in result.keys()
+        assert 'gamma_trace' in result.keys()
+        assert 'gamma_trace_max' in result.keys()
+        assert 'Ktrace' in result.keys()
+        assert 'rho_squared' in result.keys()
+        
+        # Second call: add second custom var with first custom estimate
+        result = aurel.over_time(
+            result, 
+            self.fd, 
+            estimates=['max', {'center': custom_est1}],
+            verbose=False
+        )
+        
+        # Verify both custom vars exist with their estimates
+        assert 'gammadet' in result.keys()
+        assert 'gammadet_max' in result.keys()
+        assert 'gammadet_center' in result.keys()
+        assert 'gamma_trace' in result.keys()
+        assert 'gamma_trace_max' in result.keys()
+        assert 'gamma_trace_center' in result.keys()
+        assert 'Ktrace' in result.keys()
+        assert 'Ktrace_max' in result.keys()
+        assert 'Ktrace_center' in result.keys()
+        assert 'rho_squared' in result.keys()
+        assert 'rho_squared_max' in result.keys()
+        assert 'rho_squared_center' in result.keys()
+        
+        # Third call: add second custom estimate (no new vars)
+        result = aurel.over_time(
+            result, 
+            self.fd, 
+            vars=[], 
+            estimates=[{'corner': custom_est2}],
+            verbose=False
+        )
+        
+        # Verify all custom vars have all estimates
+        assert 'gammadet' in result.keys()
+        assert 'gammadet_max' in result.keys()
+        assert 'gammadet_center' in result.keys()
+        assert 'gamma_trace' in result.keys()
+        assert 'gamma_trace_max' in result.keys()
+        assert 'gamma_trace_center' in result.keys()
+        assert 'Ktrace' in result.keys()
+        assert 'Ktrace_max' in result.keys()
+        assert 'Ktrace_center' in result.keys()
+        assert 'rho_squared' in result.keys()
+        assert 'rho_squared_max' in result.keys()
+        assert 'rho_squared_center' in result.keys()
+        assert 'gammadet_corner' in result.keys()
+        assert 'gamma_trace_corner' in result.keys()
+        assert 'Ktrace_corner' in result.keys()
+        assert 'rho_squared_corner' in result.keys()
+        
+        # Verify input scalar also got custom estimates
+        assert 'rho_center' in result.keys()
+        assert 'rho_corner' in result.keys()
+        
+        # Verify shapes
+        assert result['gamma_trace'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
+        assert result['rho_squared'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
+        assert result['gamma_trace_max'].shape == (self.Nt,)
+        assert result['gamma_trace_center'].shape == (self.Nt,)
+        assert result['gamma_trace_corner'].shape == (self.Nt,)
+        assert result['rho_squared_center'].shape == (self.Nt,)
+        assert result['rho_corner'].shape == (self.Nt,)
+    
+    def test_sequential_custom_vars_with_kwargs(self):
+        """Test sequential calls with custom variables that use kwargs."""
+        def custom_var_power(rel):
+            """Custom variable: rho raised to power."""
+            return rel['rho'] ** rel.power
+        
+        def custom_var_scaled(rel):
+            """Custom variable: scaled gamma trace."""
+            return rel.scale * (rel['gxx'] + rel['gyy'] + rel['gzz'])
+        
+        # First call: custom var with power=2
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=[{'rho_squared': custom_var_power}], 
+            estimates=['max', 'min'],
+            power=2,
+            verbose=False
+        )
+        
+        # Verify first custom var exists
+        assert 'rho_squared' in result.keys()
+        assert 'rho_squared_max' in result.keys()
+        expected = self.data['rho'][0] ** 2
+        np.testing.assert_array_almost_equal(result['rho_squared'][0], expected)
+        
+        # Second call: add another custom var with different kwarg
+        result = aurel.over_time(
+            result, 
+            self.fd, 
+            vars=[{'scaled_trace': custom_var_scaled}], 
+            estimates=['mean'],
+            scale=3.5,
+            verbose=False
+        )
+        
+        # Verify both custom vars exist with their estimates
+        assert 'rho_squared' in result.keys()
+        assert 'rho_squared_max' in result.keys()
+        assert 'rho_squared_min' in result.keys()
+        assert 'scaled_trace' in result.keys()
+        assert 'scaled_trace_mean' in result.keys()
+        
+        # Third call: recompute with different power
+        result = aurel.over_time(
+            result, 
+            self.fd, 
+            vars=[{'rho_cubed': custom_var_power}], 
+            estimates=[],
+            power=3,
+            verbose=False
+        )
+        
+        # Verify new variable with different kwarg value
+        assert 'rho_cubed' in result.keys()
+        expected = self.data['rho'][0] ** 3
+        np.testing.assert_array_almost_equal(result['rho_cubed'][0], expected)
+        
+        # Verify previous vars still exist
+        assert 'rho_squared' in result.keys()
+        assert 'scaled_trace' in result.keys()
 
 
 class TestOverTimeEdgeCases:

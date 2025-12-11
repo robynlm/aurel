@@ -216,7 +216,7 @@ def over_time(data, fd, vars=[], estimates=[],
                     # Is there a scalar without this estimate?
                     include_estimate = False
                     for skey in scalarkeys:
-                        if skey+'_'+est_item not in list(data.keys()):
+                        if skey+'_'+func_name not in list(data.keys()):
                             include_estimate = True
                             break
                     # Include the estimate only if needed and it's valid
