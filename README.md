@@ -4,7 +4,7 @@
 </a>
 </p>
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Documentation](https://img.shields.io/badge/docs-available-blue)]()
 
