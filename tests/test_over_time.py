@@ -277,6 +277,84 @@ class TestOverTimeFunction:
         for est in builtin_estimates:
             assert f'gammadet_{est}' in result.keys()
             assert result[f'gammadet_{est}'].shape == (self.Nt,)
+    
+    def test_sequential_over_time_calls(self):
+        """Test calling over_time sequentially to add variables with same estimates."""
+        # First call: compute gammadet with max estimate
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=['gammadet'], 
+            estimates=['max', 'mean'],
+            verbose=False
+        )
+        
+        # Verify first variable and estimates exist
+        assert 'gammadet' in result.keys()
+        assert 'gammadet_max' in result.keys()
+        assert 'gammadet_mean' in result.keys()
+        
+        # Second call: add null_ray_exp_in with same estimates
+        result = aurel.over_time(
+            result, 
+            self.fd, 
+            vars=['gammadet', 'null_ray_exp_in'], 
+            verbose=False
+        )
+        
+        # Verify both variables and their estimates exist
+        assert 'gammadet' in result.keys()
+        assert 'gammadet_max' in result.keys()
+        assert 'gammadet_mean' in result.keys()
+        assert 'null_ray_exp_in' in result.keys()
+
+        # Third call: add null_ray_exp_in with same estimates
+        result = aurel.over_time(
+            result, 
+            self.fd, 
+            vars=['gammadet', 'null_ray_exp_in'], 
+            estimates=['max', 'mean'],
+            verbose=False
+        )
+        
+        # Verify both variables and their estimates exist
+        assert 'gammadet' in result.keys()
+        assert 'gammadet_max' in result.keys()
+        assert 'gammadet_mean' in result.keys()
+        assert 'null_ray_exp_in' in result.keys()
+        assert 'null_ray_exp_in_max' in result.keys()
+        assert 'null_ray_exp_in_mean' in result.keys()
+
+        # Third call: add null_ray_exp_in with same estimates
+        result = aurel.over_time(
+            result, 
+            self.fd, 
+            vars=['gammadet', 'null_ray_exp_in', 'Ktrace'], 
+            estimates=['max', 'mean'],
+            verbose=False
+        )
+        
+        # Verify both variables and their estimates exist
+        assert 'gammadet' in result.keys()
+        assert 'gammadet_max' in result.keys()
+        assert 'gammadet_mean' in result.keys()
+        assert 'null_ray_exp_in' in result.keys()
+        assert 'null_ray_exp_in_max' in result.keys()
+        assert 'null_ray_exp_in_mean' in result.keys()
+        assert 'Ktrace' in result.keys()
+        assert 'Ktrace_max' in result.keys()
+        assert 'Ktrace_mean' in result.keys()
+        
+        # Verify shapes
+        assert result['gammadet'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
+        assert result['gammadet_max'].shape == (self.Nt,)
+        assert result['gammadet_mean'].shape == (self.Nt,)
+        assert result['null_ray_exp_in'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
+        assert result['null_ray_exp_in_max'].shape == (self.Nt,)
+        assert result['null_ray_exp_in_mean'].shape == (self.Nt,)
+        assert result['Ktrace'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
+        assert result['Ktrace_max'].shape == (self.Nt,)
+        assert result['Ktrace_mean'].shape == (self.Nt,)
 
 
 class TestOverTimeEdgeCases:
@@ -343,3 +421,262 @@ class TestOverTimeEdgeCases:
             )
             assert temp_key in result.keys()
             assert 'gammadet' in result.keys()
+
+
+class TestOverTimeCustomVarWithKwargs:
+    """Test over_time with custom variable functions that accept kwargs."""
+    
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Set up test data."""
+        param = {
+            'Nx': 16, 'Ny': 16, 'Nz': 16,
+            'xmin': 0.0, 'ymin': 0.0, 'zmin': 0.0,
+            'dx': 20.0, 'dy': 20.0, 'dz': 20.0
+        }
+        self.fd = aurel.FiniteDifference(param, verbose=False)
+        x, y, z = self.fd.cartesian_coords
+        
+        self.Nt = 3
+        tarray = np.linspace(1, 5, self.Nt)
+        self.data = {key: [] for key in ['t', 'gammadown3', 'Kdown3', 'rho']}
+        for t in tarray:
+            self.data['t'].append(t)
+            self.data['gammadown3'].append(sol.gammadown3(t, x, y, z))
+            self.data['Kdown3'].append(sol.Kdown3(t, x, y, z))
+            self.data['rho'].append(sol.rho(t) * np.ones((self.fd.Nx, self.fd.Ny, self.fd.Nz)))
+    
+    def test_custom_var_with_int_kwarg(self):
+        """Test custom variable with integer kwarg."""
+        def custom_var(rel):
+            """Custom variable: rho raised to a power."""
+            return rel['rho'] ** rel.power
+        
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=[{'rho_cubed': custom_var}], 
+            estimates=[],
+            power=3,
+            verbose=False
+        )
+        assert 'rho_cubed' in result.keys()
+        expected = self.data['rho'][0] ** 3
+        np.testing.assert_array_almost_equal(result['rho_cubed'][0], expected)
+    
+    def test_custom_var_with_float_kwarg(self):
+        """Test custom variable with float kwarg."""
+        def custom_var(rel):
+            """Custom variable: scaled rho."""
+            return rel['rho'] * rel.scale
+        
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=[{'scaled_rho': custom_var}], 
+            estimates=[],
+            scale=2.5,
+            verbose=False
+        )
+        assert 'scaled_rho' in result.keys()
+        expected = self.data['rho'][0] * 2.5
+        np.testing.assert_array_almost_equal(result['scaled_rho'][0], expected)
+    
+    def test_custom_var_with_bool_kwarg(self):
+        """Test custom variable with boolean kwarg."""
+        def custom_var(rel):
+            """Custom variable: optionally take absolute value."""
+            result = rel['gxx'] - rel['gyy']
+            return np.abs(result) if rel.use_absolute else result
+        
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=[{'diff': custom_var}], 
+            estimates=[],
+            use_absolute=True,
+            verbose=False
+        )
+        assert 'diff' in result.keys()
+        expected = np.abs(sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)[0, 0] - 
+                         sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)[1, 1])
+        np.testing.assert_array_almost_equal(result['diff'][0], expected)
+    
+    def test_custom_var_with_string_kwarg(self):
+        """Test custom variable with string kwarg."""
+        def custom_var(rel):
+            """Custom variable: select gamma component by string."""
+            return rel[f'g{rel.component}']
+        
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=[{'selected': custom_var}], 
+            estimates=[],
+            component='yy',
+            verbose=False
+        )
+        assert 'selected' in result.keys()
+        expected = sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)[1, 1]
+        np.testing.assert_array_almost_equal(result['selected'][0], expected)
+    
+    def test_custom_var_with_list_kwarg(self):
+        """Test custom variable with list kwarg."""
+        def custom_var(rel):
+            """Custom variable: weighted sum of gamma diagonal."""
+            return (rel.coefficients[0] * rel['gxx'] + 
+                    rel.coefficients[1] * rel['gyy'] + 
+                    rel.coefficients[2] * rel['gzz'])
+        
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=[{'weighted_trace': custom_var}], 
+            estimates=[],
+            coefficients=[2, 3, 1],
+            verbose=False
+        )
+        assert 'weighted_trace' in result.keys()
+        gamma = sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)
+        expected = 2 * gamma[0, 0] + 3 * gamma[1, 1] + 1 * gamma[2, 2]
+        np.testing.assert_array_almost_equal(result['weighted_trace'][0], expected)
+    
+    def test_custom_var_with_dict_kwarg(self):
+        """Test custom variable with dict kwarg."""
+        def custom_var(rel):
+            """Custom variable: affine transformation of rho."""
+            return rel.config['scale'] * rel['rho'] + rel.config['offset']
+        
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=[{'transformed_rho': custom_var}], 
+            estimates=[],
+            config={'scale': 3, 'offset': 5},
+            verbose=False
+        )
+        assert 'transformed_rho' in result.keys()
+        expected = 3 * self.data['rho'][0] + 5
+        np.testing.assert_array_almost_equal(result['transformed_rho'][0], expected)
+    
+    def test_custom_var_with_set_kwarg(self):
+        """Test custom variable with set kwarg."""
+        def custom_var(rel):
+            """Custom variable: sum only specified components."""
+            result = np.zeros_like(rel['gxx'])
+            if 'xx' in rel.included_components:
+                result += rel['gxx']
+            if 'yy' in rel.included_components:
+                result += rel['gyy']
+            if 'zz' in rel.included_components:
+                result += rel['gzz']
+            return result
+        
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=[{'partial_trace': custom_var}], 
+            estimates=[],
+            included_components={'xx', 'zz'},
+            verbose=False
+        )
+        assert 'partial_trace' in result.keys()
+        gamma = sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)
+        expected = gamma[0, 0] + gamma[2, 2]
+        np.testing.assert_array_almost_equal(result['partial_trace'][0], expected)
+    
+    def test_custom_var_with_ndarray_kwarg(self):
+        """Test custom variable with numpy array kwarg."""
+        def custom_var(rel):
+            """Custom variable: spatially weighted sum."""
+            return rel['rho'] * rel.weights
+        
+        weights = np.random.rand(self.fd.Nx, self.fd.Ny, self.fd.Nz)
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=[{'weighted_rho': custom_var}], 
+            estimates=[],
+            weights=weights,
+            verbose=False
+        )
+        assert 'weighted_rho' in result.keys()
+        expected = self.data['rho'][0] * weights
+        np.testing.assert_array_almost_equal(result['weighted_rho'][0], expected)
+    
+    def test_custom_var_with_function_kwarg(self):
+        """Test custom variable with function kwarg."""
+    def test_custom_var_with_function_kwarg(self):
+        """Test custom variable with function kwarg."""
+        def custom_var(rel):
+            """Custom variable: apply operation to rho."""
+            return rel.operation(rel['rho'])
+        
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=[{'transformed': custom_var}], 
+            estimates=[],
+            operation=np.square,
+            verbose=False
+        )
+        assert 'transformed' in result.keys()
+        expected = np.square(self.data['rho'][0])
+        np.testing.assert_array_almost_equal(result['transformed'][0], expected)
+        """Test custom variable with multiple kwargs of different types."""
+    def test_custom_var_with_multiple_kwargs(self):
+        """Test custom variable with multiple kwargs of different types."""
+        def custom_var(rel):
+            """Custom variable: complex transformation with multiple parameters."""
+            result = np.zeros_like(rel['gxx'])
+            for comp in rel.components:
+                result += rel[f'g{comp}']
+            result = result ** rel.power
+            result = result * rel.scale
+            if rel.use_log:
+                result = np.log(np.abs(result) + 1e-10)
+            return result
+        
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=[{'complex_var': custom_var}], 
+            estimates=[],
+            scale=2.5,
+            power=2,
+            use_log=True,
+            components=['xx', 'yy', 'zz'],
+            verbose=False
+        )
+        assert 'complex_var' in result.keys()
+        gamma = sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)
+        expected = gamma[0, 0] + gamma[1, 1] + gamma[2, 2]
+        expected = expected ** 2
+        expected = expected * 2.5
+        expected = np.log(np.abs(expected) + 1e-10)
+        np.testing.assert_array_almost_equal(result['complex_var'][0], expected)
+        """Test multiple custom variables each using different kwargs."""
+    def test_multiple_custom_vars_with_different_kwargs(self):
+        """Test multiple custom variables each using different kwargs."""
+        def var1(rel):
+            return rel['rho'] * rel.multiplier
+        
+        def var2(rel):
+            return rel['rho'] ** rel.exponent
+        
+        result = aurel.over_time(
+            self.data.copy(), 
+            self.fd, 
+            vars=[
+                {'scaled': var1},
+                {'powered': var2}
+            ], 
+            estimates=[],
+            multiplier=3,
+            exponent=2,
+            verbose=False
+        )
+        assert 'scaled' in result.keys()
+        assert 'powered' in result.keys()
+        np.testing.assert_array_almost_equal(result['scaled'][0], self.data['rho'][0] * 3)
+        np.testing.assert_array_almost_equal(result['powered'][0], self.data['rho'][0] ** 2)

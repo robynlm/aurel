@@ -26,7 +26,6 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent"
 ]
-# scipy requires Python >= 3.11 (as of scipy 1.14+)
 requires-python = ">=3.11"
 
 dependencies = [

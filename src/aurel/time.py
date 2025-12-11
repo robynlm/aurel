@@ -179,14 +179,26 @@ def over_time(data, fd, vars=[], estimates=[],
                         print(f"Skipping function '{func_name}'")
                         continue
     else:
-        # Only apply estimates that are not already in data
-        estimates_done = []
-        for v in list(data.keys()):
-            if '_' in v:
-                estimates_done += [v.split('_')[-1]]
+        # Find all scalar keys in data
+        scalarkeys = []
+        for key in data.keys():
+            if len(np.shape(data[key][0])) == 3:
+                scalarkeys += [key]
+        print("Found scalar keys for estimation: "
+              + f"{scalarkeys}", flush=True)
+        
+        # Then only apply estimates to scalars that do not already have them
         for est_item in estimates:
+            # If it's a string for a predefined function in est_functions
             if isinstance(est_item, str):
-                if est_item not in estimates_done:
+                # Is there a scalar without this estimate?
+                include_estimate = False
+                for skey in scalarkeys:
+                    if skey+'_'+est_item not in list(data.keys()):
+                        include_estimate = True
+                        break
+                # Include the estimate only if needed and it's valid
+                if include_estimate:
                     if est_item in list(est_functions.keys()):
                         cleaned_estimates += [est_item]
                     else:
@@ -198,9 +210,17 @@ def over_time(data, fd, vars=[], estimates=[],
                         print("You can add custom functions"
                             + " estimates=[{'function_name':"
                             + " user_defined_function}].", flush=True)
+            # If it's a dict for custom functions
             elif isinstance(est_item, dict):
                 for func_name, function in est_item.items():
-                    if func_name not in estimates_done:
+                    # Is there a scalar without this estimate?
+                    include_estimate = False
+                    for skey in scalarkeys:
+                        if skey+'_'+est_item not in list(data.keys()):
+                            include_estimate = True
+                            break
+                    # Include the estimate only if needed and it's valid
+                    if include_estimate:
                         try:
                             validate_estimation_function(
                                 function, func_name, fd, verbose=verbose)
