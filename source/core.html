@@ -26,8 +26,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="aurel.coreanalytic" href="coreanalytic.html" />
-    <link rel="prev" title="Welcome to aurel’s documentation!" href="../index.html" /> 
+    <link rel="next" title="aurel.coresymbolic" href="coresymbolic.html" />
+    <link rel="prev" title="Reporting Issues" href="CONTRIBUTING.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -50,7 +50,18 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#working-on-an-hpc">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Reporting Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#license">License</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">aurel.core</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#descriptions">descriptions</a><ul>
@@ -130,7 +141,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coresymbolic.html">aurel.coresymbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="finitedifference.html">aurel.finitedifference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="maths.html">aurel.maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="numerical.html">aurel.numerical</a></li>
@@ -138,16 +149,10 @@
 <li class="toctree-l1"><a class="reference internal" href="time.html">aurel.time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solutions.html">aurel.solutions</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="advice.html">Development version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advice.html#working-on-an-hpc">Working on an HPC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Example_symbolic.html">Example symbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/Example_over_time.html">Example over time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/tov_ET.html">tov_ET</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
@@ -408,6 +413,24 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Momentumup3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Momentumup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p><span class="math notranslate nohighlight">\(\mathcal{M}^i\)</span> Momentum constraint with spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Momentumx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Momentumx"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\mathcal{M}^x\)</span> Momentum constraint with x spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Momentumy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Momentumy"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\mathcal{M}^y\)</span> Momentum constraint with y spatial indices up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Momentumz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.Momentumz"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\mathcal{M}^z\)</span> Momentum constraint with z spatial indices up</p>
 </dd></dl>
 
 <dl class="py method">
@@ -756,6 +779,30 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">gdown4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p><span class="math notranslate nohighlight">\(g_{\mu\nu}\)</span> Spacetime metric with spacetime indices down</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gtt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gtt"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g_{tt}\)</span> Metric with tt indices down.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gtx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gtx"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g_{tx}\)</span> Metric with tx indices down.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gty"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g_{ty}\)</span> Metric with ty indices down.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gtz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.gtz"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g_{tz}\)</span> Metric with tz indices down.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1189,7 +1236,7 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 <p><strong>press</strong>: <span class="math notranslate nohighlight">\(p = 0\)</span>, the fluid pressure</p>
 <p><strong>eps</strong>: <span class="math notranslate nohighlight">\(\epsilon = 0\)</span>, the fluid specific internal energy</p>
 <p><strong>w_lorentz</strong>: <span class="math notranslate nohighlight">\(W = 1\)</span>, the Lorentz factor</p>
-<p><strong>velup3</strong>: <span class="math notranslate nohighlight">\(v^i = 0\)</span>, the Eulerian fluid three velocity with spatial indices up</p>
+<p><strong>velx, vely, velz</strong>: <span class="math notranslate nohighlight">\(v^i = 0\)</span>, the Eulerian fluid three velocity with spatial indices up</p>
 </section>
 <section id="metric-quantities">
 <h3>Metric quantities<a class="headerlink" href="#metric-quantities" title="Link to this heading"></a></h3>
@@ -1219,6 +1266,10 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 </section>
 <section id="spatial-metric">
 <h4>Spatial metric<a class="headerlink" href="#spatial-metric" title="Link to this heading"></a></h4>
+<p id="aurel-core-aurelcore-gtt"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gtt">gtt</a>: <span class="math notranslate nohighlight">\(g_{tt}\)</span> Metric with tt indices down.</p>
+<p id="aurel-core-aurelcore-gtx"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gtx">gtx</a>: <span class="math notranslate nohighlight">\(g_{tx}\)</span> Metric with tx indices down.</p>
+<p id="aurel-core-aurelcore-gty"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gty">gty</a>: <span class="math notranslate nohighlight">\(g_{ty}\)</span> Metric with ty indices down.</p>
+<p id="aurel-core-aurelcore-gtz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gtz">gtz</a>: <span class="math notranslate nohighlight">\(g_{tz}\)</span> Metric with tz indices down.</p>
 <p id="aurel-core-aurelcore-gxx"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gxx">gxx</a>: <span class="math notranslate nohighlight">\(g_{xx}\)</span> Metric with xx indices down. I assume <span class="math notranslate nohighlight">\(g_{xx}=1\)</span>, if not then please define AurelCore.data[‘gxx’] = …</p>
 <p id="aurel-core-aurelcore-gxy"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gxy">gxy</a>: <span class="math notranslate nohighlight">\(g_{xy}\)</span> Metric with xy indices down. I assume <span class="math notranslate nohighlight">\(g_{xy}=0\)</span>, if not then please define AurelCore.data[‘gxy’] = …</p>
 <p id="aurel-core-aurelcore-gxz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gxz">gxz</a>: <span class="math notranslate nohighlight">\(g_{xz}\)</span> Metric with xz indices down. I assume <span class="math notranslate nohighlight">\(g_{xz}=0\)</span>, if not then please define AurelCore.data[‘gxz’] = …</p>
@@ -1405,6 +1456,9 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 <h3>Constraints<a class="headerlink" href="#constraints" title="Link to this heading"></a></h3>
 <p id="aurel-core-aurelcore-hamiltonian"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Hamiltonian">Hamiltonian</a>: <span class="math notranslate nohighlight">\(\mathcal{H}\)</span> Hamilonian constraint</p>
 <p id="aurel-core-aurelcore-hamiltonian-escale"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Hamiltonian_Escale">Hamiltonian_Escale</a>: [<span class="math notranslate nohighlight">\(\mathcal{H}\)</span>] Hamilonian constraint energy scale</p>
+<p id="aurel-core-aurelcore-momentumx"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Momentumx">Momentumx</a>: <span class="math notranslate nohighlight">\(\mathcal{M}^x\)</span> Momentum constraint with x spatial indices up</p>
+<p id="aurel-core-aurelcore-momentumy"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Momentumy">Momentumy</a>: <span class="math notranslate nohighlight">\(\mathcal{M}^y\)</span> Momentum constraint with y spatial indices up</p>
+<p id="aurel-core-aurelcore-momentumz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Momentumz">Momentumz</a>: <span class="math notranslate nohighlight">\(\mathcal{M}^z\)</span> Momentum constraint with z spatial indices up</p>
 <p id="aurel-core-aurelcore-momentumup3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Momentumup3">Momentumup3</a>: <span class="math notranslate nohighlight">\(\mathcal{M}^i\)</span> Momentum constraint with spatial indices up</p>
 <p id="aurel-core-aurelcore-momentum-escale"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.Momentum_Escale">Momentum_Escale</a>: [<span class="math notranslate nohighlight">\(\mathcal{M}\)</span>] Momentum constraint energy scale</p>
 </section>
@@ -1858,8 +1912,8 @@ assumption), but this gives the same result.</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to aurel’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="coreanalytic.html" class="btn btn-neutral float-right" title="aurel.coreanalytic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="CONTRIBUTING.html" class="btn btn-neutral float-left" title="Reporting Issues" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="coresymbolic.html" class="btn btn-neutral float-right" title="aurel.coresymbolic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

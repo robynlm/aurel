@@ -48,10 +48,21 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#working-on-an-hpc">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Reporting Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#license">License</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="core.html">aurel.core</a></li>
-<li class="toctree-l1"><a class="reference internal" href="coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coresymbolic.html">aurel.coresymbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="finitedifference.html">aurel.finitedifference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="maths.html">aurel.maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="numerical.html">aurel.numerical</a></li>
@@ -66,16 +77,10 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="solutions.html">aurel.solutions</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="advice.html">Development version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advice.html#working-on-an-hpc">Working on an HPC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Example_symbolic.html">Example symbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/Example_over_time.html">Example over time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/tov_ET.html">tov_ET</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
@@ -133,8 +138,8 @@ Elements can be:</p>
 <ul>
 <li><p>str: Names of predefined variables from core.descriptions</p></li>
 <li><p>dict: Custom variable definitions with string keys (variable names)
-and functions that take an AurelCore instance and return the variable
-value.</p></li>
+and functions that take only an AurelCore instance and return the
+variable value.</p></li>
 </ul>
 <p>Default is an empty list, no variable calculations are performed.</p>
 </p></li>
@@ -142,7 +147,7 @@ value.</p></li>
 Elements can be:</p>
 <ul>
 <li><p>str: Names of predefined functions from est_functions
-(‘max’, ‘mean’, ‘median’, ‘min’, ‘OD’, ‘UD’, …)</p></li>
+(‘max’, ‘mean’, ‘median’, ‘min’, …)</p></li>
 <li><p>dict: Custom estimation functions with string keys (function names)
 and functions that take a scalar 3D array of shape
 (fd.Nx, fd.Ny, fd.Nz) and return a scalar value.</p></li>
@@ -155,6 +160,7 @@ and functions that take a scalar 3D array of shape
 <ul>
 <li><p>Lambda : float, cosmological constant</p></li>
 <li><p>tetrad_to_use : str, tetrad choice for Weyl calculations</p></li>
+<li><p>any other custom parameters required by user-defined functions.</p></li>
 </ul>
 </p></li>
 </ul>
@@ -277,7 +283,7 @@ If <cite>estimates</cite> is provided, additional keys are added with format
 <span id="estimates-list"></span><h2>estimates<a class="headerlink" href="#estimates" title="Link to this heading"></a></h2>
 <p>The following estimation functions are available for use with the <code class="docutils literal notranslate"><span class="pre">estimates</span></code>
 parameter in <code class="xref py py-func docutils literal notranslate"><span class="pre">aurel.over_time()</span></code>:</p>
-<p><code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">median</span></code>, <code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">sum</span></code>, <code class="docutils literal notranslate"><span class="pre">std</span></code>, <code class="docutils literal notranslate"><span class="pre">var</span></code>, <code class="docutils literal notranslate"><span class="pre">maxabs</span></code>, <code class="docutils literal notranslate"><span class="pre">minabs</span></code>, <code class="docutils literal notranslate"><span class="pre">meanabs</span></code>, <code class="docutils literal notranslate"><span class="pre">medianabs</span></code>, <code class="docutils literal notranslate"><span class="pre">sumabs</span></code>, <code class="docutils literal notranslate"><span class="pre">stdabs</span></code>, <code class="docutils literal notranslate"><span class="pre">varabs</span></code>, <code class="docutils literal notranslate"><span class="pre">OD</span></code>, <code class="docutils literal notranslate"><span class="pre">UD</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">quartile1</span></code>, <code class="docutils literal notranslate"><span class="pre">median</span></code>, <code class="docutils literal notranslate"><span class="pre">quartile3</span></code>, <code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">sum</span></code>, <code class="docutils literal notranslate"><span class="pre">std</span></code>, <code class="docutils literal notranslate"><span class="pre">var</span></code>, <code class="docutils literal notranslate"><span class="pre">maxabs</span></code>, <code class="docutils literal notranslate"><span class="pre">minabs</span></code>, <code class="docutils literal notranslate"><span class="pre">meanabs</span></code>, <code class="docutils literal notranslate"><span class="pre">quartile1abs</span></code>, <code class="docutils literal notranslate"><span class="pre">medianabs</span></code>, <code class="docutils literal notranslate"><span class="pre">quartile3abs</span></code>, <code class="docutils literal notranslate"><span class="pre">sumabs</span></code>, <code class="docutils literal notranslate"><span class="pre">stdabs</span></code>, <code class="docutils literal notranslate"><span class="pre">varabs</span></code>, <code class="docutils literal notranslate"><span class="pre">x0y0z0</span></code>, <code class="docutils literal notranslate"><span class="pre">x0y0z1</span></code>, <code class="docutils literal notranslate"><span class="pre">x0y1z0</span></code>, <code class="docutils literal notranslate"><span class="pre">x0y1z1</span></code>, <code class="docutils literal notranslate"><span class="pre">x1y0z0</span></code>, <code class="docutils literal notranslate"><span class="pre">x1y0z1</span></code>, <code class="docutils literal notranslate"><span class="pre">x1y1z0</span></code>, <code class="docutils literal notranslate"><span class="pre">x1y1z1</span></code></p>
 <p><a class="reference external" href="../_modules/aurel/time.html#est_functions">[source: est_functions definition]</a></p>
 </section>
 </section>

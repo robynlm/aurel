@@ -26,7 +26,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="aurel.core" href="source/core.html" /> 
+    <link rel="next" title="Development version" href="source/advice.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,10 +49,21 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html#citation">Citation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/CONTRIBUTING.html">Reporting Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/CONTRIBUTING.html#license">License</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="source/core.html">aurel.core</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/coresymbolic.html">aurel.coresymbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/finitedifference.html">aurel.finitedifference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/maths.html">aurel.maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/numerical.html">aurel.numerical</a></li>
@@ -60,16 +71,10 @@
 <li class="toctree-l1"><a class="reference internal" href="source/time.html">aurel.time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/solutions.html">aurel.solutions</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html">Development version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html#convergence">Convergence</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html#citation">Citation</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example_symbolic.html">Example symbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/Example_over_time.html">Example over time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/tov_ET.html">tov_ET</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
@@ -104,6 +109,12 @@
              
   <section id="welcome-to-aurel-s-documentation">
 <h1>Welcome to aurel’s documentation!<a class="headerlink" href="#welcome-to-aurel-s-documentation" title="Link to this heading"></a></h1>
+<a class="reference external image-reference" href="https://github.com/robynlm/aurel"><img alt="GitHub" src="https://img.shields.io/badge/GitHub-aurel-blue?logo=github" />
+</a>
+<a class="reference external image-reference" href="https://pypi.org/project/aurel/"><img alt="PyPI" src="https://img.shields.io/pypi/v/aurel?logo=pypi&amp;logoColor=white" />
+</a>
+<a class="reference external image-reference" href="mailto:r&#46;l&#46;munoz&#37;&#52;&#48;sussex&#46;ac&#46;uk"><img alt="Email" src="https://img&#46;shields&#46;io/badge/Email-r&#46;l&#46;munoz&#64;sussex&#46;ac&#46;uk-red?logo=gmail&amp;logoColor=white" />
+</a>
 <p>Aurel is an open source Python package for numerical relativity analysis.
 Designed with ease of use in mind, it will
 <span style="font-weight: bold;">au</span>tomatically calculate
@@ -148,7 +159,8 @@ and import the AurelCore class:</p>
 </pre></div>
 </div>
 <p>At this point you need to provide the spacetime metric, extrinsic curvature
-and matter fields, see <a class="reference internal" href="source/core.html#assumed-quantities"><span class="std std-ref">Assumed quantities</span></a>.
+and matter fields, see <a class="reference internal" href="source/core.html#assumed-quantities"><span class="std std-ref">Assumed quantities</span></a>, where these would otherwise
+be assumed to correspond to Minkowski vaccum.
 These are passed as numpy arrays to aurel in the following way:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the xx component of the spacetime metric</span>
 <span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;gxx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]))</span>
@@ -165,6 +177,9 @@ or an array generated from an analytical expression.</p>
 </div>
 <p><strong>Aurel will automatically do its best to calculate
 any relativistic term you ask for.</strong></p>
+<p>For a more in depth example, see the <a class="reference internal" href="notebooks/Example.html"><span class="doc">Example</span></a> for applications.
+Additionally a symbolic counterpart is also available via the
+<cite>AurelCoreSymbolic</cite> class, see the <a class="reference internal" href="notebooks/Example_symbolic.html"><span class="doc">Example symbolic</span></a> for details.</p>
 <p>Now if you want calculations over multiple moments in coordinate time, you can
 use the <code class="xref py py-func docutils literal notranslate"><span class="pre">aurel.over_time()</span></code> function. First, create a dictionary
 containing the spacetime and matter fields over time:</p>
@@ -191,47 +206,15 @@ terms are in <a class="reference internal" href="source/core.html#descriptions-l
 to calculate your own quantities.
 Likewise <cite>estimates</cite> is a list of estimates to calculate at each time step,
 available functions are in <a class="reference internal" href="source/time.html#estimates-list"><span class="std std-ref">estimates</span></a> but you can also pass custom
-functions to calculate your own estimates. See the examples.</p>
+functions to calculate your own estimates. See the examples in <a class="reference internal" href="notebooks/Example_over_time.html"><span class="doc">Example over time</span></a>.</p>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="source/core.html">aurel.core</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/coreanalytic.html">aurel.coreanalytic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/finitedifference.html">aurel.finitedifference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/maths.html">aurel.maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/numerical.html">aurel.numerical</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/reading.html">aurel.reading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/time.html">aurel.time</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/solutions.html">aurel.solutions</a></li>
-</ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html">Development version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html#convergence">Convergence</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html#citation">Citation</a></li>
-</ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Example.html">Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Example_over_time.html">Example over time</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/tov_ET.html">tov_ET</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Schwarzschild_check.html">Schwarzschild check</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Analytic_check.html">Analytic check</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Gravitational_Waves.html">Gravitational Waves</a></li>
-</ul>
 </div>
-</section>
-<section id="links">
-<h2>Links<a class="headerlink" href="#links" title="Link to this heading"></a></h2>
-<p>GitHub page: <a class="reference external" href="https://github.com/robynlm/aurel">https://github.com/robynlm/aurel</a></p>
-<p>PyPI page: <a class="reference external" href="https://pypi.org/project/aurel/">https://pypi.org/project/aurel/</a></p>
-<p>Contact the author at : <a class="reference external" href="mailto:r&#46;l&#46;munoz&#37;&#52;&#48;sussex&#46;ac&#46;uk">r<span>&#46;</span>l<span>&#46;</span>munoz<span>&#64;</span>sussex<span>&#46;</span>ac<span>&#46;</span>uk</a></p>
+<div class="toctree-wrapper compound">
+</div>
 </section>
 </section>
 
@@ -239,7 +222,7 @@ functions to calculate your own estimates. See the examples.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="source/core.html" class="btn btn-neutral float-right" title="aurel.core" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="source/advice.html" class="btn btn-neutral float-right" title="Development version" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

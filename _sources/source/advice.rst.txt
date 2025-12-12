@@ -34,7 +34,7 @@ Then you should be able to do:
    
 or the :ref:`dev_version`. 
 You should be able to find the package in `myenv/lib/pythonX.X/site-packages/aurel`.
-Acompanying required packages will be installed automatically, but at this point you should also install any other python packages you tipycally use.
+Accompanying required packages will be installed automatically, but at this point you should also install any other python packages you typically use.
 
 Jupyter notebook
 ++++++++++++++++

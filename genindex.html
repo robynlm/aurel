@@ -45,10 +45,21 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/advice.html#citation">Citation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/CONTRIBUTING.html">Reporting Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/CONTRIBUTING.html#license">License</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="source/core.html">aurel.core</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/coresymbolic.html">aurel.coresymbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/finitedifference.html">aurel.finitedifference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/maths.html">aurel.maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/numerical.html">aurel.numerical</a></li>
@@ -56,16 +67,10 @@
 <li class="toctree-l1"><a class="reference internal" href="source/time.html">aurel.time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/solutions.html">aurel.solutions</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html">Development version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html#convergence">Convergence</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/advice.html#citation">Citation</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example_symbolic.html">Example symbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/Example_over_time.html">Example over time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/tov_ET.html">tov_ET</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
@@ -168,10 +173,10 @@
 </li>
       </ul></li>
       <li>
-    aurel.coreanalytic
+    aurel.coresymbolic
 
       <ul>
-        <li><a href="source/coreanalytic.html#module-aurel.coreanalytic">module</a>
+        <li><a href="source/coresymbolic.html#module-aurel.coresymbolic">module</a>
 </li>
       </ul></li>
       <li>
@@ -283,7 +288,7 @@
       </ul></li>
       <li><a href="source/core.html#aurel.core.AurelCore">AurelCore (class in aurel.core)</a>
 </li>
-      <li><a href="source/coreanalytic.html#aurel.coreanalytic.AurelCoreAnalytic">AurelCoreAnalytic (class in aurel.coreanalytic)</a>
+      <li><a href="source/coresymbolic.html#aurel.coresymbolic.AurelCoreSymbolic">AurelCoreSymbolic (class in aurel.coresymbolic)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -376,7 +381,7 @@
       <li><a href="source/core.html#aurel.core.AurelCore.data">data (aurel.core.AurelCore attribute)</a>
 
       <ul>
-        <li><a href="source/coreanalytic.html#aurel.coreanalytic.AurelCoreAnalytic.data">(aurel.coreanalytic.AurelCoreAnalytic attribute)</a>
+        <li><a href="source/coresymbolic.html#aurel.coresymbolic.AurelCoreSymbolic.data">(aurel.coresymbolic.AurelCoreSymbolic attribute)</a>
 </li>
       </ul></li>
       <li><a href="source/solutions.html#aurel.solutions.Collins_Stewart.data">data() (in module aurel.solutions.Collins_Stewart)</a>
@@ -405,7 +410,7 @@
 </li>
       <li><a href="source/numerical.html#aurel.numerical.dichotomy">dichotomy() (in module aurel.numerical)</a>
 </li>
-      <li><a href="source/coreanalytic.html#aurel.coreanalytic.AurelCoreAnalytic.dim">dim (aurel.coreanalytic.AurelCoreAnalytic attribute)</a>
+      <li><a href="source/coresymbolic.html#aurel.coresymbolic.AurelCoreSymbolic.dim">dim (aurel.coresymbolic.AurelCoreSymbolic attribute)</a>
 </li>
       <li><a href="source/solutions.html#aurel.solutions.Conformally_flat.dxdxOmega">dxdxOmega() (in module aurel.solutions.Conformally_flat)</a>
 </li>
@@ -453,10 +458,10 @@
 </li>
       <li><a href="source/finitedifference.html#aurel.finitedifference.fd6_forward">fd6_forward() (in module aurel.finitedifference)</a>
 </li>
-      <li><a href="source/finitedifference.html#aurel.finitedifference.fd8_backward">fd8_backward() (in module aurel.finitedifference)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/finitedifference.html#aurel.finitedifference.fd8_backward">fd8_backward() (in module aurel.finitedifference)</a>
+</li>
       <li><a href="source/finitedifference.html#aurel.finitedifference.fd8_centered">fd8_centered() (in module aurel.finitedifference)</a>
 </li>
       <li><a href="source/finitedifference.html#aurel.finitedifference.fd8_forward">fd8_forward() (in module aurel.finitedifference)</a>
@@ -479,18 +484,12 @@
 </li>
       <li><a href="source/core.html#aurel.core.AurelCore.freeze_data">freeze_data() (aurel.core.AurelCore method)</a>
 </li>
-      <li><a href="source/coreanalytic.html#aurel.coreanalytic.func">func() (in module aurel.coreanalytic)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/coreanalytic.html#aurel.coreanalytic.AurelCoreAnalytic.Gamma_down">Gamma_down() (aurel.coreanalytic.AurelCoreAnalytic method)</a>
-</li>
-      <li><a href="source/coreanalytic.html#aurel.coreanalytic.AurelCoreAnalytic.Gamma_udd">Gamma_udd() (aurel.coreanalytic.AurelCoreAnalytic method)</a>
-</li>
       <li><a href="source/solutions.html#aurel.solutions.Collins_Stewart.gammadown3">gammadown3() (in module aurel.solutions.Collins_Stewart)</a>
 
       <ul>
@@ -536,8 +535,6 @@
       <li><a href="source/maths.html#aurel.maths.getcomponents3">getcomponents3() (in module aurel.maths)</a>
 </li>
       <li><a href="source/maths.html#aurel.maths.getcomponents4">getcomponents4() (in module aurel.maths)</a>
-</li>
-      <li><a href="source/coreanalytic.html#aurel.coreanalytic.AurelCoreAnalytic.gup">gup() (aurel.coreanalytic.AurelCoreAnalytic method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -667,7 +664,7 @@
       <ul>
         <li><a href="source/core.html#module-aurel.core">aurel.core</a>
 </li>
-        <li><a href="source/coreanalytic.html#module-aurel.coreanalytic">aurel.coreanalytic</a>
+        <li><a href="source/coresymbolic.html#module-aurel.coresymbolic">aurel.coresymbolic</a>
 </li>
         <li><a href="source/finitedifference.html#module-aurel.finitedifference">aurel.finitedifference</a>
 </li>
@@ -790,6 +787,8 @@
 </li>
       <li><a href="source/reading.html#aurel.reading.read_ET_variables">read_ET_variables() (in module aurel.reading)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/reading.html#aurel.reading.read_iterations">read_iterations() (in module aurel.reading)</a>
 </li>
       <li><a href="source/solutions.html#aurel.solutions.EdS.redshift">redshift() (in module aurel.solutions.EdS)</a>
@@ -798,8 +797,6 @@
         <li><a href="source/solutions.html#aurel.solutions.LCDM.redshift">(in module aurel.solutions.LCDM)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/solutions.html#aurel.solutions.Collins_Stewart.rho">rho() (in module aurel.solutions.Collins_Stewart)</a>
 
       <ul>
@@ -812,14 +809,6 @@
         <li><a href="source/solutions.html#aurel.solutions.Szekeres.rho">(in module aurel.solutions.Szekeres)</a>
 </li>
       </ul></li>
-      <li><a href="source/coreanalytic.html#aurel.coreanalytic.AurelCoreAnalytic.Ricci_down">Ricci_down() (aurel.coreanalytic.AurelCoreAnalytic method)</a>
-</li>
-      <li><a href="source/coreanalytic.html#aurel.coreanalytic.AurelCoreAnalytic.RicciS">RicciS() (aurel.coreanalytic.AurelCoreAnalytic method)</a>
-</li>
-      <li><a href="source/coreanalytic.html#aurel.coreanalytic.AurelCoreAnalytic.Riemann_down">Riemann_down() (aurel.coreanalytic.AurelCoreAnalytic method)</a>
-</li>
-      <li><a href="source/coreanalytic.html#aurel.coreanalytic.AurelCoreAnalytic.Riemann_uddd">Riemann_uddd() (aurel.coreanalytic.AurelCoreAnalytic method)</a>
-</li>
   </ul></td>
 </tr></table>
 

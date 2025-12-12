@@ -45,10 +45,21 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#citation">Citation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html">Reporting Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html#license">License</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../source/core.html">aurel.core</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../source/coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/coresymbolic.html">aurel.coresymbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/finitedifference.html">aurel.finitedifference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/maths.html">aurel.maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/numerical.html">aurel.numerical</a></li>
@@ -56,16 +67,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../source/time.html">aurel.time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/solutions.html">aurel.solutions</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html">Development version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#convergence">Convergence</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#citation">Citation</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Example_symbolic.html">Example symbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Example_over_time.html">Example over time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/tov_ET.html">tov_ET</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
@@ -138,7 +143,11 @@
     <span class="k">return</span> <span class="n">message</span>
 <span class="n">descriptions</span> <span class="o">=</span> <span class="p">{</span>
     <span class="c1"># === Metric quantities</span>
-    <span class="c1"># Spatial metric</span>
+    <span class="c1"># Full metric</span>
+    <span class="s2">&quot;gtt&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$g_</span><span class="si">{tt}</span><span class="s2">$ Metric with tt indices down.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gtx&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$g_</span><span class="si">{tx}</span><span class="s2">$ Metric with tx indices down.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gty&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$g_</span><span class="si">{ty}</span><span class="s2">$ Metric with ty indices down.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gtz&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$g_</span><span class="si">{tz}</span><span class="s2">$ Metric with tz indices down.&quot;</span><span class="p">,</span>
     <span class="s2">&quot;gxx&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$g_</span><span class="si">{xx}</span><span class="s2">$ Metric with xx indices down.&quot;</span> 
         <span class="o">+</span> <span class="n">assumption</span><span class="p">(</span><span class="s1">&#39;gxx&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$g_</span><span class="si">{xx}</span><span class="s2">=1$&quot;</span><span class="p">)),</span>
     <span class="s2">&quot;gxy&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$g_</span><span class="si">{xy}</span><span class="s2">$ Metric with xy indices down.&quot;</span> 
@@ -151,6 +160,7 @@
         <span class="o">+</span> <span class="n">assumption</span><span class="p">(</span><span class="s1">&#39;gyz&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$g_</span><span class="si">{yz}</span><span class="s2">=0$&quot;</span><span class="p">)),</span>
     <span class="s2">&quot;gzz&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$g_</span><span class="si">{zz}</span><span class="s2">$ Metric with zz indices down.&quot;</span> 
         <span class="o">+</span> <span class="n">assumption</span><span class="p">(</span><span class="s1">&#39;gzz&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$g_</span><span class="si">{zz}</span><span class="s2">=1$&quot;</span><span class="p">)),</span>
+    <span class="c1"># Spatial metric</span>
     <span class="s2">&quot;gammadown3&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$\gamma_</span><span class="si">{ij}</span><span class="s2">$ Spatial metric with spatial indices down&quot;</span><span class="p">,</span>
     <span class="s2">&quot;gammaup3&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$\gamma^</span><span class="si">{ij}</span><span class="s2">$ Spatial metric with spatial indices up&quot;</span><span class="p">,</span>
     <span class="s2">&quot;dtgammaup3&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\partial_t \gamma^</span><span class="si">{ij}</span><span class="s2">$ Coordinate time derivative of&quot;</span>
@@ -405,6 +415,12 @@
     <span class="s2">&quot;Hamiltonian&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{H}</span><span class="s2">$ Hamilonian constraint&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Hamiltonian_Escale&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[$\mathcal</span><span class="si">{H}</span><span class="s2">$] Hamilonian constraint&quot;</span>
         <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; energy scale&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Momentumx&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{M}</span><span class="s2">^x$ Momentum constraint&quot;</span>
+        <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; with x spatial indices up&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Momentumy&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{M}</span><span class="s2">^y$ Momentum constraint&quot;</span>
+        <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; with y spatial indices up&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Momentumz&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{M}</span><span class="s2">^z$ Momentum constraint&quot;</span>
+        <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; with z spatial indices up&quot;</span><span class="p">),</span>
     <span class="s2">&quot;Momentumup3&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{M}</span><span class="s2">^i$ Momentum constraint&quot;</span>
         <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; with spatial indices up&quot;</span><span class="p">),</span>
     <span class="s2">&quot;Momentum_Escale&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[$\mathcal</span><span class="si">{M}</span><span class="s2">$] Momentum constraint&quot;</span>
@@ -729,7 +745,43 @@
     <span class="c1">###########################################################################</span>
         
     <span class="c1"># === Metric quantities</span>
-    <span class="c1"># Spatial metric</span>
+    <span class="c1"># Full spacetime metric</span>
+<div class="viewcode-block" id="AurelCore.gtt">
+<a class="viewcode-back" href="../../source/core.html#aurel.core.AurelCore.gtt">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gtt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;gdown4&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;gdown4&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betamag&quot;</span><span class="p">]</span></div>
+
+    
+<div class="viewcode-block" id="AurelCore.gtx">
+<a class="viewcode-back" href="../../source/core.html#aurel.core.AurelCore.gtx">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gtx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;gdown4&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;gdown4&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betadown3&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
+
+    
+<div class="viewcode-block" id="AurelCore.gty">
+<a class="viewcode-back" href="../../source/core.html#aurel.core.AurelCore.gty">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;gdown4&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;gdown4&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betadown3&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span></div>
+
+    
+<div class="viewcode-block" id="AurelCore.gtz">
+<a class="viewcode-back" href="../../source/core.html#aurel.core.AurelCore.gtz">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gtz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;gdown4&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;gdown4&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betadown3&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span></div>
+
+    
 <div class="viewcode-block" id="AurelCore.gxx">
 <a class="viewcode-back" href="../../source/core.html#aurel.core.AurelCore.gxx">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">gxx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -784,6 +836,7 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span><span class="p">)</span></div>
 
 
+    <span class="c1"># Spatial metric</span>
 <div class="viewcode-block" id="AurelCore.gammadown3">
 <a class="viewcode-back" href="../../source/core.html#aurel.core.AurelCore.gammadown3">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">gammadown3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1171,12 +1224,8 @@
 <div class="viewcode-block" id="AurelCore.gdown4">
 <a class="viewcode-back" href="../../source/core.html#aurel.core.AurelCore.gdown4">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">gdown4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">g00</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> 
-               <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;i..., j..., ij... -&gt; ...&#39;</span><span class="p">,</span> 
-                           <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betaup3&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betaup3&quot;</span><span class="p">],</span> 
-                           <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;gammadown3&quot;</span><span class="p">]))</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-                <span class="p">[[</span><span class="n">g00</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betadown3&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> 
+                <span class="p">[[</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;gtt&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betadown3&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> 
                   <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betadown3&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betadown3&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">]],</span>
                  <span class="p">[</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;betadown3&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;gammadown3&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> 
                   <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;gammadown3&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;gammadown3&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span>
@@ -2103,6 +2152,24 @@
                 <span class="n">HamE</span> 
                 <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">kappa</span> <span class="o">*</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;rho_n&quot;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> 
                 <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lambda</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
+
+    
+<div class="viewcode-block" id="AurelCore.Momentumx">
+<a class="viewcode-back" href="../../source/core.html#aurel.core.AurelCore.Momentumx">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">Momentumx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Momentumup3&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
+
+    
+<div class="viewcode-block" id="AurelCore.Momentumy">
+<a class="viewcode-back" href="../../source/core.html#aurel.core.AurelCore.Momentumy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">Momentumy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Momentumup3&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span></div>
+
+    
+<div class="viewcode-block" id="AurelCore.Momentumz">
+<a class="viewcode-back" href="../../source/core.html#aurel.core.AurelCore.Momentumz">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">Momentumz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Momentumup3&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span></div>
 
     
 <div class="viewcode-block" id="AurelCore.Momentumup3">

@@ -1,0 +1,352 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reporting Issues &mdash; aurel May 2025 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5a7fad61" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d170800"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="aurel.core" href="core.html" />
+    <link rel="prev" title="Development version" href="advice.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aurel
+              <img src="../_static/aurel.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#working-on-an-hpc">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Reporting Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#code-contributions">Code Contributions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#development-setup">Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#keeping-your-fork-updated">Keeping Your Fork Updated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#submitting-changes">Submitting Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#license">License</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core.html">aurel.core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coresymbolic.html">aurel.coresymbolic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="finitedifference.html">aurel.finitedifference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths.html">aurel.maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="numerical.html">aurel.numerical</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reading.html">aurel.reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="time.html">aurel.time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solutions.html">aurel.solutions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Example_symbolic.html">Example symbolic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Example_over_time.html">Example over time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/tov_ET.html">tov_ET</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/ICPertFLRW.html">ICPertFLRW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Schwarzschild_check.html">Schwarzschild check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Analytic_check.html">Analytic check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Gravitational_Waves.html">Gravitational Waves</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aurel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Reporting Issues</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/CONTRIBUTING.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p>Thank you for your interest in contributing to aurel! This document provides guidelines for contributing to the project.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="reporting-issues">
+<h1>Reporting Issues<a class="headerlink" href="#reporting-issues" title="Link to this heading"></a></h1>
+<p>Found a bug or have a suggestion? Please open an issue:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/robynlm/aurel/issues/new?template=bug_report.md">Bug report</a></p></li>
+<li><p><a class="reference external" href="https://github.com/robynlm/aurel/issues/new?template=feature_request.md">Feature request</a></p></li>
+<li><p><a class="reference external" href="https://github.com/robynlm/aurel/issues/new?template=question.md">Question</a></p></li>
+</ul>
+<p>Or feel free to directly contact Robyn Munoz at <a class="reference external" href="mailto:r&#46;l&#46;munoz&#37;&#52;&#48;sussex&#46;ac&#46;uk">r<span>&#46;</span>l<span>&#46;</span>munoz<span>&#64;</span>sussex<span>&#46;</span>ac<span>&#46;</span>uk</a></p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="code-contributions">
+<h1>Code Contributions<a class="headerlink" href="#code-contributions" title="Link to this heading"></a></h1>
+<p>Before you start coding:</p>
+<ul class="simple">
+<li><p>Check <a class="reference external" href="https://github.com/robynlm/aurel/issues">existing issues</a> and <a class="reference external" href="https://github.com/robynlm/aurel/pulls">pull requests</a> to avoid duplication</p></li>
+<li><p>For major changes, <a class="reference external" href="https://github.com/robynlm/aurel/issues/new/choose">open an issue</a> first to discuss your approach</p></li>
+</ul>
+<p><strong>Guidelines for code contributions:</strong></p>
+<ul class="simple">
+<li><p>Follow <a class="reference external" href="https://peps.python.org/pep-0008/">PEP 8 style</a></p></li>
+<li><p>Write clear docstrings for functions and classes using <a class="reference external" href="https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard">NumPy style</a></p></li>
+<li><p>Include tests for new features in the <code class="docutils literal notranslate"><span class="pre">tests/</span></code> directory (use <code class="docutils literal notranslate"><span class="pre">test_*.py</span></code> filenames and <code class="docutils literal notranslate"><span class="pre">test_*</span></code> function names)</p></li>
+<li><p>Update documentation (docstrings, <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files in <code class="docutils literal notranslate"><span class="pre">docs/source/</span></code>, or add notebooks in <code class="docutils literal notranslate"><span class="pre">docs/notebooks/</span></code>)</p></li>
+<li><p><a class="reference internal" href="#check"><span class="std std-ref">Make sure everything works</span></a> before submitting</p></li>
+</ul>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h2>
+<ul>
+<li><p><strong>Fork the repository on GitHub</strong></p>
+<ul class="simple">
+<li><p>Log in to your GitHub account at YOUR_USERNAME</p></li>
+<li><p>Go to the <a class="reference external" href="https://github.com/robynlm/aurel">aurel repository</a> and click on the “Fork” button</p></li>
+</ul>
+<p>This creates your own copy at <code class="docutils literal notranslate"><span class="pre">github.com/YOUR_USERNAME/aurel</span></code>. You’ll get all branches (including <code class="docutils literal notranslate"><span class="pre">main</span></code> and <code class="docutils literal notranslate"><span class="pre">development</span></code>).</p>
+</li>
+<li><p><strong>Clone your fork locally:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/YOUR_USERNAME/aurel.git
+<span class="nb">cd</span><span class="w"> </span>aurel
+</pre></div>
+</div>
+</li>
+<li><p><strong>Set up the upstream remote</strong> (to track the original repository):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>upstream<span class="w"> </span>https://github.com/robynlm/aurel.git
+</pre></div>
+</div>
+</li>
+<li><p><strong>Create a branch for your changes:</strong></p>
+<p>Start from <code class="docutils literal notranslate"><span class="pre">development</span></code>, not <code class="docutils literal notranslate"><span class="pre">main</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>development
+git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>your-feature-name
+</pre></div>
+</div>
+<p><strong>Why create a branch?</strong> Even though it’s your fork, using a branch:</p>
+<ul class="simple">
+<li><p>Keeps your <code class="docutils literal notranslate"><span class="pre">development</span></code> branch clean and synced with the original</p></li>
+<li><p>Lets you work on multiple features simultaneously</p></li>
+<li><p>Makes it easier to update if the original repository changes</p></li>
+<li><p>Clearly identifies what your PR is about</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="development-setup">
+<h2>Development Setup<a class="headerlink" href="#development-setup" title="Link to this heading"></a></h2>
+<p>From the root directory of the repository:</p>
+<ul>
+<li><p><strong>Install in development mode with all dependencies:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>docs/requirements.txt
+</pre></div>
+</div>
+<p>The two sets of requirements distinguish dependencies needed for the package from those needed to generate the documentation.</p>
+</li>
+</ul>
+<ul id="check">
+<li><p><strong>Check everything works</strong>:</p>
+<ul>
+<li><p><strong>Run tests:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest
+</pre></div>
+</div>
+</li>
+<li><p><strong>Build documentation:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs
+make<span class="w"> </span>clean<span class="w"> </span>html
+</pre></div>
+</div>
+<p>To view the built documentation locally:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>_build/html
+python3<span class="w"> </span>-m<span class="w"> </span>http.server
+</pre></div>
+</div>
+<p>Then open <a class="reference external" href="http://localhost:8000">http://localhost:8000</a> in your browser. Check that your documentation changes appear correctly and there are no formatting issues or broken links.</p>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="keeping-your-fork-updated">
+<span id="id1"></span><h2>Keeping Your Fork Updated<a class="headerlink" href="#keeping-your-fork-updated" title="Link to this heading"></a></h2>
+<p>While you’re working on your changes, the original repository may get new commits. To stay in sync:</p>
+<ul>
+<li><p><strong>Fetch updates from the original repository:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>fetch<span class="w"> </span>upstream
+</pre></div>
+</div>
+<p>This downloads new commits from the original repo but doesn’t change your files yet.</p>
+</li>
+</ul>
+<ul id="update-development">
+<li><p><strong>Update your local development branch:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>development
+git<span class="w"> </span>merge<span class="w"> </span>upstream/development
+</pre></div>
+</div>
+<p>This updates your local <code class="docutils literal notranslate"><span class="pre">development</span></code> branch with the latest changes from the original repo.
+If there are updates present here, follow the rest of this section to bring these updates over to your feature branch and update your fork.
+Otherwise you’re good to go and continue your work.</p>
+</li>
+<li><p><strong>Update your feature branch with those new changes:</strong></p>
+<p>Now you want to include those new <code class="docutils literal notranslate"><span class="pre">development</span></code> commits into your <code class="docutils literal notranslate"><span class="pre">your-feature-name</span></code> branch. You have two main options:</p>
+<ul>
+<li><p><strong>Option A: Merge</strong> (simpler) - If you already pushed your branch to GitHub, use merge. This adds the new commits from <code class="docutils literal notranslate"><span class="pre">development</span></code> into your feature branch and creates an extra merge commit showing when you incorporated the updates.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>your-feature-name
+git<span class="w"> </span>merge<span class="w"> </span>development
+</pre></div>
+</div>
+</li>
+<li><p><strong>Option B: Rebase</strong> (cleaner history, more advanced) - If you haven’t pushed yet, or don’t mind force-pushing, use rebase. This replays your changes on top of the latest <code class="docutils literal notranslate"><span class="pre">development</span></code>, as if you started working from there. No extra merge commit.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>your-feature-name
+git<span class="w"> </span>rebase<span class="w"> </span>development
+</pre></div>
+</div>
+</li>
+<li><p><strong>Handling Conflicts</strong></p>
+<p>If git says there are conflicts, it means you and someone else changed the same lines of code. Git can’t decide which version to keep, so you need to manually resolve it:</p>
+<ul>
+<li><p>Git will mark the conflicting files. Open them and look for conflict markers like <code class="docutils literal notranslate"><span class="pre">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span> <span class="pre">HEAD</span></code>, <code class="docutils literal notranslate"><span class="pre">=======</span></code>, and <code class="docutils literal notranslate"><span class="pre">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span></code>.</p></li>
+<li><p>Edit the file to keep what you want (delete the markers and choose/combine the code).</p></li>
+<li><p>Mark the file as resolved, add it, and continue with the merge or rebase.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>filename.py
+git<span class="w"> </span>merge<span class="w"> </span>--continue
+<span class="c1"># OR</span>
+git<span class="w"> </span>rebase<span class="w"> </span>--continue
+</pre></div>
+</div>
+</li>
+<li><p>If conflicts are too difficult, you can cancel and return to how things were before you started the merge/rebase.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>merge<span class="w"> </span>--abort
+<span class="c1"># OR</span>
+git<span class="w"> </span>rebase<span class="w"> </span>--abort
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p><strong>Alternative Approach: Start Fresh</strong></p>
+<p>After you’ve <a class="reference internal" href="#update-development"><span class="std std-ref">updated your <code class="docutils literal notranslate"><span class="pre">development</span></code> branch</span></a>, you can create a new feature branch from it. Review what changes you made in your old branch with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">diff</span></code>, then manually apply your changes to the new branch. For specific files, you can copy them from the old branch. This way you start with a clean slate and can carefully reapply your changes without conflicts.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>development
+git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>your-feature-name-v2
+git<span class="w"> </span>diff<span class="w"> </span>your-feature-name-v2<span class="w"> </span>your-feature-name<span class="w">    </span><span class="c1"># Review changes</span>
+git<span class="w"> </span>checkout<span class="w"> </span>your-feature-name<span class="w"> </span>--<span class="w"> </span>path/to/file.py<span class="w">  </span><span class="c1"># Copy specific files</span>
+</pre></div>
+</div>
+<p>Then continue working on <code class="docutils literal notranslate"><span class="pre">your-feature-name-v2</span></code>. You can delete the old branch later with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">branch</span> <span class="pre">-D</span> <span class="pre">your-feature-name</span></code> once you’re sure you’ve copied everything you need.</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Push updates to your fork</strong></p>
+<p>Update your fork’s development and feature branch. If you used merge, push your feature branch normally. If you used rebase, you need <code class="docutils literal notranslate"><span class="pre">--force</span></code> because you’ve rewritten history.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>development
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>your-feature-name<span class="w">          </span><span class="c1"># If you used merge</span>
+<span class="c1"># OR</span>
+git<span class="w"> </span>push<span class="w"> </span>--force<span class="w"> </span>origin<span class="w"> </span>your-feature-name<span class="w">  </span><span class="c1"># If you used rebase</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="submitting-changes">
+<h2>Submitting Changes<a class="headerlink" href="#submitting-changes" title="Link to this heading"></a></h2>
+<p>Once you’ve completed your work on your feature branch and committed and pushed all your changes to your fork:</p>
+<ul>
+<li><p><strong>Make sure you’re up to date with the latest development branch:</strong></p>
+<p>This should have been regularly checked throughout your work, but verify one last time before submission. Follow the steps in <a class="reference internal" href="#keeping-your-fork-updated"><span class="std std-ref">Keeping Your Fork Updated</span></a> to sync with the latest changes.</p>
+</li>
+<li><p><a class="reference internal" href="#check"><span class="std std-ref"><strong>Make sure everything works</strong></span></a></p></li>
+<li><p><strong>Create a Pull Request on GitHub:</strong></p>
+<ul class="simple">
+<li><p>Go to your fork on GitHub</p></li>
+<li><p>Click “Pull Request” and select <code class="docutils literal notranslate"><span class="pre">development</span></code> as the base branch (not <code class="docutils literal notranslate"><span class="pre">main</span></code>)</p></li>
+<li><p>Provide a clear description of the changes and reference any related issues</p></li>
+</ul>
+</li>
+</ul>
+<p>A maintainer will review your PR and may request changes before merging.</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="license">
+<h1>License<a class="headerlink" href="#license" title="Link to this heading"></a></h1>
+<p>By contributing to aurel, you agree that your contributions will be licensed under the <a class="reference external" href="https://github.com/robynlm/aurel/blob/main/LICENSE">GNU General Public License v3.0</a>.</p>
+<p>Thank you for helping make aurel better!</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="advice.html" class="btn btn-neutral float-left" title="Development version" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="core.html" class="btn btn-neutral float-right" title="aurel.core" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Robyn L. Munoz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

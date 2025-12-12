@@ -48,10 +48,21 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#citation">Citation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html">Reporting Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#license">License</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../source/core.html">aurel.core</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/coresymbolic.html">aurel.coresymbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/finitedifference.html">aurel.finitedifference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/maths.html">aurel.maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/numerical.html">aurel.numerical</a></li>
@@ -59,16 +70,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../source/time.html">aurel.time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/solutions.html">aurel.solutions</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Development version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#citation">Citation</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Example_symbolic.html">Example symbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Example_over_time.html">Example over time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tov_ET.html">tov_ET</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ICPertFLRW.html">ICPertFLRW</a></li>
@@ -171,13 +176,31 @@ Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I
 Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
+Calculated gtt: $g_{tt}$ Metric with tt indices down.
 Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
-Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
 Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
 Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+CLEAN-UP: Cleaning up cache after 20 calculations...
+CLEAN-UP: data size before cleanup: 202.25 MB
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 5 calculations ago (size: 2.25 MB).
+CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 10 calculations ago (size: 2.25 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 15 calculations ago (size: 20.25 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 14 calculations ago (size: 20.25 MB).
+CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 10 calculations ago (size: 0.75 MB).
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 7 calculations ago (size: 0.75 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 6 calculations ago (size: 4.00 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 4.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 3 calculations ago (size: 2.25 MB).
+CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 2 calculations ago (size: 64.00 MB).
+CLEAN-UP: Removed 10 items
+CLEAN-UP: data size after cleanup: 81.50 MB
+Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
 Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
  *** N =  64
 8th order finite difference schemes are defined
@@ -194,13 +217,31 @@ Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I
 Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
+Calculated gtt: $g_{tt}$ Metric with tt indices down.
 Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
-Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
 Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
 Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+CLEAN-UP: Cleaning up cache after 20 calculations...
+CLEAN-UP: data size before cleanup: 1618.00 MB
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 5 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 10 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 15 calculations ago (size: 162.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 14 calculations ago (size: 162.00 MB).
+CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 10 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 7 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 6 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 3 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 2 calculations ago (size: 512.00 MB).
+CLEAN-UP: Removed 10 items
+CLEAN-UP: data size after cleanup: 652.00 MB
+Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
 Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
  *** N =  96
 8th order finite difference schemes are defined
@@ -217,13 +258,31 @@ Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I
 Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
+Calculated gtt: $g_{tt}$ Metric with tt indices down.
 Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
-Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
 Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
 Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+CLEAN-UP: Cleaning up cache after 20 calculations...
+CLEAN-UP: data size before cleanup: 5460.75 MB
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 5 calculations ago (size: 60.75 MB).
+CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 10 calculations ago (size: 60.75 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 15 calculations ago (size: 546.75 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 14 calculations ago (size: 546.75 MB).
+CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 10 calculations ago (size: 20.25 MB).
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 7 calculations ago (size: 20.25 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 6 calculations ago (size: 108.00 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 108.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 3 calculations ago (size: 60.75 MB).
+CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 2 calculations ago (size: 1728.00 MB).
+CLEAN-UP: Removed 10 items
+CLEAN-UP: data size after cleanup: 2200.50 MB
+Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
 Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
  *** N =  128
 8th order finite difference schemes are defined
@@ -240,13 +299,31 @@ Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I
 Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
+Calculated gtt: $g_{tt}$ Metric with tt indices down.
 Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
-Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
 Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
 Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+CLEAN-UP: Cleaning up cache after 20 calculations...
+CLEAN-UP: data size before cleanup: 12944.00 MB
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 5 calculations ago (size: 144.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 10 calculations ago (size: 144.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 15 calculations ago (size: 1296.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 14 calculations ago (size: 1296.00 MB).
+CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 10 calculations ago (size: 48.00 MB).
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 7 calculations ago (size: 48.00 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 6 calculations ago (size: 256.00 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 256.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 3 calculations ago (size: 144.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 2 calculations ago (size: 4096.00 MB).
+CLEAN-UP: Removed 10 items
+CLEAN-UP: data size after cleanup: 5216.00 MB
+Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
 Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
  *** N =  144
 8th order finite difference schemes are defined
@@ -263,13 +340,31 @@ Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I
 Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
+Calculated gtt: $g_{tt}$ Metric with tt indices down.
 Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
-Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
 Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
 Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+CLEAN-UP: Cleaning up cache after 20 calculations...
+CLEAN-UP: data size before cleanup: 18430.04 MB
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 5 calculations ago (size: 205.03 MB).
+CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 10 calculations ago (size: 205.03 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 15 calculations ago (size: 1845.28 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 14 calculations ago (size: 1845.28 MB).
+CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 10 calculations ago (size: 68.34 MB).
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 7 calculations ago (size: 68.34 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 6 calculations ago (size: 364.50 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 364.50 MB).
+CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 3 calculations ago (size: 205.03 MB).
+CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 2 calculations ago (size: 5832.00 MB).
+CLEAN-UP: Removed 10 items
+CLEAN-UP: data size after cleanup: 7426.69 MB
+Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
 Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
  *** N =  192
 8th order finite difference schemes are defined
@@ -286,37 +381,36 @@ Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I
 Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
+Calculated gtt: $g_{tt}$ Metric with tt indices down.
 Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
-Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
-CLEAN-UP: Cleaning up cache after 16 calculations...
-CLEAN-UP: data size before cleanup: 29700.00 MB
-CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 6 calculations ago (size: 486.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 11 calculations ago (size: 4374.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 10 calculations ago (size: 4374.00 MB).
+CLEAN-UP: Cleaning up cache after 18 calculations...
+CLEAN-UP: data size before cleanup: 29808.00 MB
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 3 calculations ago (size: 486.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 8 calculations ago (size: 486.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 13 calculations ago (size: 4374.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 12 calculations ago (size: 4374.00 MB).
+CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 8 calculations ago (size: 162.00 MB).
 CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 4 calculations ago (size: 864.00 MB).
 CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 864.00 MB).
-CLEAN-UP: Removed 5 items
-CLEAN-UP: data size after cleanup: 18738.00 MB
+CLEAN-UP: Removed 7 items
+CLEAN-UP: data size after cleanup: 18198.00 MB
 Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
-Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
-CLEAN-UP: Cleaning up cache after 19 calculations...
-CLEAN-UP: data size before cleanup: 34290.00 MB
-CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 5 calculations ago (size: 486.00 MB).
-CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 5 calculations ago (size: 486.00 MB).
-CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 3 calculations ago (size: 13824.00 MB).
-CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 2 calculations ago (size: 864.00 MB).
-CLEAN-UP: Removed 4 items
-CLEAN-UP: data size after cleanup: 18630.00 MB
-Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
 CLEAN-UP: Cleaning up cache after 20 calculations...
-CLEAN-UP: data size before cleanup: 18684.00 MB
-CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 864.00 MB).
-CLEAN-UP: Removed 1 items
-CLEAN-UP: data size after cleanup: 17820.00 MB
+CLEAN-UP: data size before cleanup: 19926.00 MB
+CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 3 calculations ago (size: 486.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 2 calculations ago (size: 13824.00 MB).
+CLEAN-UP: Removed 2 items
+CLEAN-UP: data size after cleanup: 5616.00 MB
+Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
+Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
+Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
 Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
 </pre></div>
 </div>
@@ -356,7 +450,7 @@ Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radia
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;8th order FD with excision&#39;)
 </pre></div>
 </div>
-<img alt="../_images/149306eae6146b0220677aa1839c93808d08e52b8bdd94156d6aaa2cd684de94.png" src="../_images/149306eae6146b0220677aa1839c93808d08e52b8bdd94156d6aaa2cd684de94.png" />
+<img alt="../_images/498601149e9b3b12180a680245f10580be9d9b325df20472362953566ab9d054.png" src="../_images/498601149e9b3b12180a680245f10580be9d9b325df20472362953566ab9d054.png" />
 </div>
 </div>
 <p>This shows better than 8th order convergence and a transition from truncation error (from the finite differencing) to floating point noise (from the number of digits stored).</p>

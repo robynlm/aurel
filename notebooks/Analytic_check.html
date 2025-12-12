@@ -48,10 +48,21 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Development version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#citation">Citation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html">Reporting Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#license">License</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../source/core.html">aurel.core</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/coreanalytic.html">aurel.coreanalytic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/coresymbolic.html">aurel.coresymbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/finitedifference.html">aurel.finitedifference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/maths.html">aurel.maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/numerical.html">aurel.numerical</a></li>
@@ -59,16 +70,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../source/time.html">aurel.time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/solutions.html">aurel.solutions</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Advice:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Development version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/advice.html#citation">Citation</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Example_symbolic.html">Example symbolic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Example_over_time.html">Example over time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tov_ET.html">tov_ET</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ICPertFLRW.html">ICPertFLRW</a></li>
@@ -117,10 +122,7 @@
 <h1>Analytic check<a class="headerlink" href="#analytic-check" title="Link to this heading"></a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
-<span class="n">jax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;jax_enable_x64&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.special</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -144,11 +146,13 @@
 
 <span class="c1"># Spacetime</span>
 <span class="n">g</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">gdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">an4</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCoreAnalytic</span><span class="p">([</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">],</span> <span class="n">g</span><span class="p">)</span>
+<span class="n">an4</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCoreSymbolic</span><span class="p">([</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+<span class="n">an4</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;gdown&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
 
 <span class="c1"># Space</span>
 <span class="n">gamma</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">an3</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCoreAnalytic</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">],</span> <span class="n">gamma</span><span class="p">)</span>
+<span class="n">an3</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCoreSymbolic</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+<span class="n">an3</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;gdown&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma</span>
 </pre></div>
 </div>
 </div>
@@ -295,10 +299,10 @@ Cosmological constant set to AurelCore.Lambda = 0.00e+00
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated analytic gup: Metric tensor in the up index form
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated symbolic gup: Metric tensor in the up index form
 
 Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
-Calculated analytic Gamma_udd: Christoffel symbols in the up-down-down index form
+Calculated symbolic Gamma_udd: Christoffel symbols in the up-down-down index form
 
 Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
 Γudd022 , max(abs(num_val)) =  208116.36229624215 , relative error = 0.0016382525191416827
@@ -319,7 +323,7 @@ Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spat
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated analytic gup: Metric tensor in the up index form
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated symbolic gup: Metric tensor in the up index form
 
 Calculated alpha: $\alpha$ Lapse. I assume $\alpha=1$, if not then please define AurelCore.data[&#39;alpha&#39;] = ... 
 Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
@@ -327,9 +331,11 @@ Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I
 Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
+Calculated gtt: $g_{tt}$ Metric with tt indices down.
 Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
-Calculated analytic Gamma_udd: Christoffel symbols in the up-down-down index form
+Calculated symbolic Gamma_udd: Christoffel symbols in the up-down-down index form
 
 Calculated dtalpha: $\partial_t \alpha$ Coordinate time derivative of the lapse. I assume $\partial_t \alpha=0$, if not then please define AurelCore.data[&#39;dtalpha&#39;] = ... 
 Calculated dtbetax: $\partial_t\beta^{x}$ Coordinate time derivative of the x component of the shift vector with indices up. I assume $\partial_t\beta^{x}=0$, if not then please define AurelCore.data[&#39;dtbetax&#39;] = ... 
@@ -359,7 +365,7 @@ Calculated st_Gamma_udd4: ${}^{(4)}{\Gamma^{\alpha}}_{\mu\nu}$ Christoffel symbo
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 1 0 1,  0 1 0 2,  0 1 1 2,  0 2 0 1,  0 2 0 2,  0 2 1 2,  1 0 0 1,  1 0 0 2,  1 0 1 2,  1 2 0 1,  1 2 0 2,  1 2 1 2,  2 0 0 1,  2 0 0 2,  2 0 1 2,  2 1 0 1,  2 1 0 2,  2 1 1 2,  
-Calculated analytic Riemann_uddd: Riemann curvature tensor in the up-down-down-down index form
+Calculated symbolic Riemann_uddd: Riemann curvature tensor in the up-down-down-down index form
 
 Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
 Ruddd0101 , max(abs(num_val)) =  0.016679485081112944 , relative error = 0.016679485081112944
@@ -395,9 +401,18 @@ Ruddd2221 , max(abs(num_val)) =  0.08309351032949053 , relative error = 0.083093
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 1 0 1,  0 1 0 2,  0 1 1 2,  0 2 0 2,  0 2 1 2,  1 2 1 2,  
-Calculated analytic Riemann_down: Riemann curvature tensor in the down index form
+Calculated symbolic Riemann_down: Riemann curvature tensor in the down index form
 
 Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
+CLEAN-UP: Cleaning up cache after 20 calculations...
+CLEAN-UP: data size before cleanup: 694.00 MB
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 3 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 10 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 9 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 8 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_Gamma_udd4&#39; used 2 calculations ago (size: 128.00 MB).
+CLEAN-UP: Removed 5 items
+CLEAN-UP: data size after cleanup: 478.00 MB
 R_0101 , max(abs(num_val)) =  0.016679485081112944 , relative error = 0.016679485081112944
 R_0102 , max(abs(num_val)) =  2331.4100690063497 , relative error = 0.0001242683747693139
 R_0110 , max(abs(num_val)) =  0.016679485081303968 , relative error = 0.016679485081303968
@@ -427,8 +442,9 @@ R_2121 , max(abs(num_val)) =  45.87135528560006 , relative error = 45.8713552856
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated analytic Ricci_down: Ricci curvature tensor in the down index form
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated symbolic Ricci_down: Ricci curvature tensor in the down index form
 
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
 Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
 R_00 , max(abs(num_val)) =  1.003148449103068 , relative error = 0.003148449103067996
 R_11 , max(abs(num_val)) =  0.026515946792642336 , relative error = 0.026515946792642336
@@ -446,19 +462,9 @@ R_22 , max(abs(num_val)) =  44051.88960137361 , relative error = 0.0002006623683
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated analytic RicciS: Ricci scalar
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated symbolic RicciS: Ricci scalar
 
 Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
-CLEAN-UP: Cleaning up cache after 20 calculations...
-CLEAN-UP: data size before cleanup: 710.00 MB
-CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 12 calculations ago (size: 6.00 MB).
-CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 11 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removing cached value for &#39;gup4&#39; used 10 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removing cached value for &#39;st_Gamma_udd4&#39; used 4 calculations ago (size: 128.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 3 calculations ago (size: 162.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 2 calculations ago (size: 162.00 MB).
-CLEAN-UP: Removed 6 items
-CLEAN-UP: data size after cleanup: 188.00 MB
 R , max(abs(num_val)) =  2.0054514864455992 , relative error = 0.002725743222799615
 </pre></div>
 </div>
@@ -475,7 +481,7 @@ R , max(abs(num_val)) =  2.0054514864455992 , relative error = 0.002725743222799
 Max relative difference in boundary region
 </pre></div>
 </div>
-<img alt="../_images/f42a1ab0264ac7235cc6028376190dae89a83f5b64e45419e52fb93b4ceb14e7.png" src="../_images/f42a1ab0264ac7235cc6028376190dae89a83f5b64e45419e52fb93b4ceb14e7.png" />
+<img alt="../_images/c8fc91940a0a22f3eaa61328120cb5e3091d9ebd46788a234f53e803a54dc5ca.png" src="../_images/c8fc91940a0a22f3eaa61328120cb5e3091d9ebd46788a234f53e803a54dc5ca.png" />
 </div>
 </div>
 </section>
@@ -489,15 +495,13 @@ Max relative difference in boundary region
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 1 0 1,  0 1 0 2,  0 1 0 3,  0 1 1 2,  0 1 1 3,  0 1 2 3,  0 2 0 1,  0 2 0 2,  0 2 0 3,  0 2 1 2,  0 2 1 3,  0 2 2 3,  0 3 0 1,  0 3 0 2,  0 3 0 3,  0 3 1 2,  0 3 1 3,  0 3 2 3,  1 0 0 1,  1 0 0 2,  1 0 0 3,  1 0 1 2,  1 0 1 3,  1 0 2 3,  1 2 0 1,  1 2 0 2,  1 2 0 3,  1 2 1 2,  1 2 1 3,  1 2 2 3,  1 3 0 1,  1 3 0 2,  1 3 0 3,  1 3 1 2,  1 3 1 3,  1 3 2 3,  2 0 0 1,  2 0 0 2,  2 0 0 3,  2 0 1 2,  2 0 1 3,  2 0 2 3,  2 1 0 1,  2 1 0 2,  2 1 0 3,  2 1 1 2,  2 1 1 3,  2 1 2 3,  2 3 0 1,  2 3 0 2,  2 3 0 3,  2 3 1 2,  2 3 1 3,  2 3 2 3,  3 0 0 1,  3 0 0 2,  3 0 0 3,  3 0 1 2,  3 0 1 3,  3 0 2 3,  3 1 0 1,  3 1 0 2,  3 1 0 3,  3 1 1 2,  3 1 1 3,  3 1 2 3,  3 2 0 1,  3 2 0 2,  3 2 0 3,  3 2 1 2,  3 2 1 3,  3 2 2 3,  
-Calculated analytic Riemann_uddd: Riemann curvature tensor in the up-down-down-down index form
+Calculated symbolic Riemann_uddd: Riemann curvature tensor in the up-down-down-down index form
 
-Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
-Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
 Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
-Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
+Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
 Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
 Calculated st_Riemann_uddd4: ${}^{(4)}{R^{\alpha}}_{\beta\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
 Ruddd0101 , max(abs(num_val)) =  0.0031484491030582262 , relative error = 0.0031484491030582262
@@ -568,7 +572,7 @@ Ruddd3332 , max(abs(num_val)) =  0.08309351014149692 , relative error = 0.083093
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 1 0 1,  0 1 0 2,  0 1 0 3,  0 1 1 2,  0 1 1 3,  0 1 2 3,  0 2 0 2,  0 2 0 3,  0 2 1 2,  0 2 1 3,  0 2 2 3,  0 3 0 3,  0 3 1 2,  0 3 1 3,  0 3 2 3,  1 2 1 2,  1 2 1 3,  1 2 2 3,  1 3 1 3,  1 3 2 3,  2 3 2 3,  
-Calculated analytic Riemann_down: Riemann curvature tensor in the down index form
+Calculated symbolic Riemann_down: Riemann curvature tensor in the down index form
 R_0101 , max(abs(num_val)) =  0.0031484491030582262 , relative error = 0.0031484491030582262
 R_0110 , max(abs(num_val)) =  0.0031484491030582262 , relative error = 0.0031484491030582262
 R_0123 , max(abs(num_val)) =  0.01262044790564687 , relative error = 0.01262044790564687
@@ -642,7 +646,7 @@ R_3232 , max(abs(num_val)) =  45.871355175971985 , relative error = 45.871355175
 Max relative difference in boundary region
 </pre></div>
 </div>
-<img alt="../_images/4afad4f09ab8f8e909864088107c3250862a85c7f071a24de629512be3124c00.png" src="../_images/4afad4f09ab8f8e909864088107c3250862a85c7f071a24de629512be3124c00.png" />
+<img alt="../_images/f21b413c73cccb87b38c68186b0a7250cdb0a4ab4cb43362a76a53b48b2c61eb.png" src="../_images/f21b413c73cccb87b38c68186b0a7250cdb0a4ab4cb43362a76a53b48b2c61eb.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -652,7 +656,7 @@ Max relative difference in boundary region
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated analytic Ricci_down: Ricci curvature tensor in the down index form
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated symbolic Ricci_down: Ricci curvature tensor in the down index form
 
 Calculated Ttrace: $T$ Trace of the energy-stress tensor
 Calculated st_Ricci_down4: ${}^{(4)}R_{\alpha\beta}$ Ricci tensor of spacetime metric with spacetime indices down
@@ -667,7 +671,7 @@ Calculated st_Ricci_down4: ${}^{(4)}R_{\alpha\beta}$ Ricci tensor of spacetime m
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated analytic RicciS: Ricci scalar
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated symbolic RicciS: Ricci scalar
 
 Calculated st_RicciS: ${}^{(4)}R$ Ricci scalar of spacetime metric
 </pre></div>

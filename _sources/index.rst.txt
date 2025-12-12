@@ -4,6 +4,18 @@
 Welcome to aurel's documentation! 
 =================================
 
+.. image:: https://img.shields.io/badge/GitHub-aurel-blue?logo=github
+   :target: https://github.com/robynlm/aurel
+   :alt: GitHub
+
+.. image:: https://img.shields.io/pypi/v/aurel?logo=pypi&logoColor=white
+   :target: https://pypi.org/project/aurel/
+   :alt: PyPI
+
+.. image:: https://img.shields.io/badge/Email-r.l.munoz@sussex.ac.uk-red?logo=gmail&logoColor=white
+   :target: mailto:r.l.munoz@sussex.ac.uk
+   :alt: Email
+
 .. raw:: html
 
    <p>Aurel is an open source Python package for numerical relativity analysis.
@@ -59,7 +71,8 @@ and import the AurelCore class:
    rel = aurel.AurelCore(fd)
 
 At this point you need to provide the spacetime metric, extrinsic curvature
-and matter fields, see :ref:`assumed_quantities`.
+and matter fields, see :ref:`assumed_quantities`, where these would otherwise 
+be assumed to correspond to Minkowski vaccum.
 These are passed as numpy arrays to aurel in the following way:
 
 .. code-block:: python
@@ -81,6 +94,10 @@ With everything defined, you can call any entity listed in the
 
 **Aurel will automatically do its best to calculate 
 any relativistic term you ask for.**
+
+For a more in depth example, see the :doc:`notebooks/Example` for applications. 
+Additionally a symbolic counterpart is also available via the 
+`AurelCoreSymbolic` class, see the :doc:`notebooks/Example_symbolic` for details.
 
 Now if you want calculations over multiple moments in coordinate time, you can 
 use the :func:`aurel.over_time` function. First, create a dictionary 
@@ -112,14 +129,27 @@ terms are in :ref:`descriptions_list` but you can also pass custom functions
 to calculate your own quantities.
 Likewise `estimates` is a list of estimates to calculate at each time step, 
 available functions are in :ref:`estimates_list` but you can also pass custom 
-functions to calculate your own estimates. See the examples.
+functions to calculate your own estimates. See the examples in :doc:`notebooks/Example_over_time`.
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   source/advice
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   source/CONTRIBUTING
 
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
+   :hidden:
 
    source/core
-   source/coreanalytic
+   source/coresymbolic
    source/finitedifference
    source/maths
    source/numerical
@@ -129,26 +159,14 @@ functions to calculate your own estimates. See the examples.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Advice:
-
-   source/advice
-
-.. toctree::
-   :maxdepth: 1
    :caption: Examples:
+   :hidden:
 
    notebooks/Example
+   notebooks/Example_symbolic
    notebooks/Example_over_time
    notebooks/tov_ET
    notebooks/ICPertFLRW
    notebooks/Schwarzschild_check
    notebooks/Analytic_check
    notebooks/Gravitational_Waves
-
-Links
------
-GitHub page: `<https://github.com/robynlm/aurel>`_
-
-PyPI page: `<https://pypi.org/project/aurel/>`_
-
-Contact the author at : r.l.munoz@sussex.ac.uk
