@@ -4,6 +4,18 @@
 Welcome to aurel's documentation! 
 =================================
 
+.. image:: https://img.shields.io/badge/GitHub-aurel-blue?logo=github
+   :target: https://github.com/robynlm/aurel
+   :alt: GitHub
+
+.. image:: https://img.shields.io/pypi/v/aurel?logo=pypi&logoColor=white
+   :target: https://pypi.org/project/aurel/
+   :alt: PyPI
+
+.. image:: https://img.shields.io/badge/Email-r.l.munoz@sussex.ac.uk-red?logo=gmail&logoColor=white
+   :target: mailto:r.l.munoz@sussex.ac.uk
+   :alt: Email
+
 .. raw:: html
 
    <p>Aurel is an open source Python package for numerical relativity analysis.
@@ -117,6 +129,16 @@ functions to calculate your own estimates. See the examples.
 
 .. toctree::
    :maxdepth: 1
+
+   source/advice
+
+.. toctree::
+   :maxdepth: 1
+
+   source/CONTRIBUTING
+   
+.. toctree::
+   :maxdepth: 1
    :caption: Contents:
 
    source/core
@@ -130,12 +152,6 @@ functions to calculate your own estimates. See the examples.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Advice:
-
-   source/advice
-
-.. toctree::
-   :maxdepth: 1
    :caption: Examples:
 
    notebooks/Example
@@ -145,11 +161,3 @@ functions to calculate your own estimates. See the examples.
    notebooks/Schwarzschild_check
    notebooks/Analytic_check
    notebooks/Gravitational_Waves
-
-Links
------
-GitHub page: `<https://github.com/robynlm/aurel>`_
-
-PyPI page: `<https://pypi.org/project/aurel/>`_
-
-Contact the author at : r.l.munoz@sussex.ac.uk
