@@ -164,10 +164,12 @@ with open(output_file, "w") as f:
     print_subsec("", constraints, allfunctions, varsdone)
 
     if len(varsdone) != len(core.descriptions):
-        f.write("Miscellaneous\n")
-        f.write("=============\n\n")
-        f.write("Need to update `docs/source/source/generate_rst.py`\n\n")
-        print_subsec("", core.descriptions, allfunctions, varsdone)
+        missing = set(core.descriptions.keys()) - set(varsdone)
+        raise RuntimeError(
+            f"Documentation generation failed: {len(missing)} variable(s) not categorized.\n"
+            f"Missing variables: {', '.join(sorted(missing))}\n"
+            f"Please update the categorization in docs/source/generate_rst.py"
+        )
 
     # Add a section for other functions (AurelCore members that aren't in descriptions)
     f.write("AurelCore Methods\n")
