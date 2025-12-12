@@ -11,7 +11,7 @@ import numpy as np
 
 symbolic_descriptions = {
     "gdown": ("Metric tensor in the down index form.  I assume Minkowski,"
-              +" if not then please define AurelCoreSymbolic.data['gdown'] = …"),
+              +" if not then please define AurelCoreSymbolic.data['gdown'] = ..."),
     "gup": "Metric tensor in the up index form",
     "gdet": "Determinant of the metric tensor",
     "Gamma_udd": "Christoffel symbols in the up-down-down index form",

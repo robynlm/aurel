@@ -29,7 +29,7 @@ If not defined, vacuum Minkowski is assumed for the definition of the following 
 
 .. _aurel.core.AurelCoreSymbolic.gdown:
 
-`gdown <../_modules/aurel/coresymbolic.html#AurelCoreSymbolic.gdown>`_: Metric tensor in the down index form.  I assume Minkowski, if not then please define AurelCoreSymbolic.data['gdown'] = …
+`gdown <../_modules/aurel/coresymbolic.html#AurelCoreSymbolic.gdown>`_: Metric tensor in the down index form.  I assume Minkowski, if not then please define AurelCoreSymbolic.data['gdown'] = ...
 
 Callable quantities
 ===================
