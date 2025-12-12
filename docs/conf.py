@@ -131,4 +131,6 @@ def process_notebook_source(app, docname, source):
 def setup(app):
     app.connect('source-read', process_notebook_source)
 
-subprocess.run(["python3", "source/generate_rst.py"])
+subprocess.run(["python3", "source/generate_rst.py"], check=True)
+
+subprocess.run(["python3", "source/generate_rstsymbolic.py"], check=True)

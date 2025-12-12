@@ -1,4 +1,4 @@
-"""Analytic version of AurelCore, using sympy for symbolic calculations.
+"""Symbolic version of AurelCore, using sympy for symbolic calculations.
 
 This class is designed in a similar manner to the AurelCore class, 
 but it takes in different inputs,
@@ -9,9 +9,11 @@ and there are much fewer quantities available.
 import sympy as sp
 import numpy as np
 
-analytic_descriptions = {
-    "gdown": "Metric tensor in the down index form (need to input)",
+symbolic_descriptions = {
+    "gdown": ("Metric tensor in the down index form.  I assume Minkowski,"
+              +" if not then please define AurelCoreSymbolic.data[‘gdown’] = …"),
     "gup": "Metric tensor in the up index form",
+    "gdet": "Determinant of the metric tensor",
     "Gamma_udd": "Christoffel symbols in the up-down-down index form",
     "Gamma_down": "Christoffel symbols in the down index form",
     "Riemann_down": "Riemann curvature tensor in the down index form",
@@ -19,19 +21,20 @@ analytic_descriptions = {
                      + " index form"),
     "Ricci_down": "Ricci curvature tensor in the down index form",
     "RicciS": "Ricci scalar",
+    "Einstein_down": "Einstein tensor in the down index form",
 }
 
-class AurelCoreAnalytic():
-    """Analytic version of AurelCore, using sympy for symbolic calculations.
+class AurelCoreSymbolic():
+    """Symbolic version of AurelCore, using sympy for symbolic calculations.
         
     Parameters
     ----------
     coords : list of sympy symbols
         List of coordinates.
-    g : sympy.Matrix
-        Metric tensor in the down index form.
     verbose : bool, optional
         If True, print the calculation description. Default is True.
+    simplify : bool, optional
+        If True, simplify the expressions after calculation. Default is True.
     
     Attributes
     ----------
@@ -40,12 +43,13 @@ class AurelCoreAnalytic():
     data : dict
         (*dict*) - Dictionary to store calculated quantities.
     """
-    def __init__(self, coords, g, verbose=True):
-        """Initialize the AurelCoreAnalytic class."""
+    def __init__(self, coords, verbose=True, simplify=True):
+        """Initialize the AurelCoreSymbolic class."""
         self.coords = coords
         self.dim = len(coords)
         self.verbose = verbose
-        self.data = {"gdown": g}
+        self.simplify = simplify
+        self.data = {}
 
     def __getitem__(self, key):
         """Get data[key] or compute it if not present."""
@@ -61,15 +65,35 @@ class AurelCoreAnalytic():
             self.data[key] = func()
             # Print the calculation description if available
             if self.verbose:
-                print(f"Calculated analytic {key}: " 
-                      + analytic_descriptions[key])
+                print(f"Calculated symbolic {key}: " 
+                      + symbolic_descriptions[key])
+            if self.simplify:
+                self.data[key] = sp.simplify(self.data[key])
             return self.data[key]
 
         # Return the function itself if it requires arguments
         return func
     
+    def gdown(self):
+        if self.dim == 4:
+            return sp.Matrix([[-1, 0, 0, 0],
+                              [ 0, 1, 0, 0],
+                              [ 0, 0, 1, 0],
+                              [ 0, 0, 0, 1]
+                              ])
+        elif self.dim == 3:
+            return sp.Matrix([[1, 0, 0],
+                              [0, 1, 0],
+                              [0, 0, 1]
+                              ])
+        else:
+            raise ValueError("Dimension not supported for default gdown.")
+    
     def gup(self):
         return self["gdown"].inv()
+    
+    def gdet(self):
+        return self["gdown"].det()
     
     def Gamma_down(self):
         Gamma3 = sp.MutableDenseNDimArray([0]*(self.dim**3), 
@@ -83,7 +107,9 @@ class AurelCoreAnalytic():
                         for m in range(self.dim):
                             val += (self["gdown"][i, m] 
                                     * self["Gamma_udd"][m, j, k])
-                        Gamma3[i, j, k] = sp.simplify(val)
+                        if self.simplify:
+                            val = sp.simplify(val)
+                        Gamma3[i, j, k] = val
                         done[i, j, k] = 1
                         Gamma3[i, k, j] = Gamma3[i, j, k]
                         done[i, k, j] = 1
@@ -104,7 +130,9 @@ class AurelCoreAnalytic():
                                 sp.diff(self["gdown"][m, j], self.coords[k]) -
                                 sp.diff(self["gdown"][j, k], self.coords[m])
                             )
-                        Gamma3[i, j, k] = sp.simplify(0.5 * val)
+                        if self.simplify:
+                            val = sp.simplify(0.5 * val)
+                        Gamma3[i, j, k] = val
                         done[i, j, k] = 1
                         Gamma3[i, k, j] = Gamma3[i, j, k]
                         done[i, k, j] = 1
@@ -129,14 +157,16 @@ class AurelCoreAnalytic():
                                     pass
                                 else:
                                     if not done[l,i,j,k]:
-                                        print(l, i, j, k, end= ",  ")
                                         RiemannD_down[l, i, j, k] = sum(
                                             self["gdown"][l, m] 
                                             * self["Riemann_uddd"][m, i, j, k]
                                             for m in range(self.dim)
                                         )
-                                        Rljjk = sp.simplify(
-                                            RiemannD_down[l, i, j, k])
+                                        if self.simplify:
+                                            Rljjk = sp.simplify(
+                                                RiemannD_down[l, i, j, k])
+                                        else:
+                                            Rljjk = RiemannD_down[l, i, j, k]
                                         RiemannD_down[l, i, j, k] = Rljjk
                                         RiemannD_down[l, i, k, j] = - Rljjk
                                         RiemannD_down[i, l, j, k] = - Rljjk
@@ -153,8 +183,6 @@ class AurelCoreAnalytic():
                                         done[j, k, i, l] = 1
                                         done[k, j, l, i] = 1
                                         done[k, j, i, l] = 1
-            print()
-            return RiemannD_down
         else:
             RiemannD_down = sp.MutableDenseNDimArray(
                 [0]*(self.dim**4), (self.dim, self.dim, self.dim, self.dim))
@@ -172,7 +200,6 @@ class AurelCoreAnalytic():
                                     pass
                                 else:
                                     if not done[i, j, k, l]:
-                                        print(i, j, k, l, end= ",  ")
                                         term1 = sp.diff(
                                             self["Gamma_down"][i, j, l], 
                                             self.coords[k])
@@ -187,9 +214,13 @@ class AurelCoreAnalytic():
                                             self["Gamma_down"][i, l, m]
                                             *self["Gamma_udd"][m, j, k] 
                                             for m in range(self.dim))
-                                        Rijkl = sp.simplify(
-                                            sp.simplify(term1 - term2) 
-                                            + sp.simplify(term3 - term4))
+                                        if self.simplify:
+                                            Rijkl = sp.simplify(
+                                                sp.simplify(term1 - term2) 
+                                                + sp.simplify(term3 - term4))
+                                        else:
+                                            Rijkl = (term1 - term2 
+                                                     + term3 - term4)
                                         RiemannD_down[i, j, k, l] = Rijkl
                                         RiemannD_down[i, j, l, k] = - Rijkl
                                         RiemannD_down[j, i, k, l] = - Rijkl
@@ -207,8 +238,7 @@ class AurelCoreAnalytic():
                                         done[k, l, j, i] = 1
                                         done[l, k, i, j] = 1
                                         done[l, k, j, i] = 1
-            print()
-            return RiemannD_down
+        return RiemannD_down
     
     def Riemann_uddd(self):
         Riemann3_up = sp.MutableDenseNDimArray(
@@ -227,7 +257,6 @@ class AurelCoreAnalytic():
                                 pass
                             else:
                                 if not done[i, j, k, l]:
-                                    print(i, j, k, l, end= ",  ")
                                     term1 = sp.diff(self["Gamma_udd"][i, j, l], 
                                                     self.coords[k])
                                     term2 = sp.diff(self["Gamma_udd"][i, j, k], 
@@ -238,14 +267,17 @@ class AurelCoreAnalytic():
                                     term4 = sum(self["Gamma_udd"][i, l, m]
                                                 *self["Gamma_udd"][m, j, k] 
                                                 for m in range(self.dim))
-                                    Rijkl = sp.simplify(
-                                        sp.simplify(term1 - term2) 
-                                        + sp.simplify(term3 - term4))
+                                    if self.simplify:
+                                        Rijkl = sp.simplify(
+                                            sp.simplify(term1 - term2) 
+                                            + sp.simplify(term3 - term4))
+                                    else:
+                                        Rijkl = (term1 - term2
+                                                 + term3 - term4)
                                     Riemann3_up[i, j, k, l] = Rijkl
                                     Riemann3_up[i, j, l, k] = - Rijkl
                                     done[i, j, k, l] = 1
                                     done[i, j, l, k] = 1
-        print()
         return Riemann3_up
 
     def Ricci_down(self):
@@ -259,11 +291,12 @@ class AurelCoreAnalytic():
                         val = 0
                         for k in range(self.dim):
                             val += self["Riemann_uddd"][k, i, k, j]
-                        Ricci3_down[i, j] = sp.simplify(val)
+                        if self.simplify:
+                            val = sp.simplify(val)
+                        Ricci3_down[i, j] = val
                         done[i,j] = 1
                         Ricci3_down[j, i] = Ricci3_down[i, j]
                         done[j,i] = 1
-            return Ricci3_down
         else:
             for i in range(self.dim):
                 for j in range(self.dim):
@@ -283,13 +316,19 @@ class AurelCoreAnalytic():
                                 term4 = sum(self["Gamma_udd"][k, j, m]
                                             *self["Gamma_udd"][m, i, k] 
                                             for m in range(self.dim))
-                                val = sp.simplify(sp.simplify(term1 - term2) 
-                                                  + sp.simplify(term3 - term4))
-                        Ricci3_down[i, j] = sp.simplify(val)
+                                if self.simplify:
+                                    val += sp.simplify(
+                                        sp.simplify(term1 - term2) 
+                                        + sp.simplify(term3 - term4))
+                                else:
+                                    val += (term1 - term2 + term3 - term4)
+                        if self.simplify:
+                            val = sp.simplify(val)
+                        Ricci3_down[i, j] = val
                         done[i,j] = 1
                         Ricci3_down[j, i] = Ricci3_down[i, j]
                         done[j,i] = 1
-
+        return Ricci3_down
     
     def RicciS(self):
         Ricci3 = 0
@@ -298,8 +337,23 @@ class AurelCoreAnalytic():
                 Ricci3 += self["gup"][i, j] * self["Ricci_down"][i, j]
         return Ricci3
     
+    def Einstein_down(self):
+        Einstein_down = sp.MutableDenseNDimArray(
+            [0]*(self.dim**2), (self.dim, self.dim))
+        done = np.zeros((self.dim, self.dim))
+        for i in range(self.dim):
+            for j in range(self.dim):
+                if not done[i,j]:
+                    Einstein_down[i, j] = ( self["Ricci_down"][i, j] 
+                                            - 0.5 * self["gdown"][i, j] 
+                                            * self["RicciS"] )
+                    done[i,j] = 1
+                    Einstein_down[j, i] = Einstein_down[i, j]
+                    done[j,i] = 1
+        return Einstein_down
+    
 # Update __doc__ of the functions listed in descriptions
-for func_name, doc in analytic_descriptions.items():
-    func = getattr(AurelCoreAnalytic, func_name, None)
+for func_name, doc in symbolic_descriptions.items():
+    func = getattr(AurelCoreSymbolic, func_name, None)
     if func is not None:
         func.__doc__ = doc

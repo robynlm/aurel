@@ -69,6 +69,11 @@ gravimag = ['st_Weyl_down4', 'Weyl_Psi', 'Psi4_lm', 'Weyl_invariants',
     'bweyl_n_down3']
 varsdone = []
 
+assumed = []
+for key in core.descriptions:
+    if 'assume' in core.descriptions[key].lower():
+        assumed += [key]
+
 def print_subsec(title, subsecvars, allfunctions, varsdone):
     if title != "":
         f.write(title+"\n")
@@ -123,7 +128,20 @@ with open(output_file, "w") as f:
     f.write(r"**press**: $p = 0$, the fluid pressure"+"\n\n")
     f.write(r"**eps**: $\epsilon = 0$, the fluid specific internal energy"+"\n\n")
     f.write(r"**w_lorentz**: $W = 1$, the Lorentz factor"+"\n\n")
-    f.write(r"**velup3**: $v^i = 0$, the Eulerian fluid three velocity with spatial indices up"+"\n\n")
+    f.write(r"**velx, vely, velz**: $v^i = 0$, the Eulerian fluid three velocity with spatial indices up"+"\n\n")
+    assumed_done = ['alpha', 'dtalpha', 'betax', 'betay', 'betaz',
+                    'dtbetax', 'dtbetay', 'dtbetaz',
+                    'gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz',
+                    'kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz',
+                    'rho0', 'press', 'eps',
+                    'w_lorentz', 'velx', 'vely', 'velz']
+    missing = set(assumed) - set(assumed_done)
+    if missing:
+        raise RuntimeError(
+            f"Documentation generation failed: {len(missing)} assumed variable(s) not documented.\n"
+            f"Missing variables: {', '.join(sorted(missing))}\n"
+            f"Please update the assumed quantities list in docs/source/generate_rst.py"
+        )
 
     f.write("Metric quantities\n")
     f.write("=================\n\n")

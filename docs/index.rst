@@ -95,6 +95,10 @@ With everything defined, you can call any entity listed in the
 **Aurel will automatically do its best to calculate 
 any relativistic term you ask for.**
 
+For a more in depth example, see the :doc:`notebooks/Example` for applications. 
+Additionally a symbolic counterpart is also available via the 
+`AurelCoreSymbolic` class, see the :doc:`notebooks/Example_symbolic` for details.
+
 Now if you want calculations over multiple moments in coordinate time, you can 
 use the :func:`aurel.over_time` function. First, create a dictionary 
 containing the spacetime and matter fields over time:
@@ -125,24 +129,27 @@ terms are in :ref:`descriptions_list` but you can also pass custom functions
 to calculate your own quantities.
 Likewise `estimates` is a list of estimates to calculate at each time step, 
 available functions are in :ref:`estimates_list` but you can also pass custom 
-functions to calculate your own estimates. See the examples.
+functions to calculate your own estimates. See the examples in :doc:`notebooks/Example_over_time`.
 
 .. toctree::
    :maxdepth: 1
+   :hidden:
 
    source/advice
 
 .. toctree::
    :maxdepth: 1
+   :hidden:
 
    source/CONTRIBUTING
-   
+
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
+   :hidden:
 
    source/core
-   source/coreanalytic
+   source/coresymbolic
    source/finitedifference
    source/maths
    source/numerical
@@ -153,8 +160,10 @@ functions to calculate your own estimates. See the examples.
 .. toctree::
    :maxdepth: 1
    :caption: Examples:
+   :hidden:
 
    notebooks/Example
+   notebooks/Example_symbolic
    notebooks/Example_over_time
    notebooks/tov_ET
    notebooks/ICPertFLRW

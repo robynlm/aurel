@@ -1,5 +1,5 @@
 __version__ = "0.8.2"
-from .coreanalytic import *
+from .coresymbolic import *
 from .core import *
 from .finitedifference import *
 from .maths import *

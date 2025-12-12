@@ -47,7 +47,7 @@ If not defined, vacuum Minkowski is assumed for the definition of the following 
 
 **w_lorentz**: $W = 1$, the Lorentz factor
 
-**velup3**: $v^i = 0$, the Eulerian fluid three velocity with spatial indices up
+**velx, vely, velz**: $v^i = 0$, the Eulerian fluid three velocity with spatial indices up
 
 Metric quantities
 =================
