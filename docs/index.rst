@@ -8,6 +8,14 @@ Welcome to aurel's documentation!
    :target: https://github.com/robynlm/aurel
    :alt: GitHub
 
+.. image:: https://img.shields.io/badge/python-3.11%2B-blue
+   :target: https://www.python.org/
+   :alt: Python 3.11+
+
+.. image:: https://img.shields.io/badge/License-GPLv3-blue.svg
+   :target: https://www.gnu.org/licenses/gpl-3.0
+   :alt: License: GPL v3
+
 .. image:: https://img.shields.io/pypi/v/aurel?logo=pypi&logoColor=white
    :target: https://pypi.org/project/aurel/
    :alt: PyPI

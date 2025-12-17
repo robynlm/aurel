@@ -27,7 +27,7 @@ classifiers = [
     "Operating System :: OS Independent"
 ]
 requires-python = ">=3.11"
-# If this changes, update the README badge
+# If this changes, update the index shield
 
 dependencies = [
     "numpy",
