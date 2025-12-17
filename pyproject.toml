@@ -48,6 +48,13 @@ Documentation = "https://robynlm.github.io/aurel/"
 
 [project.optional-dependencies]
 test = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["*.ipynb_checkpoints", "*.ipynb_checkpoints.*"]
+
+[tool.setuptools.package-data]
+"*" = ["!.ipynb_checkpoints/*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = [
