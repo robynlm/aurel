@@ -24,14 +24,11 @@ Welcome to aurel's documentation!
    <span style="font-weight: bold;">rel</span>ativistic terms. 
    </p>
 
-(As long as it is in the list of available entities, 
-see :ref:`descriptions_list`.)
-
 In addition, this package also provides tools for 
 advanced numerical computations, including:
 
 - finite difference schemes for 3D grids,
-- tools for tensor calculations,
+- tools for tensor calculations, both numerically and symbolically,
 - tools to import data 
   from `Einstein Toolkit <https://einsteintoolkit.org>`_ simulations.
 
