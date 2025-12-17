@@ -4,7 +4,6 @@ scipy          # for scientific computing
 sympy          # for analytical calculations and checks
 matplotlib     # for plotting
 h5py           # for reading/writing hdf5 files
-glob2          # for recursive file searching
 ipython        # for interactive use
 jupyter        # for notebooks
 ipykernel      # for notebooks

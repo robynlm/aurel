@@ -34,7 +34,6 @@ dependencies = [
     "matplotlib",
     "sympy",
     "h5py",
-    "glob2",
     "scipy",  # Requires Python >= 3.11
     "ipython",
     "tqdm",
