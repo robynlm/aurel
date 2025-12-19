@@ -188,7 +188,7 @@ Once you've completed your work on your feature branch and committed and pushed 
 - **Create a Pull Request on GitHub:**
    - Go to your fork on GitHub
    - Click "Pull Request" and select `development` as the base branch (not `main`)
-   - Provide a clear description of the changes and reference any related issues
+   - Fill out the [pull request template](https://github.com/robynlm/aurel/blob/main/.github/PULL_REQUEST_TEMPLATE.md) that will automatically appear
    
 A maintainer will review your PR and may request changes before merging.
 
