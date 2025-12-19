@@ -71,12 +71,15 @@ then in your python script you can have
 Convergence
 -----------
 
-See `Schwarzschild_check notebook <https://robynlm.github.io/aurel/notebooks/Schwarzschild_check.html>`_
+See :doc:`../notebooks/Schwarzschild_check`
 
 * Choose the order of the finite difference scheme you want to use,
   this is done by setting the `fd_order` parameter in the 
-  `FiniteDifference` class. Options are: 4 (default), 6, 8.
-  ``fd = aurel.FiniteDifference(param, fd_order=6)``
+  :class:`aurel.FiniteDifference` class. Options are: 2, 4 (default), 6, 8.
+
+.. code-block:: python
+
+   fd = aurel.FiniteDifference(param, fd_order=6)
 
 * Increase the grid resolution in your simulation, or reduce the grid spacing 
   for generated data.
