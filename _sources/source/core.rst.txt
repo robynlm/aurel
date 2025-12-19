@@ -8,7 +8,7 @@ aurel.core
    <div style='display: none;' aria-hidden='true'>
 
 .. autoclass:: aurel.core.AurelCore
-   :members: gtt, gtx, gty, gtz, gxx, gxy, gxz, gyy, gyz, gzz, gammadown3, gammaup3, dtgammaup3, gammadet, gammadown4, gammaup4, psi_bssnok, phi_bssnok, dtphi_bssnok, gammadown3_bssnok, gammaup3_bssnok, dtgammadown3_bssnok, kxx, kxy, kxz, kyy, kyz, kzz, Kdown3, Kup3, Ktrace, dtKtrace, Adown3, Aup3, A2, Adown3_bssnok, Aup3_bssnok, A2_bssnok, dtAdown3_bssnok, alpha, dtalpha, DDalpha, betax, betay, betaz, betaup3, dtbetax, dtbetay, dtbetaz, dtbetaup3, betadown3, betamag, dttau, nup4, ndown4, gdown4, gup4, gdet, null_ray_exp_out, null_ray_exp_in, rho0, press, eps, rho, enthalpy, w_lorentz, velx, vely, velz, velup3, velup4, veldown3, veldown4, uup0, uup3, uup4, udown3, udown4, hdown4, hdet, hmixed4, hup4, Tdown4, Tup4, Ttrace, rho_n, fluxup3_n, fluxdown3_n, angmomup3_n, angmomdown3_n, Stressup3_n, Stressdown3_n, Stresstrace_n, press_n, anisotropic_press_down3_n, rho_n_fromHam, fluxup3_n_fromMom, conserved_D, conserved_E, conserved_Sdown4, conserved_Sdown3, conserved_Sup4, conserved_Sup3, dtconserved, st_covd_udown4, accelerationdown4, accelerationup4, s_covd_udown4, thetadown4, theta, sheardown4, shear2, omegadown4, omega2, s_RicciS_u, s_Gamma_udd3, s_Riemann_uddd3, s_Riemann_down3, s_Ricci_down3, s_RicciS, st_Gamma_udd4, st_Riemann_uddd4, st_Riemann_down4, st_Riemann_uudd4, st_Ricci_down4, st_Ricci_down3, st_RicciS, Einsteindown4, Kretschmann, s_Gamma_udd3_bssnok, s_Gamma_bssnok, dts_Gamma_bssnok, s_Ricci_down3_bssnok, s_RicciS_bssnok, s_Ricci_down3_phi, Hamiltonian, Hamiltonian_Escale, Momentumx, Momentumy, Momentumz, Momentumup3, Momentum_Escale, st_Weyl_down4, Weyl_Psi, Psi4_lm, Weyl_invariants, eweyl_u_down4, eweyl_n_down3, bweyl_u_down4, bweyl_n_down3
+   :members: gtt, gtx, gty, gtz, gxx, gxy, gxz, gyy, gyz, gzz, gammadown3, gammaup3, dtgammaup3, gammadet, gammadown4, gammaup4, psi_bssnok, phi_bssnok, dtphi_bssnok, gammadown3_bssnok, gammaup3_bssnok, dtgammadown3_bssnok, kxx, kxy, kxz, kyy, kyz, kzz, Kdown3, Kup3, Ktrace, dtKtrace, Adown3, Aup3, A2, Adown3_bssnok, Aup3_bssnok, A2_bssnok, dtAdown3_bssnok, alpha, dtalpha, DDalpha, betax, betay, betaz, betaup3, dtbetax, dtbetay, dtbetaz, dtbetaup3, betadown3, betamag, dttau, nup4, ndown4, gdown4, gup4, gdet, null_ray_exp_out, null_ray_exp_in, rho0, press, eps, rho, enthalpy, w_lorentz, velx, vely, velz, velup3, velup4, veldown3, veldown4, uup0, uup3, uup4, udown3, udown4, hdown4, hdet, hmixed4, hup4, Tdown4, Tup4, Ttrace, rho_n, fluxup3_n, fluxdown3_n, angmomup3_n, angmomdown3_n, Stressup3_n, Stressdown3_n, Stresstrace_n, press_n, anisotropic_press_down3_n, rho_n_fromHam, fluxup3_n_fromMom, conserved_D, conserved_E, conserved_Sdown4, conserved_Sdown3, conserved_Sup4, conserved_Sup3, dtconserved, st_covd_udown4, accelerationdown4, accelerationup4, s_covd_udown4, thetadown4, theta, sheardown4, shear2, omegadown4, omega2, s_RicciS_u, s_Gamma_udd3, s_Riemann_uddd3, s_Riemann_down3, s_Ricci_down3, s_RicciS, st_Gamma_udd4, st_Riemann_uddd4, st_Riemann_down4, st_Riemann_uudd4, st_Ricci_down4, st_Ricci_down3, st_RicciS, Einsteindown4, Kretschmann, s_Gamma_udd3_bssnok, s_Gamma_bssnok, dts_Gamma_bssnok, s_Ricci_down3_bssnok, s_RicciS_bssnok, s_Ricci_down3_phi, Hamiltonian, Hamiltonian_Escale, Hamiltonian_norm, Momentumx, Momentumy, Momentumz, Momentumdownx, Momentumdowny, Momentumdownz, Momentumup3, Momentumdown3, Momentum_Escale, Momentumx_norm, Momentumy_norm, Momentumz_norm, Momentumdownx_norm, Momentumdowny_norm, Momentumdownz_norm, st_Weyl_down4, Weyl_Psi, Psi4_lm, Weyl_invariants, eweyl_u_down4, eweyl_n_down3, bweyl_u_down4, bweyl_n_down3
    :noindex:
 
 .. raw:: html
@@ -705,6 +705,10 @@ Constraints
 
 `Hamiltonian_Escale <../_modules/aurel/core.html#AurelCore.Hamiltonian_Escale>`_: [$\mathcal{H}$] Hamilonian constraint energy scale
 
+.. _aurel.core.AurelCore.Hamiltonian_norm:
+
+`Hamiltonian_norm <../_modules/aurel/core.html#AurelCore.Hamiltonian_norm>`_: $\mathcal{H}/[\mathcal{H}]$ Normalized Hamilonian constraint
+
 .. _aurel.core.AurelCore.Momentumx:
 
 `Momentumx <../_modules/aurel/core.html#AurelCore.Momentumx>`_: $\mathcal{M}^x$ Momentum constraint with x spatial indices up
@@ -717,13 +721,53 @@ Constraints
 
 `Momentumz <../_modules/aurel/core.html#AurelCore.Momentumz>`_: $\mathcal{M}^z$ Momentum constraint with z spatial indices up
 
+.. _aurel.core.AurelCore.Momentumdownx:
+
+`Momentumdownx <../_modules/aurel/core.html#AurelCore.Momentumdownx>`_: $\mathcal{M}_x$ Momentum constraint with x spatial indices down
+
+.. _aurel.core.AurelCore.Momentumdowny:
+
+`Momentumdowny <../_modules/aurel/core.html#AurelCore.Momentumdowny>`_: $\mathcal{M}_y$ Momentum constraint with y spatial indices down
+
+.. _aurel.core.AurelCore.Momentumdownz:
+
+`Momentumdownz <../_modules/aurel/core.html#AurelCore.Momentumdownz>`_: $\mathcal{M}_z$ Momentum constraint with z spatial indices down
+
 .. _aurel.core.AurelCore.Momentumup3:
 
 `Momentumup3 <../_modules/aurel/core.html#AurelCore.Momentumup3>`_: $\mathcal{M}^i$ Momentum constraint with spatial indices up
 
+.. _aurel.core.AurelCore.Momentumdown3:
+
+`Momentumdown3 <../_modules/aurel/core.html#AurelCore.Momentumdown3>`_: $\mathcal{M}_i$ Momentum constraint with spatial indices down
+
 .. _aurel.core.AurelCore.Momentum_Escale:
 
 `Momentum_Escale <../_modules/aurel/core.html#AurelCore.Momentum_Escale>`_: [$\mathcal{M}$] Momentum constraint energy scale
+
+.. _aurel.core.AurelCore.Momentumx_norm:
+
+`Momentumx_norm <../_modules/aurel/core.html#AurelCore.Momentumx_norm>`_: $\mathcal{M}^x/[\mathcal{M}]$ Normalized Momentum constraint with x spatial indices up
+
+.. _aurel.core.AurelCore.Momentumy_norm:
+
+`Momentumy_norm <../_modules/aurel/core.html#AurelCore.Momentumy_norm>`_: $\mathcal{M}^y/[\mathcal{M}]$ Normalized Momentum constraint with y spatial indices up
+
+.. _aurel.core.AurelCore.Momentumz_norm:
+
+`Momentumz_norm <../_modules/aurel/core.html#AurelCore.Momentumz_norm>`_: $\mathcal{M}^z/[\mathcal{M}]$ Normalized Momentum constraint with z spatial indices up
+
+.. _aurel.core.AurelCore.Momentumdownx_norm:
+
+`Momentumdownx_norm <../_modules/aurel/core.html#AurelCore.Momentumdownx_norm>`_: $\mathcal{M}_x/[\mathcal{M}]$ Normalized Momentum constraint with x spatial indices down
+
+.. _aurel.core.AurelCore.Momentumdowny_norm:
+
+`Momentumdowny_norm <../_modules/aurel/core.html#AurelCore.Momentumdowny_norm>`_: $\mathcal{M}_y/[\mathcal{M}]$ Normalized Momentum constraint with y spatial indices down
+
+.. _aurel.core.AurelCore.Momentumdownz_norm:
+
+`Momentumdownz_norm <../_modules/aurel/core.html#AurelCore.Momentumdownz_norm>`_: $\mathcal{M}_z/[\mathcal{M}]$ Normalized Momentum constraint with z spatial indices down
 
 AurelCore Methods
 *****************
@@ -731,5 +775,5 @@ AurelCore Methods
 .. autoclass:: aurel.core.AurelCore
    :show-inheritance:
    :members:
-   :exclude-members: gtt, gtx, gty, gtz, gxx, gxy, gxz, gyy, gyz, gzz, gammadown3, gammaup3, dtgammaup3, gammadet, gammadown4, gammaup4, psi_bssnok, phi_bssnok, dtphi_bssnok, gammadown3_bssnok, gammaup3_bssnok, dtgammadown3_bssnok, kxx, kxy, kxz, kyy, kyz, kzz, Kdown3, Kup3, Ktrace, dtKtrace, Adown3, Aup3, A2, Adown3_bssnok, Aup3_bssnok, A2_bssnok, dtAdown3_bssnok, alpha, dtalpha, DDalpha, betax, betay, betaz, betaup3, dtbetax, dtbetay, dtbetaz, dtbetaup3, betadown3, betamag, dttau, nup4, ndown4, gdown4, gup4, gdet, null_ray_exp_out, null_ray_exp_in, rho0, press, eps, rho, enthalpy, w_lorentz, velx, vely, velz, velup3, velup4, veldown3, veldown4, uup0, uup3, uup4, udown3, udown4, hdown4, hdet, hmixed4, hup4, Tdown4, Tup4, Ttrace, rho_n, fluxup3_n, fluxdown3_n, angmomup3_n, angmomdown3_n, Stressup3_n, Stressdown3_n, Stresstrace_n, press_n, anisotropic_press_down3_n, rho_n_fromHam, fluxup3_n_fromMom, conserved_D, conserved_E, conserved_Sdown4, conserved_Sdown3, conserved_Sup4, conserved_Sup3, dtconserved, st_covd_udown4, accelerationdown4, accelerationup4, s_covd_udown4, thetadown4, theta, sheardown4, shear2, omegadown4, omega2, s_RicciS_u, s_Gamma_udd3, s_Riemann_uddd3, s_Riemann_down3, s_Ricci_down3, s_RicciS, st_Gamma_udd4, st_Riemann_uddd4, st_Riemann_down4, st_Riemann_uudd4, st_Ricci_down4, st_Ricci_down3, st_RicciS, Einsteindown4, Kretschmann, s_Gamma_udd3_bssnok, s_Gamma_bssnok, dts_Gamma_bssnok, s_Ricci_down3_bssnok, s_RicciS_bssnok, s_Ricci_down3_phi, Hamiltonian, Hamiltonian_Escale, Momentumx, Momentumy, Momentumz, Momentumup3, Momentum_Escale, st_Weyl_down4, Weyl_Psi, Psi4_lm, Weyl_invariants, eweyl_u_down4, eweyl_n_down3, bweyl_u_down4, bweyl_n_down3
+   :exclude-members: gtt, gtx, gty, gtz, gxx, gxy, gxz, gyy, gyz, gzz, gammadown3, gammaup3, dtgammaup3, gammadet, gammadown4, gammaup4, psi_bssnok, phi_bssnok, dtphi_bssnok, gammadown3_bssnok, gammaup3_bssnok, dtgammadown3_bssnok, kxx, kxy, kxz, kyy, kyz, kzz, Kdown3, Kup3, Ktrace, dtKtrace, Adown3, Aup3, A2, Adown3_bssnok, Aup3_bssnok, A2_bssnok, dtAdown3_bssnok, alpha, dtalpha, DDalpha, betax, betay, betaz, betaup3, dtbetax, dtbetay, dtbetaz, dtbetaup3, betadown3, betamag, dttau, nup4, ndown4, gdown4, gup4, gdet, null_ray_exp_out, null_ray_exp_in, rho0, press, eps, rho, enthalpy, w_lorentz, velx, vely, velz, velup3, velup4, veldown3, veldown4, uup0, uup3, uup4, udown3, udown4, hdown4, hdet, hmixed4, hup4, Tdown4, Tup4, Ttrace, rho_n, fluxup3_n, fluxdown3_n, angmomup3_n, angmomdown3_n, Stressup3_n, Stressdown3_n, Stresstrace_n, press_n, anisotropic_press_down3_n, rho_n_fromHam, fluxup3_n_fromMom, conserved_D, conserved_E, conserved_Sdown4, conserved_Sdown3, conserved_Sup4, conserved_Sup3, dtconserved, st_covd_udown4, accelerationdown4, accelerationup4, s_covd_udown4, thetadown4, theta, sheardown4, shear2, omegadown4, omega2, s_RicciS_u, s_Gamma_udd3, s_Riemann_uddd3, s_Riemann_down3, s_Ricci_down3, s_RicciS, st_Gamma_udd4, st_Riemann_uddd4, st_Riemann_down4, st_Riemann_uudd4, st_Ricci_down4, st_Ricci_down3, st_RicciS, Einsteindown4, Kretschmann, s_Gamma_udd3_bssnok, s_Gamma_bssnok, dts_Gamma_bssnok, s_Ricci_down3_bssnok, s_RicciS_bssnok, s_Ricci_down3_phi, Hamiltonian, Hamiltonian_Escale, Hamiltonian_norm, Momentumx, Momentumy, Momentumz, Momentumdownx, Momentumdowny, Momentumdownz, Momentumup3, Momentumdown3, Momentum_Escale, Momentumx_norm, Momentumy_norm, Momentumz_norm, Momentumdownx_norm, Momentumdowny_norm, Momentumdownz_norm, st_Weyl_down4, Weyl_Psi, Psi4_lm, Weyl_invariants, eweyl_u_down4, eweyl_n_down3, bweyl_u_down4, bweyl_n_down3
 
