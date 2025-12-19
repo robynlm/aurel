@@ -61,9 +61,12 @@ curv_bssnok = ['s_Gamma_udd3_bssnok',
           's_Gamma_bssnok', 'dts_Gamma_bssnok', 
           's_Ricci_down3_bssnok', 's_RicciS_bssnok',
           's_Ricci_down3_phi']
-constraints = ['Hamiltonian', 'Hamiltonian_Escale',
+constraints = ['Hamiltonian', 'Hamiltonian_Escale', 'Hamiltonian_norm',
     'Momentumx', 'Momentumy', 'Momentumz',
-    'Momentumup3', 'Momentum_Escale']
+    'Momentumdownx', 'Momentumdowny', 'Momentumdownz',
+    'Momentumup3', 'Momentumdown3', 'Momentum_Escale',
+    'Momentumx_norm', 'Momentumy_norm', 'Momentumz_norm',
+    'Momentumdownx_norm', 'Momentumdowny_norm', 'Momentumdownz_norm']
 gravimag = ['st_Weyl_down4', 'Weyl_Psi', 'Psi4_lm', 'Weyl_invariants',
     'eweyl_u_down4', 'eweyl_n_down3', 'bweyl_u_down4',
     'bweyl_n_down3']

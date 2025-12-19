@@ -309,16 +309,38 @@ descriptions = {
     "Hamiltonian": r"$\mathcal{H}$ Hamilonian constraint",
     "Hamiltonian_Escale": (r"[$\mathcal{H}$] Hamilonian constraint"
         + r" energy scale"),
+    "Hamiltonian_norm": (r"$\mathcal{H}/[\mathcal{H}]$ Normalized Hamilonian"
+        + r" constraint"),
     "Momentumx": (r"$\mathcal{M}^x$ Momentum constraint"
         + r" with x spatial indices up"),
     "Momentumy": (r"$\mathcal{M}^y$ Momentum constraint"
         + r" with y spatial indices up"),
     "Momentumz": (r"$\mathcal{M}^z$ Momentum constraint"
         + r" with z spatial indices up"),
+    "Momentumdownx": (r"$\mathcal{M}_x$ Momentum constraint"
+        + r" with x spatial indices down"),
+    "Momentumdowny": (r"$\mathcal{M}_y$ Momentum constraint"
+        + r" with y spatial indices down"),
+    "Momentumdownz": (r"$\mathcal{M}_z$ Momentum constraint"
+        + r" with z spatial indices down"),
     "Momentumup3": (r"$\mathcal{M}^i$ Momentum constraint"
         + r" with spatial indices up"),
+    "Momentumdown3": (r"$\mathcal{M}_i$ Momentum constraint"
+        + r" with spatial indices down"),
     "Momentum_Escale": (r"[$\mathcal{M}$] Momentum constraint"
         + r" energy scale"),
+    "Momentumx_norm": (r"$\mathcal{M}^x/[\mathcal{M}]$ Normalized Momentum"
+        + r" constraint with x spatial indices up"),
+    "Momentumy_norm": (r"$\mathcal{M}^y/[\mathcal{M}]$ Normalized Momentum"
+        + r" constraint with y spatial indices up"),
+    "Momentumz_norm": (r"$\mathcal{M}^z/[\mathcal{M}]$ Normalized Momentum"
+        + r" constraint with z spatial indices up"),
+    "Momentumdownx_norm": (r"$\mathcal{M}_x/[\mathcal{M}]$ Normalized Momentum"
+        + r" constraint with x spatial indices down"),
+    "Momentumdowny_norm": (r"$\mathcal{M}_y/[\mathcal{M}]$ Normalized Momentum"
+        + r" constraint with y spatial indices down"),
+    "Momentumdownz_norm": (r"$\mathcal{M}_z/[\mathcal{M}]$ Normalized Momentum"
+        + r" constraint with z spatial indices down"),
 
     # === Gravito-electromagnetism quantities
     "st_Weyl_down4": (r"$C_{\alpha\beta\mu\nu}$ Weyl tensor of spacetime"
@@ -1623,6 +1645,10 @@ class AurelCore():
                 + (2 * self.kappa * self["rho_n"])**2 
                 + (2 * self.Lambda)**2))
     
+    def Hamiltonian_norm(self):
+        return maths.safe_division(
+            self["Hamiltonian"], self["Hamiltonian_Escale"])
+    
     def Momentumx(self):
         return self["Momentumup3"][0]
     
@@ -1631,6 +1657,15 @@ class AurelCore():
     
     def Momentumz(self):
         return self["Momentumup3"][2]
+    
+    def Momentumdownx(self):
+        return self["Momentumdown3"][0]
+    
+    def Momentumdowny(self):
+        return self["Momentumdown3"][1]
+    
+    def Momentumdownz(self):
+        return self["Momentumdown3"][2]
     
     def Momentumup3(self):
         if "Momentumx" in self.data.keys():
@@ -1645,6 +1680,10 @@ class AurelCore():
                 return Mom
             else:
                 return (Mom - self.kappa * self["fluxup3_n"])
+    
+    def Momentumdown3(self):
+        return np.einsum('ab..., b... -> a...', 
+                         self["gammadown3"], self["Momentumup3"])
     
     def Momentum_Escale(self):
         DdKdd = self.s_covd(self["Kdown3"], 'dd')
@@ -1663,6 +1702,30 @@ class AurelCore():
                   * np.einsum('a..., a... -> ...', 
                               self["fluxup3_n"], self["fluxdown3_n"]))
             return np.sqrt(abs(DKd2 + DdK2 + Eflux2))
+    
+    def Momentumx_norm(self):
+        return maths.safe_division(
+            self["Momentumx"], self["Momentum_Escale"])
+    
+    def Momentumy_norm(self):
+        return maths.safe_division(
+            self["Momentumy"], self["Momentum_Escale"])
+    
+    def Momentumz_norm(self):
+        return maths.safe_division(
+            self["Momentumz"], self["Momentum_Escale"])
+    
+    def Momentumdownx_norm(self):
+        return maths.safe_division(
+            self["Momentumdownx"], self["Momentum_Escale"])
+    
+    def Momentumdowny_norm(self):
+        return maths.safe_division(
+            self["Momentumdowny"], self["Momentum_Escale"])
+    
+    def Momentumdownz_norm(self):
+        return maths.safe_division(
+            self["Momentumdownz"], self["Momentum_Escale"])
     
     # === Gravito-electromagnetism quantities
     def st_Weyl_down4(self): 
