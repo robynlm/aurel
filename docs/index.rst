@@ -20,7 +20,7 @@ Welcome to aurel's documentation!
    :target: https://pypi.org/project/aurel/
    :alt: PyPI
 
-.. image:: https://github.com/robynlm/aurel/actions/workflows/test-build.yml/badge.svg
+.. image:: https://github.com/robynlm/aurel/actions/workflows/test-build.yml/badge.svg?branch=main
    :target: https://github.com/robynlm/aurel/actions/workflows/test-build.yml
    :alt: Test build
 
@@ -39,10 +39,14 @@ Welcome to aurel's documentation!
 In addition, this package also provides tools for 
 advanced numerical computations, including:
 
-- finite difference schemes for 3D grids,
-- tools for tensor calculations, both numerically and symbolically,
-- tools to import data 
-  from `Einstein Toolkit <https://einsteintoolkit.org>`_ simulations.
+- tools for tensor calculations:
+
+  - numerically (:doc:`source/core`, :ref:`getting_started`, :doc:`notebooks/Example`, :doc:`notebooks/Example_over_time`, :doc:`notebooks/Gravitational_Waves`)
+  - symbolically (:doc:`source/coresymbolic`, :doc:`notebooks/Example_symbolic`)
+
+- finite difference schemes for 3D grids (:doc:`source/finitedifference`)
+- tools to import data from Carpet `Einstein Toolkit <https://einsteintoolkit.org>`_ simulations (:doc:`source/reading`, :doc:`notebooks/tov_ET`)
+- analytical solutions (:doc:`source/solutions`, :doc:`notebooks/ICPertFLRW`, :doc:`notebooks/Analytic_check`, :doc:`notebooks/Schwarzschild_check`)
 
 Installation
 ------------
@@ -56,11 +60,13 @@ Install aurel using `pip <https://pip.pypa.io/en/stable/installation/>`_:
 all other required packages will be installed automatically. 
 Or get the :ref:`dev_version`.
 
+.. _getting_started:
+
 Getting started
 ---------------
 
 Start your Python session on a jupyter notebook or in a Python script 
-and import the AurelCore class:
+and import the :class:`aurel.AurelCore` class:
 
 .. code-block:: python
    
@@ -105,8 +111,8 @@ With everything defined, you can call any entity listed in the
 any relativistic term you ask for.**
 
 For a more in depth example, see the :doc:`notebooks/Example` for applications. 
-Additionally a symbolic counterpart is also available via the 
-`AurelCoreSymbolic` class, see the :doc:`notebooks/Example_symbolic` for details.
+Additionally, a symbolic counterpart that works in a very similar way is also available via the 
+:class:`aurel.AurelCoreSymbolic` class, see the :doc:`notebooks/Example_symbolic` for details.
 
 Now if you want calculations over multiple moments in coordinate time, you can 
 use the :func:`aurel.over_time` function. First, create a dictionary 
