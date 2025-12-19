@@ -20,6 +20,10 @@ Welcome to aurel's documentation!
    :target: https://pypi.org/project/aurel/
    :alt: PyPI
 
+.. image:: https://github.com/robynlm/aurel/actions/workflows/test-build.yml/badge.svg
+   :target: https://github.com/robynlm/aurel/actions/workflows/test-build.yml
+   :alt: Test build
+
 .. image:: https://img.shields.io/badge/Email-r.l.munoz@sussex.ac.uk-red?logo=gmail&logoColor=white
    :target: mailto:r.l.munoz@sussex.ac.uk
    :alt: Email
