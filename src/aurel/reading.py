@@ -25,9 +25,11 @@ Users must set the SIMLOC environment variable to the simulation directories:
 
     ``export SIMLOC="/path/to/simulations/"``
 
-For multiple simulation locations, use colon separation:
+For multiple simulation locations, use colon separation on Unix/Mac or semicolon on Windows:
 
-    ``export SIMLOC="/path1:/path2:/path3"``
+    ``export SIMLOC="/path1:/path2:/path3"``  # Unix/Mac
+    
+    ``set SIMLOC="C:\\path1;C:\\path2;C:\\path3"``  # Windows
 """
 
 import os
@@ -667,9 +669,11 @@ def parameters(simname):
     
         ``export SIMLOC="/path/to/simulations"``
         
-    For multiple locations:
+    For multiple locations (use colon on Unix/Mac, semicolon on Windows):
     
-        ``export SIMLOC="/path1:/path2:/path3"``
+        ``export SIMLOC="/path1:/path2:/path3"``  # Unix/Mac
+        
+        ``set SIMLOC="C:\path1;C:\path2;C:\path3"``  # Windows
     """
     parameters = {
         'simname':simname,
@@ -678,7 +682,7 @@ def parameters(simname):
 
     # Looking for data
     founddata = False
-    simlocs = os.environ.get('SIMLOC', '').split(':')
+    simlocs = os.environ.get('SIMLOC', '').split(os.pathsep)
     if simlocs == ['']:
         raise ValueError(
             'Could not find environment variable SIMLOC. '
