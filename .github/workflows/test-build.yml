@@ -51,7 +51,7 @@ jobs:
         if [ $COVERAGE -lt 60 ]; then COLOR="orange"; fi
         if [ $COVERAGE -lt 40 ]; then COLOR="red"; fi
         mkdir -p .github/badges
-        echo "{\"schemaVersion\": 1, \"label\": \"coverage\", \"message\": \"${COVERAGE}%\", \"color\": \"${COLOR}\"}" > .github/badges/coverage.json
+        echo "{\"schemaVersion\": 1, \"label\": \"Coverage\", \"message\": \"${COVERAGE}%\", \"color\": \"${COLOR}\"}" > .github/badges/coverage.json
         
     - name: Commit coverage badge data
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
