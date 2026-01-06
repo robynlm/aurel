@@ -684,10 +684,12 @@ def parameters(simname):
             'Could not find environment variable SIMLOC. '
             +'Please set it to the path of your simulations.'
             +'`export SIMLOC="/path/to/simulations/"`')
+    print('TESTING:', simlocs, flush=True)
     for simloc in simlocs:
         param_files = sorted(glob.glob(simloc + parameters['simname'] 
                                        + '/output-*/' 
                                        + parameters['simname'] + '.par'))
+        print('TESTING:', param_files, flush=True)
         if param_files:
             parampath = param_files[0]
             founddata = True
