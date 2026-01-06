@@ -308,7 +308,7 @@ Another::Complex::Thorn::Setting = 42
         
         # Temporarily add test sim to SIMLOC
         original_simloc = os.environ.get('SIMLOC', '')
-        os.environ['SIMLOC'] = str(tmp_path) + '/'
+        os.environ['SIMLOC'] = str(tmp_path) + os.sep
         
         try:
             param = reading.parameters('test_multicolon')
@@ -352,7 +352,7 @@ Complex::expression = "result = input1 = input2"
         
         # Temporarily add test sim to SIMLOC
         original_simloc = os.environ.get('SIMLOC', '')
-        os.environ['SIMLOC'] = str(tmp_path) + '/'
+        os.environ['SIMLOC'] = str(tmp_path) + os.sep
         
         try:
             param = reading.parameters('test_multiequals')
@@ -611,7 +611,7 @@ RESTART 0
         
         # Temporarily add test sim to SIMLOC
         original_simloc = os.environ.get('SIMLOC', '')
-        os.environ['SIMLOC'] = str(tmp_path) + '/'
+        os.environ['SIMLOC'] = str(tmp_path) + os.sep
         
         try:
             param = reading.parameters('test_no_output')
@@ -653,7 +653,7 @@ CoordBase::dz = 0.5
         
         # Temporarily add test sim to SIMLOC
         original_simloc = os.environ.get('SIMLOC', '')
-        os.environ['SIMLOC'] = str(tmp_path) + '/'
+        os.environ['SIMLOC'] = str(tmp_path) + os.sep
         
         try:
             param = reading.parameters('test_empty_restart')
@@ -683,7 +683,7 @@ class TestAurelFormat:
     def test_save_and_read_aurel_data(self, tmp_path):
         """Test saving and reading data in Aurel format."""
         # Create test data
-        param = {'datapath': str(tmp_path) + '/'}
+        param = {'datapath': str(tmp_path) + os.sep}
         data = {
             'it': np.array([0, 1]),
             't': [0.0, 0.1],
@@ -710,7 +710,7 @@ class TestAurelFormat:
     
     def test_read_aurel_data_missing_iteration(self, tmp_path):
         """Test reading when some iterations are missing."""
-        param = {'datapath': str(tmp_path) + '/'}
+        param = {'datapath': str(tmp_path) + os.sep}
         data = {
             'it': np.array([0]),
             't': [0.0],
@@ -729,7 +729,7 @@ class TestAurelFormat:
     
     def test_save_data_with_refinement_levels(self, tmp_path):
         """Test saving data with different refinement levels."""
-        param = {'datapath': str(tmp_path) + '/'}
+        param = {'datapath': str(tmp_path) + os.sep}
         
         # rl=0
         data_rl0 = {
@@ -1080,7 +1080,7 @@ class TestReadData:
     def test_read_data_aurel_format(self, tmp_path):
         """Test read_data with Aurel format (no 'simulation' key)."""
         # Create some test data first
-        param = {'datapath': str(tmp_path) + '/'}
+        param = {'datapath': str(tmp_path) + os.sep}
         test_data = {
             'it': np.array([0, 1]),
             't': [0.0, 0.1],
@@ -1119,7 +1119,7 @@ class TestIntegration:
             param_et, it=[0], restart=0, split_per_it=False, verbose=False)
         
         # Save in Aurel format
-        param_aurel = {'datapath': str(tmp_path) + '/'}
+        param_aurel = {'datapath': str(tmp_path) + os.sep}
         vars_to_save = [k for k in data_et.keys() if k not in ['it']][:3]  # Save a few vars
         reading.save_data(param_aurel, data_et, it=[0], vars=vars_to_save)
         

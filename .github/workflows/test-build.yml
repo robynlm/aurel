@@ -43,7 +43,7 @@ jobs:
       run: pytest --cov=aurel --cov-report=term --cov-report=json
     
     - name: Generate coverage badge data
-      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12' && github.ref == 'refs/heads/main'
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
       run: |
         COVERAGE=$(python -c "import json; print(int(json.load(open('coverage.json'))['totals']['percent_covered']))")
         COLOR="brightgreen"
@@ -54,7 +54,7 @@ jobs:
         echo "{\"schemaVersion\": 1, \"label\": \"coverage\", \"message\": \"${COVERAGE}%\", \"color\": \"${COLOR}\"}" > .github/badges/coverage.json
         
     - name: Commit coverage badge data
-      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12' && github.ref == 'refs/heads/main'
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
