@@ -46,7 +46,7 @@ Source = "https://github.com/robynlm/aurel"
 Documentation = "https://robynlm.github.io/aurel/"
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = ["pytest", "pytest-cov"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
