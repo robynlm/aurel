@@ -24,6 +24,9 @@ Welcome to aurel's documentation!
    :target: https://github.com/robynlm/aurel/actions/workflows/test-build.yml
    :alt: Test build
 
+.. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/robynlm/aurel/main/.github/badges/coverage.json&logo=pytest&logoColor=white
+   :alt: Coverage
+
 .. image:: https://img.shields.io/badge/Email-r.l.munoz@sussex.ac.uk-red?logo=gmail&logoColor=white
    :target: mailto:r.l.munoz@sussex.ac.uk
    :alt: Email
