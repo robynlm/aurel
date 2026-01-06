@@ -1,7 +1,6 @@
 """Tests for checking docstring coverage across the aurel package."""
 
 import inspect
-import numpy as np
 import aurel
 import pytest
 
