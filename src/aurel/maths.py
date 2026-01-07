@@ -72,12 +72,12 @@ def format_rank2_4(f):
     return farray
 
 def determinant3(f):
-    """Determinant 3x3 matrice in every position of the data grid."""
+    """Determinant 3x3 matrix in every position of the data grid."""
     xx, xy, xz, yy, yz, zz = getcomponents3(f)
     return -xz*xz*yy + 2*xy*xz*yz - xx*yz*yz - xy*xy*zz + xx*yy*zz
 
 def determinant4(f):
-    """Determinant of a 4x4 matrice in every position of the data grid."""
+    """Determinant of a 4x4 matrix in every position of the data grid."""
     tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = getcomponents4(f)
     return (tz*tz*xy*xy - 2*ty*tz*xy*xz + ty*ty*xz*xz 
             - tz*tz*xx*yy + 2*tx*tz*xz*yy - tt*xz*xz*yy 
@@ -87,7 +87,7 @@ def determinant4(f):
             - tx*tx*yy*zz + tt*xx*yy*zz)
 
 def inverse3(f):
-    """Inverse of a 3x3 matrice in every position of the data grid."""
+    """Inverse of a 3x3 matrix in every position of the data grid."""
     xx, xy, xz, yy, yz, zz = getcomponents3(f)
     fup = np.array([[yy*zz - yz*yz, -(xy*zz - yz*xz), xy*yz - yy*xz], 
                      [-(xy*zz - xz*yz), xx*zz - xz*xz, -(xx*yz - xy*xz)],
@@ -95,7 +95,7 @@ def inverse3(f):
     return safe_division(fup, determinant3(f))
 
 def inverse4(f):
-    """Inverse of a 4x4 matrice in every position of the data grid."""
+    """Inverse of a 4x4 matrix in every position of the data grid."""
     tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = getcomponents4(f)
     fup = np.array([
         [-xz*xz*yy + 2*xy*xz*yz - xx*yz*yz - xy*xy*zz + xx*yy*zz, 
