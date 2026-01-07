@@ -369,7 +369,7 @@ def save_data(param, data, **kwargs):
             for key in vars:
                 if data[key] is not None:
                     skey = key + ' rl={}'.format(rl)
-                    # TODO: are you sure about overwritting?
+                    # TODO: are you sure about overwriting?
                     if skey in list(f.keys()):
                         del f[skey]
                     f.create_dataset(skey, data=data[key][it_index])
@@ -714,7 +714,7 @@ def parameters(simname):
                 for l in line[2:]:
                     linerest += '::' + l
             # split rest of line into variable and value
-            # TODO: case where value goes accross multiple lines
+            # TODO: case where value goes across multiple lines
             linerest = re.split('=', linerest)
             variable = linerest[0]
             value = linerest[1]
