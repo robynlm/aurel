@@ -1,15 +1,3 @@
-.. _dev_version:
-
-Development version
--------------------
-
-Install the development version of aurel with pip:
-
-.. code-block:: bash
-
-   pip install git+https://github.com/robynlm/aurel.git@development
-
-
 Working on an HPC
 -----------------
 
@@ -32,7 +20,8 @@ Then you should be able to do:
 
    pip install aurel
    
-or the :ref:`dev_version`. 
+or the latest development version.
+
 You should be able to find the package in `myenv/lib/pythonX.X/site-packages/aurel`.
 Accompanying required packages will be installed automatically, but at this point you should also install any other python packages you typically use.
 
@@ -71,12 +60,15 @@ then in your python script you can have
 Convergence
 -----------
 
-See `Schwarzschild_check notebook <https://robynlm.github.io/aurel/notebooks/Schwarzschild_check.html>`_
+See :doc:`../notebooks/Schwarzschild_check`
 
 * Choose the order of the finite difference scheme you want to use,
   this is done by setting the `fd_order` parameter in the 
-  `FiniteDifference` class. Options are: 4 (default), 6, 8.
-  ``fd = aurel.FiniteDifference(param, fd_order=6)``
+  :class:`aurel.FiniteDifference` class. Options are: 2, 4 (default), 6, 8.
+
+.. code-block:: python
+
+   fd = aurel.FiniteDifference(param, fd_order=6)
 
 * Increase the grid resolution in your simulation, or reduce the grid spacing 
   for generated data.

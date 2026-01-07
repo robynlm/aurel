@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="aurel.core" href="core.html" />
-    <link rel="prev" title="Development version" href="advice.html" /> 
+    <link rel="prev" title="Working on an HPC" href="advice.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,15 +48,17 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="advice.html">Development version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advice.html#working-on-an-hpc">Working on an HPC</a></li>
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme_sections.html">Key Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_sections.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_sections.html#getting-started">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_sections.html#citation">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
-</ul>
-<ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reporting Issues</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#code-contributions">Code Contributions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#branch-workflow">Branch Workflow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#development-setup">Development Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#keeping-your-fork-updated">Keeping Your Fork Updated</a></li>
@@ -130,6 +132,14 @@
 <li><p>Check <a class="reference external" href="https://github.com/robynlm/aurel/issues">existing issues</a> and <a class="reference external" href="https://github.com/robynlm/aurel/pulls">pull requests</a> to avoid duplication</p></li>
 <li><p>For major changes, <a class="reference external" href="https://github.com/robynlm/aurel/issues/new/choose">open an issue</a> first to discuss your approach</p></li>
 </ul>
+<section id="branch-workflow">
+<h2>Branch Workflow<a class="headerlink" href="#branch-workflow" title="Link to this heading"></a></h2>
+<p>This project follows a two-branch workflow:</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">main</span></code></strong>: Stable release branch - protected and only updated via reviewed PRs from <code class="docutils literal notranslate"><span class="pre">development</span></code></p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">development</span></code></strong>: Active development branch - all contributions should target this branch</p></li>
+</ul>
+<p><strong>Important</strong>: When submitting a pull request, make sure it targets the <code class="docutils literal notranslate"><span class="pre">development</span></code> branch, not <code class="docutils literal notranslate"><span class="pre">main</span></code>.</p>
 <p><strong>Guidelines for code contributions:</strong></p>
 <ul class="simple">
 <li><p>Follow <a class="reference external" href="https://peps.python.org/pep-0008/">PEP 8 style</a></p></li>
@@ -138,6 +148,7 @@
 <li><p>Update documentation (docstrings, <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files in <code class="docutils literal notranslate"><span class="pre">docs/source/</span></code>, or add notebooks in <code class="docutils literal notranslate"><span class="pre">docs/notebooks/</span></code>)</p></li>
 <li><p><a class="reference internal" href="#check"><span class="std std-ref">Make sure everything works</span></a> before submitting</p></li>
 </ul>
+</section>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h2>
 <ul>
@@ -180,12 +191,10 @@ git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </
 <p>From the root directory of the repository:</p>
 <ul>
 <li><p><strong>Install in development mode with all dependencies:</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>docs/requirements.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>test,docs<span class="o">]</span>
 </pre></div>
 </div>
-<p>The two sets of requirements distinguish dependencies needed for the package from those needed to generate the documentation.</p>
+<p>This installs the package in editable mode with optional test and documentation dependencies defined in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>.</p>
 </li>
 </ul>
 <ul id="check">
@@ -305,7 +314,7 @@ git<span class="w"> </span>push<span class="w"> </span>--force<span class="w"> <
 <ul class="simple">
 <li><p>Go to your fork on GitHub</p></li>
 <li><p>Click “Pull Request” and select <code class="docutils literal notranslate"><span class="pre">development</span></code> as the base branch (not <code class="docutils literal notranslate"><span class="pre">main</span></code>)</p></li>
-<li><p>Provide a clear description of the changes and reference any related issues</p></li>
+<li><p>Fill out the <a class="reference external" href="https://github.com/robynlm/aurel/blob/main/.github/PULL_REQUEST_TEMPLATE.md">pull request template</a> that will automatically appear</p></li>
 </ul>
 </li>
 </ul>
@@ -322,7 +331,7 @@ git<span class="w"> </span>push<span class="w"> </span>--force<span class="w"> <
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="advice.html" class="btn btn-neutral float-left" title="Development version" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="advice.html" class="btn btn-neutral float-left" title="Working on an HPC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="core.html" class="btn btn-neutral float-right" title="aurel.core" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

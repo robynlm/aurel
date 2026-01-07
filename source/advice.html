@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Development version &mdash; aurel May 2025 documentation</title>
+  <title>Working on an HPC &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Reporting Issues" href="CONTRIBUTING.html" />
-    <link rel="prev" title="Welcome to aurel’s documentation!" href="../index.html" /> 
+    <link rel="prev" title="Key Features" href="readme_sections.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,8 +49,11 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Development version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#working-on-an-hpc">Working on an HPC</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="readme_sections.html">Key Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_sections.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_sections.html#getting-started">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_sections.html#citation">Citation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Working on an HPC</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#create-a-virtual-environment">Create a virtual environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#jupyter-notebook">Jupyter notebook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#python-script">Python script</a></li>
@@ -58,8 +61,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#citation">Citation</a></li>
-</ul>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Reporting Issues</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#license">License</a></li>
@@ -101,7 +102,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Development version</li>
+      <li class="breadcrumb-item active">Working on an HPC</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/source/advice.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -111,14 +112,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="development-version">
-<span id="dev-version"></span><h1>Development version<a class="headerlink" href="#development-version" title="Link to this heading"></a></h1>
-<p>Install the development version of aurel with pip:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/robynlm/aurel.git@development
-</pre></div>
-</div>
-</section>
-<section id="working-on-an-hpc">
+  <section id="working-on-an-hpc">
 <h1>Working on an HPC<a class="headerlink" href="#working-on-an-hpc" title="Link to this heading"></a></h1>
 <p>While HPCs won’t let you install packages globally, you can still use aurel.
 You just need to create a virtual environment and install aurel there.</p>
@@ -133,8 +127,8 @@ You just need to create a virtual environment and install aurel there.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>aurel
 </pre></div>
 </div>
-<p>or the <a class="reference internal" href="#dev-version"><span class="std std-ref">Development version</span></a>.
-You should be able to find the package in <cite>myenv/lib/pythonX.X/site-packages/aurel</cite>.
+<p>or the latest development version.</p>
+<p>You should be able to find the package in <cite>myenv/lib/pythonX.X/site-packages/aurel</cite>.
 Accompanying required packages will be installed automatically, but at this point you should also install any other python packages you typically use.</p>
 </section>
 <section id="jupyter-notebook">
@@ -164,12 +158,16 @@ python<span class="w"> </span>myscript.py
 </section>
 <section id="convergence">
 <h1>Convergence<a class="headerlink" href="#convergence" title="Link to this heading"></a></h1>
-<p>See <a class="reference external" href="https://robynlm.github.io/aurel/notebooks/Schwarzschild_check.html">Schwarzschild_check notebook</a></p>
+<p>See <a class="reference internal" href="../notebooks/Schwarzschild_check.html"><span class="doc">Schwarzschild check</span></a></p>
 <ul class="simple">
 <li><p>Choose the order of the finite difference scheme you want to use,
 this is done by setting the <cite>fd_order</cite> parameter in the
-<cite>FiniteDifference</cite> class. Options are: 4 (default), 6, 8.
-<code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">=</span> <span class="pre">aurel.FiniteDifference(param,</span> <span class="pre">fd_order=6)</span></code></p></li>
+<code class="xref py py-class docutils literal notranslate"><span class="pre">aurel.FiniteDifference</span></code> class. Options are: 2, 4 (default), 6, 8.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fd</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">FiniteDifference</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">fd_order</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
 <li><p>Increase the grid resolution in your simulation, or reduce the grid spacing
 for generated data.</p></li>
 </ul>
@@ -215,7 +213,7 @@ for generated data.</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to aurel’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="readme_sections.html" class="btn btn-neutral float-left" title="Key Features" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="CONTRIBUTING.html" class="btn btn-neutral float-right" title="Reporting Issues" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -15,6 +15,14 @@ Before you start coding:
 - Check [existing issues](https://github.com/robynlm/aurel/issues) and [pull requests](https://github.com/robynlm/aurel/pulls) to avoid duplication
 - For major changes, [open an issue](https://github.com/robynlm/aurel/issues/new/choose) first to discuss your approach
 
+## Branch Workflow
+
+This project follows a two-branch workflow:
+- **`main`**: Stable release branch - protected and only updated via reviewed PRs from `development`
+- **`development`**: Active development branch - all contributions should target this branch
+
+**Important**: When submitting a pull request, make sure it targets the `development` branch, not `main`.
+
 **Guidelines for code contributions:**
 - Follow [PEP 8 style](https://peps.python.org/pep-0008/)
 - Write clear docstrings for functions and classes using [NumPy style](https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard)
@@ -61,11 +69,9 @@ From the root directory of the repository:
 
 - **Install in development mode with all dependencies:**
    ```bash
-   pip install -e .
-   pip install -r requirements.txt
-   pip install -r docs/requirements.txt
+   pip install -e .[test,docs]
    ```
-   The two sets of requirements distinguish dependencies needed for the package from those needed to generate the documentation.
+   This installs the package in editable mode with optional test and documentation dependencies defined in `pyproject.toml`.
 
 (check)=
 - **Check everything works**:
@@ -188,7 +194,7 @@ Once you've completed your work on your feature branch and committed and pushed 
 - **Create a Pull Request on GitHub:**
    - Go to your fork on GitHub
    - Click "Pull Request" and select `development` as the base branch (not `main`)
-   - Provide a clear description of the changes and reference any related issues
+   - Fill out the [pull request template](https://github.com/robynlm/aurel/blob/main/.github/PULL_REQUEST_TEMPLATE.md) that will automatically appear
    
 A maintainer will review your PR and may request changes before merging.
 

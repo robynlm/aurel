@@ -46,12 +46,13 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html">Development version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#working-on-an-hpc">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/readme_sections.html">Key Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/readme_sections.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/readme_sections.html#getting-started">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/readme_sections.html#citation">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#citation">Citation</a></li>
-</ul>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html">Reporting Issues</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html#license">License</a></li>
@@ -131,9 +132,11 @@
 
 <span class="sd">    ``export SIMLOC=&quot;/path/to/simulations/&quot;``</span>
 
-<span class="sd">For multiple simulation locations, use colon separation:</span>
+<span class="sd">For multiple simulation locations, use colon separation on Unix/Mac or semicolon on Windows:</span>
 
-<span class="sd">    ``export SIMLOC=&quot;/path1:/path2:/path3&quot;``</span>
+<span class="sd">    ``export SIMLOC=&quot;/path1:/path2:/path3&quot;``  # Unix/Mac</span>
+<span class="sd">    </span>
+<span class="sd">    ``set SIMLOC=&quot;C:\\path1;C:\\path2;C:\\path3&quot;``  # Windows</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -368,6 +371,8 @@
                         <span class="k">if</span> <span class="s1">&#39; rl=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rl</span><span class="p">)</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
                             <span class="n">var</span> <span class="o">+=</span> <span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; rl&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
                     <span class="n">var</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>  <span class="c1"># Remove duplicates</span>
+                    <span class="c1"># Remove &#39;it&#39; - not a file variable</span>
+                    <span class="n">var</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">var</span> <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="s1">&#39;it&#39;</span><span class="p">]</span>
                     
                 <span class="c1"># Read each requested variable</span>
                 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
@@ -470,9 +475,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">datapath</span> <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;datapath&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">datapath</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
-            <span class="n">lastpart</span> <span class="o">=</span> <span class="n">datapath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">firstpart</span> <span class="o">=</span> <span class="n">datapath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">datapath</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">firstpart</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span>
+            <span class="n">lastpart</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">lastpart</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
@@ -728,7 +731,12 @@
                                                 <span class="c1"># e.g., &quot;123&quot; or None</span>
         <span class="n">xyz_suffix</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>             <span class="c1"># e.g., &quot;.xyz&quot; or None</span>
         
-        <span class="n">base_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">thorn_group_with_dash</span><span class="si">}{</span><span class="n">variable_or_group_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">thorn_group_with_dash</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> 
+            <span class="ow">and</span> <span class="n">variable_or_group_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">base_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">thorn_group_with_dash</span><span class="si">}{</span><span class="n">variable_or_group_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">base_name</span> <span class="o">=</span> <span class="kc">None</span>
+        
         <span class="k">return</span> <span class="p">{</span>
             <span class="s1">&#39;thorn_with_dash&#39;</span><span class="p">:</span> <span class="n">thorn_group_with_dash</span><span class="p">,</span>
             <span class="s1">&#39;thorn&#39;</span><span class="p">:</span> <span class="n">thorn_name</span><span class="p">,</span>
@@ -797,9 +805,11 @@
 <span class="sd">    </span>
 <span class="sd">        ``export SIMLOC=&quot;/path/to/simulations&quot;``</span>
 <span class="sd">        </span>
-<span class="sd">    For multiple locations:</span>
+<span class="sd">    For multiple locations (use colon on Unix/Mac, semicolon on Windows):</span>
 <span class="sd">    </span>
-<span class="sd">        ``export SIMLOC=&quot;/path1:/path2:/path3&quot;``</span>
+<span class="sd">        ``export SIMLOC=&quot;/path1:/path2:/path3&quot;``  # Unix/Mac</span>
+<span class="sd">        </span>
+<span class="sd">        ``set SIMLOC=&quot;C:\path1;C:\path2;C:\path3&quot;``  # Windows</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;simname&#39;</span><span class="p">:</span><span class="n">simname</span><span class="p">,</span>
@@ -808,16 +818,18 @@
 
     <span class="c1"># Looking for data</span>
     <span class="n">founddata</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">simlocs</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SIMLOC&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+    <span class="n">simlocs</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SIMLOC&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">simlocs</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s1">&#39;Could not find environment variable SIMLOC. &#39;</span>
             <span class="o">+</span><span class="s1">&#39;Please set it to the path of your simulations.&#39;</span>
             <span class="o">+</span><span class="s1">&#39;`export SIMLOC=&quot;/path/to/simulations/&quot;`&#39;</span><span class="p">)</span>
+    
     <span class="k">for</span> <span class="n">simloc</span> <span class="ow">in</span> <span class="n">simlocs</span><span class="p">:</span>
         <span class="n">param_files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">simloc</span> <span class="o">+</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span> 
                                        <span class="o">+</span> <span class="s1">&#39;/output-*/&#39;</span> 
                                        <span class="o">+</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.par&#39;</span><span class="p">))</span>
+        
         <span class="k">if</span> <span class="n">param_files</span><span class="p">:</span>
             <span class="n">parampath</span> <span class="o">=</span> <span class="n">param_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">founddata</span> <span class="o">=</span> <span class="kc">True</span>
@@ -1197,7 +1209,7 @@
                 <span class="o">+</span> <span class="s1">&#39;/output-</span><span class="si">{:04d}</span><span class="s1">/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">restart</span><span class="p">)</span>
                 <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/checkpoint.chkpt.it_*.h5&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">checkpoint_files</span> <span class="o">!=</span> <span class="p">[]:</span>
-                <span class="k">if</span> <span class="s1">&#39;file_&#39;</span> <span class="ow">in</span> <span class="n">checkpoint_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="s1">&#39;.file_&#39;</span> <span class="ow">in</span> <span class="n">checkpoint_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                     <span class="n">checkpoint_files</span> <span class="o">=</span> <span class="p">[</span>
                         <span class="n">cf</span> <span class="k">for</span> <span class="n">cf</span> <span class="ow">in</span> <span class="n">checkpoint_files</span> <span class="k">if</span> <span class="s1">&#39;.file_0.&#39;</span> <span class="ow">in</span> <span class="n">cf</span><span class="p">]</span>
                 
@@ -2077,7 +2089,7 @@
     <span class="c1"># are the chunks together in one file or one file per chunk?</span>
     <span class="n">first_var</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vars_and_files</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">first_file_of_first_var</span> <span class="o">=</span> <span class="n">vars_and_files</span><span class="p">[</span><span class="n">first_var</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="s1">&#39;file_&#39;</span> <span class="ow">in</span> <span class="n">first_file_of_first_var</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s1">&#39;.file_&#39;</span> <span class="ow">in</span> <span class="n">first_file_of_first_var</span><span class="p">:</span>
         <span class="c1"># one file per chunk</span>
         <span class="n">cmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">parse_h5file</span><span class="p">(</span><span class="n">fp</span><span class="p">)[</span><span class="s1">&#39;chunk_number&#39;</span><span class="p">]</span> 
                        <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">vars_and_files</span><span class="p">[</span><span class="n">first_var</span><span class="p">]])</span>
@@ -2159,6 +2171,15 @@
     <span class="n">it</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]))))</span>
     <span class="n">rl</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rl&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">veryextraverbose</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;veryextraverbose&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Validate cmax parameter</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">cmax</span> <span class="o">==</span> <span class="s1">&#39;in file&#39;</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cmax</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">))):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;cmax must be either &#39;in file&#39; or an integer. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">cmax</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cmax</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cmax</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">))</span> <span class="ow">and</span> <span class="n">cmax</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;cmax must be a non-negative integer. Got </span><span class="si">{</span><span class="n">cmax</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">veryextraverbose</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;read_ET_group_or_var(variables, files, cmax) activated with:&#39;</span><span class="p">,</span> 
@@ -2294,7 +2315,7 @@
 
 <div class="viewcode-block" id="read_ET_checkpoints">
 <a class="viewcode-back" href="../../source/reading.html#aurel.reading.read_ET_checkpoints">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_ET_checkpoints</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">it</span><span class="p">,</span> <span class="n">restart</span><span class="p">,</span> <span class="n">rl</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_ET_checkpoints</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Read the data from Einstein Toolkit simulation checkpoint files.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -2303,15 +2324,15 @@
 <span class="sd">        The parameters of the simulation.</span>
 <span class="sd">    var : list</span>
 <span class="sd">        The variables to read from the simulation checkpoint files.</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
 <span class="sd">    it : list</span>
 <span class="sd">        The iterations to read from the simulation checkpoint files.</span>
 <span class="sd">    restart : int</span>
 <span class="sd">        The restart number to read from.</span>
 <span class="sd">    rl : int</span>
 <span class="sd">        The refinement level to read from the simulation checkpoint files.</span>
-
-<span class="sd">    Other Parameters</span>
-<span class="sd">    ----------------</span>
 <span class="sd">    verbose : bool, optional</span>
 <span class="sd">        Print progress information. Default True.</span>
 <span class="sd">        </span>
@@ -2321,8 +2342,10 @@
 <span class="sd">        A dictionary containing the data from the simulation checkpoint files.</span>
 <span class="sd">        dict.keys() = [&#39;it&#39;, &#39;t&#39;, var[0], var[1], ...]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">it</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">it</span><span class="p">)))</span>
     <span class="n">var</span> <span class="o">=</span> <span class="n">transform_vars_aurel_to_ET</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+    <span class="n">it</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]))))</span>
+    <span class="n">restart</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;restart&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">rl</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rl&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">verbose</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
     <span class="n">veryverbose</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;veryverbose&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="n">veryextraverbose</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;veryextraverbose&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>

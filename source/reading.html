@@ -49,12 +49,13 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="advice.html">Development version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advice.html#working-on-an-hpc">Working on an HPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_sections.html">Key Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_sections.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_sections.html#getting-started">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_sections.html#citation">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#citation">Citation</a></li>
-</ul>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Reporting Issues</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#license">License</a></li>
@@ -158,9 +159,10 @@ All other functions are auxiliary utilities for Einstein Toolkit data handling.<
 <blockquote>
 <div><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SIMLOC=&quot;/path/to/simulations/&quot;</span></code></p>
 </div></blockquote>
-<p>For multiple simulation locations, use colon separation:</p>
+<p>For multiple simulation locations, use colon separation on Unix/Mac or semicolon on Windows:</p>
 <blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SIMLOC=&quot;/path1:/path2:/path3&quot;</span></code></p>
+<div><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SIMLOC=&quot;/path1:/path2:/path3&quot;</span></code>  # Unix/Mac</p>
+<p><code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">SIMLOC=&quot;C:\path1;C:\path2;C:\path3&quot;</span></code>  # Windows</p>
 </div></blockquote>
 </section>
 <dl class="py function">
@@ -405,9 +407,10 @@ Conflicting parameter names include thorn prefix.</p>
 <blockquote>
 <div><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SIMLOC=&quot;/path/to/simulations&quot;</span></code></p>
 </div></blockquote>
-<p>For multiple locations:</p>
+<p>For multiple locations (use colon on Unix/Mac, semicolon on Windows):</p>
 <blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SIMLOC=&quot;/path1:/path2:/path3&quot;</span></code></p>
+<div><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SIMLOC=&quot;/path1:/path2:/path3&quot;</span></code>  # Unix/Mac</p>
+<p><code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">SIMLOC=&quot;C:\path1;C:\path2;C:\path3&quot;</span></code>  # Windows</p>
 </div></blockquote>
 </dd></dl>
 
@@ -485,7 +488,7 @@ Otherwise returns dictionary with parsed components:</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.reading.read_ET_checkpoints">
-<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_ET_checkpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">it</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_ET_checkpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_ET_checkpoints" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">aurel.reading.</span></span><span class="sig-name descname"><span class="pre">read_ET_checkpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/reading.html#read_ET_checkpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.reading.read_ET_checkpoints" title="Link to this definition"></a></dt>
 <dd><p>Read the data from Einstein Toolkit simulation checkpoint files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
