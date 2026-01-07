@@ -134,7 +134,7 @@ functions to calculate your own estimates). See the [time evolution example](htt
 If you use aurel in your work, please cite:
 
 <details>
-<summary style="cursor: pointer; padding: 10px; border: 1px solid; border-radius: 5px; display: list-item; margin: 5px 0; font-weight: bold;"><b>Munoz, R. L. (2025). Aurel: A Python package for automatic relativistic calculations. <i>GitHub</i>. <a href="https://github.com/robynlm/aurel">https://github.com/robynlm/aurel</a></b></summary>
+<summary style="cursor: pointer; padding: 15px; border: 1px solid rgba(128, 128, 128, 0.3); border-radius: 5px; margin: 5px 0; font-weight: bold; font-size: 1.1em;"><b>Munoz, R. L. (2025). Aurel: A Python package for automatic relativistic calculations. <i>GitHub</i>. <a href="https://github.com/robynlm/aurel">https://github.com/robynlm/aurel</a></b></summary>
 
 ```bibtex
 @misc{aurel2025,
@@ -152,7 +152,7 @@ If you use aurel in your work, please cite:
 This code is not published yet, so to add to citation count please also include:
 
 <details>
-<summary style="cursor: pointer; padding: 10px; border: 1px solid; border-radius: 5px; display: list-item; margin: 5px 0; font-weight: bold;"><b>Munoz, R. L., & Bruni, M. (2023). EBWeyl: a Code to Invariantly Characterize Numerical Spacetimes. <i>Classical and Quantum Gravity</i>, 40(13), 135010. <a href="https://doi.org/10.1088/1361-6382/acd6cf">https://doi.org/10.1088/1361-6382/acd6cf</a></b></summary>
+<summary style="cursor: pointer; padding: 15px; border: 1px solid rgba(128, 128, 128, 0.3); border-radius: 5px; margin: 5px 0; font-weight: bold; font-size: 1.1em;"><b>Munoz, R. L., & Bruni, M. (2023). EBWeyl: a Code to Invariantly Characterize Numerical Spacetimes. <i>Classical and Quantum Gravity</i>, 40(13), 135010. <a href="https://doi.org/10.1088/1361-6382/acd6cf">https://doi.org/10.1088/1361-6382/acd6cf</a></b></summary>
 
 ```bibtex
 @article{R.L.Munoz_M.Bruni_2023,
