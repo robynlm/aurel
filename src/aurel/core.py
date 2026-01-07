@@ -494,7 +494,19 @@ class AurelCore():
         if self.verbose:
             if is_notebook:
                 if self.fancy_print:
-                    display(Latex(message))
+                    try:
+                        from IPython.display import display, Latex
+                        display(Latex(message))
+                    except ImportError:
+                        # Fall back to plain print if IPython not available
+                        warnings.warn(
+                            "IPython is not available. Disabling fancy_print and falling back to plain text output. "
+                            "Install IPython with 'pip install ipython' to enable fancy formatting.",
+                            ImportWarning,
+                            stacklevel=2
+                        )
+                        self.fancy_print = False  # Disable to avoid repeated import attempts
+                        print(message, flush=True)
                 else:
                     print(message, flush=True)
             else:
