@@ -10,12 +10,6 @@ on:
       - development
       - main
 
-permissions:
-  contents: write  # Allow pushing coverage badge updates
-
-permissions:
-  contents: write  # Allow pushing coverage badge updates
-
 jobs:
   test:
     runs-on: ${{ matrix.os }}
