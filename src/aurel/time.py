@@ -8,21 +8,7 @@ import numpy as np
 from . import core
 import inspect
 import sys
-
-# Check if running in a notebook
-is_notebook = 'ipykernel' in sys.modules
-# Check if stdout is a terminal (not redirected to a file)
-is_terminal = sys.stdout.isatty() if hasattr(sys.stdout, 'isatty') else False
-disable_tqdm = not is_notebook and not is_terminal
-
-# Import appropriate tqdm version
-if is_notebook:
-    try:
-        from tqdm.notebook import tqdm
-    except ImportError:
-        from tqdm import tqdm
-else:
-    from tqdm import tqdm
+from .utils.jupyter import get_tqdm
 
 # Dictionary of available estimation functions for 3D arrays
 est_functions = {
@@ -254,13 +240,16 @@ def over_time(data, fd, vars=[], estimates=[],
                 print("Now processing remaining time steps sequentially",
                     flush=True)
             
+            # Get appropriate tqdm for environment
+            tqdm, disable_tqdm = get_tqdm()
+
             # When redirected, replace \r with \n so progress appears on new lines
             tqdm_kwargs = {} if not disable_tqdm else {
                 'file': type('', (), {
-                    'write': lambda self, s: sys.stdout.write(s.replace('\r', '\n')), 
+                    'write': lambda self, s: sys.stdout.write(s.replace('\r', '\n')),
                     'flush': lambda self: sys.stdout.flush()})()
             }
-            results = [process_single_timestep(item, fd, vars, estimates, 
+            results = [process_single_timestep(item, fd, vars, estimates,
                                                 veryverbose, scalarkeys, rel_kwargs)
                         for item in tqdm(input_data_list[1:], **tqdm_kwargs)]
             # Combine and sort the results by temporal_key key

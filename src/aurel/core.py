@@ -21,11 +21,11 @@ This module is the main event. It contains:
 """
 
 import sys
+import warnings
 import numpy as np
-from IPython.display import display, Latex
 from . import maths
 from . import numerical
-is_notebook = 'ipykernel' in sys.modules
+from .utils.jupyter import is_notebook
 
 # Descriptions for each AurelCore.data entry and function
 # assumed variables need to be listed in docs/source/source/generate_rst.py
@@ -492,7 +492,7 @@ class AurelCore():
     def myprint(self, message):
         """Print a message with a fancy format."""
         if self.verbose:
-            if is_notebook:
+            if is_notebook():
                 if self.fancy_print:
                     try:
                         from IPython.display import display, Latex
