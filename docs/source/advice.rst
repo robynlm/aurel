@@ -1,15 +1,3 @@
-.. _dev_version:
-
-Development version
--------------------
-
-Install the development version of aurel with pip:
-
-.. code-block:: bash
-
-   pip install git+https://github.com/robynlm/aurel.git@development
-
-
 Working on an HPC
 -----------------
 
@@ -32,7 +20,8 @@ Then you should be able to do:
 
    pip install aurel
    
-or the :ref:`dev_version`. 
+or the latest development version.
+
 You should be able to find the package in `myenv/lib/pythonX.X/site-packages/aurel`.
 Accompanying required packages will be installed automatically, but at this point you should also install any other python packages you typically use.
 
