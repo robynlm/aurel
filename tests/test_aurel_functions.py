@@ -26,9 +26,9 @@ class TestAurelCoreFunctions:
     
     def test_with_vacuum_flag(self):
         """Test vacuum-specific branches in Hamiltonian, Momentum_Escale, dts_Gamma_bssnok"""
-        rel_vac = aurel.AurelCore(self.fd, vaccum=True, verbose=False)
+        rel_vac = aurel.AurelCore(self.fd, vacuum=True, verbose=False)
         
-        # These functions have vaccum-specific branches
+        # These functions have vacuum-specific branches
         ham = rel_vac["Hamiltonian"]
         assert ham is not None
         
@@ -40,7 +40,7 @@ class TestAurelCoreFunctions:
     
     def test_with_matter(self):
         """Test matter-related quantities with non-zero matter fields"""
-        rel_matter = aurel.AurelCore(self.fd, vaccum=False, verbose=False)
+        rel_matter = aurel.AurelCore(self.fd, vacuum=False, verbose=False)
         
         # Set non-trivial matter fields
         rel_matter.data['rho0'] = np.ones(self.rel.data_shape)
