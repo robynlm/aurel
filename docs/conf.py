@@ -53,7 +53,8 @@ exclude_patterns = [
     '_build', 
     'Thumbs.db', 
     '.DS_Store',
-    'notebooks/docinspect.ipynb'
+    'notebooks/docinspect.ipynb',
+    'source/README.md'
 ]
 
 html_theme = 'sphinx_rtd_theme'
