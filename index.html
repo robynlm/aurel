@@ -164,7 +164,7 @@ and import the AurelCore class:</p>
 </div>
 <p>At this point you need to provide the spacetime metric, extrinsic curvature
 and matter fields, see <a class="reference internal" href="source/core.html#assumed-quantities"><span class="std std-ref">Assumed quantities</span></a>, where these would otherwise
-be assumed to correspond to Minkowski vaccum.
+be assumed to correspond to Minkowski vacuum.
 These are passed as numpy arrays to aurel in the following way:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the xx component of the spacetime metric</span>
 <span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;gxx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]))</span>

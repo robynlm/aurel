@@ -486,7 +486,7 @@
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">skey</span> <span class="o">=</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39; rl=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rl</span><span class="p">)</span>
-                    <span class="c1"># TODO: are you sure about overwritting?</span>
+                    <span class="c1"># TODO: are you sure about overwriting?</span>
                     <span class="k">if</span> <span class="n">skey</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
                         <span class="k">del</span> <span class="n">f</span><span class="p">[</span><span class="n">skey</span><span class="p">]</span>
                     <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">skey</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">it_index</span><span class="p">])</span></div>
@@ -849,7 +849,7 @@
                 <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
                     <span class="n">linerest</span> <span class="o">+=</span> <span class="s1">&#39;::&#39;</span> <span class="o">+</span> <span class="n">l</span>
             <span class="c1"># split rest of line into variable and value</span>
-            <span class="c1"># TODO: case where value goes accross multiple lines</span>
+            <span class="c1"># TODO: case where value goes across multiple lines</span>
             <span class="n">linerest</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">linerest</span><span class="p">)</span>
             <span class="n">variable</span> <span class="o">=</span> <span class="n">linerest</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">linerest</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
