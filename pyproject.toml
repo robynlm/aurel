@@ -47,6 +47,14 @@ Documentation = "https://robynlm.github.io/aurel/"
 
 [project.optional-dependencies]
 test = ["pytest", "pytest-cov"]
+docs = [
+    "sphinx>=8.0",
+    "sphinx-rtd-theme",
+    "sphinx-math-dollar",
+    "myst-nb",
+    "myst-parser",
+    "sphinx-design"
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]

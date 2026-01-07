@@ -69,11 +69,9 @@ From the root directory of the repository:
 
 - **Install in development mode with all dependencies:**
    ```bash
-   pip install -e .
-   pip install -r requirements.txt
-   pip install -r docs/requirements.txt
+   pip install -e .[test,docs]
    ```
-   The two sets of requirements distinguish dependencies needed for the package from those needed to generate the documentation.
+   This installs the package in editable mode with optional test and documentation dependencies defined in `pyproject.toml`.
 
 (check)=
 - **Check everything works**:

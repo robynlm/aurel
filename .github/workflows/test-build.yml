@@ -32,10 +32,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt
+        pip install -e .[test,docs]
         pip install build twine
-        pip install -r docs/requirements.txt
-        pip install .[test]
 
     - name: Build the package
       run: python -m build
