@@ -1,0 +1,193 @@
+######################################
+# Run Time
+######################################
+ActiveThorns = "Time"
+
+Cactus::cctk_initial_time = 1
+Cactus::cctk_final_time   = 10
+Cactus::terminate         = "time"
+
+######################################
+# Grid
+######################################
+ActiveThorns = "CartGrid3D CoordBase Slab SymBase SpaceMask CoordGauge"
+ActiveThorns = "Carpet CarpetLib CarpetInterp CarpetReduce CarpetSlab"
+
+CoordBase::domainsize = "minmax"
+CoordBase::xmin = 0.0
+CoordBase::ymin = 0.0
+CoordBase::zmin = 0.0
+CoordBase::xmax = 603.0
+CoordBase::ymax = 603.0
+CoordBase::zmax = 603.0
+CoordBase::dx = 60.3
+CoordBase::dy = 60.3
+CoordBase::dz = 60.3
+
+CoordBase::boundary_size_x_lower     = 3
+CoordBase::boundary_size_y_lower     = 3
+CoordBase::boundary_size_z_lower     = 3
+CoordBase::boundary_size_x_upper     = 3
+CoordBase::boundary_size_y_upper     = 3
+CoordBase::boundary_size_z_upper     = 3
+CoordBase::boundary_shiftout_x_lower = 1
+CoordBase::boundary_shiftout_y_lower = 1
+CoordBase::boundary_shiftout_z_lower = 1
+CoordBase::boundary_shiftout_x_upper = 1
+CoordBase::boundary_shiftout_y_upper = 1
+CoordBase::boundary_shiftout_z_upper = 1
+
+CartGrid3D::type = "coordbase"
+CartGrid3D::avoid_origin = "no"
+SpaceMask::use_mask = "yes" # turn on storage for mask, required by GRHydro
+
+Carpet::init_fill_timelevels     = "yes"
+Carpet::poison_new_timelevels    = yes
+Carpet::domain_from_coordbase    = yes
+driver::ghost_size               = 3
+Carpet::use_buffer_zones         = yes
+Carpet::prolongation_order_space = 5
+CarpetLib::poison_new_memory     = yes
+CarpetLib::max_allowed_memory_MB = 12288
+Carpet::grid_structure_filename   = "grid_structure.asc"
+Carpet::grid_coordinates_filename = "grid_coordinates.asc"
+
+ActiveThorns = "Boundary SymBase ReflectionSymmetry"
+ReflectionSymmetry::reflection_x = "yes"
+ReflectionSymmetry::reflection_y = "yes"
+ReflectionSymmetry::reflection_z = "yes"
+ReflectionSymmetry::reflection_upper_x = "yes"
+ReflectionSymmetry::reflection_upper_y = "yes"
+ReflectionSymmetry::reflection_upper_z = "yes"
+ReflectionSymmetry::avoid_origin_x = "no"
+ReflectionSymmetry::avoid_origin_y = "no"
+ReflectionSymmetry::avoid_origin_z = "no"
+ReflectionSymmetry::avoid_origin_upper_x = "no"
+ReflectionSymmetry::avoid_origin_upper_y = "no"
+ReflectionSymmetry::avoid_origin_upper_z = "no"
+
+#####################################
+# Mesh Refinement
+#####################################
+ActiveThorns = "CarpetRegrid2"
+CarpetRegrid2::verbose = yes
+CarpetRegrid2::regrid_every = 0
+Carpet::max_refinement_levels = 2
+CarpetRegrid2::num_centres = 1
+CarpetRegrid2::num_levels_1 = 2
+CarpetRegrid2::radius_1[1] = 150.75 
+
+#####################################
+# Spacetime IC
+#####################################
+ActiveThorns = "InitBase ICPertFLRW_GRH"
+ActiveThorns = "ADMBase ADMMacros ADMCoupling StaticConformal"
+
+InitBase::initial_data_setup_method = "init_some_levels"
+ADMBase::metric_type     = "physical"
+ADMBase::initial_data    = "ICPertFLRW_GRH"
+
+ADMBase::initial_lapse = "one"
+ADMBase::initial_shift = "zero"
+ADMBase::initial_dtlapse = "zero"
+ADMBase::initial_dtshift = "zero"
+
+#####################################
+# Hydrodynamics IC
+#####################################
+ActiveThorns = "HydroBase TmunuBase EOS_Omni"
+
+HydroBase::initial_hydro = "ICPertFLRW_GRH"
+HydroBase::evolution_method = "GRHydro"
+
+TmunuBase::stress_energy_storage = "yes"
+TmunuBase::stress_energy_at_RHS  = "yes"
+TmunuBase::prolongation_type     = none
+
+EOS_Omni::poly_k     = 1.e-50
+EOS_Omni::poly_gamma = 2.0
+
+######################################
+# Evolution Spacetime
+######################################
+ActiveThorns = "MoL ML_BSSN ML_BSSN_Helper CosmoLapse"
+ActiveThorns = "AEILocalInterp GenericFD LocalReduce LoopControl"
+
+MoL::ODE_Method             = "RK4"
+MoL::MoL_Intermediate_Steps = 4
+MoL::MoL_Num_Scratch_Levels = 1
+
+ADMMacros::spatial_order   = 4
+ADMBase::evolution_method  = "ML_BSSN"
+
+# for Mesh Refinement interpolation
+Carpet::prolongation_order_time = 2 
+# time interpolation order needs to be 1 less than timelevels
+ADMBase::metric_timelevels = 3
+ADMBase::lapse_timelevels  = 3
+ADMBase::shift_timelevels  = 3
+ML_BSSN::timelevels        = 3
+CosmoLapse::timelevels     = 3
+TmunuBase::timelevels      = 3
+HydroBase::timelevels      = 3
+
+#----------------------------------
+#      Gauge
+#----------------------------------
+
+ADMBase::lapse_evolution_method = "ML_BSSN"
+ADMBase::shift_evolution_method = "ML_BSSN"
+ADMBase::dtlapse_evolution_method = "ML_BSSN"
+ADMBase::dtshift_evolution_method = "ML_BSSN"
+
+######################################
+# Evolution Hydrodynamics
+######################################
+ActiveThorns = "GRHydro"
+
+GRHydro::riemann_solver        = "HLLE"
+GRHydro::GRHydro_eos_type      = "Polytype"
+GRHydro::GRHydro_eos_table     = "2D_Polytrope"
+GRHydro::recon_method          = "ppm"
+GRHydro::ppm_detect            = yes
+GRHydro::GRHydro_stencil       = 3
+GRHydro::bound                 = "none"
+GRHydro::rho_abs_min           = 1.e-30
+GRHydro::sources_spatial_order = 4
+GRHydro::GRHydro_enable_internal_excision = "false"
+
+######################################
+# Output
+######################################
+ActiveThorns = "CarpetIOBasic CarpetIOHDF5"
+IO::out_dir = $parfile
+IO::out_unchunked = "no"
+IO::out_mode = "proc"
+IO::out3D_septimefiles = "no"
+
+IOHDF5::checkpoint                  = yes
+IO::checkpoint_dir                  = $parfile
+IO::checkpoint_ID                   = yes
+IO::checkpoint_every_walltime_hours = 0.016
+IO::checkpoint_keep                 = -1
+IO::checkpoint_on_terminate         = yes
+IO::recover     = "autoprobe"
+IO::recover_dir = $parfile
+
+# print in stdout
+IOBasic::outInfo_every      = 128
+IOBasic::outInfo_reductions = "minimum maximum"
+IOBasic::outInfo_vars       = "
+       CosmoLapse::propertime
+       HydroBase::rho
+"
+
+# record box values
+IOHDF5::out_criterion = "divisor"
+IOHDF5::out_every          = 128
+IOHDF5::one_file_per_group = no
+IOHDF5::compression_level  = 1
+IOHDF5::out_vars  = "
+        ADMBase::lapse
+        ADMBase::shift
+"

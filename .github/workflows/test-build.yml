@@ -10,8 +10,11 @@ on:
       - development
       - main
 
+permissions:
+  contents: write  # Allow pushing coverage badge updates
+
 jobs:
-  test-and-update:
+  test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -21,8 +24,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
@@ -31,18 +32,62 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt
+        pip install -e .[test,docs]
         pip install build twine
-        pip install -r docs/requirements.txt
-        pip install .[test]
 
     - name: Build the package
       run: python -m build
     
-    - name: Run the tests
-      run: pytest
+    - name: Run the tests with coverage
+      run: pytest --cov=aurel --cov-report=term --cov-report=json
+    
+    - name: Upload coverage data
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-data
+        path: coverage.json
     
     - name: Build documentation
       run: |
         cd docs
         make html
+  
+  update-coverage-badge:
+    needs: test
+    runs-on: ubuntu-latest
+    if: success()
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Download coverage data
+      uses: actions/download-artifact@v4
+      with:
+        name: coverage-data
+    
+    - name: Generate coverage badge data
+      run: |
+        COVERAGE=$(python -c "import json; print(int(json.load(open('coverage.json'))['totals']['percent_covered']))")
+        COLOR="brightgreen"
+        if [ $COVERAGE -lt 80 ]; then COLOR="yellow"; fi
+        if [ $COVERAGE -lt 60 ]; then COLOR="orange"; fi
+        if [ $COVERAGE -lt 40 ]; then COLOR="red"; fi
+        mkdir -p .github/badges
+        echo "{\"schemaVersion\": 1, \"label\": \"Coverage\", \"message\": \"${COVERAGE}%\", \"color\": \"${COLOR}\"}" > .github/badges/coverage.json
+    
+    - name: Commit coverage badge data if changed
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .github/badges/coverage.json
+        if git diff --cached --quiet; then
+          echo "Coverage badge unchanged, skipping commit"
+        else
+          git commit -m "Update coverage badge data"
+          git push
+        fi

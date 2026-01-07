@@ -8,3 +8,6 @@ docs/_build/
 docs/notes.txt
 .pypirc
 mytests/
+htmlcov/
+.coverage
+.pytest_cache/

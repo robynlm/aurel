@@ -46,7 +46,15 @@ Source = "https://github.com/robynlm/aurel"
 Documentation = "https://robynlm.github.io/aurel/"
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = ["pytest", "pytest-cov"]
+docs = [
+    "sphinx>=8.0",
+    "sphinx-rtd-theme",
+    "sphinx-math-dollar",
+    "myst-nb",
+    "myst-parser",
+    "sphinx-design"
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -58,4 +66,7 @@ exclude = ["*.ipynb_checkpoints", "*.ipynb_checkpoints.*"]
 testpaths = ["tests"]
 addopts = [
     "--verbose"
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
 ]

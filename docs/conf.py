@@ -18,7 +18,7 @@ copyright = '2025, Robyn L. Munoz'
 author = 'Robyn L. Munoz'
 release = 'May 2025'
 
-# Also update docs/requirements.txt
+# Also update pyproject.toml [project.optional-dependencies.docs]
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',

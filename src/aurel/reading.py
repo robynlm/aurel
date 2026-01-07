@@ -25,9 +25,11 @@ Users must set the SIMLOC environment variable to the simulation directories:
 
     ``export SIMLOC="/path/to/simulations/"``
 
-For multiple simulation locations, use colon separation:
+For multiple simulation locations, use colon separation on Unix/Mac or semicolon on Windows:
 
-    ``export SIMLOC="/path1:/path2:/path3"``
+    ``export SIMLOC="/path1:/path2:/path3"``  # Unix/Mac
+    
+    ``set SIMLOC="C:\\path1;C:\\path2;C:\\path3"``  # Windows
 """
 
 import os
@@ -254,6 +256,8 @@ def read_aurel_data(param, **kwargs):
                         if ' rl={}'.format(rl) in key:
                             var += [key.split(' rl')[0]]
                     var = list(set(var))  # Remove duplicates
+                    # Remove 'it' - not a file variable
+                    var = [v for v in var if v != 'it']
                     
                 # Read each requested variable
                 for key in var:
@@ -353,9 +357,7 @@ def save_data(param, data, **kwargs):
     else:
         datapath = param['datapath']
         if not datapath.endswith('/'):
-            lastpart = datapath.split('/')[-1]
-            firstpart = datapath.split('/')[:-1]
-            datapath = '/'.join(firstpart) + '/'
+            lastpart = '/'
         else:
             lastpart = ''
     if not os.path.exists(datapath):
@@ -596,7 +598,12 @@ def parse_h5file(filepath):
                                                 # e.g., "123" or None
         xyz_suffix = match.group(7)             # e.g., ".xyz" or None
         
-        base_name = f"{thorn_group_with_dash}{variable_or_group_name}"
+        if (thorn_group_with_dash is not None 
+            and variable_or_group_name is not None):
+            base_name = f"{thorn_group_with_dash}{variable_or_group_name}"
+        else:
+            base_name = None
+        
         return {
             'thorn_with_dash': thorn_group_with_dash,
             'thorn': thorn_name,
@@ -662,9 +669,11 @@ def parameters(simname):
     
         ``export SIMLOC="/path/to/simulations"``
         
-    For multiple locations:
+    For multiple locations (use colon on Unix/Mac, semicolon on Windows):
     
-        ``export SIMLOC="/path1:/path2:/path3"``
+        ``export SIMLOC="/path1:/path2:/path3"``  # Unix/Mac
+        
+        ``set SIMLOC="C:\path1;C:\path2;C:\path3"``  # Windows
     """
     parameters = {
         'simname':simname,
@@ -673,16 +682,18 @@ def parameters(simname):
 
     # Looking for data
     founddata = False
-    simlocs = os.environ.get('SIMLOC', '').split(':')
+    simlocs = os.environ.get('SIMLOC', '').split(os.pathsep)
     if simlocs == ['']:
         raise ValueError(
             'Could not find environment variable SIMLOC. '
             +'Please set it to the path of your simulations.'
             +'`export SIMLOC="/path/to/simulations/"`')
+    
     for simloc in simlocs:
         param_files = sorted(glob.glob(simloc + parameters['simname'] 
                                        + '/output-*/' 
                                        + parameters['simname'] + '.par'))
+        
         if param_files:
             parampath = param_files[0]
             founddata = True
@@ -1056,7 +1067,7 @@ def iterations(param, **kwargs):
                 + '/output-{:04d}/'.format(restart)
                 + param['simname'] + '/checkpoint.chkpt.it_*.h5')
             if checkpoint_files != []:
-                if 'file_' in checkpoint_files[0]:
+                if '.file_' in checkpoint_files[0]:
                     checkpoint_files = [
                         cf for cf in checkpoint_files if '.file_0.' in cf]
                 
@@ -1921,7 +1932,7 @@ def read_ET_variables(param, var, vars_and_files, **kwargs):
     # are the chunks together in one file or one file per chunk?
     first_var = list(vars_and_files.keys())[0]
     first_file_of_first_var = vars_and_files[first_var][0]
-    if 'file_' in first_file_of_first_var:
+    if '.file_' in first_file_of_first_var:
         # one file per chunk
         cmax = np.max([parse_h5file(fp)['chunk_number'] 
                        for fp in vars_and_files[first_var]])
@@ -2000,6 +2011,15 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
     it = sorted(list(set(kwargs.get('it', [0]))))
     rl = kwargs.get('rl', 0)
     veryextraverbose = kwargs.get('veryextraverbose', False)
+
+    # Validate cmax parameter
+    if not (cmax == 'in file' or isinstance(cmax, (int, np.integer))):
+        raise TypeError(
+            f"cmax must be either 'in file' or an integer. "
+            f"Got {type(cmax).__name__}: {cmax}")
+    if isinstance(cmax, (int, np.integer)) and cmax < 0:
+        raise ValueError(
+            f"cmax must be a non-negative integer. Got {cmax}")
 
     if veryextraverbose:
         print('read_ET_group_or_var(variables, files, cmax) activated with:', 
@@ -2132,7 +2152,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
         
     return var
 
-def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
+def read_ET_checkpoints(param, var, **kwargs):
     """Read the data from Einstein Toolkit simulation checkpoint files.
     
     Parameters
@@ -2141,15 +2161,15 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
         The parameters of the simulation.
     var : list
         The variables to read from the simulation checkpoint files.
+
+    Other Parameters
+    ----------------
     it : list
         The iterations to read from the simulation checkpoint files.
     restart : int
         The restart number to read from.
     rl : int
         The refinement level to read from the simulation checkpoint files.
-
-    Other Parameters
-    ----------------
     verbose : bool, optional
         Print progress information. Default True.
         
@@ -2159,8 +2179,10 @@ def read_ET_checkpoints(param, var, it, restart, rl, **kwargs):
         A dictionary containing the data from the simulation checkpoint files.
         dict.keys() = ['it', 't', var[0], var[1], ...]
     """
-    it = sorted(list(set(it)))
     var = transform_vars_aurel_to_ET(var)
+    it = sorted(list(set(kwargs.get('it', [0]))))
+    restart = kwargs.get('restart', 0)
+    rl = kwargs.get('rl', 0)
     verbose = kwargs.get('verbose', True)
     veryverbose = kwargs.get('veryverbose', False)
     veryextraverbose = kwargs.get('veryextraverbose', False)
