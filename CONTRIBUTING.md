@@ -15,6 +15,14 @@ Before you start coding:
 - Check [existing issues](https://github.com/robynlm/aurel/issues) and [pull requests](https://github.com/robynlm/aurel/pulls) to avoid duplication
 - For major changes, [open an issue](https://github.com/robynlm/aurel/issues/new/choose) first to discuss your approach
 
+## Branch Workflow
+
+This project follows a two-branch workflow:
+- **`main`**: Stable release branch - protected and only updated via reviewed PRs from `development`
+- **`development`**: Active development branch - all contributions should target this branch
+
+**Important**: When submitting a pull request, make sure it targets the `development` branch, not `main`.
+
 **Guidelines for code contributions:**
 - Follow [PEP 8 style](https://peps.python.org/pep-0008/)
 - Write clear docstrings for functions and classes using [NumPy style](https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard)
