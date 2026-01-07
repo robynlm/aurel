@@ -18,7 +18,7 @@ copyright = '2025, Robyn L. Munoz'
 author = 'Robyn L. Munoz'
 release = 'May 2025'
 
-# Also update docs/requirements.txt
+# Also update pyproject.toml [project.optional-dependencies.docs]
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
@@ -53,7 +53,8 @@ exclude_patterns = [
     '_build', 
     'Thumbs.db', 
     '.DS_Store',
-    'notebooks/docinspect.ipynb'
+    'notebooks/docinspect.ipynb',
+    'source/README.md'
 ]
 
 html_theme = 'sphinx_rtd_theme'

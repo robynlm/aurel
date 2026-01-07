@@ -477,7 +477,7 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
             result_value = result.item()
         else:
             result_value = result
-    except:
+    except Exception:
         result_value = result
     
     # Check if result is scalar-like: Python scalar or 0-dimensional array

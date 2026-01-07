@@ -1,15 +1,3 @@
-.. _dev_version:
-
-Development version
--------------------
-
-Install the development version of aurel with pip:
-
-.. code-block:: bash
-
-   pip install git+https://github.com/robynlm/aurel.git@development
-
-
 Working on an HPC
 -----------------
 
@@ -32,7 +20,8 @@ Then you should be able to do:
 
    pip install aurel
    
-or the :ref:`dev_version`. 
+or the latest development version.
+
 You should be able to find the package in `myenv/lib/pythonX.X/site-packages/aurel`.
 Accompanying required packages will be installed automatically, but at this point you should also install any other python packages you typically use.
 
@@ -83,39 +72,3 @@ See :doc:`../notebooks/Schwarzschild_check`
 
 * Increase the grid resolution in your simulation, or reduce the grid spacing 
   for generated data.
-
-Citation
---------
-
-If you use aurel in your work, please cite it as:
-
-.. dropdown:: Munoz, R. L. (2025). Aurel: A Python package for automatic relativistic calculations. *GitHub*. https://github.com/robynlm/aurel
-
-   .. code-block:: bibtex
-
-      @misc{aurel2025,
-        title     = {Aurel: A Python package for automatic relativistic calculations},
-        author    = {Munoz, Robyn L.},
-        publisher = {GitHub},
-        year      = {2025},
-        url       = {https://github.com/robynlm/aurel}}
-
-This code is not published yet, so to add to citation count please also include:
-
-.. dropdown:: Munoz, R. L., & Bruni, M. (2023). EBWeyl: a Code to Invariantly Characterize Numerical Spacetimes. *Classical and Quantum Gravity*, 40(13), 135010. https://doi.org/10.1088/1361-6382/acd6cf
-
-   .. code-block:: bibtex
-
-      @article{R.L.Munoz_M.Bruni_2023,
-        title     = {EBWeyl: a Code to Invariantly Characterize Numerical Spacetimes},
-        author    = {Munoz, Robyn L. and Bruni, Marco},
-        journal   = {Classical and Quantum Gravity},
-        volume    = {40},
-        number    = {13},
-        pages     = {135010},
-        year      = {2023},
-        month     = {jun},
-        doi       = {10.1088/1361-6382/acd6cf},
-        archivePrefix = {arXiv},
-        eprint    = {2211.08133},
-        primaryClass = {gr-qc}}
