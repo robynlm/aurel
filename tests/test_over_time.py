@@ -826,16 +826,14 @@ class TestOverTimeCustomVarWithKwargs:
     
     def test_custom_var_with_function_kwarg(self):
         """Test custom variable with function kwarg."""
-    def test_custom_var_with_function_kwarg(self):
-        """Test custom variable with function kwarg."""
         def custom_var(rel):
             """Custom variable: apply operation to rho."""
             return rel.operation(rel['rho'])
-        
+
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[{'transformed': custom_var}], 
+            self.data.copy(),
+            self.fd,
+            vars=[{'transformed': custom_var}],
             estimates=[],
             operation=np.square,
             verbose=False
@@ -843,7 +841,7 @@ class TestOverTimeCustomVarWithKwargs:
         assert 'transformed' in result.keys()
         expected = np.square(self.data['rho'][0])
         np.testing.assert_array_almost_equal(result['transformed'][0], expected)
-        """Test custom variable with multiple kwargs of different types."""
+
     def test_custom_var_with_multiple_kwargs(self):
         """Test custom variable with multiple kwargs of different types."""
         def custom_var(rel):
@@ -875,7 +873,7 @@ class TestOverTimeCustomVarWithKwargs:
         expected = expected * 2.5
         expected = np.log(np.abs(expected) + 1e-10)
         np.testing.assert_array_almost_equal(result['complex_var'][0], expected)
-        """Test multiple custom variables each using different kwargs."""
+
     def test_multiple_custom_vars_with_different_kwargs(self):
         """Test multiple custom variables each using different kwargs."""
         def var1(rel):

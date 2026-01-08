@@ -26,6 +26,7 @@ import numpy as np
 from . import maths
 from . import numerical
 from .utils.jupyter import is_notebook
+from .utils.memory import get_size
 
 IS_NOTEBOOK = is_notebook()
 if IS_NOTEBOOK:
@@ -546,8 +547,7 @@ class AurelCore():
         regular_cleanup = (
             self.calculation_count % self.clear_cache_every_nbr_calc == 0)
 
-        total_cache_size = sum(sys.getsizeof(value) 
-                               for value in self.data.values())
+        total_cache_size = get_size(self.data)
         memory_threshold = self.memory_threshold_inGB * 1024 * 1024 * 1024
         memory_limit_exceeded = total_cache_size >= memory_threshold
         if regular_cleanup or memory_limit_exceeded:
@@ -568,7 +568,7 @@ class AurelCore():
                 # the data entry was last accessed
                 time_since_last_access = self.calculation_count - last_time
                 # Get the size of the entry
-                data_size = sys.getsizeof(self.data[key])
+                data_size = get_size(self.data[key])
                 if time_since_last_access > 1:
                     importance = self.var_importance.get(key, 1.0)
                     strain = (time_since_last_access * data_size 
@@ -589,17 +589,16 @@ class AurelCore():
                 del self.data[key], self.last_accessed[key]
             nbr_keys_removed = len(key_to_remove)
 
-            # if it's still too bog, then remove the most strain
-            total_cache_size = sum(sys.getsizeof(value) 
-                                   for value in self.data.values())
+            # if it's still too big, then remove the most strain
+            total_cache_size = get_size(self.data)
             while total_cache_size >= memory_threshold:
                 maxstrain = 0
                 for key, last_time in self.last_accessed.items():
                     time_since_last_access = self.calculation_count - last_time
                     if time_since_last_access > 1:
                         importance = self.var_importance.get(key, 1.0)
-                        strain = (time_since_last_access 
-                                * sys.getsizeof(self.data[key]) 
+                        strain = (time_since_last_access
+                                * get_size(self.data[key])
                                 * importance)
                         if strain > maxstrain:
                             maxstrain = strain
@@ -619,9 +618,9 @@ class AurelCore():
                 else:
                     # Remove the key with the maximum strain
                     if self.verbose:
-                        calc_age = (self.calculation_count 
+                        calc_age = (self.calculation_count
                                     - self.last_accessed[key_to_remove])
-                        varsize = sys.getsizeof(self.data[key_to_remove])
+                        varsize = get_size(self.data[key_to_remove])
                         self.myprint('CLEAN-UP: '+
                             f"Removing cached value for '{key_to_remove}' "
                             + f"used {calc_age} "
