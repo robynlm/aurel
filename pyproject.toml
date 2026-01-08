@@ -38,7 +38,8 @@ dependencies = [
     "ipython",
     "tqdm",
     "jupyter",
-    "ipykernel"
+    "ipykernel",
+    "pyyaml"
 ]
 
 [project.urls]

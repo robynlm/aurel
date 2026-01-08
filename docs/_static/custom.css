@@ -1,18 +1,77 @@
-/* Hide the entire type block for attributes */
+/**
+ * Custom CSS for aurel documentation
+ * Extends the Read the Docs theme with project-specific styling
+ */
+
+/* ============================================================================
+   ATTRIBUTE FIELD CLEANUP
+   ============================================================================
+   Hide the redundant "type" field list for Python attributes in the API docs.
+   This prevents duplicate type information from cluttering the documentation.
+*/
 div.rst-content dl.py.attribute .field-list {
     display: none !important;
 }
 
-/* Hide the project name text next to logo */
+/* ============================================================================
+   LOGO STYLING
+   ============================================================================
+   Configure the sidebar logo to display without the project name text overlay.
+   The logo image is sufficient branding without additional text.
+*/
+
+/* Constrain logo to prevent sidebar expansion */
 .wy-side-nav-search .icon img {
     display: inline-block !important;
 }
 
+/* Remove any auto-generated content before the logo */
 .wy-side-nav-search a.icon::before {
     content: none !important;
 }
 
+/* Hide the project name text by collapsing font size */
 .wy-side-nav-search a.icon {
     font-size: 0 !important;
     line-height: 0 !important;
+    display: block;
+}
+
+/* ============================================================================
+   COLLAPSIBLE TOCTREE CAPTIONS
+   ============================================================================
+   Make sidebar sections with captions (CONTENTS, EXAMPLES) collapsible to
+   improve navigation UX and reduce sidebar clutter. Works in conjunction
+   with custom.js which handles the toggle interaction.
+*/
+
+/* Base styling for caption elements - makes them clickable */
+.wy-menu-vertical p.caption {
+    position: relative;
+    padding-left: 1.75em;  /* Space for arrow icon plus gap */
+    cursor: pointer;       /* Indicate clickability */
+    user-select: none;     /* Prevent text selection on click */
+}
+
+/* Collapsed state: right-pointing arrow */
+.wy-menu-vertical p.caption::before {
+    content: "▶";
+    position: absolute;
+    left: 0.5em;
+    transition: transform 0.2s ease;  /* Smooth rotation animation */
+}
+
+/* Expanded state: down-pointing arrow */
+.wy-menu-vertical p.caption.expanded::before {
+    content: "▼";
+}
+
+/* Hide the child list when caption is not expanded */
+.wy-menu-vertical p.caption:not(.expanded) + ul {
+    display: none;
+}
+
+/* Ensure current page's section stays visible in navigation */
+.wy-menu-vertical li.toctree-l1.current ul {
+    display: block;
 }

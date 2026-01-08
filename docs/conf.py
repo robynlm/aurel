@@ -64,6 +64,9 @@ html_favicon = '_static/favicon.png'
 html_css_files = [
     'custom.css',
 ]
+html_js_files = [
+    'custom.js',
+]
 
 autodoc_typehints = "none"
 

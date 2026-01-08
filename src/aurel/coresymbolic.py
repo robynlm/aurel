@@ -8,21 +8,10 @@ and there are much fewer quantities available.
 
 import sympy as sp
 import numpy as np
+from .utils.descriptions import load_symbolic_descriptions
 
-symbolic_descriptions = {
-    "gdown": ("Metric tensor in the down index form.  I assume Minkowski,"
-              +" if not then please define AurelCoreSymbolic.data['gdown'] = ..."),
-    "gup": "Metric tensor in the up index form",
-    "gdet": "Determinant of the metric tensor",
-    "Gamma_udd": "Christoffel symbols in the up-down-down index form",
-    "Gamma_down": "Christoffel symbols in the down index form",
-    "Riemann_down": "Riemann curvature tensor in the down index form",
-    "Riemann_uddd": ("Riemann curvature tensor in the up-down-down-down"
-                     + " index form"),
-    "Ricci_down": "Ricci curvature tensor in the down index form",
-    "RicciS": "Ricci scalar",
-    "Einstein_down": "Einstein tensor in the down index form",
-}
+# Load symbolic descriptions from YAML file
+symbolic_descriptions = load_symbolic_descriptions()
 
 class AurelCoreSymbolic():
     """Symbolic version of AurelCore, using sympy for symbolic calculations.

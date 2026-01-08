@@ -1,96 +1,77 @@
+"""Generate RST documentation from hierarchical descriptions.yml."""
+
 import os
 import inspect
 import sys
+import yaml
+import re
+
+# Get absolute paths based on script location
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(script_dir, '../..'))
+src_dir = os.path.join(project_root, 'src')
 
 # Add the src directory to the Python path
-sys.path.insert(0, os.path.abspath('../src'))
+sys.path.insert(0, src_dir)
 import aurel.core as core
 
-# Directory to save the generated .rst files
-output_dir = "."
+# File paths
+descriptions_file = os.path.join(src_dir, 'aurel/data/descriptions.yml')
+output_file = os.path.join(script_dir, 'core.rst')
 
-# Ensure the output directory exists
-os.makedirs(output_dir, exist_ok=True)
+# Load hierarchical structure from descriptions.yml
+with open(descriptions_file, 'r') as f:
+    categories = yaml.safe_load(f)
 
-# File to write the documentation
-output_file = os.path.join(output_dir, "source/core.rst")
-
-gamma = ['gtt', 'gtx', 'gty', 'gtz', 'gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz', 
-         'gammadown3', 'gammaup3', 
-         'dtgammaup3', 
-         'gammadet',  
-         'gammadown4', 'gammaup4']
-metric_bssnok = ['gammadown3_bssnok', 'dtgammadown3_bssnok',
-                 'gammaup3_bssnok', 'psi_bssnok', 'dtphi_bssnok', 'phi_bssnok']
-extcurv = ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz', 
-           'Kdown3', 'Kup3', 'Ktrace', 'dtKtrace',
-           'Adown3', 'Aup3', 'A2']
-extcurv_bssnok = ['A2_bssnok',
-           'Adown3_bssnok', 'dtAdown3_bssnok', 'Aup3_bssnok']
-lapse = ['alpha', 'dtalpha', 'DDalpha']
-shift = ['betax', 'betay', 'betaz',
-         'dtbetax', 'dtbetay', 'dtbetaz',
-         'betaup3', 'dtbetaup3', 'betadown3', 'betamag']
-time = ['dttau']
-enne = ['nup4', 'ndown4']
-gee = ['gdown4', 'gup4', 'gdet']
-nullrayexp = ['null_ray_exp_out', 'null_ray_exp_in']
-matter = ['rho0', 'press', 'eps', 'rho', 'enthalpy']
-vel = ['w_lorentz', 'velx', 'vely', 'velz', 
-       'velup3', 'velup4', 'veldown3', 'veldown4', 
-       'uup0', 'uup3', 'uup4', 
-       'udown3', 'udown4', 'hdown4', 'hmixed4', 'hup4', 'hdet']
-est = ['Tdown4', 'Tup4', 'Ttrace']
-fluid = ['rho_n', 'fluxup3_n', 'fluxdown3_n', 'angmomup3_n', 
-         'angmomdown3_n', 'Stressup3_n', 
-         'Stressdown3_n', 'Stresstrace_n', 'press_n', 
-         'anisotropic_press_down3_n', 'rho_n_fromHam', 'fluxup3_n_fromMom']
-conserv = ['conserved_D', 'conserved_E', 'conserved_Sdown4', 
-           'conserved_Sdown3', 'conserved_Sup4', 
-           'conserved_Sup3', 'dtconserved']
-kinema = ['st_covd_udown4', 'accelerationdown4', 'accelerationup4', 
-          's_covd_udown4', 'thetadown4', 'theta', 'sheardown4', 'shear2',
-          'omegadown4', 'omega2']
-s_curv = ['s_RicciS_u', 's_Gamma_udd3', 's_Riemann_uddd3', 
-          's_Riemann_down3', 's_Ricci_down3', 's_RicciS']
-st_curv = ['st_Gamma_udd4', 'st_Riemann_uddd4',
-    'st_Riemann_down4', 'st_Riemann_uudd4',
-    'st_Ricci_down4', 'st_Ricci_down3',
-    'st_RicciS', 'Einsteindown4', 'Kretschmann']
-curv_bssnok = ['s_Gamma_udd3_bssnok', 
-          's_Gamma_bssnok', 'dts_Gamma_bssnok', 
-          's_Ricci_down3_bssnok', 's_RicciS_bssnok',
-          's_Ricci_down3_phi']
-constraints = ['Hamiltonian', 'Hamiltonian_Escale', 'Hamiltonian_norm',
-    'Momentumx', 'Momentumy', 'Momentumz',
-    'Momentumdownx', 'Momentumdowny', 'Momentumdownz',
-    'Momentumup3', 'Momentumdown3', 'Momentum_Escale',
-    'Momentumx_norm', 'Momentumy_norm', 'Momentumz_norm',
-    'Momentumdownx_norm', 'Momentumdowny_norm', 'Momentumdownz_norm']
-gravimag = ['st_Weyl_down4', 'Weyl_Psi', 'Psi4_lm', 'Weyl_invariants',
-    'eweyl_u_down4', 'eweyl_n_down3', 'bweyl_u_down4',
-    'bweyl_n_down3']
+# Keep track of processed variables
 varsdone = []
 
+# Extract assumed variables by looking for assumption messages
 assumed = []
 for key in core.descriptions:
     if 'assume' in core.descriptions[key].lower():
         assumed += [key]
 
-def print_subsec(title, subsecvars, allfunctions, varsdone):
-    if title != "":
-        f.write(title+"\n")
-        f.write("-"*len(title)+"\n\n")
-    for name in list(core.descriptions.keys()):
-        if ((name in allfunctions) 
-            and (name in subsecvars) 
-            and (name not in varsdone)):
-            # Add a reference label that matches what Sphinx expects for the class method
-            f.write(f".. _aurel.core.AurelCore.{name}:\n\n")
-            # Link directly to the source code in _modules
-            f.write(f"`{name} <../_modules/aurel/core.html#AurelCore.{name}>`_: {core.descriptions[name]}\n\n")
-            varsdone.append(name)
-    return varsdone
+# 
+allfunctions = []
+for name, func in inspect.getmembers(core.AurelCore, inspect.isfunction):
+    allfunctions.append(name)
+
+# Process categories hierarchy
+def process_category(f, category_name, category_data, varsdone, level=0):
+    """Process a category and write to file."""
+    
+    f.write(category_name + "\n")
+
+    # Determine heading level
+    if level == 0:
+        underline = "=" * len(category_name)
+    elif level == 1:
+        underline = "-" * len(category_name)
+    else:
+        underline = "^" * len(category_name)
+    f.write(underline + "\n\n")
+    
+    if isinstance(category_data, dict):
+        for subcat_name, subcat_data in category_data.items():
+            # Skip metadata fields
+            if subcat_name in ('category', 'subcategory', 'note'):
+                continue
+            
+            # Check if this is a variable (has string description) or subcategory
+            if isinstance(subcat_data, str):
+                # It's a variable
+                if ((subcat_name in core.descriptions) and 
+                    (subcat_name not in varsdone) and
+                    (subcat_name in allfunctions)):
+                    # Add a reference label that matches what Sphinx expects for the class method
+                    f.write(f".. _aurel.core.AurelCore.{subcat_name}:\n\n")
+                    # Link directly to the source code in _modules
+                    f.write(f"`{subcat_name} <../_modules/aurel/core.html#AurelCore.{subcat_name}>`_: {core.descriptions[subcat_name]}\n\n")
+                    varsdone.append(subcat_name)
+            else:
+                # It's a subcategory
+                process_category(f, subcat_name, subcat_data, varsdone, level=level + 1)
 
 # Start writing the .rst file
 with open(output_file, "w") as f:
@@ -113,9 +94,8 @@ with open(output_file, "w") as f:
     # Add a section for functions listed in `descriptions`
     f.write("descriptions\n")
     f.write("************\n\n")
-    allfunctions = []
-    for name, func in inspect.getmembers(core.AurelCore, inspect.isfunction):
-        allfunctions.append(name)
+
+
 
     f.write(".. _assumed_quantities:\n\n")
     f.write("Assumed quantities\n")
@@ -145,45 +125,11 @@ with open(output_file, "w") as f:
             f"Missing variables: {', '.join(sorted(missing))}\n"
             f"Please update the assumed quantities list in docs/source/generate_rst.py"
         )
-
-    f.write("Metric quantities\n")
-    f.write("=================\n\n")
-    print_subsec("Lapse", lapse, allfunctions, varsdone)
-    print_subsec("Shift", shift, allfunctions, varsdone)
-    print_subsec("Timelike normal vector", enne, allfunctions, varsdone)
-    print_subsec("Spatial metric", gamma, allfunctions, varsdone)
-    print_subsec("Spacetime metric", gee, allfunctions, varsdone)
-    print_subsec("BSSNOK metric", metric_bssnok, allfunctions, varsdone)
-    print_subsec("Extrinsic curvature", extcurv, allfunctions, varsdone)
-    print_subsec("BSSNOK extrinsic curvature", extcurv_bssnok, allfunctions, varsdone)
-    print_subsec("Proper time", time, allfunctions, varsdone)
-
-    f.write("Matter quantities\n")
-    f.write("=================\n\n")
-    f.write(r"Eulerian observer follows $n^\mu$"+"\n\n")
-    f.write(r"Lagrangian observer follows $u^\mu$"+"\n\n")
-    print_subsec("Lagrangian matter variables", matter, allfunctions, varsdone)
-    print_subsec("Fluid velocity", vel, allfunctions, varsdone)
-    print_subsec("Energy-stress tensor", est, allfunctions, varsdone)
-    print_subsec("Eulerian matter variables", fluid, allfunctions, varsdone)
-    print_subsec("Conserved variables", conserv, allfunctions, varsdone)
-    print_subsec("Kinematic variables", kinema, allfunctions, varsdone)
-
-    f.write("Curvature quantities\n")
-    f.write("====================\n\n")
-    print_subsec("Spatial curvature", s_curv, allfunctions, varsdone)
-    print_subsec("Spacetime curvature", st_curv, allfunctions, varsdone)
-    print_subsec("BSSNOK curvature", curv_bssnok, allfunctions, varsdone)
-    print_subsec("Weyl decomposition", gravimag, allfunctions, varsdone)
-
-    f.write("Null ray expansion\n")
-    f.write("==================\n\n")
-    print_subsec("", nullrayexp, allfunctions, varsdone)
-
-    f.write("Constraints\n")
-    f.write("===========\n\n")
-    print_subsec("", constraints, allfunctions, varsdone)
-
+    
+    # Process all top-level categories
+    for cat_name, cat_data in categories.items():
+        process_category(f, cat_name, cat_data, varsdone)
+    
     if len(varsdone) != len(core.descriptions):
         missing = set(core.descriptions.keys()) - set(varsdone)
         raise RuntimeError(
@@ -191,7 +137,7 @@ with open(output_file, "w") as f:
             f"Missing variables: {', '.join(sorted(missing))}\n"
             f"Please update the categorization in docs/source/generate_rst.py"
         )
-
+    
     # Add a section for other functions (AurelCore members that aren't in descriptions)
     f.write("AurelCore Methods\n")
     f.write("*****************\n\n")

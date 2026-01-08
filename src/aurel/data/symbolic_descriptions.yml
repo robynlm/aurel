@@ -1,0 +1,14 @@
+# ==============================================================================
+# AurelCoreSymbolic VARIABLE DESCRIPTIONS WITH CATEGORIES
+# ==============================================================================
+
+gdown: Metric tensor in the down index form.  I assume Minkowski, if not then please define AurelCoreSymbolic.data['gdown'] = ...
+gup: Metric tensor in the up index form
+gdet: Determinant of the metric tensor
+Gamma_udd: Christoffel symbols in the up-down-down index form
+Gamma_down: Christoffel symbols in the down index form
+Riemann_down: Riemann curvature tensor in the down index form
+Riemann_uddd: Riemann curvature tensor in the up-down-down-down index form
+Ricci_down: Ricci curvature tensor in the down index form
+RicciS: Ricci scalar
+Einstein_down: Einstein tensor in the down index form
