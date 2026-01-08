@@ -9,6 +9,9 @@ on:
     branches:
       - development
       - main
+      
+permissions:
+  contents: write  # Allow pushing coverage badge updates
 
 jobs:
   test:
