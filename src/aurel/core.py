@@ -27,6 +27,16 @@ from . import maths
 from . import numerical
 from .utils.jupyter import is_notebook
 
+IS_NOTEBOOK = is_notebook()
+if IS_NOTEBOOK:
+    try:
+        from IPython.display import display, Latex
+        HAS_IPYTHON_DISPLAY = True
+    except ImportError:
+        HAS_IPYTHON_DISPLAY = False
+else:
+    HAS_IPYTHON_DISPLAY = False
+
 # Descriptions for each AurelCore.data entry and function
 # assumed variables need to be listed in docs/source/source/generate_rst.py
 def assumption(keyname, assumption):
@@ -440,6 +450,16 @@ class AurelCore():
         # Kwargs or use defaults
         self.verbose = kwargs.get('verbose', True)
         self.fancy_print = kwargs.get('fancy_print', True)
+        if self.fancy_print and IS_NOTEBOOK and not HAS_IPYTHON_DISPLAY:
+            warnings.warn(
+                "IPython.display is not available. Disabling fancy_print and "
+                "falling back to plain text output. Install IPython with "
+                "'pip install ipython' to enable fancy formatting.",
+                ImportWarning,
+                stacklevel=2
+            )
+            self.fancy_print = False
+
         self.clear_cache_every_nbr_calc = kwargs.get(
             'clear_cache_every_nbr_calc', 20)
         self.memory_threshold_inGB = kwargs.get(
@@ -492,23 +512,8 @@ class AurelCore():
     def myprint(self, message):
         """Print a message with a fancy format."""
         if self.verbose:
-            if is_notebook():
-                if self.fancy_print:
-                    try:
-                        from IPython.display import display, Latex
-                        display(Latex(message))
-                    except ImportError:
-                        # Fall back to plain print if IPython not available
-                        warnings.warn(
-                            "IPython is not available. Disabling fancy_print and falling back to plain text output. "
-                            "Install IPython with 'pip install ipython' to enable fancy formatting.",
-                            ImportWarning,
-                            stacklevel=2
-                        )
-                        self.fancy_print = False  # Disable to avoid repeated import attempts
-                        print(message, flush=True)
-                else:
-                    print(message, flush=True)
+            if self.fancy_print and HAS_IPYTHON_DISPLAY:
+                display(Latex(message))
             else:
                 print(message, flush=True)
 
