@@ -21,11 +21,21 @@ This module is the main event. It contains:
 """
 
 import sys
+import warnings
 import numpy as np
-from IPython.display import display, Latex
 from . import maths
 from . import numerical
-is_notebook = 'ipykernel' in sys.modules
+from .utils.jupyter import is_notebook
+
+IS_NOTEBOOK = is_notebook()
+if IS_NOTEBOOK:
+    try:
+        from IPython.display import display, Latex
+        HAS_IPYTHON_DISPLAY = True
+    except ImportError:
+        HAS_IPYTHON_DISPLAY = False
+else:
+    HAS_IPYTHON_DISPLAY = False
 
 # Descriptions for each AurelCore.data entry and function
 # assumed variables need to be listed in docs/source/source/generate_rst.py
@@ -440,6 +450,16 @@ class AurelCore():
         # Kwargs or use defaults
         self.verbose = kwargs.get('verbose', True)
         self.fancy_print = kwargs.get('fancy_print', True)
+        if self.fancy_print and IS_NOTEBOOK and not HAS_IPYTHON_DISPLAY:
+            warnings.warn(
+                "IPython.display is not available. Disabling fancy_print and "
+                "falling back to plain text output. Install IPython with "
+                "'pip install ipython' to enable fancy formatting.",
+                ImportWarning,
+                stacklevel=2
+            )
+            self.fancy_print = False
+
         self.clear_cache_every_nbr_calc = kwargs.get(
             'clear_cache_every_nbr_calc', 20)
         self.memory_threshold_inGB = kwargs.get(
@@ -492,11 +512,8 @@ class AurelCore():
     def myprint(self, message):
         """Print a message with a fancy format."""
         if self.verbose:
-            if is_notebook:
-                if self.fancy_print:
-                    display(Latex(message))
-                else:
-                    print(message, flush=True)
+            if self.fancy_print and HAS_IPYTHON_DISPLAY:
+                display(Latex(message))
             else:
                 print(message, flush=True)
 
