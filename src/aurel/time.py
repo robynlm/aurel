@@ -9,6 +9,18 @@ from . import core
 import inspect
 import sys
 
+# Get appropriate tqdm for environment
+IS_TERMINAL = sys.stdout.isatty() if hasattr(sys.stdout, 'isatty') else False
+DISABLE_TQDM = not core.IS_NOTEBOOK and not IS_TERMINAL
+
+if core.IS_NOTEBOOK:
+    try:
+        from tqdm.notebook import tqdm
+    except ImportError:
+        from tqdm import tqdm
+else:
+    from tqdm import tqdm
+
 # Dictionary of available estimation functions for 3D arrays
 est_functions = {
     'max': np.max,
@@ -239,20 +251,8 @@ def over_time(data, fd, vars=[], estimates=[],
                 print("Now processing remaining time steps sequentially",
                     flush=True)
             
-            # Get appropriate tqdm for environment
-            is_terminal = sys.stdout.isatty() if hasattr(sys.stdout, 'isatty') else False
-            disable_tqdm = not core.IS_NOTEBOOK and not is_terminal
-
-            if core.IS_NOTEBOOK:
-                try:
-                    from tqdm.notebook import tqdm
-                except ImportError:
-                    from tqdm import tqdm
-            else:
-                from tqdm import tqdm
-
             # When redirected, replace \r with \n so progress appears on new lines
-            tqdm_kwargs = {} if not disable_tqdm else {
+            tqdm_kwargs = {} if not DISABLE_TQDM else {
                 'file': type('', (), {
                     'write': lambda self, s: sys.stdout.write(s.replace('\r', '\n')),
                     'flush': lambda self: sys.stdout.flush()})()
