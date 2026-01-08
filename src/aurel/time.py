@@ -8,7 +8,6 @@ import numpy as np
 from . import core
 import inspect
 import sys
-from .utils.jupyter import get_tqdm
 
 # Dictionary of available estimation functions for 3D arrays
 est_functions = {
@@ -241,7 +240,16 @@ def over_time(data, fd, vars=[], estimates=[],
                     flush=True)
             
             # Get appropriate tqdm for environment
-            tqdm, disable_tqdm = get_tqdm()
+            is_terminal = sys.stdout.isatty() if hasattr(sys.stdout, 'isatty') else False
+            disable_tqdm = not core.IS_NOTEBOOK and not is_terminal
+
+            if core.IS_NOTEBOOK:
+                try:
+                    from tqdm.notebook import tqdm
+                except ImportError:
+                    from tqdm import tqdm
+            else:
+                from tqdm import tqdm
 
             # When redirected, replace \r with \n so progress appears on new lines
             tqdm_kwargs = {} if not disable_tqdm else {
