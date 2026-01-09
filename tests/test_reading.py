@@ -4,13 +4,13 @@ Tests for the reading module.
 These tests use real Einstein Toolkit simulation data stored in tests/fixtures/.
 """
 
-import numpy as np
-import pytest
 import os
 from pathlib import Path
 
-import aurel.reading as reading
+import numpy as np
+import pytest
 
+import aurel.reading as reading
 
 # =============================================================================
 #                               Fixtures

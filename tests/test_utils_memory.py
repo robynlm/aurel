@@ -1,8 +1,8 @@
 """Tests for memory utility functions."""
 
 import numpy as np
-import pytest
-from aurel.utils.memory import get_size, format_size
+
+from aurel.utils.memory import format_size, get_size
 
 
 class TestGetSize:

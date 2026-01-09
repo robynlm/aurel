@@ -6,6 +6,7 @@ See https://arxiv.org/pdf/0904.4184
 
 import numpy as np
 import sympy as sp
+
 from .. import maths
 
 kappa = 8 * np.pi # Einstein's gravitational constant

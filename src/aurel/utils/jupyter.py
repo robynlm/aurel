@@ -1,6 +1,5 @@
 """Jupyter notebook detection and related utilities."""
 
-import sys
 
 
 def is_notebook():

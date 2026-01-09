@@ -1,6 +1,7 @@
 """Tests for the aurel.time.over_time function with various configurations."""
 import numpy as np
 import pytest
+
 import aurel
 from aurel.solutions import EdS as sol
 

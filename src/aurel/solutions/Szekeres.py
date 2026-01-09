@@ -3,8 +3,9 @@ which is perturbed solution of the flat dust FLRW + LCDM spacetime.
 See section 3.1 of 2211.08133"""
 
 import numpy as np
-import sympy as sp
 import scipy.special as sc
+import sympy as sp
+
 from . import LCDM
 
 Amp = 1000 # Amplitude of the perturbation

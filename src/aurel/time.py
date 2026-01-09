@@ -4,10 +4,12 @@ Variable calculation and scalar estimation over time for the Aurel package.
 This module provides a function to calculate variables over time series data
 and applying statistical estimation functions to 3D arrays.
 """
-import numpy as np
-from . import core
 import inspect
 import sys
+
+import numpy as np
+
+from . import core
 
 # Get appropriate tqdm for environment
 IS_TERMINAL = sys.stdout.isatty() if hasattr(sys.stdout, 'isatty') else False

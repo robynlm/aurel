@@ -1,7 +1,9 @@
-import aurel
+import numpy as np
 import pytest
 import sympy as sp
-import numpy as np
+
+import aurel
+
 
 class TestAurelCoreFunctions:
     """Test aurel functions execute"""

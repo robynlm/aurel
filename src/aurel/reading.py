@@ -32,13 +32,14 @@ For multiple simulation locations, use colon separation on Unix/Mac or semicolon
     ``set SIMLOC="C:\\path1;C:\\path2;C:\\path3"``  # Windows
 """
 
-import os
-import numpy as np
-import glob
-import h5py
-import re
 import contextlib
+import glob
 import json
+import os
+import re
+
+import h5py
+import numpy as np
 
 aurel_tensor_to_scalar = {
     'gammadown3': ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],

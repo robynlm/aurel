@@ -22,17 +22,18 @@ This module is the main event. It contains:
 
 import sys
 import warnings
+
 import numpy as np
-from . import maths
-from . import numerical
+
+from . import maths, numerical
+from .utils.descriptions import load_descriptions
 from .utils.jupyter import is_notebook
 from .utils.memory import get_size
-from .utils.descriptions import load_descriptions
 
 IS_NOTEBOOK = is_notebook()
 if IS_NOTEBOOK:
     try:
-        from IPython.display import display, Latex
+        from IPython.display import Latex, display
         HAS_IPYTHON_DISPLAY = True
     except ImportError:
         HAS_IPYTHON_DISPLAY = False

@@ -6,22 +6,21 @@ functions can be called without errors, and that they return properly shaped out
 """
 
 import numpy as np
-import sympy as sp
 import pytest
+import sympy as sp
 
 from aurel.solutions import (
+    LCDM,
     Collins_Stewart,
     Conformally_flat,
     EdS,
     Harvey_Tsoubelis,
     ICPertFLRW,
-    LCDM,
     Non_diagonal,
     Rosquist_Jantzen,
     Schwarzschild_isotropic,
-    Szekeres
+    Szekeres,
 )
-
 
 # =============================================================================
 #                           Test Grid Setup

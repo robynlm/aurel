@@ -5,7 +5,7 @@ These tests verify numerical methods work correctly.
 """
 
 import numpy as np
-import pytest
+
 from aurel import numerical
 
 

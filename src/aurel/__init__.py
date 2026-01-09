@@ -1,11 +1,12 @@
 __version__ = "0.9.1"
-from .coresymbolic import *
 from .core import *
+from .coresymbolic import *
 from .finitedifference import *
 from .maths import *
 from .numerical import *
 from .reading import *
 from .time import *
+
 
 def helloworld():
     """A simple function that prints a welcome message."""

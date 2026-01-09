@@ -2,7 +2,7 @@
  and: https://arxiv.org/pdf/1307.1478"""
 
 import numpy as np
-import sympy as sp
+
 
 def Rc_func(x, y, z, amp, lamb):
     """Comoving curvature perturbation"""

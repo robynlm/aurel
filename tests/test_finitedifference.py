@@ -3,6 +3,7 @@ Tests for the finitedifference module.
 """
 import numpy as np
 import pytest
+
 from aurel import finitedifference
 
 

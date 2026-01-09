@@ -7,6 +7,7 @@ This module contains numerical methods for various calculations.
 import numpy as np
 import scipy
 
+
 def dichotomy(y_wanted, function, lower_bound, upper_bound, tolerance):
     """Find the root of a function using the bisection method.
 

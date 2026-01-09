@@ -6,8 +6,9 @@ has no cache management,
 and there are much fewer quantities available.
 """
 
-import sympy as sp
 import numpy as np
+import sympy as sp
+
 from .utils.descriptions import load_symbolic_descriptions
 
 # Load symbolic descriptions from YAML file

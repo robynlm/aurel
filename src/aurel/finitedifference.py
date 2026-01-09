@@ -20,6 +20,7 @@ It contains the following classes and functions:
 """
 
 import numpy as np
+
 from . import maths
 
 ###############################################################################

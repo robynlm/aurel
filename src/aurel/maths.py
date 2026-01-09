@@ -13,6 +13,7 @@ This module contains functions for manipulating rank 2 tensors, including:
 import numpy as np
 import scipy.special as sc
 
+
 def getcomponents3(f):
     """Extract components of a rank 2 tensor with 3D indices.
 

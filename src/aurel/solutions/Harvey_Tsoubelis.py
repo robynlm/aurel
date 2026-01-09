@@ -6,6 +6,7 @@ See section 3.5 of 2211.08133"""
 import numpy as np
 import sympy as sp
 
+
 def alpha(t, x, y, z):
     """Returns the lapse function"""
     return np.ones(np.shape(x))

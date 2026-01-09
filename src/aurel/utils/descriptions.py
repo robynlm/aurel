@@ -6,9 +6,10 @@ used throughout the aurel project. Descriptions are stored in a hierarchical
 YAML file that combines categories with descriptions.
 """
 
-import re
-import yaml
 import os
+import re
+
+import yaml
 
 
 def _assumption(keyname, assumption_text):

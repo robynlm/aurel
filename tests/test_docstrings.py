@@ -1,8 +1,11 @@
 """Tests for checking docstring coverage across the aurel package."""
 
 import inspect
-import aurel
+
 import pytest
+
+import aurel
+
 
 class TestDocstrings:
     """Test docstring coverage."""
