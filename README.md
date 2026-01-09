@@ -33,13 +33,17 @@ Designed with ease of use in mind, it will **au**tomatically calculate **rel**at
 
 # Installation
 
-Install aurel using [pip](https://pip.pypa.io/en/stable/installation/):
+**Requirements:** 
+- Python 3.11 or higher ([download here](https://www.python.org/downloads/))
+- pip (usually included with Python, or [install separately](https://pip.pypa.io/en/stable/installation/))
+
+Install aurel using pip (all other dependencies will be installed automatically):
 
 ```bash
 pip install aurel
 ```
 
-All required dependencies (Python 3.11+, numpy, scipy, sympy, matplotlib, h5py, ipython, jupyter, tqdm) will be installed automatically. To get the latest development version, use:
+To get the latest development version:
 
 ```bash
 pip install git+https://github.com/robynlm/aurel.git@development
