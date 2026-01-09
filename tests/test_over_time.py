@@ -29,7 +29,9 @@ class TestOverTimeFunction:
             self.data['t'].append(t)
             self.data['gammadown3'].append(sol.gammadown3(t, x, y, z))
             self.data['Kdown3'].append(sol.Kdown3(t, x, y, z))
-            self.data['rho'].append(sol.rho(t) * np.ones((self.fd.Nx, self.fd.Ny, self.fd.Nz)))
+            self.data['rho'].append(
+                sol.rho(t) * np.ones((self.fd.Nx, self.fd.Ny, self.fd.Nz))
+            )
 
     def test_no_vars_no_estimates(self):
         """Test over_time with no variables or estimates requested."""
@@ -87,7 +89,9 @@ class TestOverTimeFunction:
         )
         assert 'custom_trace' in result.keys()
         assert len(result['custom_trace']) == self.Nt
-        assert result['custom_trace'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
+        assert result['custom_trace'].shape == (
+            self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz
+        )
 
     def test_mixed_vars(self):
         """Test over_time with both built-in and custom variables."""
@@ -350,7 +354,9 @@ class TestOverTimeFunction:
         assert result['gammadet'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
         assert result['gammadet_max'].shape == (self.Nt,)
         assert result['gammadet_mean'].shape == (self.Nt,)
-        assert result['null_ray_exp_in'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
+        assert result['null_ray_exp_in'].shape == (
+            self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz
+        )
         assert result['null_ray_exp_in_max'].shape == (self.Nt,)
         assert result['null_ray_exp_in_mean'].shape == (self.Nt,)
         assert result['Ktrace'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
@@ -507,8 +513,12 @@ class TestOverTimeFunction:
         assert 'rho_corner' in result.keys()
 
         # Verify shapes
-        assert result['gamma_trace'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
-        assert result['rho_squared'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
+        assert result['gamma_trace'].shape == (
+            self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz
+        )
+        assert result['rho_squared'].shape == (
+            self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz
+        )
         assert result['gamma_trace_max'].shape == (self.Nt,)
         assert result['gamma_trace_center'].shape == (self.Nt,)
         assert result['gamma_trace_corner'].shape == (self.Nt,)
@@ -665,7 +675,9 @@ class TestOverTimeCustomVarWithKwargs:
             self.data['t'].append(t)
             self.data['gammadown3'].append(sol.gammadown3(t, x, y, z))
             self.data['Kdown3'].append(sol.Kdown3(t, x, y, z))
-            self.data['rho'].append(sol.rho(t) * np.ones((self.fd.Nx, self.fd.Ny, self.fd.Nz)))
+            self.data['rho'].append(
+                sol.rho(t) * np.ones((self.fd.Nx, self.fd.Ny, self.fd.Nz))
+            )
 
     def test_custom_var_with_int_kwarg(self):
         """Test custom variable with integer kwarg."""
@@ -719,8 +731,10 @@ class TestOverTimeCustomVarWithKwargs:
             verbose=False
         )
         assert 'diff' in result.keys()
-        expected = np.abs(sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)[0, 0] -
-                         sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)[1, 1])
+        expected = np.abs(
+            sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)[0, 0]
+            - sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)[1, 1]
+        )
         np.testing.assert_array_almost_equal(result['diff'][0], expected)
 
     def test_custom_var_with_string_kwarg(self):
@@ -897,5 +911,51 @@ class TestOverTimeCustomVarWithKwargs:
         )
         assert 'scaled' in result.keys()
         assert 'powered' in result.keys()
-        np.testing.assert_array_almost_equal(result['scaled'][0], self.data['rho'][0] * 3)
-        np.testing.assert_array_almost_equal(result['powered'][0], self.data['rho'][0] ** 2)
+        np.testing.assert_array_almost_equal(
+            result['scaled'][0], self.data['rho'][0] * 3
+        )
+        np.testing.assert_array_almost_equal(
+            result['powered'][0], self.data['rho'][0] ** 2
+        )
+
+    def test_mutable_default_arguments(self):
+        """Test that default arguments don't accumulate between calls.
+
+        This test verifies that the fix for B006 (mutable default arguments)
+        works correctly - each call to over_time should get fresh empty lists.
+        """
+        # First call with no vars or estimates (should use defaults)
+        result1 = aurel.over_time(
+            self.data.copy(),
+            self.fd,
+            verbose=False
+        )
+
+        # Second call with no vars or estimates (should also use defaults)
+        result2 = aurel.over_time(
+            self.data.copy(),
+            self.fd,
+            verbose=False
+        )
+
+        # Both should have the same keys (no accumulated state)
+        assert set(result1.keys()) == set(self.data.keys())
+        assert set(result2.keys()) == set(self.data.keys())
+
+        # Third call with a var specified
+        result3 = aurel.over_time(
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet'],
+            verbose=False
+        )
+
+        # Fourth call with no vars should not have gammadet
+        result4 = aurel.over_time(
+            self.data.copy(),
+            self.fd,
+            verbose=False
+        )
+
+        assert 'gammadet' in result3.keys()
+        assert 'gammadet' not in result4.keys()

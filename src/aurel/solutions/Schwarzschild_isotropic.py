@@ -55,7 +55,6 @@ def gdown4(t, x, y, z, analytical=False):
             [ 0, gij[2,0], gij[2,1], gij[2,2]]
         ])
     else:
-        ones = np.ones(np.shape(x))
         zeros = np.zeros(np.shape(x))
         return np.array([
             [-a2,      zeros,  zeros,        zeros],

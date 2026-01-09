@@ -41,7 +41,8 @@ def getcomponents4(f):
 
     Parameters
     ----------
-    f : (4, 4, ...) array_like or list of 10 components [tt, tx, ty, tz, xx, xy, xz, yy, yz, zz]
+    f : (4, 4, ...) array_like or list of 10 components
+        [tt, tx, ty, tz, xx, xy, xz, yy, yz, zz]
 
     Returns
     -------
@@ -202,15 +203,15 @@ def factorial(n):
     else:
         return sc.factorial(n)
 
-def sYlm(s, l, m, theta, phi):
+def sYlm(s, el, m, theta, phi):
     """Spin-weighted spherical harmonics ${}_sY_{lm}$, Eq 3.1 of https://doi.org/10.1063/1.1705135
 
     Parameters
     ----------
     s : int
         Spin weight.
-    l : int
-        Degree.
+    el : int
+        Degree (named 'el' to avoid ambiguity with '1').
     m : int
         Order.
     theta : ndarray
@@ -223,16 +224,16 @@ def sYlm(s, l, m, theta, phi):
     sYlm : ndarray
         Spin-weighted spherical harmonics on the (theta, phi) grid.
     """
-    fac = np.sqrt(factorial(l + m) * factorial(l - m) * (2*l + 1)
-                  /(factorial(l + s) * factorial(l - s) * 4 * np.pi))
+    fac = np.sqrt(factorial(el + m) * factorial(el - m) * (2*el + 1)
+                  /(factorial(el + s) * factorial(el - s) * 4 * np.pi))
     sumY = 0
     costh2 = np.cos(theta/2)
     sinth2 = np.sin(theta/2)
-    for r in range(max(m - s, 0), min(l + m, l - s) + 1):
+    for r in range(max(m - s, 0), min(el + m, el - s) + 1):
         cos = costh2**(2*r + s - m)
-        sin = sinth2**(2*l - 2*r - s + m)
-        sumY += (sc.binom(l-s, r) * sc.binom(l+s, r+s-m)
-            * ((-1)**(l - r - s)) * np.exp(1j * m * phi) * cos * sin)
+        sin = sinth2**(2*el - 2*r - s + m)
+        sumY += (sc.binom(el-s, r) * sc.binom(el+s, r+s-m)
+            * ((-1)**(el - r - s)) * np.exp(1j * m * phi) * cos * sin)
     return fac * sumY
 
 def sYlm_coefficients(s, lmax, f, theta, phi, dtheta_weight, dphi):
@@ -243,7 +244,7 @@ def sYlm_coefficients(s, lmax, f, theta, phi, dtheta_weight, dphi):
     s : int
         Spin weight.
     lmax : int
-        Maximum l in the expansion.
+        Maximum l (el) in the expansion.
     f : ndarray
         Spin-weighted function on the (theta, phi) grid.
     theta, phi : ndarray
@@ -256,14 +257,14 @@ def sYlm_coefficients(s, lmax, f, theta, phi, dtheta_weight, dphi):
 
     Returns
     -------
-    alm : dict[l,m]
+    alm : dict[el,m]
         Harmonic coefficients.
     """
     alm = {}
-    for l in range(lmax+1):
-        for m in range(-l, l+1):
-            alm[l,m] = np.sum(
-                np.conj(sYlm(s, l, m, theta, phi))
+    for el in range(lmax+1):
+        for m in range(-el, el+1):
+            alm[el,m] = np.sum(
+                np.conj(sYlm(s, el, m, theta, phi))
                 * f
                 * dtheta_weight * dphi)
     return alm
@@ -276,8 +277,8 @@ def sYlm_reconstruct(s, lmax, alm, theta, phi):
     s : int
         Spin weight.
     lmax : int
-        Maximum l in the expansion.
-    alm : dict[l,m]
+        Maximum l (el) in the expansion.
+    alm : dict[el,m]
         Harmonic coefficients.
     theta, phi : ndarray
         Angular grids.
@@ -288,7 +289,7 @@ def sYlm_reconstruct(s, lmax, alm, theta, phi):
         Reconstructed spin-weighted function on the (theta, phi) grid.
     """
     f = np.zeros_like(theta, dtype=complex)
-    for l in range(lmax + 1):
-        for m in range(-l, l + 1):
-            f += alm[l, m] * sYlm(s, l, m, theta, phi)
+    for el in range(lmax + 1):
+        for m in range(-el, el + 1):
+            f += alm[el, m] * sYlm(s, el, m, theta, phi)
     return f

@@ -65,7 +65,10 @@ class TestParsing:
     def test_parse_h5file_single_variable(self, simloc_env):
         """Test parsing single variable HDF5 filename."""
         fixtures_path = Path(simloc_env)
-        filepath = fixtures_path / "test_onefile_ungrouped/output-0000/test_onefile_ungrouped/alp.h5"
+        filepath = (
+            fixtures_path / "test_onefile_ungrouped/output-0000/"
+            "test_onefile_ungrouped/alp.h5"
+        )
         result = reading.parse_h5file(str(filepath))
         assert result is not None
         assert result['thorn_with_dash'] is None
@@ -75,12 +78,15 @@ class TestParsing:
         assert result['xyz_prefix'] is None
         assert result['chunk_number'] is None
         assert result['xyz_suffix'] is None
-        assert result['group_file'] == False
+        assert result['group_file'] is False
 
     def test_parse_h5file_grouped_variable(self, simloc_env):
         """Test parsing grouped variable HDF5 filename."""
         fixtures_path = Path(simloc_env)
-        filepath = fixtures_path / "test_onefile_grouped/output-0000/test_onefile_grouped/admbase-shift.h5"
+        filepath = (
+            fixtures_path / "test_onefile_grouped/output-0000/"
+            "test_onefile_grouped/admbase-shift.h5"
+        )
         result = reading.parse_h5file(str(filepath))
         assert result is not None
         assert result['thorn_with_dash'] == 'admbase-'
@@ -90,12 +96,15 @@ class TestParsing:
         assert result['xyz_prefix'] is None
         assert result['chunk_number'] is None
         assert result['xyz_suffix'] is None
-        assert result['group_file'] == True
+        assert result['group_file'] is True
 
     def test_parse_h5file_with_chunks(self, simloc_env):
         """Test parsing chunked HDF5 filename."""
         fixtures_path = Path(simloc_env)
-        filepath = fixtures_path / "test_proc_ungrouped/output-0000/test_proc_ungrouped/betax.file_5.h5"
+        filepath = (
+            fixtures_path / "test_proc_ungrouped/output-0000/"
+            "test_proc_ungrouped/betax.file_5.h5"
+        )
         result = reading.parse_h5file(str(filepath))
         assert result is not None
         assert result['thorn_with_dash'] is None
@@ -105,12 +114,15 @@ class TestParsing:
         assert result['xyz_prefix'] is None
         assert result['chunk_number'] == 5
         assert result['xyz_suffix'] is None
-        assert result['group_file'] == False
+        assert result['group_file'] is False
 
     def test_parse_h5file_grouped_chunked(self, simloc_env):
         """Test parsing grouped and chunked filename."""
         fixtures_path = Path(simloc_env)
-        filepath = fixtures_path / "test_proc_grouped/output-0000/test_proc_grouped/admbase-shift.file_7.h5"
+        filepath = (
+            fixtures_path / "test_proc_grouped/output-0000/"
+            "test_proc_grouped/admbase-shift.file_7.h5"
+        )
         result = reading.parse_h5file(str(filepath))
         assert result is not None
         assert result['thorn_with_dash'] == 'admbase-'
@@ -120,12 +132,15 @@ class TestParsing:
         assert result['xyz_prefix'] is None
         assert result['chunk_number'] == 7
         assert result['xyz_suffix'] is None
-        assert result['group_file'] == True
+        assert result['group_file'] is True
 
     def test_parse_h5file_checkpoint(self, simloc_env):
         """Test parsing checkpoint filename."""
         fixtures_path = Path(simloc_env)
-        filepath = fixtures_path / "test_onefile_ungrouped/output-0000/test_onefile_ungrouped/checkpoint.chkpt.it_0.h5"
+        filepath = (
+            fixtures_path / "test_onefile_ungrouped/output-0000/"
+            "test_onefile_ungrouped/checkpoint.chkpt.it_0.h5"
+        )
         result = reading.parse_h5file(str(filepath))
         assert result is not None
         assert result['iteration'] == 0
@@ -270,7 +285,9 @@ class TestParameters:
             del os.environ['SIMLOC']
 
         try:
-            with pytest.raises(ValueError, match="Could not find environment variable SIMLOC"):
+            with pytest.raises(
+                ValueError, match="Could not find environment variable SIMLOC"
+            ):
                 reading.parameters('test_onefile_ungrouped')
         finally:
             # Restore SIMLOC
@@ -426,15 +443,19 @@ class TestGetContent:
         assert cache_file.exists(), f"Cache file should exist for restart {restart}"
 
         # Check if simulation has grouped or chunked files
-        if 'grouped' in simname:
+        if '_grouped' in simname:
             # Grouped simulations should have multi-variable tuples
             has_grouped = any(len(var_tuple) > 1 for var_tuple in content.keys())
             # Note: May be True or False depending on how variables are organized
+            assert has_grouped, "Grouped simulations should have multi-variable tuples"
 
     def test_get_content_caching(self, simloc_env):
         """Test that content.txt cache file is created and used."""
         param = reading.parameters('test_onefile_ungrouped')
-        cache_file = Path(param['simpath']) / param['simname'] / 'output-0000' / param['simname'] / 'content.txt'
+        cache_file = (
+            Path(param['simpath']) / param['simname'] / 'output-0000'
+            / param['simname'] / 'content.txt'
+        )
 
         # Remove cache if it exists
         if cache_file.exists():
@@ -455,7 +476,10 @@ class TestGetContent:
     def test_get_content_overwrite(self, simloc_env):
         """Test that overwrite=True regenerates the cache."""
         param = reading.parameters('test_onefile_ungrouped')
-        cache_file = Path(param['simpath']) / param['simname'] / 'output-0000' / param['simname'] / 'content.txt'
+        cache_file = (
+            Path(param['simpath']) / param['simname'] / 'output-0000'
+            / param['simname'] / 'content.txt'
+        )
 
         # First call to ensure cache exists
         content1 = reading.get_content(param, restart=0, verbose=False)
@@ -522,7 +546,8 @@ class TestIterations:
         # Now read the catalog back with read_iterations()
         its_read = reading.read_iterations(param, verbose=False)
 
-        # Should return identical structure (except 'overall' which read_iterations doesn't parse)
+        # Should return identical structure
+        # (except 'overall' which read_iterations doesn't parse)
         assert len(its_read) > 0
 
         # Compare restart keys (excluding 'overall' which only iterations() adds)
@@ -539,8 +564,10 @@ class TestIterations:
             # For test_onefile_ungrouped, checkpoints should exist
             if restart_num in [0, 1, 2]:
                 assert isinstance(restart_data['checkpoints'], list)
-                assert len(restart_data['checkpoints']) > 0, \
-                    f"Expected checkpoints for restart {restart_num} in test_onefile_ungrouped"
+                assert len(restart_data['checkpoints']) > 0, (
+                    f"Expected checkpoints for restart {restart_num} "
+                    "in test_onefile_ungrouped"
+                )
 
             # Data should match what iterations() returned
             assert restart_data == its_available[restart_num]
@@ -553,7 +580,9 @@ class TestIterations:
         its_available_skipped = reading.iterations(
             param, skip_last=True, verbose=False)
 
-        restart_keys_skipped = [k for k in its_available_skipped.keys() if k != 'overall']
+        restart_keys_skipped = [
+            k for k in its_available_skipped.keys() if k != 'overall'
+        ]
         num_restarts_skipped = len(restart_keys_skipped)
 
         # Check catalog file was created
@@ -579,10 +608,13 @@ class TestIterations:
         test_sim_dir = tmp_path / "test_no_output"
         test_sim_dir.mkdir(parents=True)
 
-        # Create a minimal parameter file (but not in output-XXXX since we want to test no restarts)
-        # We need to create it somewhere the parameters() function can find it temporarily
+        # Create a minimal parameter file (but not in output-XXXX since we
+        # want to test no restarts)
+        # We need to create it somewhere the parameters() function can find
+        # it temporarily
         # Actually, parameters() expects the file in output-XXXX/simname.par
-        # So we create one output dir with par file, but then simulate all restarts being done
+        # So we create one output dir with par file, but then simulate all
+        # restarts being done
         test_output_dir = test_sim_dir / "output-0000"
         test_output_dir.mkdir(parents=True)
 
@@ -601,7 +633,7 @@ CoordBase::dz = 0.5
 """
         par_file.write_text(par_content)
 
-        # Create iterations.txt file showing all restarts as done (to trigger lines 909-915)
+        # Create iterations.txt file showing all restarts as done
         iterations_file = test_sim_dir / "iterations.txt"
         iterations_content = """==================
 RESTART 0
@@ -617,8 +649,11 @@ RESTART 0
             param = reading.parameters('test_no_output')
 
             # Try to run iterations with skip_last=True
-            # This should raise ImportError because all restarts are done and skip_last=True
-            with pytest.raises(ImportError, match="Nothing to process.*skip_last=False"):
+            # This should raise ImportError because all restarts are done
+            # and skip_last=True
+            with pytest.raises(
+                ImportError, match="Nothing to process.*skip_last=False"
+            ):
                 reading.iterations(param, skip_last=True, verbose=False)
         finally:
             os.environ['SIMLOC'] = original_simloc
@@ -815,7 +850,9 @@ class TestETDataReading:
         assert restart in its_available, f"Restart {restart} not found for {simname}"
 
         restart_its = its_available[restart]
-        assert len(restart_its['its available']) > 0, f"No iterations available for {simname} restart {restart}"
+        assert len(restart_its['its available']) > 0, (
+            f"No iterations available for {simname} restart {restart}"
+        )
 
         # Read first available iteration from specified restart
         itmin, itmax, dit = restart_its['rl = 0']
@@ -825,7 +862,9 @@ class TestETDataReading:
 
         assert 'it' in data
         assert len(data['it']) > 0
-        assert data['it'][0] == it_to_read[0], f"Expected iteration {it_to_read[0]}, got {data['it'][0]}"
+        assert data['it'][0] == it_to_read[0], (
+            f"Expected iteration {it_to_read[0]}, got {data['it'][0]}"
+        )
 
         # Should have some variables (more than just 'it' and 't')
         var_keys = [k for k in data.keys() if k not in ['it', 't']]
@@ -937,7 +976,11 @@ class TestETDataReading:
                     if data1[var][idx] is not None and data2[var][idx] is not None:
                         np.testing.assert_array_equal(
                             data1[var][idx], data2[var][idx],
-                            err_msg=f"Data mismatch for {var} at iteration {it_to_read[idx]}")
+                            err_msg=(
+                                f"Data mismatch for {var} at iteration "
+                                f"{it_to_read[idx]}"
+                            )
+                        )
 
         # Third call with all iterations including the last one - tests hybrid approach
         # (reading some from cache, some from ET files)
@@ -1012,8 +1055,10 @@ class TestETDataReading:
 
         # Verify iterations are in correct order
         for idx, expected_it in enumerate(its_to_read):
-            assert data['it'][idx] == expected_it, \
-                f"Iteration mismatch at index {idx}: expected {expected_it}, got {data['it'][idx]}"
+            assert data['it'][idx] == expected_it, (
+                f"Iteration mismatch at index {idx}: expected {expected_it}, "
+                f"got {data['it'][idx]}"
+            )
 
         # Check that we got variables from all restarts
         var_keys = [k for k in data.keys() if k not in ['it', 't']]
@@ -1052,8 +1097,10 @@ class TestETDataReading:
 
         # Verify checkpoint iterations are in correct order
         for idx, expected_it in enumerate(checkpoint_its):
-            assert data['it'][idx] == expected_it, \
-                f"Checkpoint iteration mismatch: expected {expected_it}, got {data['it'][idx]}"
+            assert data['it'][idx] == expected_it, (
+                f"Checkpoint iteration mismatch: expected {expected_it}, "
+                f"got {data['it'][idx]}"
+            )
 
         # Check that we got variables from checkpoints
         var_keys = [k for k in data.keys() if k not in ['it', 't']]
@@ -1120,7 +1167,8 @@ class TestIntegration:
 
         # Save in Aurel format
         param_aurel = {'datapath': str(tmp_path).replace('\\', '/') + '/'}
-        vars_to_save = [k for k in data_et.keys() if k not in ['it']][:3]  # Save a few vars
+        vars_to_save = [k for k in data_et.keys() if k not in ['it']][:3]
+        # Save a few vars
         reading.save_data(param_aurel, data_et, it=[0], vars=vars_to_save)
 
         # Read back from Aurel format

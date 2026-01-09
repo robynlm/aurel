@@ -55,7 +55,7 @@ est_functions = {
     'x1y1z1': lambda array: array[-1, -1, -1],
 }
 
-def over_time(data, fd, vars=[], estimates=[],
+def over_time(data, fd, vars=None, estimates=None,
               verbose=True, veryverbose=False, **rel_kwargs):
     """Calculate variables from the data and store them in the data dictionary.
 
@@ -113,6 +113,12 @@ def over_time(data, fd, vars=[], estimates=[],
         If `estimates` is provided, additional keys are added with format
         '{variable}_{estimation_func}'.
     """
+
+    # Initialize mutable default arguments
+    if vars is None:
+        vars = []
+    if estimates is None:
+        estimates = []
 
     # Check/define temporal key
     temporal_key = None
@@ -235,8 +241,10 @@ def over_time(data, fd, vars=[], estimates=[],
 
         # Transform dict of lists to a list of dicts
         keys = data.keys()
-        input_data_list = [dict(zip(keys, values))
-                           for values in zip(*data.values())]
+        input_data_list = [
+            dict(zip(keys, values, strict=True))
+            for values in zip(*data.values(), strict=True)
+        ]
         del data
 
         # Calculate first instance
@@ -382,7 +390,7 @@ def process_single_timestep(data, fd, vars, estimates,
             if isinstance(v, str):
                 data[v] = rel[v]
             elif isinstance(v, dict):
-                for func_name, function in v.items():
+                for func_name, _ in v.items():
                     data[func_name] = rel[func_name]
 
         # Clean up AurelCore instance to free memory
@@ -409,7 +417,7 @@ def process_single_timestep(data, fd, vars, estimates,
                     print(f"Processing estimation item: {est_item}",
                           flush=True)
                 elif isinstance(est_item, dict):
-                    for func_name, func in est_item.items():
+                    for func_name, _ in est_item.items():
                         print(f"Processing estimation item: {func_name}",
                             flush=True)
             # For each scalar key, process the estimation functions
@@ -478,7 +486,7 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
         raise ValueError(
             f"Estimation function '{func_name}' failed when called with "
             f"array of shape ({fd.Nx}, {fd.Ny}, {fd.Nz}): {e}"
-        )
+        ) from e
 
     # Check return type and shape - must be scalar-like
     try:
@@ -554,7 +562,7 @@ def validate_variable_function(func, func_name, fd,
         raise ValueError(
             f"Variable function '{func_name}' failed when called with "
             f"AurelCore instance: {e}"
-        )
+        ) from e
 
     if verbose:
         print(f"✓ Custom function '{func_name}' validated successfully")

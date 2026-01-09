@@ -134,45 +134,45 @@ class AurelCoreSymbolic:
                 [0]*(self.dim**4),
                 (self.dim, self.dim, self.dim, self.dim))
             done = np.zeros((self.dim, self.dim, self.dim, self.dim))
-            for l in range(self.dim):
+            for h in range(self.dim):
                 for i in range(self.dim):
-                    if l == i:
-                        done[l,i,:,:] = 1
+                    if h == i:
+                        done[h,i,:,:] = 1
                         pass
                     else:
                         for j in range(self.dim):
                             for k in range(self.dim):
                                 if j == k:
-                                    done[l,i,j,k] = 1
+                                    done[h,i,j,k] = 1
                                     pass
                                 else:
-                                    if not done[l,i,j,k]:
-                                        RiemannD_down[l, i, j, k] = sum(
-                                            self["gdown"][l, m]
+                                    if not done[h,i,j,k]:
+                                        RiemannD_down[h, i, j, k] = sum(
+                                            self["gdown"][h, m]
                                             * self["Riemann_uddd"][m, i, j, k]
                                             for m in range(self.dim)
                                         )
                                         if self.simplify:
-                                            Rljjk = sp.simplify(
-                                                RiemannD_down[l, i, j, k])
+                                            Rhjjk = sp.simplify(
+                                                RiemannD_down[h, i, j, k])
                                         else:
-                                            Rljjk = RiemannD_down[l, i, j, k]
-                                        RiemannD_down[l, i, j, k] = Rljjk
-                                        RiemannD_down[l, i, k, j] = - Rljjk
-                                        RiemannD_down[i, l, j, k] = - Rljjk
-                                        RiemannD_down[i, l, k, j] = Rljjk
-                                        done[l, i, j, k] = 1
-                                        done[l, i, k, j] = 1
-                                        done[i, l, j, k] = 1
-                                        done[i, l, k, j] = 1
-                                        RiemannD_down[j, k, l, i] = Rljjk
-                                        RiemannD_down[j, k, i, l] = - Rljjk
-                                        RiemannD_down[k, j, l, i] = - Rljjk
-                                        RiemannD_down[k, j, i, l] = Rljjk
-                                        done[j, k, l, i] = 1
-                                        done[j, k, i, l] = 1
-                                        done[k, j, l, i] = 1
-                                        done[k, j, i, l] = 1
+                                            Rhjjk = RiemannD_down[h, i, j, k]
+                                        RiemannD_down[h, i, j, k] = Rhjjk
+                                        RiemannD_down[h, i, k, j] = - Rhjjk
+                                        RiemannD_down[i, h, j, k] = - Rhjjk
+                                        RiemannD_down[i, h, k, j] = Rhjjk
+                                        done[h, i, j, k] = 1
+                                        done[h, i, k, j] = 1
+                                        done[i, h, j, k] = 1
+                                        done[i, h, k, j] = 1
+                                        RiemannD_down[j, k, h, i] = Rhjjk
+                                        RiemannD_down[j, k, i, h] = - Rhjjk
+                                        RiemannD_down[k, j, h, i] = - Rhjjk
+                                        RiemannD_down[k, j, i, h] = Rhjjk
+                                        done[j, k, h, i] = 1
+                                        done[j, k, i, h] = 1
+                                        done[k, j, h, i] = 1
+                                        done[k, j, i, h] = 1
         else:
             RiemannD_down = sp.MutableDenseNDimArray(
                 [0]*(self.dim**4), (self.dim, self.dim, self.dim, self.dim))
@@ -184,50 +184,50 @@ class AurelCoreSymbolic:
                         pass
                     else:
                         for k in range(self.dim):
-                            for l in range(self.dim):
-                                if k == l:
-                                    done[i,j,k,l] = 1
+                            for h in range(self.dim):
+                                if k == h:
+                                    done[i,j,k,h] = 1
                                     pass
                                 else:
-                                    if not done[i, j, k, l]:
+                                    if not done[i, j, k, h]:
                                         term1 = sp.diff(
-                                            self["Gamma_down"][i, j, l],
+                                            self["Gamma_down"][i, j, h],
                                             self.coords[k])
                                         term2 = sp.diff(
                                             self["Gamma_down"][i, j, k],
-                                            self.coords[l])
+                                            self.coords[h])
                                         term3 = sum(
                                             self["Gamma_down"][i, k, m]
-                                            *self["Gamma_udd"][m, j, l]
+                                            *self["Gamma_udd"][m, j, h]
                                             for m in range(self.dim))
                                         term4 = sum(
-                                            self["Gamma_down"][i, l, m]
+                                            self["Gamma_down"][i, h, m]
                                             *self["Gamma_udd"][m, j, k]
                                             for m in range(self.dim))
                                         if self.simplify:
-                                            Rijkl = sp.simplify(
+                                            Rijkh = sp.simplify(
                                                 sp.simplify(term1 - term2)
                                                 + sp.simplify(term3 - term4))
                                         else:
-                                            Rijkl = (term1 - term2
+                                            Rijkh = (term1 - term2
                                                      + term3 - term4)
-                                        RiemannD_down[i, j, k, l] = Rijkl
-                                        RiemannD_down[i, j, l, k] = - Rijkl
-                                        RiemannD_down[j, i, k, l] = - Rijkl
-                                        RiemannD_down[j, i, l, k] = Rijkl
-                                        done[i, j, k, l] = 1
-                                        done[i, j, l, k] = 1
-                                        done[j, i, k, l] = 1
-                                        done[j, i, l, k] = 1
+                                        RiemannD_down[i, j, k, h] = Rijkh
+                                        RiemannD_down[i, j, h, k] = - Rijkh
+                                        RiemannD_down[j, i, k, h] = - Rijkh
+                                        RiemannD_down[j, i, h, k] = Rijkh
+                                        done[i, j, k, h] = 1
+                                        done[i, j, h, k] = 1
+                                        done[j, i, k, h] = 1
+                                        done[j, i, h, k] = 1
 
-                                        RiemannD_down[k, l, i, j] = Rijkl
-                                        RiemannD_down[k, l, j, i] = - Rijkl
-                                        RiemannD_down[l, k, i, j] = - Rijkl
-                                        RiemannD_down[l, k, j, i] = Rijkl
-                                        done[k, l, i, j] = 1
-                                        done[k, l, j, i] = 1
-                                        done[l, k, i, j] = 1
-                                        done[l, k, j, i] = 1
+                                        RiemannD_down[k, h, i, j] = Rijkh
+                                        RiemannD_down[k, h, j, i] = - Rijkh
+                                        RiemannD_down[h, k, i, j] = - Rijkh
+                                        RiemannD_down[h, k, j, i] = Rijkh
+                                        done[k, h, i, j] = 1
+                                        done[k, h, j, i] = 1
+                                        done[h, k, i, j] = 1
+                                        done[h, k, j, i] = 1
         return RiemannD_down
 
     def Riemann_uddd(self):
@@ -241,33 +241,33 @@ class AurelCoreSymbolic:
                     pass
                 else:
                     for k in range(self.dim):
-                        for l in range(self.dim):
-                            if k == l:
-                                done[i,j,k,l] = 1
+                        for h in range(self.dim):
+                            if k == h:
+                                done[i,j,k,h] = 1
                                 pass
                             else:
-                                if not done[i, j, k, l]:
-                                    term1 = sp.diff(self["Gamma_udd"][i, j, l],
+                                if not done[i, j, k, h]:
+                                    term1 = sp.diff(self["Gamma_udd"][i, j, h],
                                                     self.coords[k])
                                     term2 = sp.diff(self["Gamma_udd"][i, j, k],
-                                                    self.coords[l])
+                                                    self.coords[h])
                                     term3 = sum(self["Gamma_udd"][i, k, m]
-                                                *self["Gamma_udd"][m, j, l]
+                                                *self["Gamma_udd"][m, j, h]
                                                 for m in range(self.dim))
-                                    term4 = sum(self["Gamma_udd"][i, l, m]
+                                    term4 = sum(self["Gamma_udd"][i, h, m]
                                                 *self["Gamma_udd"][m, j, k]
                                                 for m in range(self.dim))
                                     if self.simplify:
-                                        Rijkl = sp.simplify(
+                                        Rijkh = sp.simplify(
                                             sp.simplify(term1 - term2)
                                             + sp.simplify(term3 - term4))
                                     else:
-                                        Rijkl = (term1 - term2
+                                        Rijkh = (term1 - term2
                                                  + term3 - term4)
-                                    Riemann3_up[i, j, k, l] = Rijkl
-                                    Riemann3_up[i, j, l, k] = - Rijkl
-                                    done[i, j, k, l] = 1
-                                    done[i, j, l, k] = 1
+                                    Riemann3_up[i, j, k, h] = Rijkh
+                                    Riemann3_up[i, j, h, k] = - Rijkh
+                                    done[i, j, k, h] = 1
+                                    done[i, j, h, k] = 1
         return Riemann3_up
 
     def Ricci_down(self):

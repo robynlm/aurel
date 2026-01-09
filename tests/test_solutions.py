@@ -745,7 +745,8 @@ class TestAllSolutions:
         (LCDM, ['a', 'Hprop', 'rho', 'alpha']),
         (Non_diagonal, ['gammadown3', 'Kdown3', 'A', 'dzA', 'dzdzA', 'Tdown4', 'data']),
         (Rosquist_Jantzen, ['gammadown3', 'Kdown3']),  # No rho function
-        (Schwarzschild_isotropic, ['alpha', 'betaup3', 'gammadown3', 'Kdown3', 'Tdown4']),
+        (Schwarzschild_isotropic, ['alpha', 'betaup3', 'gammadown3', 'Kdown3',
+                                   'Tdown4']),
         (Szekeres, ['rho', 'press'])
     ])
     def test_solution_has_expected_functions(self, solution_module, expected_functions):

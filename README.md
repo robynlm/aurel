@@ -25,11 +25,11 @@ Designed with ease of use in mind, it will **au**tomatically calculate **rel**at
   - Symbolically ([documentation](https://robynlm.github.io/aurel/source/coresymbolic.html), [example](https://robynlm.github.io/aurel/notebooks/Example_symbolic.html))
 - **Dynamic computation and intelligent caching**: Aurel automatically calculates only what's needed and caches results, significantly improving performance for complex calculations
 - **Clear user feedback**: Progress bars and informative messages guide you through computations
+- **Time evolution support**: Tools for analyzing data across multiple time steps ([example](https://robynlm.github.io/aurel/notebooks/Example_over_time.html))
 - **Flexible data input**: Works seamlessly with numerical simulation data, analytical solutions, or custom numpy arrays
 - **Einstein Toolkit integration**: Native support for reading Carpet HDF5 outputs from [Einstein Toolkit](https://einsteintoolkit.org) simulations ([documentation](https://robynlm.github.io/aurel/source/reading.html), [example](https://robynlm.github.io/aurel/notebooks/tov_ET.html))
 - **Advanced [finite difference schemes](https://robynlm.github.io/aurel/source/finitedifference.html)**: Multiple discretization schemes for 3D spatial grids
 - **Built-in [analytical solutions](https://robynlm.github.io/aurel/source/solutions.html)**: Pre-implemented spacetimes for testing and validation ([examples](https://robynlm.github.io/aurel/notebooks/ICPertFLRW.html))
-- **Time evolution support**: Tools for analyzing data across multiple time steps ([example](https://robynlm.github.io/aurel/notebooks/Example_over_time.html))
 
 # Installation
 

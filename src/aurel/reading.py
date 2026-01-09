@@ -25,7 +25,8 @@ Users must set the SIMLOC environment variable to the simulation directories:
 
     ``export SIMLOC="/path/to/simulations/"``
 
-For multiple simulation locations, use colon separation on Unix/Mac or semicolon on Windows:
+For multiple simulation locations, use colon separation on Unix/Mac or
+semicolon on Windows:
 
     ``export SIMLOC="/path1:/path2:/path3"``  # Unix/Mac
 
@@ -137,7 +138,7 @@ def read_data(param, **kwargs):
                 ...
             }
     """
-    it = sorted(list(set(kwargs.get('it', [0]))))
+    it = sorted(set(kwargs.get('it', [0])))
     if len(it) == 0:
         raise ValueError(
             'it can not be an empty list. '
@@ -202,11 +203,10 @@ def read_aurel_data(param, **kwargs):
             }
     """
     # Extract reading parameters with defaults
-    it = sorted(list(set(kwargs.get('it', [0]))))
+    it = sorted(set(kwargs.get('it', [0])))
     rl = kwargs.get('rl', 0)
     restart = kwargs.get('restart', 0)
     var = list(set(kwargs.get('vars', [])))
-    verbose = kwargs.get('verbose', False)
     veryverbose = kwargs.get('veryverbose', False)
 
     # Determine if we should read all variables or specific ones
@@ -334,7 +334,7 @@ def save_data(param, data, **kwargs):
     - Skips variables with None values
     """
     vars = kwargs.get('vars', [])
-    it = sorted(list(set(kwargs.get('it', [0]))))
+    it = sorted(set(kwargs.get('it', [0])))
     rl = kwargs.get('rl', 0)
     restart = kwargs.get('restart', 0)
 
@@ -674,7 +674,7 @@ def parameters(simname):
 
         ``export SIMLOC="/path1:/path2:/path3"``  # Unix/Mac
 
-        ``set SIMLOC="C:\path1;C:\path2;C:\path3"``  # Windows
+        ``set SIMLOC="C:\\path1;C:\\path2;C:\\path3"``  # Windows
     """
     parameters = {
         'simname':simname,
@@ -710,8 +710,8 @@ def parameters(simname):
     # save all parameters
     with open(parampath) as f:
         lines = f.read().split('\n') # read file
-    lines = [l.split('#')[0] for l in lines] # remove comments
-    lines = [l for l in lines if l!=''] # remove empty lines
+    lines = [li.split('#')[0] for li in lines] # remove comments
+    lines = [li for li in lines if li!=''] # remove empty lines
 
     list_of_thorns = []
     for line in lines:
@@ -723,16 +723,16 @@ def parameters(simname):
             thorn = line[0]
             linerest = line[1]
             if len(line)>2:
-                for l in line[2:]:
-                    linerest += '::' + l
+                for li in line[2:]:
+                    linerest += '::' + li
             # split rest of line into variable and value
             # TODO: case where value goes across multiple lines
             linerest = re.split('=', linerest)
             variable = linerest[0]
             value = linerest[1]
             if len(linerest)>2:
-                for l in linerest[2:]:
-                    value += '='+l
+                for li in linerest[2:]:
+                    value += '='+li
             thorn = thorn.strip()
             variable = variable.strip()
             value = value.strip()
@@ -1008,7 +1008,8 @@ def iterations(param, **kwargs):
                             if varkey is not None:
                                 varkey = varkey['variable']
                                 break
-                        if verbose: print(f'Checking variable {varkey}')
+                        if verbose:
+                            print(f'Checking variable {varkey}')
 
                         # all the keys of this variable
                         fkeys = [k for k in fkeys if varkey in k]
@@ -1036,8 +1037,8 @@ def iterations(param, **kwargs):
                             if keysrl!=[]:
                                 # Check if there are chunk numbers
                                 if parse_hdf5_key(keysrl[0])['c'] is not None:
-                                    cs = list(set([parse_hdf5_key(k)['c']
-                                                for k in keysrl]))
+                                    cs = list({parse_hdf5_key(k)['c']
+                                               for k in keysrl})
                                     chosen_c = ' c=' + str(np.sort(cs)[-1])
                                 else:
                                     chosen_c = ''
@@ -1049,7 +1050,10 @@ def iterations(param, **kwargs):
 
                                 rlkey = f'rl = {rl}'
                                 if len(allits)>1:
-                                    itkey = f'it = np.arange({np.min(allits)}, {np.max(allits)}, {np.diff(allits)[0]})'
+                                    itkey = (
+                                        f'it = np.arange({np.min(allits)}, '
+                                        f'{np.max(allits)}, {np.diff(allits)[0]})'
+                                    )
                                     its_available[restart][rlkey] = [
                                         np.min(allits), np.max(allits),
                                         np.diff(allits)[0]]
@@ -1073,13 +1077,16 @@ def iterations(param, **kwargs):
             for chkfile in checkpoint_files:
                 chk_it = int(chkfile.split('checkpoint.chkpt.it_')[1].split('.')[0])
                 checkpoint_its += [chk_it]
-            checkpoint_its = sorted(list(set(checkpoint_its)))
+            checkpoint_its = sorted(set(checkpoint_its))
 
             if 'its available' not in its_available[restart].keys():
                 its_available[restart]['its available'] = [
                     np.min(checkpoint_its), np.max(checkpoint_its)]
-                saveprint(it_file, f'it = {np.min(checkpoint_its)} -> {np.max(checkpoint_its)}',
-                    verbose=verbose_file)
+                saveprint(
+                    it_file,
+                    f'it = {np.min(checkpoint_its)} -> {np.max(checkpoint_its)}',
+                    verbose=verbose_file
+                )
 
             its_available[restart]['checkpoints'] = checkpoint_its
             saveprint(it_file,
@@ -1157,36 +1164,36 @@ def read_iterations(param, **kwargs):
             lines = contents.split("\n")
             # each line is a dictionary entry
             its_available = {}
-            for l in lines:
+            for li in lines:
                 # higher level key is the restart number
-                if ' === restart ' in l:
-                    restart_nbr = int(l.split(' === restart ')[1])
+                if ' === restart ' in li:
+                    restart_nbr = int(li.split(' === restart ')[1])
                     its_available[restart_nbr] = {}
                 # lower level keys
                 # variables available
-                elif '3D variables available' in l:
-                    vars = l.split('3D variables available: [')[1].split(', ')
+                elif '3D variables available' in li:
+                    vars = li.split('3D variables available: [')[1].split(', ')
                     vars = [v.split("'")[1] for v in vars]
                     its_available[restart_nbr]['var available'] = vars
                 # iterations available (inclusive interval)
-                elif '->' in l:
+                elif '->' in li:
                     its_available[restart_nbr]['its available'] = [
-                        int(l.split(' ')[2]), int(l.split(' ')[4])]
+                        int(li.split(' ')[2]), int(li.split(' ')[4])]
                 # iterations available for said refinement level
-                elif 'rl = ' in l:
-                    rl = l.split('rl = ')[1].split(' ')[0]
+                elif 'rl = ' in li:
+                    rl = li.split('rl = ')[1].split(' ')[0]
                     rlkey = 'rl = ' + rl
-                    if 'arange' in l:
-                        it_list = [int(l.split('(')[1].split(',')[0]),
-                                   int(l.split(', ')[1]),
-                                   int(l.split(', ')[2].split(')')[0])]
+                    if 'arange' in li:
+                        it_list = [int(li.split('(')[1].split(',')[0]),
+                                   int(li.split(', ')[1]),
+                                   int(li.split(', ')[2].split(')')[0])]
                         its_available[restart_nbr][rlkey] = it_list
                     else:
-                        it_list = [int(l.split('[')[1].split(']')[0])]
+                        it_list = [int(li.split('[')[1].split(']')[0])]
                         its_available[restart_nbr][rlkey] = it_list
 
-                elif 'Checkpoints available at its' in l:
-                    chk_its = l.split('Checkpoints available at its: ')[1]
+                elif 'Checkpoints available at its' in li:
+                    chk_its = li.split('Checkpoints available at its: ')[1]
                     chk_its = chk_its.replace('[', '').replace(']', '')
                     if chk_its.strip() == '':
                         its_available[restart_nbr]['checkpoints'] = []
@@ -1324,7 +1331,10 @@ def collect_overall_iterations(its_available, verbose):
                 for iit_situation in it_situation:
                     if len(iit_situation)>1:
                         # If it's an array, print np.arange
-                        it_situation_string += f'np.arange({iit_situation[0]}, {iit_situation[1]}, {iit_situation[2]})'
+                        it_situation_string += (
+                            f'np.arange({iit_situation[0]}, {iit_situation[1]}, '
+                            f'{iit_situation[2]})'
+                        )
                     else:
                         # If it's just one then give it directly
                         it_situation_string += f'{iit_situation[0]}'
@@ -1630,7 +1640,7 @@ def read_ET_data(param, **kwargs):
     6. **Cache Update**: Saves newly-read data for future access
     """
     # reading kwargs
-    it = sorted(list(set(kwargs.get('it', [0]))))
+    it = sorted(set(kwargs.get('it', [0])))
     var = kwargs.get('vars', [])
     restart = kwargs.get('restart', -1)
     split_per_it = kwargs.get('split_per_it', True)
@@ -1913,7 +1923,7 @@ def read_ET_variables(param, var, vars_and_files, **kwargs):
         A dictionary containing the data from the simulation output files.
         dict.keys() = ['it', 't', var[0], var[1], ...]
     """
-    it = sorted(list(set(kwargs.get('it', [0]))))
+    it = sorted(set(kwargs.get('it', [0])))
     veryverbose = kwargs.get('veryverbose', False)
 
     if veryverbose:
@@ -2001,7 +2011,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
         dict.keys() = ['it', 't', var]
     """
 
-    it = sorted(list(set(kwargs.get('it', [0]))))
+    it = sorted(set(kwargs.get('it', [0])))
     rl = kwargs.get('rl', 0)
     veryextraverbose = kwargs.get('veryextraverbose', False)
 
@@ -2171,7 +2181,7 @@ def read_ET_checkpoints(param, var, **kwargs):
         dict.keys() = ['it', 't', var[0], var[1], ...]
     """
     var = transform_vars_aurel_to_ET(var)
-    it = sorted(list(set(kwargs.get('it', [0]))))
+    it = sorted(set(kwargs.get('it', [0])))
     restart = kwargs.get('restart', 0)
     rl = kwargs.get('rl', 0)
     verbose = kwargs.get('verbose', True)

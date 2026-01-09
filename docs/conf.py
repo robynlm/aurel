@@ -1,15 +1,15 @@
 import os
-import sys
 import re
 import subprocess
+import sys
 
 # Add the src directory to the Python path
 sys.path.insert(0, os.path.abspath('../src'))
-import aurel.core as core
 import aurel.time as time_module
 
 # Generate list of estimation functions for documentation
-est_functions_keys = ', '.join([f"``{key}``" for key in time_module.est_functions.keys()])
+est_functions_keys = ', '.join(
+    [f"``{key}``" for key in time_module.est_functions.keys()])
 
 # Configuration file for the Sphinx documentation builder.
 
@@ -23,7 +23,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
-    'sphinx_math_dollar', 
+    'sphinx_math_dollar',
     'sphinx.ext.mathjax',
     'myst_nb',
     'sphinx_design'
@@ -42,16 +42,16 @@ mathjax3_config = {
         "displayMath": [['$$', '$$'], ["\\[", "\\]"]],
     }
 }
-rst_prolog = """
+rst_prolog = f"""
 .. role:: raw-latex(raw)
    :format: latex html
 
-.. |est_functions_keys| replace:: {est_keys}
-""".format(est_keys=est_functions_keys)
+.. |est_functions_keys| replace:: {est_functions_keys}
+"""
 
 exclude_patterns = [
-    '_build', 
-    'Thumbs.db', 
+    '_build',
+    'Thumbs.db',
     '.DS_Store',
     'notebooks/docinspect.ipynb',
     'source/README.md'
@@ -77,11 +77,16 @@ def process_notebook_source(app, docname, source):
         content = source[0]
         brackets = r'\[\s*"([^"]*?)"\s*\]'
         # First pass: Convert display_data to stream
-        display_data_pattern = r'{\s*"data":\s*{\s*"text/latex":\s*'+brackets+r',\s*"text/plain":\s*\[\s*"<IPython\.core\.display\.Latex object>"\s*\]\s*},\s*"metadata":\s*{[^}]*},\s*"output_type":\s*"display_data"\s*}'
-        
+        display_data_pattern = (
+            r'{\s*"data":\s*{\s*"text/latex":\s*' + brackets +
+            r',\s*"text/plain":\s*\[\s*"<IPython\.core\.display\.Latex '
+            r'object>"\s*\]\s*},'
+            r'\s*"metadata":\s*{[^}]*},\s*"output_type":\s*"display_data"\s*}'
+        )
+
         def convert_to_stream(match):
             latex_content = match.group(1)
-            
+
             # Convert to stream output format
             stream_output = f'''{{
          "name": "stdout",
@@ -90,17 +95,24 @@ def process_notebook_source(app, docname, source):
           "{latex_content}"
          ]
         }}'''
-            
+
             return stream_output
-        
-        content = re.sub(display_data_pattern, convert_to_stream, content, flags=re.DOTALL)
-        # Second pass: Simple approach - just merge any two consecutive stdout streams
+
+        content = re.sub(
+            display_data_pattern, convert_to_stream, content, flags=re.DOTALL
+        )
+        # Second pass: Simple approach - just merge consecutive stdout streams
         # Much more specific pattern that only matches the text array content
         c = r'[^\[\]]*'
         nest = r'(?:\['+c+r'\]'+c+r')*'
-        brackets = r'\['+c+nest+r'\]'  # Matches single quoted string in array
-        simple_merge_pattern = r'({\s*"name":\s*"stdout",\s*"output_type":\s*"stream",\s*"text":\s*'+brackets+r'\s*})\s*,\s*({\s*"name":\s*"stdout",\s*"output_type":\s*"stream",\s*"text":\s*'+brackets+r'\s*})'
-        
+        # Matches single quoted string in array
+        brackets = r'\['+c+nest+r'\]'
+        simple_merge_pattern = (
+            r'({\s*"name":\s*"stdout",\s*"output_type":\s*"stream",\s*"text":\s*' +
+            brackets + r'\s*})\s*,\s*({\s*"name":\s*"stdout",'\
+            r'\s*"output_type":\s*"stream",\s*"text":\s*' + brackets + r'\s*})'
+        )
+
         def simple_merge(match):
             block1 = match.group(1)
             block2 = match.group(2)
@@ -123,12 +135,13 @@ def process_notebook_source(app, docname, source):
          ]
         }}'''
             return match.group(0)  # Return original if extraction fails
-        
+
         # Keep applying until no more merges possible
         prev_content = ""
         while prev_content != content:
             prev_content = content
-            content = re.sub(simple_merge_pattern, simple_merge, content, flags=re.DOTALL)
+            content = re.sub(
+                simple_merge_pattern, simple_merge, content, flags=re.DOTALL)
         # Replace the original source with the modified content
         source[0] = content
 

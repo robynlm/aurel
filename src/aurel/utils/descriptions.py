@@ -51,7 +51,7 @@ def _extract_descriptions(data):
     """
     descriptions = {}
 
-    for category_key, category_value in data.items():
+    for _, category_value in data.items():
         if isinstance(category_value, dict):
             for key, value in category_value.items():
                 # Skip metadata fields
@@ -127,7 +127,9 @@ def load_symbolic_descriptions():
     # Get the directory containing this file (utils/)
     current_dir = os.path.dirname(os.path.abspath(__file__))
     # Go up to aurel/ directory then into data/
-    yaml_path = os.path.join(os.path.dirname(current_dir), 'data', 'symbolic_descriptions.yml')
+    yaml_path = os.path.join(
+        os.path.dirname(current_dir), 'data', 'symbolic_descriptions.yml'
+    )
 
     # Load YAML file
     with open(yaml_path) as f:

@@ -27,7 +27,7 @@ class TestAurelCoreFunctions:
         assert output is not None
 
     def test_with_vacuum_flag(self):
-        """Test vacuum-specific branches in Hamiltonian, Momentum_Escale, dts_Gamma_bssnok"""
+        """Test vacuum-specific branches in Constraints and dts_Gamma_bssnok"""
         rel_vac = aurel.AurelCore(self.fd, vacuum=True, verbose=False)
 
         # These functions have vacuum-specific branches
@@ -70,7 +70,10 @@ class TestAurelCoreFunctions:
         alpha = 1.2 * np.ones(self.rel.data_shape)
         gxx = 1.1 * np.ones(self.rel.data_shape)
         rel.data['gdown4'] = np.array([
-            [-alpha**2, np.zeros_like(alpha), np.zeros_like(alpha), np.zeros_like(alpha)],
+            [
+                -alpha**2, np.zeros_like(alpha),
+                np.zeros_like(alpha), np.zeros_like(alpha)
+            ],
             [np.zeros_like(alpha), gxx, np.zeros_like(alpha), np.zeros_like(alpha)],
             [np.zeros_like(alpha), np.zeros_like(alpha), gxx, np.zeros_like(alpha)],
             [np.zeros_like(alpha), np.zeros_like(alpha), np.zeros_like(alpha), gxx]

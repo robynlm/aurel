@@ -88,14 +88,13 @@ select = [
     "C4",  # flake8-comprehensions
 ]
 ignore = [
-    "N802",  # function names can have uppercase (GR convention)
-    "N803",  # argument names can have uppercase (GR convention)
-    "N806",  # variable names can have uppercase (GR convention)
-    "W605",  # escape sequence part of documentation
+    # Using uppercases for physics and GR conventions
+    "N802", "N803", "N806", "N811", "N816", "N813", "N814", "N999",
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401"]  # unused imports in __init__ files
+"__init__.py" = ["F401", "F403"]
+"docs/notebooks/*.ipynb" = ["E501"]
 
 [tool.ruff.format]
 quote-style = "double"

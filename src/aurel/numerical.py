@@ -33,17 +33,17 @@ def dichotomy(y_wanted, function, lower_bound, upper_bound, tolerance):
     x_low = lower_bound
     x_upp = upper_bound
     x_mid = (x_low + x_upp) / 2
-    y_low = function(x_low)
-    y_upp = function(x_upp)
+    #y_low = function(x_low)
+    #y_upp = function(x_upp)
     y_mid = function(x_mid)
     while abs(y_wanted / y_mid - 1) > tolerance:
         if y_wanted > y_mid:
-            y_low = y_mid
+            #y_low = y_mid
             x_low = x_mid
             x_mid = (x_low + x_upp) / 2
             y_mid = function(x_mid)
         else:
-            y_upp = y_mid
+            #y_upp = y_mid
             x_upp = x_mid
             x_mid = (x_low + x_upp) / 2
             y_mid = function(x_mid)
@@ -82,7 +82,9 @@ def interpolate(val, grid_points, target_points, method='linear'):
     points_flat = np.stack(target_flat, axis=-1)
 
     # Check that all target points are within grid bounds
-    for i, (grid, target) in enumerate(zip(grid_points, target_points)):
+    for i, (grid, target) in enumerate(
+        zip(grid_points, target_points, strict=True)
+    ):
         grid_min, grid_max = grid.min(), grid.max()
         target_min, target_max = target.min(), target.max()
         if target_min < grid_min or target_max > grid_max:
