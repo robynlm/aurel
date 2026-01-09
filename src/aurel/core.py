@@ -167,7 +167,7 @@ class AurelCore:
         self.last_accessed = {}
 
         # Importance of each variable for cache cleanup
-        self.var_importance = {key:1.0 for key in descriptions.keys()}
+        self.var_importance = dict.fromkeys(descriptions.keys(), 1.0)
         self.var_importance["s_Gamma_udd3"] = 0.002
         self.var_importance["s_RicciS"] = 0.1
 

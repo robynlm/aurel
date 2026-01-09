@@ -90,7 +90,7 @@ def load_descriptions():
     yaml_path = os.path.join(os.path.dirname(current_dir), 'data', 'descriptions.yml')
 
     # Load YAML file
-    with open(yaml_path, 'r') as f:
+    with open(yaml_path) as f:
         hierarchical_data = yaml.safe_load(f)
 
     # Extract flat descriptions from hierarchical structure
@@ -130,7 +130,7 @@ def load_symbolic_descriptions():
     yaml_path = os.path.join(os.path.dirname(current_dir), 'data', 'symbolic_descriptions.yml')
 
     # Load YAML file
-    with open(yaml_path, 'r') as f:
+    with open(yaml_path) as f:
         descriptions = yaml.safe_load(f)
 
     return descriptions

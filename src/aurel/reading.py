@@ -708,7 +708,7 @@ def parameters(simname):
                          + simname)
 
     # save all parameters
-    with open(parampath, 'r') as f:
+    with open(parampath) as f:
         lines = f.read().split('\n') # read file
     lines = [l.split('#')[0] for l in lines] # remove comments
     lines = [l for l in lines if l!=''] # remove empty lines
@@ -1145,7 +1145,7 @@ def read_iterations(param, **kwargs):
         # read the file
         if verbose:
             print(f'Reading iterations in {it_filename}', flush=True)
-        with open(it_filename, "r") as it_file:
+        with open(it_filename) as it_file:
             it_file.seek(0)
             contents = it_file.read()
         # Empty file handling
@@ -1444,7 +1444,7 @@ def get_content(param, **kwargs):
     try:
         if verbose:
             print(f"Loading existing content from {content_file}...")
-        with open(content_file, 'r') as f:
+        with open(content_file) as f:
             content_data = json.load(f)
             # Convert keys back to tuples of variable names
             vars_and_files = {}
