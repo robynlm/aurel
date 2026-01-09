@@ -1,4 +1,6 @@
-"""See: https://arxiv.org/pdf/2302.09033
+"""Perturbed FLRW initial conditions.
+
+See: https://arxiv.org/pdf/2302.09033
 and: https://arxiv.org/pdf/1307.1478.
 """
 

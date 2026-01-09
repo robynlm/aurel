@@ -1,3 +1,5 @@
+"""Aurel: A Python package for automatic relativistic calculations."""
+
 __version__ = "0.9.1"
 from .core import *
 from .coresymbolic import *
@@ -9,5 +11,5 @@ from .time import *
 
 
 def helloworld():
-    """A simple function that prints a welcome message."""
+    """Print a welcome message."""
     print("Hello! Welcome to Aurel!", flush=True)

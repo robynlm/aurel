@@ -168,7 +168,7 @@ def map3(func, f):
 ###############################################################################
 
 class FiniteDifference:
-    """This class applies the FD schemes to the entire data grid.
+    """Apply finite difference schemes to entire data grid.
 
     Parameters
     ----------
@@ -356,11 +356,11 @@ class FiniteDifference:
         return np.concatenate((lhs, central_part, rhs), axis=0)
 
     def d3x(self, f):
-        r"""Derivative along x of a scalar: $\partial_x (f)$."""
+        r"""Calculate derivative along x of a scalar: $\partial_x (f)$."""
         return self.d3(f, self.inverse_dx, self.param['Nx'])
 
     def d3y(self, f):
-        r"""Derivative along y of a scalar: $\partial_y (f)$."""
+        r"""Calculate derivative along y of a scalar: $\partial_y (f)$."""
         # Same as D3x but as we apply the FD schemes in the y direction
         # we transpose
         f = np.transpose(f, (1, 0, 2))
@@ -368,7 +368,7 @@ class FiniteDifference:
         return np.transpose(dyf, (1, 0, 2))
 
     def d3z(self, f):
-        r"""Derivative along z of a scalar: $\partial_z (f)$."""
+        r"""Calculate derivative along z of a scalar: $\partial_z (f)$."""
         # Same as D3x but as we apply the FD schemes in the z direction
         # we transpose
         f = np.transpose(f, (2, 1, 0))
@@ -376,13 +376,15 @@ class FiniteDifference:
         return np.transpose(dzf, (2, 1, 0))
 
     def d3_scalar(self, f):
-        r"""Spatial derivatives of a scalar:
+        r"""Spatial derivatives of a scalar.
+
         $\partial_i (f)$.
         """
         return np.array([self.d3x(f), self.d3y(f), self.d3z(f)])
 
     def d3_rank1tensor(self, f):
-        r"""Spatial derivatives of a spatial rank 1 tensor:
+        r"""Spatial derivatives of a spatial rank 1 tensor.
+
         $\partial_i (f_{j})$ or $\partial_i (f^{j})$.
         """
         return np.stack(
@@ -391,25 +393,29 @@ class FiniteDifference:
              map1(self.d3z, f)], axis=0)
 
     def d3x_rank1tensor(self, f):
-        r"""Spatial derivatives of a spatial rank 1 tensor:
+        r"""Spatial derivatives of a spatial rank 1 tensor.
+
         $\partial_x (f_{j})$ or $\partial_x (f^{j})$.
         """
         return map1(self.d3x, f)
 
     def d3y_rank1tensor(self, f):
-        r"""Spatial derivatives of a spatial rank 1 tensor:
+        r"""Spatial derivatives of a spatial rank 1 tensor.
+
         $\partial_y (f_{j})$ or $\partial_y (f^{j})$.
         """
         return map1(self.d3y, f)
 
     def d3z_rank1tensor(self, f):
-        r"""Spatial derivatives of a spatial rank 1 tensor:
+        r"""Spatial derivatives of a spatial rank 1 tensor.
+
         $\partial_z (f_{j})$ or $\partial_z (f^{j})$.
         """
         return map1(self.d3z, f)
 
     def d3_rank2tensor(self, f):
-        r"""Spatial derivatives of a spatial rank 2 tensor:
+        r"""Spatial derivatives of a spatial rank 2 tensor.
+
         $\partial_i (f_{kj})$ or $\partial_i (f^{kj})$
         or $\partial_i (f^{k}_{j})$.
         """
@@ -419,21 +425,24 @@ class FiniteDifference:
              self.d3z_rank2tensor(f)])
 
     def d3x_rank2tensor(self, f):
-        r"""Spatial derivatives along x of a spatial rank 2 tensor:
+        r"""Spatial derivatives along x of a spatial rank 2 tensor.
+
         $\partial_x (f_{kj})$ or $\partial_x (f^{kj})$
         or $\partial_x (f^{k}_{j})$.
         """
         return map2(self.d3x, f)
 
     def d3y_rank2tensor(self, f):
-        r"""Spatial derivatives along y of a spatial rank 2 tensor:
+        r"""Spatial derivatives along y of a spatial rank 2 tensor.
+
         $\partial_y (f_{kj})$ or $\partial_y (f^{kj})$
         or $\partial_y (f^{k}_{j})$.
         """
         return map2(self.d3y, f)
 
     def d3z_rank2tensor(self, f):
-        r"""Spatial derivatives along z of a spatial rank 2 tensor:
+        r"""Spatial derivatives along z of a spatial rank 2 tensor.
+
         $\partial_z (f_{kj})$ or $\partial_z (f^{kj})$
         or $\partial_z (f^{k}_{j})$.
         """

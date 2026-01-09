@@ -1,3 +1,5 @@
+"""Generate RST documentation for symbolic aurel functions."""
+
 import inspect
 import os
 import sys
@@ -18,6 +20,7 @@ output_file = os.path.join(output_dir, "source/coresymbolic.rst")
 varsdone = []
 
 def print_subsec(title, subsecvars, allfunctions, varsdone):
+    """Print subsection with function documentation to RST file."""
     if title != "":
         f.write(title+"\n")
         f.write("-"*len(title)+"\n\n")

@@ -1,3 +1,5 @@
+"""Sphinx configuration for Aurel documentation."""
+
 import os
 import re
 import subprocess
@@ -72,7 +74,37 @@ autodoc_typehints = "none"
 
 # Render LateX in notebook outputs
 def process_notebook_source(app, docname, source):
-    """Simple test function to replace LaTeX outputs with 'Hi <3'."""
+    """Process notebook sources to normalize LaTeX output formatting.
+
+    Transform display_data outputs containing LaTeX into stream outputs and
+    merge consecutive stdout streams. This preprocessing ensures consistent
+    rendering of mathematical expressions in Sphinx-generated documentation.
+
+    Parameters
+    ----------
+    app : sphinx.application.Sphinx
+        The Sphinx application instance.
+    docname : str
+        Name of the document being processed (e.g., 'notebooks/Example').
+    source : list of str
+        List containing the source content. Modified in-place with source[0]
+        containing the notebook JSON as a string.
+
+    Notes
+    -----
+    This function performs two-pass processing on notebook files:
+
+    1. **First pass**: Converts display_data outputs with text/latex MIME type
+       to stream outputs with output_type="stream" and name="stdout". This
+       transformation enables LaTeX to render properly in HTML documentation.
+
+    2. **Second pass**: Iteratively merges consecutive stdout stream outputs
+       into single blocks. This reduces output fragmentation and improves
+       readability in the rendered documentation.
+
+    Only processes documents under the 'notebooks/' directory. Other documents
+    pass through unchanged.
+    """
     if source and len(source) > 0 and docname.startswith('notebooks/'):
         content = source[0]
         brackets = r'\[\s*"([^"]*?)"\s*\]'
@@ -146,6 +178,7 @@ def process_notebook_source(app, docname, source):
         source[0] = content
 
 def setup(app):
+    """Configure Sphinx application with custom event handlers."""
     app.connect('source-read', process_notebook_source)
 
 subprocess.run(["python3", "source/generate_rst.py"], check=True)

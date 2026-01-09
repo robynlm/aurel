@@ -150,6 +150,10 @@ ignore = [
 # Notebooks are documentation/tutorials - allow long lines
 "docs/notebooks/*.ipynb" = ["E501"]
 
+# Core modules have property methods documented in data/*descriptions.yml
+"src/aurel/core.py" = ["D102"]
+"src/aurel/coresymbolic.py" = ["D102"]
+
 # -----------------------------------------------------------------------------
 # Docstring Convention
 # -----------------------------------------------------------------------------

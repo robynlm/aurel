@@ -77,7 +77,7 @@ class TestOverTimeFunction:
     def test_custom_var_no_estimates(self):
         """Test over_time with custom variable function."""
         def custom_var(rel):
-            """Custom variable: sum of gamma components."""
+            """Calculate custom variable: sum of gamma components."""
             return rel['gxx'] + rel['gyy'] + rel['gzz']
 
         result = aurel.over_time(
@@ -96,7 +96,7 @@ class TestOverTimeFunction:
     def test_mixed_vars(self):
         """Test over_time with both built-in and custom variables."""
         def custom_var(rel):
-            """Custom variable: sum of gamma components."""
+            """Calculate custom variable: sum of gamma components."""
             return rel['gxx'] + rel['gyy'] + rel['gzz']
 
         result = aurel.over_time(
@@ -145,7 +145,7 @@ class TestOverTimeFunction:
     def test_custom_estimate(self):
         """Test over_time with custom estimation function."""
         def custom_est(array):
-            """Custom estimation: value at center of grid."""
+            """Estimate custom value: value at center of grid."""
             Nx, Ny, Nz = np.shape(array)
             xcenter = Nx // 2
             ycenter = Ny // 2
@@ -414,20 +414,20 @@ class TestOverTimeFunction:
     def test_sequential_custom_vars_and_estimates(self):
         """Test sequential calls with custom variables and custom estimates."""
         def custom_var1(rel):
-            """Custom variable: trace of gamma."""
+            """Calculate custom variable: trace of gamma."""
             return rel['gxx'] + rel['gyy'] + rel['gzz']
 
         def custom_var2(rel):
-            """Custom variable: squared rho."""
+            """Calculate custom variable: squared rho."""
             return rel['rho'] ** 2
 
         def custom_est1(array):
-            """Custom estimate: center value."""
+            """Estimate custom value: center value."""
             Nx, Ny, Nz = np.shape(array)
             return array[Nx // 2, Ny // 2, Nz // 2]
 
         def custom_est2(array):
-            """Custom estimate: corner value."""
+            """Estimate custom value: corner value."""
             return array[0, 0, 0]
 
         # First call: compute first custom var with builtin estimate
@@ -528,11 +528,11 @@ class TestOverTimeFunction:
     def test_sequential_custom_vars_with_kwargs(self):
         """Test sequential calls with custom variables that use kwargs."""
         def custom_var_power(rel):
-            """Custom variable: rho raised to power."""
+            """Calculate custom variable: rho raised to power."""
             return rel['rho'] ** rel.power
 
         def custom_var_scaled(rel):
-            """Custom variable: scaled gamma trace."""
+            """Calculate custom variable: scaled gamma trace."""
             return rel.scale * (rel['gxx'] + rel['gyy'] + rel['gzz'])
 
         # First call: custom var with power=2
@@ -682,7 +682,7 @@ class TestOverTimeCustomVarWithKwargs:
     def test_custom_var_with_int_kwarg(self):
         """Test custom variable with integer kwarg."""
         def custom_var(rel):
-            """Custom variable: rho raised to a power."""
+            """Calculate custom variable: rho raised to a power."""
             return rel['rho'] ** rel.power
 
         result = aurel.over_time(
@@ -700,7 +700,7 @@ class TestOverTimeCustomVarWithKwargs:
     def test_custom_var_with_float_kwarg(self):
         """Test custom variable with float kwarg."""
         def custom_var(rel):
-            """Custom variable: scaled rho."""
+            """Calculate custom variable: scaled rho."""
             return rel['rho'] * rel.scale
 
         result = aurel.over_time(
@@ -718,7 +718,7 @@ class TestOverTimeCustomVarWithKwargs:
     def test_custom_var_with_bool_kwarg(self):
         """Test custom variable with boolean kwarg."""
         def custom_var(rel):
-            """Custom variable: optionally take absolute value."""
+            """Calculate custom variable: optionally take absolute value."""
             result = rel['gxx'] - rel['gyy']
             return np.abs(result) if rel.use_absolute else result
 
@@ -740,7 +740,7 @@ class TestOverTimeCustomVarWithKwargs:
     def test_custom_var_with_string_kwarg(self):
         """Test custom variable with string kwarg."""
         def custom_var(rel):
-            """Custom variable: select gamma component by string."""
+            """Calculate custom variable: select gamma component by string."""
             return rel[f'g{rel.component}']
 
         result = aurel.over_time(
@@ -758,7 +758,7 @@ class TestOverTimeCustomVarWithKwargs:
     def test_custom_var_with_list_kwarg(self):
         """Test custom variable with list kwarg."""
         def custom_var(rel):
-            """Custom variable: weighted sum of gamma diagonal."""
+            """Calculate custom variable: weighted sum of gamma diagonal."""
             return (rel.coefficients[0] * rel['gxx'] +
                     rel.coefficients[1] * rel['gyy'] +
                     rel.coefficients[2] * rel['gzz'])
@@ -779,7 +779,7 @@ class TestOverTimeCustomVarWithKwargs:
     def test_custom_var_with_dict_kwarg(self):
         """Test custom variable with dict kwarg."""
         def custom_var(rel):
-            """Custom variable: affine transformation of rho."""
+            """Calculate custom variable: affine transformation of rho."""
             return rel.config['scale'] * rel['rho'] + rel.config['offset']
 
         result = aurel.over_time(
@@ -797,7 +797,7 @@ class TestOverTimeCustomVarWithKwargs:
     def test_custom_var_with_set_kwarg(self):
         """Test custom variable with set kwarg."""
         def custom_var(rel):
-            """Custom variable: sum only specified components."""
+            """Calculate custom variable: sum only specified components."""
             result = np.zeros_like(rel['gxx'])
             if 'xx' in rel.included_components:
                 result += rel['gxx']
@@ -823,7 +823,7 @@ class TestOverTimeCustomVarWithKwargs:
     def test_custom_var_with_ndarray_kwarg(self):
         """Test custom variable with numpy array kwarg."""
         def custom_var(rel):
-            """Custom variable: spatially weighted sum."""
+            """Calculate custom variable: spatially weighted sum."""
             return rel['rho'] * rel.weights
 
         weights = np.random.rand(self.fd.Nx, self.fd.Ny, self.fd.Nz)
@@ -842,7 +842,7 @@ class TestOverTimeCustomVarWithKwargs:
     def test_custom_var_with_function_kwarg(self):
         """Test custom variable with function kwarg."""
         def custom_var(rel):
-            """Custom variable: apply operation to rho."""
+            """Calculate custom variable: apply operation to rho."""
             return rel.operation(rel['rho'])
 
         result = aurel.over_time(
@@ -860,7 +860,7 @@ class TestOverTimeCustomVarWithKwargs:
     def test_custom_var_with_multiple_kwargs(self):
         """Test custom variable with multiple kwargs of different types."""
         def custom_var(rel):
-            """Custom variable: complex transformation with multiple parameters."""
+            """Calculate custom variable."""
             result = np.zeros_like(rel['gxx'])
             for comp in rel.components:
                 result += rel[f'g{comp}']

@@ -1,6 +1,7 @@
-r"""This is a $\Lambda$ - Szekeres solution
-which is perturbed solution of the flat dust FLRW + LCDM spacetime.
-See section 3.1 of 2211.08133.
+r"""$\Lambda$ - Szekeres solution.
+
+Perturbed solution of the flat dust FLRW + LCDM spacetime,
+see section 3.1 of 2211.08133.
 """
 
 import numpy as np
@@ -18,7 +19,7 @@ B = (3/4)*(LCDM.Hprop_today**2)*(LCDM.Omega_l_today
                                  *(LCDM.Omega_m_today**2))**(1/3)
 
 def Z_terms(t, x, y, z, analytical=False):
-    """Returns F, Z, dtZ functions."""
+    """Return F, Z, dtZ functions."""
     if analytical:
         pac = sp
     else:
@@ -48,24 +49,24 @@ def Z_terms(t, x, y, z, analytical=False):
     return F, Z, dtZ
 
 def rho(t, x, y, z):
-    """Returns the energy density."""
+    """Return the energy density."""
     F, Z, dtZ = Z_terms(t, x, y, z)
     delta =  -F/Z
     return  LCDM.rho(t)*(1+delta)
 
 def press(t, x, y, z):
-    """Returns the pressure."""
+    """Return the pressure."""
     return np.zeros(np.shape(x))
 
 def gammadown3(t, x, y, z, analytical=False):
-    """Returns the spatial metric."""
+    """Return the spatial metric."""
     gd3 = LCDM.gammadown3(t, x, y, z, analytical=analytical)
     F, Z, dtZ = Z_terms(t, x, y, z, analytical=analytical)
     gd3[2, 2] *= Z**2
     return gd3
 
 def Kdown3(t, x, y, z):
-    """Returns the extrinsic curvature."""
+    """Return the extrinsic curvature."""
     # Define the Kdown matrix
     Kd3 = LCDM.gammadown3(t, x, y, z)
     F, Z, dtZ = Z_terms(t, x, y, z)
@@ -74,16 +75,16 @@ def Kdown3(t, x, y, z):
     return Kd3
 
 def alpha(t, x, y, z):
-    """Returns the lapse function."""
+    """Return the lapse function."""
     return np.ones(np.shape(x))
 
 def betaup3(t, x, y, z):
-    """Returns the shift vector."""
+    """Return the shift vector."""
     Nx, Ny, Nz = np.shape(x)
     return np.zeros((3, Nx, Ny, Nz))
 
 def gdown4(t, x, y, z, analytical=False):
-    """Returns the spacetime metric."""
+    """Return the spacetime metric."""
     gij = gammadown3(t, x, y, z, analytical=analytical)
     if analytical:
         return sp.Matrix([
@@ -103,7 +104,7 @@ def gdown4(t, x, y, z, analytical=False):
         ])
 
 def data(t, x, y, z):
-    """Returns dictionary of Szekeres data."""
+    """Return dictionary of Szekeres data."""
     return {'gammadown3': gammadown3(t, x, y, z),
             'rho': rho(t, x, y, z),
             'Kdown3': Kdown3(t, x, y, z)}

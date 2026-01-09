@@ -1,3 +1,5 @@
+"""Conformally flat spacetime solution."""
+
 import numpy as np
 import sympy as sp
 
@@ -5,16 +7,16 @@ eps = 2 # arbitraty positive constant
 kappa = 8 * np.pi # Einstein's gravitational constant
 
 def Omega(x):
-    """Returns the conformal factor."""
+    """Return the conformal factor."""
     return 1 + eps*(x**2)
 # or use Om = sp.Function('Om')(x) for analytic
 
 def dxOmega(x):
-    """Returns the 1st derivative of the conformal factor."""
+    """Return the 1st derivative of the conformal factor."""
     return 2*eps*x
 
 def dxdxOmega(x):
-    """Returns the 2nd derivatire of the conformal factor."""
+    """Return the 2nd derivatire of the conformal factor."""
     return 2*eps
 
 def alpha(t, x, y, z):
@@ -85,7 +87,7 @@ def Tdown4(t, x, y, z):
     return Gdown4 / kappa
 
 def data(t, x, y, z):
-    """Returns dictionary of Collins Stewart data."""
+    """Return dictionary of Collins Stewart data."""
     return {'gammadown3': gammadown3(t, x, y, z),
             'alpha': alpha(t, x, y, z),
             'Tdown4': Tdown4(t, x, y, z)}

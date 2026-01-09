@@ -1,6 +1,5 @@
-"""
-This is the Schwarzschild solution in in isotropic coordinates
-with maximal slicing.
+"""Schwarzschild solution in isotropic coordinates with maximal slicing.
+
 See https://arxiv.org/pdf/0904.4184.
 """
 
@@ -13,7 +12,7 @@ kappa = 8 * np.pi # Einstein's gravitational constant
 M = 1.0 # Mass of the black hole
 
 def alpha(t, x, y, z, analytical=False):
-    """Returns the lapse function."""
+    """Return the lapse function."""
     if analytical:
         r = sp.sqrt(x**2 + y**2 + z**2)
     else:
@@ -22,12 +21,12 @@ def alpha(t, x, y, z, analytical=False):
     return alpha
 
 def betaup3(t, x, y, z):
-    """Returns the shift vector."""
+    """Return the shift vector."""
     Nx, Ny, Nz = np.shape(x)
     return np.zeros((3, Nx, Ny, Nz))
 
 def gammadown3(t, x, y, z, analytical=False):
-    """Returns the spatial metric."""
+    """Return the spatial metric."""
     if analytical:
         r = sp.sqrt(x**2 + y**2 + z**2)
         A = (1 + M / (2 * r))**4
@@ -44,7 +43,7 @@ def gammadown3(t, x, y, z, analytical=False):
                         [zero, zero, A]])
 
 def gdown4(t, x, y, z, analytical=False):
-    """Returns the spacetime metric."""
+    """Return the spacetime metric."""
     a2 = alpha(t, x, y, z, analytical=analytical)**2
     gij = gammadown3(t, x, y, z, analytical=analytical)
     if analytical:
@@ -64,17 +63,17 @@ def gdown4(t, x, y, z, analytical=False):
         ])
 
 def Kdown3(t, x, y, z):
-    """Returns the extrinsic curvature."""
+    """Return the extrinsic curvature."""
     Nx, Ny, Nz = np.shape(x)
     return np.zeros((3, 3, Nx, Ny, Nz))
 
 def Tdown4(t, x, y, z):
-    """Returns the energy-stress tensor."""
+    """Return the energy-stress tensor."""
     Nx, Ny, Nz = np.shape(x)
     return np.zeros((4, 4, Nx, Ny, Nz))
 
 def data(t, x, y, z):
-    """Returns dictionary of Schwarzschild data."""
+    """Return dictionary of Schwarzschild data."""
     return {'alpha': alpha(t, x, y, z),
             'gammadown3': gammadown3(t, x, y, z),
             'Kdown3': Kdown3(t, x, y, z),

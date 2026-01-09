@@ -1,3 +1,5 @@
+"""Tests for aurel core and symbolic functions."""
+
 import numpy as np
 import pytest
 import sympy as sp
@@ -10,6 +12,7 @@ class TestAurelCoreFunctions:
 
     @pytest.fixture(autouse=True)
     def setup(self):
+        """Set up test fixture with AurelCore instance."""
         Lx, Ly, Lz = 60.0, 40.0, 30.0
         Nx, Ny, Nz = 30, 20, 15
         param = { 'Nx': Nx, 'Ny': Ny, 'Nz': Nz,
@@ -225,6 +228,7 @@ class TestAurelCoreSymbolicFunctions:
 
     @pytest.fixture(autouse=True)
     def setup(self):
+        """Set up test fixture with AurelCoreSymbolic instances."""
         # 4D coordinates (spacetime)
         t, x, y, z = sp.symbols('t x y z')
         self.coords_4d = [t, x, y, z]

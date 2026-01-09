@@ -17,6 +17,7 @@ class TestDocstrings:
 
     @pytest.mark.parametrize("module", aurel_elements)
     def test_docstrings(self, module):
+        """Check that all public classes and functions have docstrings."""
         missing_docs = []
 
         if inspect.isclass(module):

@@ -74,12 +74,12 @@ def format_rank2_4(f):
     return farray
 
 def determinant3(f):
-    """Determinant 3x3 matrix in every position of the data grid."""
+    """Calculate determinant of 3x3 matrix in every position of the data grid."""
     xx, xy, xz, yy, yz, zz = getcomponents3(f)
     return -xz*xz*yy + 2*xy*xz*yz - xx*yz*yz - xy*xy*zz + xx*yy*zz
 
 def determinant4(f):
-    """Determinant of a 4x4 matrix in every position of the data grid."""
+    """Calculate determinant of 4x4 matrix in every position of the data grid."""
     tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = getcomponents4(f)
     return (tz*tz*xy*xy - 2*ty*tz*xy*xz + ty*ty*xz*xz
             - tz*tz*xx*yy + 2*tx*tz*xz*yy - tt*xz*xz*yy
@@ -197,7 +197,7 @@ def populate_4Riemann(Riemann_ssss, Riemann_ssst, Riemann_stst):
     return R
 
 def factorial(n):
-    """Returns the factorial of n."""
+    """Return the factorial of n."""
     if n<=1:
         return 1
     else:

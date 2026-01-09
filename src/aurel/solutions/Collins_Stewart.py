@@ -1,6 +1,6 @@
-"""This is a Collins and Stewart 1971 solution that describes
-a Bianchi II γ-law perfect fluid homogeneous solution.
-See section 3.3 of 2211.08133.
+"""Collins and Stewart 1971 Bianchi II γ-law perfect fluid solution.
+
+This is a homogeneous solution, see section 3.3 of 2211.08133.
 """
 
 import numpy as np
@@ -77,7 +77,7 @@ def Kdown3(t, x, y, z):
         [      zeros,                   zeros, dtt2p2]])
 
 def data(t, x, y, z):
-    """Returns dictionary of Collins Stewart data."""
+    """Return dictionary of Collins Stewart data."""
     return {'gammadown3': gammadown3(t, x, y, z),
             'rho': rho(t, x, y, z),
             'press': press(t, x, y, z),
