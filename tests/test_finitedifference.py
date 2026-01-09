@@ -124,15 +124,15 @@ class TestFiniteDifferenceFunctions:
         # Use a function with more interesting derivatives
         f = np.sin(x) * np.exp(x/2)
         analytical = np.cos(x) * np.exp(x/2) + 0.5 * np.sin(x) * np.exp(x/2)
-        
+
         i = len(f) // 2
-        
+
         # Compute errors for different orders
         error2 = abs(finitedifference.fd2_centered(f, i, 1/dx) - analytical[i])
         error4 = abs(finitedifference.fd4_centered(f, i, 1/dx) - analytical[i])
         error6 = abs(finitedifference.fd6_centered(f, i, 1/dx) - analytical[i])
         error8 = abs(finitedifference.fd8_centered(f, i, 1/dx) - analytical[i])
-        
+
         # Higher order should have smaller errors
         assert error4 < error2
         assert error6 < error4
@@ -226,15 +226,15 @@ class TestFiniteDifferenceClass:
         fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
                                                fd_order=4, verbose=False)
         result = fd.d3x(f)
-        
+
         # Check shape is preserved
         assert result.shape == f.shape
-        
+
         # Check analytical derivative in interior (away from boundaries)
         mask = fd.mask_len
         interior_result = result[mask:-mask, mask:-mask, mask:-mask]
         interior_analytical = 2 * X[mask:-mask, mask:-mask, mask:-mask]
-        
+
         assert np.allclose(interior_result, interior_analytical, rtol=1e-4)
 
     def test_d3y_no_boundary(self, params_3d, test_scalar_field):
@@ -243,15 +243,15 @@ class TestFiniteDifferenceClass:
         fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
                                                fd_order=4, verbose=False)
         result = fd.d3y(f)
-        
+
         # Check shape is preserved
         assert result.shape == f.shape
-        
+
         # Check analytical derivative in interior
         mask = fd.mask_len
         interior_result = result[mask:-mask, mask:-mask, mask:-mask]
         interior_analytical = 2 * Y[mask:-mask, mask:-mask, mask:-mask]
-        
+
         assert np.allclose(interior_result, interior_analytical, rtol=1e-4)
 
     def test_d3z_no_boundary(self, params_3d, test_scalar_field):
@@ -260,15 +260,15 @@ class TestFiniteDifferenceClass:
         fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
                                                fd_order=4, verbose=False)
         result = fd.d3z(f)
-        
+
         # Check shape is preserved
         assert result.shape == f.shape
-        
+
         # Check analytical derivative in interior
         mask = fd.mask_len
         interior_result = result[mask:-mask, mask:-mask, mask:-mask]
         interior_analytical = 2 * Z[mask:-mask, mask:-mask, mask:-mask]
-        
+
         assert np.allclose(interior_result, interior_analytical, rtol=1e-4)
 
     def test_d3_periodic_boundary(self, params_3d):
@@ -284,17 +284,17 @@ class TestFiniteDifferenceClass:
                      params_3d['zmin'] + params_3d['Nz'] * params_3d['dz'], 
                      params_3d['dz'])
         X, Y, Z = np.meshgrid(x, y, z, indexing='ij')
-        
+
         L = params_3d['Nx'] * params_3d['dx']
         f = np.sin(2 * np.pi * X / L)
-        
+
         fd = finitedifference.FiniteDifference(params_3d, boundary='periodic', 
                                                fd_order=4, verbose=False)
         result = fd.d3x(f)
-        
+
         # Analytical derivative: d/dx[sin(2*pi*x/L)] = (2*pi/L)*cos(2*pi*x/L)
         analytical = (2 * np.pi / L) * np.cos(2 * np.pi * X / L)
-        
+
         # With periodic boundaries, accuracy should be good throughout
         assert np.allclose(result, analytical, rtol=1e-3)
 
@@ -311,16 +311,16 @@ class TestFiniteDifferenceClass:
                      params_3d['zmin'] + params_3d['Nz'] * params_3d['dz'], 
                      params_3d['dz'])
         X, Y, Z = np.meshgrid(x, y, z, indexing='ij')
-        
+
         f = X**2
-        
+
         fd = finitedifference.FiniteDifference(params_3d, boundary='symmetric', 
                                                fd_order=4, verbose=False)
         result = fd.d3x(f)
-        
+
         # Analytical derivative: d/dx[x^2] = 2x
         analytical = 2 * X
-        
+
         # With symmetric boundaries, check interior accuracy
         mask = fd.mask_len
         assert np.allclose(result[mask:-mask, mask:-mask, mask:-mask], 
@@ -332,10 +332,10 @@ class TestFiniteDifferenceClass:
         fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
                                                fd_order=4, verbose=False)
         result = fd.d3_scalar(f)
-        
+
         # Result should be a 3-component vector field
         assert result.shape == (3,) + f.shape
-        
+
         # Check each component in interior
         mask = fd.mask_len
         assert np.allclose(result[0, mask:-mask, mask:-mask, mask:-mask], 
@@ -351,10 +351,10 @@ class TestFiniteDifferenceClass:
         fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
                                                fd_order=4, verbose=False)
         result = fd.d3x_rank1tensor(V)
-        
+
         # Result should have shape (3, Nx, Ny, Nz) for dV_i/dx
         assert result.shape == V.shape
-        
+
         # Check analytical derivatives in interior
         # dV_x/dx = d(x^2)/dx = 2x
         # dV_y/dx = d(y^2)/dx = 0
@@ -373,7 +373,7 @@ class TestFiniteDifferenceClass:
         fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
                                                fd_order=4, verbose=False)
         result = fd.d3y_rank1tensor(V)
-        
+
         # Check analytical derivatives in interior
         # dV_x/dy = d(x^2)/dy = 0
         # dV_y/dy = d(y^2)/dy = 2y
@@ -392,7 +392,7 @@ class TestFiniteDifferenceClass:
         fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
                                                fd_order=4, verbose=False)
         result = fd.d3z_rank1tensor(V)
-        
+
         # Check analytical derivatives in interior
         # dV_x/dz = d(x^2)/dz = 0
         # dV_y/dz = d(y^2)/dz = 0
@@ -411,10 +411,10 @@ class TestFiniteDifferenceClass:
         fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
                                                fd_order=4, verbose=False)
         result = fd.d3_rank1tensor(V)
-        
+
         # Result should have shape (3, 3, Nx, Ny, Nz) for dV_j/dx_i
         assert result.shape == (3, 3, params_3d['Nx'], params_3d['Ny'], params_3d['Nz'])
-        
+
         # Verify individual components
         mask = fd.mask_len
         # dV_x/dx = 2x
@@ -440,36 +440,36 @@ class TestFiniteDifferenceClass:
                      params_3d['zmin'] + params_3d['Nz'] * params_3d['dz'], 
                      params_3d['dz'])
         X, Y, Z = np.meshgrid(x, y, z, indexing='ij')
-        
+
         # Use x^3 for more interesting higher derivatives
         f = X**3
         analytical = 3 * X**2
-        
+
         fd2 = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
                                                 fd_order=2, verbose=False)
         fd4 = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
                                                 fd_order=4, verbose=False)
-        
+
         result2 = fd2.d3x(f)
         result4 = fd4.d3x(f)
-        
+
         # Use larger mask for comparison
         mask = 4
         error2 = np.abs(result2[mask:-mask, mask:-mask, mask:-mask] - 
                        analytical[mask:-mask, mask:-mask, mask:-mask]).max()
         error4 = np.abs(result4[mask:-mask, mask:-mask, mask:-mask] - 
                        analytical[mask:-mask, mask:-mask, mask:-mask]).max()
-        
+
         assert error4 < error2
 
     def test_cartesian_to_spherical_conversion(self, params_3d):
         """Test coordinate conversion from Cartesian to spherical."""
         fd = finitedifference.FiniteDifference(params_3d, verbose=False)
-        
+
         # Test at a known point
         r, theta, phi = fd.cartesian_to_spherical(
             np.array([1.0]), np.array([0.0]), np.array([0.0]))
-        
+
         assert np.isclose(r[0], 1.0)
         assert np.isclose(theta[0], np.pi/2)  # on equator
         assert np.isclose(phi[0], 0.0)
@@ -477,11 +477,11 @@ class TestFiniteDifferenceClass:
     def test_spherical_to_cartesian_conversion(self, params_3d):
         """Test coordinate conversion from spherical to Cartesian."""
         fd = finitedifference.FiniteDifference(params_3d, verbose=False)
-        
+
         # Test at a known point
         x, y, z = fd.spherical_to_cartesian(
             np.array([1.0]), np.array([np.pi/2]), np.array([0.0]))
-        
+
         assert np.isclose(x[0], 1.0)
         assert np.isclose(y[0], 0.0)
         assert np.isclose(z[0], 0.0)

@@ -11,3 +11,4 @@ mytests/
 htmlcov/
 .coverage
 .pytest_cache/
+paper/

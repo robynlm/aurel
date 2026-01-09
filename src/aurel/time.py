@@ -56,11 +56,11 @@ est_functions = {
 def over_time(data, fd, vars=[], estimates=[], 
               verbose=True, veryverbose=False, **rel_kwargs):
     """Calculate variables from the data and store them in the data dictionary.
-    
+
     This function processes time series data by creating AurelCore instances 
     for each time step, calculating specified variables, and optionally 
     applying estimation functions to 3D arrays.
-    
+
     Parameters
     ----------
     data : dict
@@ -89,7 +89,7 @@ def over_time(data, fd, vars=[], estimates=[],
         - dict: Custom estimation functions with string keys (function names) 
           and functions that take a scalar 3D array of shape 
           (fd.Nx, fd.Ny, fd.Nz) and return a scalar value.
-        
+
         Default is an empty list (no estimation applied).
     verbose : bool, optional
         If True, prints debug information about the calculation process.
@@ -97,11 +97,11 @@ def over_time(data, fd, vars=[], estimates=[],
         If True, provides more detailed debug information. Defaults to False.
     **rel_kwargs : dict, optional
         Additional parameters passed to AurelCore initialization, such as:
-        
+
         - Lambda : float, cosmological constant
         - tetrad_to_use : str, tetrad choice for Weyl calculations
         - any other custom parameters required by user-defined functions.
-    
+
     Returns
     -------
     dict
@@ -120,7 +120,7 @@ def over_time(data, fd, vars=[], estimates=[],
     if temporal_key is None:
         raise ValueError("Data dictionary must contain a temporal key: "
                          "'it', 'iteration', 't', or 'time'.")
-    
+
     # Clean vars list to remove any variables that are already in data
     cleaned_vars = []
     for v in vars:
@@ -145,7 +145,7 @@ def over_time(data, fd, vars=[], estimates=[],
                         print(f"Skipping function '{func_name}'")
                         continue
     vars = cleaned_vars
-    
+
     # Clean estimate list to remove any estimations that are already in data
     cleaned_estimates = []
     if vars != []:
@@ -183,7 +183,7 @@ def over_time(data, fd, vars=[], estimates=[],
                 scalarkeys += [key]
         print("Found scalar keys for estimation: "
               + f"{scalarkeys}", flush=True)
-        
+
         # Then only apply estimates to scalars that do not already have them
         for est_item in estimates:
             # If it's a string for a predefined function in est_functions
@@ -227,30 +227,30 @@ def over_time(data, fd, vars=[], estimates=[],
                             print(f"Skipping function '{func_name}'")
                             continue
     estimates = cleaned_estimates
-    
+
     # Only perform variable calculations if lists are not empty
     if vars or estimates:
-        
+
         # Transform dict of lists to a list of dicts
         keys = data.keys()
         input_data_list = [dict(zip(keys, values)) 
                            for values in zip(*data.values())]
         del data
-        
+
         # Calculate first instance
         data_list_i0, scalarkeys = process_single_timestep(
             input_data_list[0], fd, vars, estimates, verbose, None, rel_kwargs)
         data_list = [data_list_i0]
         del data_list_i0
-        
+
         # Calculate all the other
         if len(input_data_list) > 1:
-            
+
             # Sequential processing
             if verbose:
                 print("Now processing remaining time steps sequentially",
                     flush=True)
-            
+
             # When redirected, replace \r with \n so progress appears on new lines
             tqdm_kwargs = {} if not DISABLE_TQDM else {
                 'file': type('', (), {
@@ -265,7 +265,7 @@ def over_time(data, fd, vars=[], estimates=[],
         del input_data_list
         data_list_sorted = sorted(data_list, key=lambda x: x[temporal_key])
         del data_list
-        
+
         # Transform list of dicts to a dict of lists
         keys = data_list_sorted[0].keys()
         data = {key: [] for key in keys}
@@ -275,7 +275,7 @@ def over_time(data, fd, vars=[], estimates=[],
         for key in keys:
             data[key] = np.array(data[key])
         del data_list_sorted
-    
+
         if verbose:
             print("Done!", flush=True)
         return data
@@ -287,11 +287,11 @@ def over_time(data, fd, vars=[], estimates=[],
 def process_single_timestep(data, fd, vars, estimates, 
                             verbose, scalarkeys, rel_kwargs):
     """Process a single time step for variable calculation and estimation.
-    
+
     This function creates an AurelCore instance for the specified time step,
     calculates requested variables, and applies estimation 
     functions to 3D arrays if specified.
-    
+
     Parameters
     ----------
     data : dict
@@ -319,7 +319,7 @@ def process_single_timestep(data, fd, vars, estimates,
         - dict: Custom estimation functions with string keys (function names)
           and functions that take a 3D array of shape (fd.Nx, fd.Ny, fd.Nz) 
           and return a scalar value.
-        
+
         If empty, no estimation applied.
     verbose : bool
         Passed to AurelCore for debug information and calculation process.
@@ -328,7 +328,7 @@ def process_single_timestep(data, fd, vars, estimates,
         the function will determine these keys automatically.
     rel_kwargs : dict
         Additional parameters passed to AurelCore initialization.
-    
+
     Returns
     -------
     dict
@@ -339,19 +339,19 @@ def process_single_timestep(data, fd, vars, estimates,
         '{variable}_{estimation_func}'.
     list of str
         List of scalar keys if `scalarkeys` is None, otherwise returns None."""
-    
+
     if verbose:
         for temp in ['it', 'iteration', 't', 'time']:
             if temp in list(data.keys()):
                 print(f"Processing {temp} = {data[temp]}", 
                       flush=True)
                 break
-    
+
     # ====== Calculate vars if requested
     if vars:
         # Create a new AurelCore instance for this time step
         rel = core.AurelCore(fd, verbose=verbose, **rel_kwargs)
-        
+
         # Set all existing data values for this time step 
         # (except variables to be calculated)
         for key, values in data.items():
@@ -374,7 +374,7 @@ def process_single_timestep(data, fd, vars, estimates,
                     if verbose:
                         print(f"Calculated and freezed variable '{func_name}'"
                               + f" in AurelCore", flush=True)
-        
+
         # Calculate and store each requested variable
         for v in vars:
             if isinstance(v, str):
@@ -382,7 +382,7 @@ def process_single_timestep(data, fd, vars, estimates,
             elif isinstance(v, dict):
                 for func_name, function in v.items():
                     data[func_name] = rel[func_name]
-        
+
         # Clean up AurelCore instance to free memory
         del rel
 
@@ -396,10 +396,10 @@ def process_single_timestep(data, fd, vars, estimates,
         return_scalarkeys = True
     else:
         return_scalarkeys = False
-    
+
     # ====== Apply estimation functions if requested
     if estimates:
-        
+
         # Process each item in the estimates list
         for est_item in estimates:
             if verbose:
@@ -424,16 +424,16 @@ def process_single_timestep(data, fd, vars, estimates,
                         if key+'_'+func_name not in list(data.keys()):
                             # Apply the custom estimation function and store 
                             data[key+'_'+func_name] = func(data[key])
-    
+
     # Return the updated data and scalar keys if new information requested
     if return_scalarkeys:
         return data, scalarkeys
     else:
         return data
-    
+
 def validate_estimation_function(func, func_name, fd, verbose=True):
     """Validate that estimation function has correct signature and behaviour.
-    
+
     Parameters
     ----------
     func : callable
@@ -444,7 +444,7 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
         Finite difference object to get grid dimensions
     verbose : bool, optional
         If True, prints debug information about the validation process.
-        
+
     Returns
     -------
     bool
@@ -452,24 +452,24 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
     """
     if verbose:
         print(f"Validating estimation function '{func_name}'...", flush=True)
-    
+
     # Check if it's callable
     if not callable(func):
         raise ValueError(f"Estimation function '{func_name}' must be callable")
-    
+
     # Check function signature
     sig = inspect.signature(func)
     params = list(sig.parameters.keys())
-    
+
     if len(params) != 1:
         raise ValueError(
             f"Estimation function '{func_name}' must take exactly 1 parameter,"
             f" a scalar array, instead got {len(params)}: {params}"
         )
-    
+
     # Test with dummy array
     test_array = np.ones((fd.Nx, fd.Ny, fd.Nz))
-    
+
     try:
         result = func(test_array)
     except Exception as e:
@@ -477,7 +477,7 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
             f"Estimation function '{func_name}' failed when called with "
             f"array of shape ({fd.Nx}, {fd.Ny}, {fd.Nz}): {e}"
         )
-    
+
     # Check return type and shape - must be scalar-like
     try:
         # Convert to Python scalar if possible evaluation
@@ -487,14 +487,14 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
             result_value = result
     except Exception:
         result_value = result
-    
+
     # Check if result is scalar-like: Python scalar or 0-dimensional array
     is_scalar = (
         isinstance(result_value, (int, float, complex)) or  # Python scalars
         (hasattr(result, 'shape') and result.shape == ()) or  # 0-d arrays
         (hasattr(result, 'ndim') and result.ndim == 0)        # NumPy scalars
     )
-    
+
     if not is_scalar:
         raise ValueError(
             f"Estimation function '{func_name}' must return a scalar, "
@@ -507,7 +507,7 @@ def validate_estimation_function(func, func_name, fd, verbose=True):
 def validate_variable_function(func, func_name, fd,
                                verbose, veryverbose, rel_kwargs):
     """Validate that variable function has correct signature and behaviour.
-    
+
     Parameters
     ----------
     func : callable
@@ -522,7 +522,7 @@ def validate_variable_function(func, func_name, fd,
         If True, prints aurelcore verbose information.
     rel_kwargs : dict
         Additional parameters passed to AurelCore initialization.
-        
+
     Returns
     -------
     bool
@@ -534,7 +534,7 @@ def validate_variable_function(func, func_name, fd,
     # Check if it's callable
     if not callable(func):
         raise ValueError(f"Variable function '{func_name}' must be callable")
-    
+
     # Check function signature
     sig = inspect.signature(func)
     params = list(sig.parameters.keys())
@@ -543,7 +543,7 @@ def validate_variable_function(func, func_name, fd,
             f"Variable function '{func_name}' must take exactly 1 parameter,"
             f" the AurelCore class, instead got {len(params)}: {params}"
         )
-    
+
     # Test with dummy AurelCore instance
     rel = core.AurelCore(fd, verbose=veryverbose, **rel_kwargs)
     try:
@@ -553,7 +553,7 @@ def validate_variable_function(func, func_name, fd,
             f"Variable function '{func_name}' failed when called with "
             f"AurelCore instance: {e}"
         )
-    
+
     if verbose:
         print(f"✓ Custom function '{func_name}' validated successfully")
     return True

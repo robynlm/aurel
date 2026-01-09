@@ -20,7 +20,7 @@ Omega_l_today = 0.0 # dark energy density parameter today
 def a(t):
     """Scale factor"""
     return a_today * ((t / t_today) ** (2 / (3 * (1.0 + w))))
-    
+
 def t_func_a(a):
     """Proper time from scale factor"""
     return t_today * ((a / a_today) ** ((3 * (1.0 + w)) / 2))
@@ -28,7 +28,7 @@ def t_func_a(a):
 def Hprop(t):
     """Proper Hubble function"""
     return Hprop_today * t_today / t
-    
+
 def t_func_Hprop(Hprop):
     """Proper time from Hubble"""
     return Hprop_today * t_today / Hprop
@@ -44,11 +44,11 @@ def an_today(t):
 def redshift(t):
     """Redshift"""
     return -1 + ( a_today / a(t) )
-    
+
 def a_func_z(z):
     """Scale factor from redshift"""
     return a_today / (1 + z)
-    
+
 def t_func_z(z):
     """Proper time from redshift"""
     return t_func_a(a_func_z(z))

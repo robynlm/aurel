@@ -33,7 +33,7 @@ def Z_terms(t, x, y, z, analytical=False):
     integrated_part = ((3/5) * pac.sqrt(pac.cosh(tau)**2)
                        * hyperthing * (pac.sinh(tau)**(5/3)) / pac.cosh(tau))
     fP = fM*integrated_part
-    
+
     dtaufM = -1/pac.sinh(tau)**2
     dtfM = tauC*dtaufM
     part_to_integrate = (pac.sinh(tau)**(2/3))/pac.cosh(tau)**2

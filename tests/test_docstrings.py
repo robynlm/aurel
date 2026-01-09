@@ -10,7 +10,7 @@ class TestDocstrings:
          if ((inspect.isclass(getattr(aurel, name)) 
               or inspect.isfunction(getattr(aurel, name)))
              and getattr(aurel, name).__module__.startswith('aurel'))]
-    
+
     @pytest.mark.parametrize("module", aurel_elements)
     def test_docstrings(self, module):
         missing_docs = []
@@ -28,5 +28,5 @@ class TestDocstrings:
             doc = module.__doc__
             if not doc or not doc.strip():
                 missing_docs.append(module.__name__)
-        
+
         assert not missing_docs, f"Missing docstrings: {missing_docs}"

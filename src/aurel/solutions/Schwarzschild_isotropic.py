@@ -10,7 +10,7 @@ from .. import maths
 
 kappa = 8 * np.pi # Einstein's gravitational constant
 M = 1.0 # Mass of the black hole
-    
+
 def alpha(t, x, y, z, analytical=False):
     """Returns the lapse function"""
     if analytical:
@@ -19,7 +19,7 @@ def alpha(t, x, y, z, analytical=False):
         r = np.sqrt(x**2 + y**2 + z**2)
     alpha = ((2 * r) - M) / ((2 * r) + M)
     return alpha
-    
+
 def betaup3(t, x, y, z):
     """Returns the shift vector"""
     Nx, Ny, Nz = np.shape(x)

@@ -28,7 +28,7 @@ Users must set the SIMLOC environment variable to the simulation directories:
 For multiple simulation locations, use colon separation on Unix/Mac or semicolon on Windows:
 
     ``export SIMLOC="/path1:/path2:/path3"``  # Unix/Mac
-    
+
     ``set SIMLOC="C:\\path1;C:\\path2;C:\\path3"``  # Windows
 """
 
@@ -171,19 +171,19 @@ def read_aurel_data(param, **kwargs):
     ----------------
     it : list of int, optional
         Iteration numbers to read. Default [0].
-        
+
     vars : list of str, optional
         Variable names to read. Default [] (read all available variables).
-        
+
     rl : int, optional
         Refinement level to read. Default 0.
-        
+
     restart : int, optional
         Restart number (for ET-style directory structure). Default 0.
-        
+
     verbose : bool, optional
         Print progress information. Default False.
-        
+
     veryverbose : bool, optional
         Print detailed debugging information. Default False.
 
@@ -213,7 +213,7 @@ def read_aurel_data(param, **kwargs):
         get_them_all = True
     else:
         get_them_all = False
-        
+
     if veryverbose:
         print('read_aurel_data: looking for it ', it)
         if get_them_all:
@@ -232,16 +232,16 @@ def read_aurel_data(param, **kwargs):
     else:
         # Direct path to Aurel format files
         datapath = param['datapath']
-        
+
     # Always include time coordinate in variables to read
     var += ['t']
     # Initialize data dictionary with empty lists for each variable
     data = {'it': np.array(it), **{v: [] for v in var}}
-    
+
     # Read data for each requested iteration
     for it_index, iit in enumerate(it):
         fname = '{}it_{}.hdf5'.format(datapath, int(iit))
-        
+
         # Handle missing iteration files gracefully
         if not os.path.exists(fname):
             # Record None values for all variables at this iteration
@@ -258,15 +258,15 @@ def read_aurel_data(param, **kwargs):
                     var = list(set(var))  # Remove duplicates
                     # Remove 'it' - not a file variable
                     var = [v for v in var if v != 'it']
-                    
+
                 # Read each requested variable
                 for key in var:
                     skey = key + ' rl={}'.format(rl)  # HDF5 dataset key
-                    
+
                     # Ensure this variable exists in our data dictionary
                     if key not in data.keys():
                         data[key] = [None]*it_index # Fill iterations with None
-                        
+
                     # Read data if dataset exists, otherwise store None
                     if skey in list(f.keys()):
                         data[key].append(np.array(f[skey]))
@@ -491,12 +491,12 @@ rx_key = re.compile(
 
 def parse_hdf5_key(key):
     """Parse HDF5 dataset key into its components.
-    
+
     Parameters
     ----------
     key : str
         HDF5 dataset key in format like "admbase::gxx it=0 tl=0 m=0 rl=0 c=0"
-    
+
     Returns
     -------
     dict or None
@@ -512,9 +512,9 @@ def parse_hdf5_key(key):
                 'rl': int or None,  # refinement level (if present) 
                 'c': int or None    # chunk number (if present)
             }
-            
+
     """
-    
+
     match = rx_key.match(key)
     if match:
         return {
@@ -539,14 +539,14 @@ rx_checkpoint = re.compile(
 
 def parse_h5file(filepath):
     """Parse HDF5 filename into its components.
-    
+
     Parameters
     ----------
     filepath : str
         HDF5 file path or filename. Can be either:
 
         - Full absolute/relative path: "/path/to/admbase-metric.h5"
-        
+
         - Just filename: "rho.xyz.h5"
 
     Returns
@@ -573,13 +573,13 @@ def parse_h5file(filepath):
             }
 
     """
-    
+
     # Extract just the filename if a full path was provided
     if os.path.sep in filepath:
         filename = os.path.basename(filepath)
     else:
         filename = filepath
-    
+
     match_checkpoint = rx_checkpoint.match(filename)
     match = rx_h5file.match(filename)
     if match_checkpoint:
@@ -597,13 +597,13 @@ def parse_h5file(filepath):
         chunk_number = int(match.group(6)) if match.group(6) else None
                                                 # e.g., "123" or None
         xyz_suffix = match.group(7)             # e.g., ".xyz" or None
-        
+
         if (thorn_group_with_dash is not None 
             and variable_or_group_name is not None):
             base_name = f"{thorn_group_with_dash}{variable_or_group_name}"
         else:
             base_name = None
-        
+
         return {
             'thorn_with_dash': thorn_group_with_dash,
             'thorn': thorn_name,
@@ -650,15 +650,15 @@ def parameters(simname):
             'simulation' : str, Data format identifier ('ET')
 
             'simpath' : str, Path to simulation root directory
-            
+
         Grid Parameters:
             'xmin', 'xmax', 'Lx', 'Nx', 'dx' : float/int, minimum, maximum, 
             extent, grid points and spacing. Same for Y and Z-direction 
             parameters.
-            
+
         Thorn Information:
             'list_of_thorns' : list of str, All active thorns in the simulation
-            
+
         Parameter Values:
             All parameters from the .par file with appropriate types.
             Conflicting parameter names include thorn prefix.
@@ -666,13 +666,13 @@ def parameters(simname):
     Notes
     -----
     The SIMLOC environment variable must be set:
-    
+
         ``export SIMLOC="/path/to/simulations"``
-        
+
     For multiple locations (use colon on Unix/Mac, semicolon on Windows):
-    
+
         ``export SIMLOC="/path1:/path2:/path3"``  # Unix/Mac
-        
+
         ``set SIMLOC="C:\path1;C:\path2;C:\path3"``  # Windows
     """
     parameters = {
@@ -688,12 +688,12 @@ def parameters(simname):
             'Could not find environment variable SIMLOC. '
             +'Please set it to the path of your simulations.'
             +'`export SIMLOC="/path/to/simulations/"`')
-    
+
     for simloc in simlocs:
         param_files = sorted(glob.glob(simloc + parameters['simname'] 
                                        + '/output-*/' 
                                        + parameters['simname'] + '.par'))
-        
+
         if param_files:
             parampath = param_files[0]
             founddata = True
@@ -735,7 +735,7 @@ def parameters(simname):
             thorn = thorn.strip()
             variable = variable.strip()
             value = value.strip()
-            
+
             # format value, number or string
             digitvalue = value.replace('.', '', 1).replace(
                 '-', '', 1).replace('+', '', 1).replace('e', '', 1)
@@ -747,7 +747,7 @@ def parameters(simname):
             else:
                 if '"' in value:
                     value = value.split('"')[1]
-                    
+
             # save variable and value
             if variable in [
                 'verbose',
@@ -767,7 +767,7 @@ def parameters(simname):
             list_of_thorns += re.split(' ', thorns)
     list_of_thorns = list(set(list_of_thorns)) # remove duplicates
     parameters['list_of_thorns'] = list_of_thorns
-                
+
     # calculate extra grid info
     for coord in ['x', 'y', 'z']:
         L = parameters[coord+'max']-parameters[coord+'min']
@@ -808,11 +808,11 @@ def iterations(param, **kwargs):
 
         - 'simpath': Path to simulation directory (with trailing slash)
         - 'simname': Simulation name
-        
+
     skip_last : bool, optional
         Skip the last restart directory. Default True.
         Useful to avoid interrupting running simulations.
-        
+
     verbose : bool, optional
         Print detailed progress information. Default True.
         Shows contents of iterations.txt file and overall summary.
@@ -821,7 +821,7 @@ def iterations(param, **kwargs):
     -------
     dict
         Dictionary containing iteration information for all restarts::
-        
+
             {
                 restart_number: {
                     'var available': [variable names],
@@ -842,7 +842,7 @@ def iterations(param, **kwargs):
     Notes
     -----
     Creates/appends to '{simpath}/{simname}/iterations.txt' with format::
-    
+
         === restart 0
         3D variables available: ['rho', 'alpha', 'gxx', ...]
         it = 0 -> 1000
@@ -862,7 +862,7 @@ def iterations(param, **kwargs):
     skip_last = kwargs.get('skip_last', True)
     verbose = kwargs.get('verbose', True)
     verbose_file = kwargs.get('verbose_file', True)
-    
+
     # Open/create iterations catalog file
     it_filename = param['simpath']+param['simname']+'/iterations.txt'
     file_existed_before = os.path.isfile(it_filename)
@@ -874,7 +874,7 @@ def iterations(param, **kwargs):
         if not file_existed_before:
             print('Creating new iterations file: ' + it_filename, 
                   flush=True)
-    
+
     with open(it_filename, "a+") as it_file:
         # Display existing content from previous runs
         it_file.seek(0)
@@ -931,14 +931,14 @@ def iterations(param, **kwargs):
             saveprint(it_file, ' === restart {}'.format(restart), 
                       verbose=verbose_file)
             its_available[restart] = {}
-            
+
             # Analyze available variables in this restart
             vars_and_files = get_content(param, 
                                          verbose=verbose, restart=restart)
             vars_available = []
             for key in vars_and_files.keys():
                 vars_available += list(key)
-            
+
             # Error handling for empty restart directories
             if vars_available == []:
                 # Path to this restart's output directory that was checked
@@ -954,7 +954,7 @@ def iterations(param, **kwargs):
                           + str(aurel_vars_available), 
                           verbose=verbose_file)
                 its_available[restart]['var available'] = aurel_vars_available
-                
+
                 # Select representative file for iteration analysis
                 # Preferably a light file that only has one variable
                 files_with_single_var = [
@@ -999,7 +999,7 @@ def iterations(param, **kwargs):
                     saveprint(it_file, 'Reading iterations in: '
                             + file_for_it, verbose=verbose_file)
                     with h5py.File(file_for_it, 'r') as f:
-                        
+
                         # only consider one of the variables in this file
                         fkeys = list(f.keys())
                         for fk in fkeys:
@@ -1008,10 +1008,10 @@ def iterations(param, **kwargs):
                                 varkey = varkey['variable']
                                 break
                         if verbose: print(f'Checking variable {varkey}')
-                            
+
                         # all the keys of this variable
                         fkeys = [k for k in fkeys if varkey in k]
-                        
+
                         # all the iterations
                         allits = np.sort([parse_hdf5_key(k)['it'] 
                                           for k in fkeys])
@@ -1022,17 +1022,17 @@ def iterations(param, **kwargs):
                             verbose=verbose_file)
                         its_available[restart]['its available'] = [
                             np.min(allits), np.max(allits)]
-                            
+
                         # maximum refinement level present
                         rlmax = np.max([parse_hdf5_key(k)['rl'] 
                                         for k in fkeys])
-                        
+
                         # for each refinement level
                         for rl in range(rlmax+1):
                             # take the corresponding keys
                             keysrl = [k for k in fkeys 
                                     if parse_hdf5_key(k)['rl'] == rl]
-        
+
                             if keysrl!=[]:
                                 # Check if there are chunk numbers
                                 if parse_hdf5_key(keysrl[0])['c'] is not None:
@@ -1042,7 +1042,7 @@ def iterations(param, **kwargs):
                                 else:
                                     chosen_c = ''
                                 keysrl = [k for k in keysrl if chosen_c in k]
-                                
+
                                 # and look at what iterations they have
                                 allits = np.sort([parse_hdf5_key(k)['it'] 
                                                 for k in keysrl])
@@ -1060,7 +1060,7 @@ def iterations(param, **kwargs):
                                     its_available[restart][rlkey] = allits
                                 saveprint(it_file, rlkey+' at '+itkey, 
                                         verbose=verbose_file)
-            
+
             # List checkpoints available
             checkpoint_files = glob.glob(
                 param['simpath'] + param['simname']
@@ -1070,7 +1070,7 @@ def iterations(param, **kwargs):
                 if '.file_' in checkpoint_files[0]:
                     checkpoint_files = [
                         cf for cf in checkpoint_files if '.file_0.' in cf]
-                
+
             checkpoint_its = []
             for chkfile in checkpoint_files:
                 chk_it = int(chkfile.split('checkpoint.chkpt.it_')[1].split('.')[0])
@@ -1110,11 +1110,11 @@ def read_iterations(param, **kwargs):
 
         - 'simpath': Path to simulation directory
         - 'simname': Simulation name
-        
+
     skip_last : bool, optional
         Skip the last restart directory when creating iterations.txt.
         Default True. This is passed to `iterations()`.
-        
+
     verbose : bool, optional
         Print detailed parsing information. Default False. 
         Also passed to `iterations()`.
@@ -1123,7 +1123,7 @@ def read_iterations(param, **kwargs):
     -------
     dict
         Dictionary containing iteration information for all restarts::
-        
+
             {
                 restart_number: {
                     'var available': [variable names],
@@ -1188,7 +1188,7 @@ def read_iterations(param, **kwargs):
                     else:
                         it_list = [int(l.split('[')[1].split(']')[0])]
                         its_available[restart_nbr][rlkey] = it_list
-                
+
                 elif 'Checkpoints available at its' in l:
                     chk_its = l.split('Checkpoints available at its: ')[1]
                     chk_its = chk_its.replace('[', '').replace(']', '')
@@ -1204,7 +1204,7 @@ def collect_overall_iterations(its_available, verbose):
     """Merge iteration data across all restarts into overall summary.
 
     This is a helper function for `iterations()`.
-    
+
     This function analyzes the iteration information from individual restart
     and merges them into a comprehensive overview of what iterations are 
     available across the entire simulation. It handles multiple refinement 
@@ -1217,7 +1217,7 @@ def collect_overall_iterations(its_available, verbose):
     its_available : dict
         Dictionary with iterations available for each restart, typically
         from `read_iterations()` or `iterations()`.
-        
+
     verbose : bool
         If True, print the overall iterations summary to stdout.
 
@@ -1226,7 +1226,7 @@ def collect_overall_iterations(its_available, verbose):
     dict
         The input dictionary with an added 'overall' key containing merged
         iteration information across all restarts::
-        
+
             {
                 restart_number: {...},  # Original restart data preserved
                 'overall': {
@@ -1314,7 +1314,7 @@ def collect_overall_iterations(its_available, verbose):
                                 pass
                             else:
                                 it_situation += [list(rl_it_situation)]
-        
+
         if rl_to_do:
             its_available['overall'][rlkey] = it_situation
             if verbose:
@@ -1340,7 +1340,7 @@ def collect_overall_iterations(its_available, verbose):
                             it_situation_string += ']'
                     else:
                         it_situation_string += ', '
-                
+
                 # Print overall iterations of said refinement level
                 print(rlkey, 'at it =', it_situation_string, flush=True)
         rl += 1
@@ -1402,11 +1402,11 @@ def get_content(param, **kwargs):
 
     overwrite : bool, optional
         Overwrite existing content file. Default False.
-        
+
     verbose : bool, optional
         Print progress information during processing. Default True.
         Shows file scanning progress and caching status.
-        
+
     veryverbose : bool, optional
         Print extra progress information during processing. Default False.
 
@@ -1445,7 +1445,7 @@ def get_content(param, **kwargs):
             print(f"Removing content file from {content_file}...")
         if os.path.exists(content_file):
             os.remove(content_file)
-    
+
     # Try to load existing content file
     try:
         if verbose:
@@ -1463,7 +1463,7 @@ def get_content(param, **kwargs):
     except (FileNotFoundError, json.JSONDecodeError):
         print("No existing content file found or invalid format."
               + " Calculating from scratch...")
-        
+
         vars_and_files = {}
         processed_groups = {}  # Track which groups we've already read
         h5files = glob.glob(path+'*.h5')
@@ -1511,7 +1511,7 @@ def get_content(param, **kwargs):
                         # We've already processed this group 
                         # - reuse the variable names
                         varnames = processed_groups[base_name]
-                    
+
                     if veryverbose:
                         print('Found the variables:', varnames, flush=True)
                     # Add this file to all variables in the group
@@ -1521,7 +1521,7 @@ def get_content(param, **kwargs):
         # Convert sets to lists
         vars_and_files = {var: list(files) 
                           for var, files in vars_and_files.items()}
-        
+
         # ==== Group variables by shared file paths ====
         # Create a mapping from file paths 
         # (as tuples for hashability) to variables
@@ -1529,11 +1529,11 @@ def get_content(param, **kwargs):
         for var, file_list in vars_and_files.items():
             # Convert list to tuple so it can be used as a dictionary key
             file_tuple = tuple(sorted(file_list))
-            
+
             if file_tuple not in files_to_vars:
                 files_to_vars[file_tuple] = []
             files_to_vars[file_tuple].append(var)
-        
+
         # Invert the mapping: group variables by their shared file paths
         vars_and_files = {}
         for file_tuple, var_list in files_to_vars.items():
@@ -1578,44 +1578,44 @@ def read_ET_data(param, **kwargs):
     - **Missing Data Handling**: Fills gaps by reading from original ET files
     - **Variable Mapping**: Handles Aurel to Einstein Toolkit name conversions
     - **Caching Strategy**: Saves data in optimized format for future access
-    
+
     Parameters
     ----------
     param : dict
         Simulation parameters from `parameters()` function.
-    
+
     Other Parameters
     ----------------
     it : list of int, optional
         Iterations to read. Default [0].
-    
+
     vars : list of str, optional.
         Variables in Aurel format. Default [] (all available). 
         Examples: ['rho', 'Kdown3'], ['gammadown3', 'alpha']
-    
+
     restart : int, optional
         Specific restart to read from. 
         Default -1 (auto-detect).
-    
+
     split_per_it : bool, optional
         Use cached per-iteration files when available and save read data
         in per-iteration files. Default True.
-    
+
     usecheckpoints : bool, optional
         For ET data: whether to use checkpoint iterations if available. 
         Default False.
-    
+
     verbose : bool, optional
         Print progress information. Default True.
-    
+
     veryverbose : bool, optional
         Print detailed debugging information. Default False.
-    
+
     Returns
     -------
     dict
         Simulation data dictionary with structure::
-        
+
             {
                 'it': [iteration_numbers],
                 't': [time_values],
@@ -1623,11 +1623,11 @@ def read_ET_data(param, **kwargs):
                 'var2': [data_arrays],
                 ...
             }
-    
+
     Notes
     -----
     Processing Workflow:
-    
+
     1. **Iteration Location**: Determines which restart contains each iteration
     2. **Cache Reading**: Loads available data from per-iteration files  
     3. **Gap Detection**: Identifies missing iterations/variables
@@ -1732,7 +1732,7 @@ def read_ET_data(param, **kwargs):
             kwargs['restart'] = restart
             vars_and_files = get_content(
                 param, restart=restart, verbose=verbose)
-            
+
             # if no variable is specified, take all available
             if var==[]:
                 var = its_available[restart]['var available']
@@ -1747,12 +1747,12 @@ def read_ET_data(param, **kwargs):
             if usecheckpoints:
                 datar[restart] = read_ET_checkpoints(param, var, **kwargs)
             else:
-            
+
                 # ====== directly read and provide the data
                 if not split_per_it:
                     datar[restart] = read_ET_variables(
                         param, var, vars_and_files, **kwargs)
-                    
+
                 # ====== combination of Einstein Toolkit data and aurel data
                 # + save into it files for quicker reading next time
                 else:
@@ -1772,7 +1772,7 @@ def read_ET_data(param, **kwargs):
                                 and k!='it')}
                         print('Data read from split iterations:', 
                                 list(verbose_cleaned_dict.keys()), flush=True)
-                        
+
                     # Find iterations missing
                     avart = avar + ['t']
                     its_missing = {v: [] for v in avart}
@@ -1793,7 +1793,7 @@ def read_ET_data(param, **kwargs):
                             k:v for k, v in its_missing.items() if v!= []}
                         print('Iterations missing:', 
                                 verbose_clean_its_missing, flush=True)
-                                
+
 
                     # =========================================================
                     # ======== Collect missing data from ET data
@@ -1846,7 +1846,7 @@ def read_ET_data(param, **kwargs):
                                             if (data_temp[av][iidxtem] is None
                                                 or av == 't'):
                                                 its_missing[av].remove(iit)
-                                                
+
                                     if its_missing[av] != []:
                                         # save the missing iterations
                                         # and save them individually
@@ -1871,7 +1871,7 @@ def read_ET_data(param, **kwargs):
                         if verbose_saved_vars != []:
                             print('Variables saved to split iterations files:',
                                 verbose_saved_vars, flush=True)
-    
+
     # create ultimate data dictionary (flattening datar)
     if veryverbose:
         print(' =========== Joining the data from the different restarts')
@@ -1879,7 +1879,7 @@ def read_ET_data(param, **kwargs):
     data = {}
     for key in datar[restart].keys():
         data[key] = []
-    
+
     # copy over everything from datar
     for iit in old_it:
         for restart in datar.keys():
@@ -1891,7 +1891,7 @@ def read_ET_data(param, **kwargs):
 
 def read_ET_variables(param, var, vars_and_files, **kwargs):
     """Read the data from Einstein Toolkit simulation output files.
-    
+
     Parameters
     ----------
     param : dict
@@ -1913,7 +1913,7 @@ def read_ET_variables(param, var, vars_and_files, **kwargs):
     veryverbose : bool, optional
         If True, print additional information during the joining process.
         The default is False.
-        
+
     Returns
     -------
     dict
@@ -1925,10 +1925,10 @@ def read_ET_variables(param, var, vars_and_files, **kwargs):
 
     if veryverbose:
         print('read_ET_variables was given the vars:', var, flush=True)
-    
+
     # data to be returned
     data = {'it':np.array(it), 't':[]}
-    
+
     # are the chunks together in one file or one file per chunk?
     first_var = list(vars_and_files.keys())[0]
     first_file_of_first_var = vars_and_files[first_var][0]
@@ -1976,7 +1976,7 @@ def read_ET_variables(param, var, vars_and_files, **kwargs):
 
 def read_ET_group_or_var(variables, files, cmax, **kwargs):
     """Read variables from Einstein Toolkit simulation output files.
-    
+
     Parameters
     ----------
     variables : list
@@ -1999,7 +1999,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
     rl : int, optional
         The refinement level to read from the simulation output files.
         The default is 0.
-        
+
     Returns
     -------
     dict
@@ -2024,9 +2024,9 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
     if veryextraverbose:
         print('read_ET_group_or_var(variables, files, cmax) activated with:', 
               variables, files, cmax, flush=True)
-    
+
     var_chunks = {iit:{} for iit in it}
-    
+
     # also collect time while you're at it
     time = []
     collect_time = True
@@ -2051,7 +2051,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                         raise ValueError(
                             f"Could not find {variables} for it {iit}"
                             + f" and rl {rl} in file: {filepath}")
-                        
+
                     # find the actual number of chunks
                     if cmax == 'in file':
                         if 'c=' in relevant_keys[0]:
@@ -2065,13 +2065,13 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                     else:
                         actual_cmax = cmax
                         crange = [parse_h5file(filepath)['chunk_number']]
-                            
+
                     # for each chunk
                     for c in crange:
                         if actual_cmax!=0: 
                             relevant_keys_with_c = [k for k in relevant_keys 
                                      if ((parse_hdf5_key(k)['c'] == c))]
-                             
+
                         # For each component
                         for vi, v in enumerate(variables):
                             # the full key to use
@@ -2113,7 +2113,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                                         + ' found: {}'.format(key))
                             else:
                                 key = key[0]
-                            
+
                             # Read in the variable
                             if veryextraverbose:
                                 print('Reading key = {}'.format(key), 
@@ -2149,12 +2149,12 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
             varlist += [fixij(join_chunks(
                 var_chunks[iit][v], **kwargs))]
         var['t'] = time
-        
+
     return var
 
 def read_ET_checkpoints(param, var, **kwargs):
     """Read the data from Einstein Toolkit simulation checkpoint files.
-    
+
     Parameters
     ----------
     param : dict
@@ -2172,7 +2172,7 @@ def read_ET_checkpoints(param, var, **kwargs):
         The refinement level to read from the simulation checkpoint files.
     verbose : bool, optional
         Print progress information. Default True.
-        
+
     Returns
     -------
     dict
@@ -2194,7 +2194,7 @@ def read_ET_checkpoints(param, var, **kwargs):
         param['simpath'] + param['simname']
         + '/output-{:04d}/'.format(restart)
         + param['simname'] + '/checkpoint.chkpt.it_*.h5')
-    
+
     # find cmax
     it0_file = []
     i = 0
@@ -2226,7 +2226,7 @@ def read_ET_checkpoints(param, var, **kwargs):
                     if veryextraverbose:
                         print('Reading checkpoint file: {}'.format(file), 
                             flush=True)
-                        
+
                     # keys 
                     file_keys = [k for k in f.keys() 
                                  if parse_hdf5_key(k) is not None]
@@ -2234,7 +2234,7 @@ def read_ET_checkpoints(param, var, **kwargs):
                                      if ((parse_hdf5_key(k)['it'] == iit)
                                      and (parse_hdf5_key(k)['rl'] == rl)
                                      and (parse_hdf5_key(k)['tl'] == 0))]
-                    
+
                     # max number of chunks
                     if cmax == 'in file':
                         if 'c=' in relevant_keys[0]:
@@ -2262,7 +2262,7 @@ def read_ET_checkpoints(param, var, **kwargs):
                             else:
                                 key = [k for k in varkeys 
                                         if parse_hdf5_key(k)['c'] == c]
-                                
+
                             # should be only one key
                             if len(key) != 1:
                                 other = [k.split(' it=')[1] for k in key]
@@ -2297,7 +2297,7 @@ def read_ET_checkpoints(param, var, **kwargs):
                                         + ' found: {}'.format(key))
                             else:
                                 key = key[0]
-                            
+
                             # Read in the variable
                             if veryextraverbose:
                                 print('Reading key = {}'.format(key), 
@@ -2313,11 +2313,11 @@ def read_ET_checkpoints(param, var, **kwargs):
                                                   ghost_x:-ghost_x]
                             iorigin = tuple(f[key].attrs['iorigin'])
                             var_chunks.setdefault(v, {})[iorigin] = var_array
-                        
+
                     if collect_time:
                         data['t'] += [f[key].attrs['time']]
                         collect_time = False
-                    
+
             # Join chunks, fix indexing and save in data dictionary
             for v in var:
                 if veryextraverbose:
@@ -2330,7 +2330,7 @@ def read_ET_checkpoints(param, var, **kwargs):
         else:
             print('Could not find checkpoint file for'
                     + ' it={}'.format(iit), flush=True)
-                           
+
     return data
 
 def fixij(f):
@@ -2339,7 +2339,7 @@ def fixij(f):
 
 def join_chunks(cut_data, **kwargs):
     """Join the chunks of data together.
-    
+
     Parameters
     ----------
     cut_data : dict of dict
@@ -2352,7 +2352,7 @@ def join_chunks(cut_data, **kwargs):
     veryextraverbose : bool, optional
         If True, print additional information during the joining process.
         The default is False.
-    
+
     Returns
     -------
     uncut_data : array_like
@@ -2396,7 +2396,7 @@ def join_chunks(cut_data, **kwargs):
                           for key, item in ndata_groups[k].items()}
                 print(f"Group {k} has elements with shapes: {shapes}", 
                       flush=True)
-        
+
         # Then append them together
         ndata = {}
         for k12 in ndata_groups.keys():
@@ -2409,7 +2409,7 @@ def join_chunks(cut_data, **kwargs):
                           flush=True)
                 ndata[k12] = np.append(
                     ndata[k12], ndata_groups[k12][k0], axis=2)
-                
+
         all_keys = list(ndata.keys())
         del cut_data, ndata_groups
 
@@ -2446,15 +2446,15 @@ def join_chunks(cut_data, **kwargs):
                           flush=True)
                 nndata[k2] = np.append(
                     nndata[k2], nndata_groups[k2][k1], axis=1)
-        
+
         all_keys = list(nndata.keys())
         del ndata, nndata_groups
-        
+
         if veryextraverbose:
             print(' === Key and shape after 2nd append', flush=True)
             for i, k in enumerate(all_keys):
                 print(i, k, np.shape(nndata[k]), flush=True)
-                
+
         # --- Append along axis = 0
         if veryextraverbose:
             print('Appending along axis = 0', flush=True)
@@ -2469,7 +2469,7 @@ def join_chunks(cut_data, **kwargs):
             uncut_data = np.append(
                 uncut_data, nndata[k], axis=0)
         del nndata
-        
+
         if veryextraverbose:
             print(' === Final shape after 3rd append', flush=True)
             print(np.shape(uncut_data), flush=True)

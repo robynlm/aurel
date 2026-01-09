@@ -15,13 +15,13 @@ import scipy.special as sc
 
 def getcomponents3(f):
     """Extract components of a rank 2 tensor with 3D indices.
-    
+
     This assumes this tensor is symmetric.
-    
+
     Parameters
     ----------
     f : (3, 3, ...) array_like or list of 6 components [xx, xy, xz, yy, yz, zz]
-    
+
     Returns
     -------
     [xx, xy, xz, yy, yz, zz]: list
@@ -35,13 +35,13 @@ def getcomponents3(f):
 
 def getcomponents4(f):
     """Extract components of a rank 2 tensor with 4D indices.
-    
+
     This assumes this tensor is symmetric.
-    
+
     Parameters
     ----------
     f : (4, 4, ...) array_like or list of 10 components [tt, tx, ty, tz, xx, xy, xz, yy, yz, zz]
-    
+
     Returns
     -------
     [tt, tx, ty, tz, xx, xy, xz, yy, yz, zz]: list
@@ -190,7 +190,7 @@ def populate_4Riemann(Riemann_ssss, Riemann_ssst, Riemann_stst):
             R[i, 0, 0, j] = -Riemann_stst[i-1, j-1]
             R[0, i, 0, j] =  Riemann_stst[i-1, j-1]
             R[0, i, j, 0] = -Riemann_stst[i-1, j-1]
-    
+
     # remaining terms are all zero
     return R
 
@@ -200,10 +200,10 @@ def factorial(n):
         return 1
     else:
         return sc.factorial(n)
-    
+
 def sYlm(s, l, m, theta, phi):
     """Spin-weighted spherical harmonics ${}_sY_{lm}$, Eq 3.1 of https://doi.org/10.1063/1.1705135
-    
+
     Parameters
     ----------
     s : int
@@ -216,7 +216,7 @@ def sYlm(s, l, m, theta, phi):
         Inclination/polar angle grid.
     phi : ndarray
         Azimuthal angle grid.
-    
+
     Returns
     -------
     sYlm : ndarray
@@ -233,10 +233,10 @@ def sYlm(s, l, m, theta, phi):
         sumY += (sc.binom(l-s, r) * sc.binom(l+s, r+s-m) 
             * ((-1)**(l - r - s)) * np.exp(1j * m * phi) * cos * sin)
     return fac * sumY
-    
+
 def sYlm_coefficients(s, lmax, f, theta, phi, dtheta_weight, dphi):
     """Coefficients of spin-weighted spherical harmonics decomposition of f
-    
+
     Parameters
     ----------
     s : int
@@ -252,7 +252,7 @@ def sYlm_coefficients(s, lmax, f, theta, phi, dtheta_weight, dphi):
         depending on sampling scheme.
     dphi : float
         Step size in phi direction.
-    
+
     Returns
     -------
     alm : dict[l,m]
@@ -269,7 +269,7 @@ def sYlm_coefficients(s, lmax, f, theta, phi, dtheta_weight, dphi):
 
 def sYlm_reconstruct(s, lmax, alm, theta, phi):
     """Reconstruct a spin-weighted function from its harmonic coefficients.
-    
+
     Parameters
     ----------
     s : int
@@ -280,7 +280,7 @@ def sYlm_reconstruct(s, lmax, alm, theta, phi):
         Harmonic coefficients.
     theta, phi : ndarray
         Angular grids.
-    
+
     Returns
     -------
     f : ndarray

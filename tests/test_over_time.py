@@ -7,7 +7,7 @@ from aurel.solutions import EdS as sol
 
 class TestOverTimeFunction:
     """Test over_time function with different variable and estimation configurations."""
-    
+
     @pytest.fixture(autouse=True)
     def setup(self):
         """Set up test data with LCDM solution."""
@@ -19,7 +19,7 @@ class TestOverTimeFunction:
         }
         self.fd = aurel.FiniteDifference(param, verbose=False)
         x, y, z = self.fd.cartesian_coords
-        
+
         # Generate minimal test data
         self.Nt = 3
         tarray = np.linspace(1, 5, self.Nt)
@@ -29,7 +29,7 @@ class TestOverTimeFunction:
             self.data['gammadown3'].append(sol.gammadown3(t, x, y, z))
             self.data['Kdown3'].append(sol.Kdown3(t, x, y, z))
             self.data['rho'].append(sol.rho(t) * np.ones((self.fd.Nx, self.fd.Ny, self.fd.Nz)))
-    
+
     def test_no_vars_no_estimates(self):
         """Test over_time with no variables or estimates requested."""
         result = aurel.over_time(
@@ -42,7 +42,7 @@ class TestOverTimeFunction:
         # Should return original data unchanged
         assert set(result.keys()) == set(self.data.keys())
         assert len(result['t']) == self.Nt
-    
+
     def test_builtin_var_no_estimates(self):
         """Test over_time with built-in variable from descriptions."""
         result = aurel.over_time(
@@ -56,7 +56,7 @@ class TestOverTimeFunction:
         assert 'gammadet' in result.keys()
         assert len(result['gammadet']) == self.Nt
         assert result['gammadet'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
-    
+
     def test_multiple_builtin_vars_no_estimates(self):
         """Test over_time with multiple built-in variables."""
         result = aurel.over_time(
@@ -70,13 +70,13 @@ class TestOverTimeFunction:
         assert 'null_ray_exp_in' in result.keys()
         assert len(result['gammadet']) == self.Nt
         assert len(result['null_ray_exp_in']) == self.Nt
-    
+
     def test_custom_var_no_estimates(self):
         """Test over_time with custom variable function."""
         def custom_var(rel):
             """Custom variable: sum of gamma components."""
             return rel['gxx'] + rel['gyy'] + rel['gzz']
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -87,13 +87,13 @@ class TestOverTimeFunction:
         assert 'custom_trace' in result.keys()
         assert len(result['custom_trace']) == self.Nt
         assert result['custom_trace'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
-    
+
     def test_mixed_vars(self):
         """Test over_time with both built-in and custom variables."""
         def custom_var(rel):
             """Custom variable: sum of gamma components."""
             return rel['gxx'] + rel['gyy'] + rel['gzz']
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -105,7 +105,7 @@ class TestOverTimeFunction:
         assert 'custom_trace' in result.keys()
         assert len(result['gammadet']) == self.Nt
         assert len(result['custom_trace']) == self.Nt
-    
+
     def test_builtin_var_builtin_estimate(self):
         """Test over_time with built-in variable and built-in estimation."""
         result = aurel.over_time(
@@ -121,7 +121,7 @@ class TestOverTimeFunction:
         assert len(result['gammadet_max']) == self.Nt
         # Max should be a scalar for each timestep
         assert result['gammadet_max'].shape == (self.Nt,)
-    
+
     def test_multiple_builtin_estimates(self):
         """Test over_time with multiple built-in estimations."""
         result = aurel.over_time(
@@ -136,7 +136,7 @@ class TestOverTimeFunction:
         assert 'gammadet_mean' in result.keys()
         for est in ['max', 'min', 'mean']:
             assert result[f'gammadet_{est}'].shape == (self.Nt,)
-    
+
     def test_custom_estimate(self):
         """Test over_time with custom estimation function."""
         def custom_est(array):
@@ -146,7 +146,7 @@ class TestOverTimeFunction:
             ycenter = Ny // 2
             zcenter = Nz // 2
             return array[xcenter, ycenter, zcenter]
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -156,12 +156,12 @@ class TestOverTimeFunction:
         )
         assert 'gammadet_center' in result.keys()
         assert result['gammadet_center'].shape == (self.Nt,)
-    
+
     def test_mixed_estimates(self):
         """Test over_time with both built-in and custom estimations."""
         def custom_est(array):
             return array[0, 0, 0]
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -173,7 +173,7 @@ class TestOverTimeFunction:
         assert 'gammadet_corner' in result.keys()
         assert result['gammadet_max'].shape == (self.Nt,)
         assert result['gammadet_corner'].shape == (self.Nt,)
-    
+
     def test_estimates_on_input_scalars(self):
         """Test that estimates are also applied to input 3D scalar arrays."""
         result = aurel.over_time(
@@ -187,15 +187,15 @@ class TestOverTimeFunction:
         assert 'rho_max' in result.keys()
         assert 'rho_min' in result.keys()
         assert result['rho_max'].shape == (self.Nt,)
-    
+
     def test_full_configuration(self):
         """Test over_time with all combinations: builtin+custom vars and estimates."""
         def custom_var(rel):
             return rel['gammadown3'][0, 0]
-        
+
         def custom_est(array):
             return np.median(array)
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -203,18 +203,18 @@ class TestOverTimeFunction:
             estimates=['max', 'mean', {'custom_median': custom_est}],
             verbose=False
         )
-        
+
         # Check variables
         assert 'gammadet' in result.keys()
         assert 'custom_var' in result.keys()
-        
+
         # Check estimates on all 3D arrays (including input rho and computed vars)
         for var in ['gammadet', 'custom_var', 'rho']:
             assert f'{var}_max' in result.keys()
             assert f'{var}_mean' in result.keys()
             assert f'{var}_custom_median' in result.keys()
             assert result[f'{var}_max'].shape == (self.Nt,)
-    
+
     def test_invalid_builtin_var(self):
         """Test that invalid built-in variable names are handled gracefully."""
         result = aurel.over_time(
@@ -226,7 +226,7 @@ class TestOverTimeFunction:
         )
         # Should skip invalid variable and not crash
         assert 'invalid_variable_name' not in result.keys()
-    
+
     def test_invalid_builtin_estimate(self):
         """Test that invalid built-in estimation names are handled gracefully."""
         result = aurel.over_time(
@@ -238,19 +238,19 @@ class TestOverTimeFunction:
         )
         # Should skip invalid estimate and not crash
         assert 'gammadet_invalid_estimate_name' not in result.keys()
-    
+
     def test_temporal_ordering(self):
         """Test that results maintain temporal ordering."""
         # Shuffle input data
         import random
         indices = list(range(self.Nt))
         random.shuffle(indices)
-        
+
         shuffled_data = {key: [] for key in self.data.keys()}
         for idx in indices:
             for key in self.data.keys():
                 shuffled_data[key].append(self.data[key][idx])
-        
+
         result = aurel.over_time(
             shuffled_data, 
             self.fd, 
@@ -258,14 +258,14 @@ class TestOverTimeFunction:
             estimates=['max'],
             verbose=False
         )
-        
+
         # Results should be sorted by time
         assert np.all(np.diff(result['t']) > 0)
-    
+
     def test_estimates_all_builtin(self):
         """Test over_time with all available built-in estimation functions."""
         builtin_estimates = list(aurel.time.est_functions.keys())
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -273,11 +273,11 @@ class TestOverTimeFunction:
             estimates=builtin_estimates,
             verbose=False
         )
-        
+
         for est in builtin_estimates:
             assert f'gammadet_{est}' in result.keys()
             assert result[f'gammadet_{est}'].shape == (self.Nt,)
-    
+
     def test_sequential_over_time_calls(self):
         """Test calling over_time sequentially to add variables with same estimates."""
         # First call: compute gammadet with max estimate
@@ -288,12 +288,12 @@ class TestOverTimeFunction:
             estimates=['max', 'mean'],
             verbose=False
         )
-        
+
         # Verify first variable and estimates exist
         assert 'gammadet' in result.keys()
         assert 'gammadet_max' in result.keys()
         assert 'gammadet_mean' in result.keys()
-        
+
         # Second call: add null_ray_exp_in with same estimates
         result = aurel.over_time(
             result, 
@@ -301,7 +301,7 @@ class TestOverTimeFunction:
             vars=['gammadet', 'null_ray_exp_in'], 
             verbose=False
         )
-        
+
         # Verify both variables and their estimates exist
         assert 'gammadet' in result.keys()
         assert 'gammadet_max' in result.keys()
@@ -316,7 +316,7 @@ class TestOverTimeFunction:
             estimates=['max', 'mean'],
             verbose=False
         )
-        
+
         # Verify both variables and their estimates exist
         assert 'gammadet' in result.keys()
         assert 'gammadet_max' in result.keys()
@@ -333,7 +333,7 @@ class TestOverTimeFunction:
             estimates=['max', 'mean'],
             verbose=False
         )
-        
+
         # Verify both variables and their estimates exist
         assert 'gammadet' in result.keys()
         assert 'gammadet_max' in result.keys()
@@ -344,7 +344,7 @@ class TestOverTimeFunction:
         assert 'Ktrace' in result.keys()
         assert 'Ktrace_max' in result.keys()
         assert 'Ktrace_mean' in result.keys()
-        
+
         # Verify shapes
         assert result['gammadet'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
         assert result['gammadet_max'].shape == (self.Nt,)
@@ -355,7 +355,7 @@ class TestOverTimeFunction:
         assert result['Ktrace'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
         assert result['Ktrace_max'].shape == (self.Nt,)
         assert result['Ktrace_mean'].shape == (self.Nt,)
-    
+
     def test_sequential_vars_then_estimates_only(self):
         """Test calling over_time first with vars, then with only estimates."""
         # First call: compute variables without estimates
@@ -366,13 +366,13 @@ class TestOverTimeFunction:
             estimates=[],
             verbose=False
         )
-        
+
         # Verify variables exist but no estimates
         assert 'gammadet' in result.keys()
         assert 'Ktrace' in result.keys()
         assert 'gammadet_max' not in result.keys()
         assert 'Ktrace_max' not in result.keys()
-        
+
         # Second call: compute estimates only (no new vars)
         result = aurel.over_time(
             result, 
@@ -381,7 +381,7 @@ class TestOverTimeFunction:
             estimates=['max', 'min', 'mean'],
             verbose=False
         )
-        
+
         # Verify variables still exist and now have estimates
         assert 'gammadet' in result.keys()
         assert 'Ktrace' in result.keys()
@@ -391,38 +391,38 @@ class TestOverTimeFunction:
         assert 'Ktrace_max' in result.keys()
         assert 'Ktrace_min' in result.keys()
         assert 'Ktrace_mean' in result.keys()
-        
+
         # Verify input scalar (rho) also got estimates
         assert 'rho_max' in result.keys()
         assert 'rho_min' in result.keys()
         assert 'rho_mean' in result.keys()
-        
+
         # Verify shapes
         assert result['gammadet'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
         assert result['Ktrace'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
         assert result['gammadet_max'].shape == (self.Nt,)
         assert result['Ktrace_max'].shape == (self.Nt,)
         assert result['rho_max'].shape == (self.Nt,)
-    
+
     def test_sequential_custom_vars_and_estimates(self):
         """Test sequential calls with custom variables and custom estimates."""
         def custom_var1(rel):
             """Custom variable: trace of gamma."""
             return rel['gxx'] + rel['gyy'] + rel['gzz']
-        
+
         def custom_var2(rel):
             """Custom variable: squared rho."""
             return rel['rho'] ** 2
-        
+
         def custom_est1(array):
             """Custom estimate: center value."""
             Nx, Ny, Nz = np.shape(array)
             return array[Nx // 2, Ny // 2, Nz // 2]
-        
+
         def custom_est2(array):
             """Custom estimate: corner value."""
             return array[0, 0, 0]
-        
+
         # First call: compute first custom var with builtin estimate
         result = aurel.over_time(
             self.data.copy(), 
@@ -431,13 +431,13 @@ class TestOverTimeFunction:
             estimates=['max'],
             verbose=False
         )
-        
+
         # Verify first custom var and estimate exist
         assert 'gammadet' in result.keys()
         assert 'gammadet_max' in result.keys()
         assert 'gamma_trace' in result.keys()
         assert 'gamma_trace_max' in result.keys()
-        
+
         # Second call: add second custom var with first custom estimate
         result = aurel.over_time(
             result, 
@@ -451,7 +451,7 @@ class TestOverTimeFunction:
         assert 'gamma_trace_max' in result.keys()
         assert 'Ktrace' in result.keys()
         assert 'rho_squared' in result.keys()
-        
+
         # Second call: add second custom var with first custom estimate
         result = aurel.over_time(
             result, 
@@ -459,7 +459,7 @@ class TestOverTimeFunction:
             estimates=['max', {'center': custom_est1}],
             verbose=False
         )
-        
+
         # Verify both custom vars exist with their estimates
         assert 'gammadet' in result.keys()
         assert 'gammadet_max' in result.keys()
@@ -473,7 +473,7 @@ class TestOverTimeFunction:
         assert 'rho_squared' in result.keys()
         assert 'rho_squared_max' in result.keys()
         assert 'rho_squared_center' in result.keys()
-        
+
         # Third call: add second custom estimate (no new vars)
         result = aurel.over_time(
             result, 
@@ -482,7 +482,7 @@ class TestOverTimeFunction:
             estimates=[{'corner': custom_est2}],
             verbose=False
         )
-        
+
         # Verify all custom vars have all estimates
         assert 'gammadet' in result.keys()
         assert 'gammadet_max' in result.keys()
@@ -500,11 +500,11 @@ class TestOverTimeFunction:
         assert 'gamma_trace_corner' in result.keys()
         assert 'Ktrace_corner' in result.keys()
         assert 'rho_squared_corner' in result.keys()
-        
+
         # Verify input scalar also got custom estimates
         assert 'rho_center' in result.keys()
         assert 'rho_corner' in result.keys()
-        
+
         # Verify shapes
         assert result['gamma_trace'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
         assert result['rho_squared'].shape == (self.Nt, self.fd.Nx, self.fd.Ny, self.fd.Nz)
@@ -513,17 +513,17 @@ class TestOverTimeFunction:
         assert result['gamma_trace_corner'].shape == (self.Nt,)
         assert result['rho_squared_center'].shape == (self.Nt,)
         assert result['rho_corner'].shape == (self.Nt,)
-    
+
     def test_sequential_custom_vars_with_kwargs(self):
         """Test sequential calls with custom variables that use kwargs."""
         def custom_var_power(rel):
             """Custom variable: rho raised to power."""
             return rel['rho'] ** rel.power
-        
+
         def custom_var_scaled(rel):
             """Custom variable: scaled gamma trace."""
             return rel.scale * (rel['gxx'] + rel['gyy'] + rel['gzz'])
-        
+
         # First call: custom var with power=2
         result = aurel.over_time(
             self.data.copy(), 
@@ -533,13 +533,13 @@ class TestOverTimeFunction:
             power=2,
             verbose=False
         )
-        
+
         # Verify first custom var exists
         assert 'rho_squared' in result.keys()
         assert 'rho_squared_max' in result.keys()
         expected = self.data['rho'][0] ** 2
         np.testing.assert_array_almost_equal(result['rho_squared'][0], expected)
-        
+
         # Second call: add another custom var with different kwarg
         result = aurel.over_time(
             result, 
@@ -549,14 +549,14 @@ class TestOverTimeFunction:
             scale=3.5,
             verbose=False
         )
-        
+
         # Verify both custom vars exist with their estimates
         assert 'rho_squared' in result.keys()
         assert 'rho_squared_max' in result.keys()
         assert 'rho_squared_min' in result.keys()
         assert 'scaled_trace' in result.keys()
         assert 'scaled_trace_mean' in result.keys()
-        
+
         # Third call: recompute with different power
         result = aurel.over_time(
             result, 
@@ -566,12 +566,12 @@ class TestOverTimeFunction:
             power=3,
             verbose=False
         )
-        
+
         # Verify new variable with different kwarg value
         assert 'rho_cubed' in result.keys()
         expected = self.data['rho'][0] ** 3
         np.testing.assert_array_almost_equal(result['rho_cubed'][0], expected)
-        
+
         # Verify previous vars still exist
         assert 'rho_squared' in result.keys()
         assert 'scaled_trace' in result.keys()
@@ -579,7 +579,7 @@ class TestOverTimeFunction:
 
 class TestOverTimeEdgeCases:
     """Test edge cases and error handling for over_time function."""
-    
+
     @pytest.fixture(autouse=True)
     def setup(self):
         """Set up minimal test data."""
@@ -590,7 +590,7 @@ class TestOverTimeEdgeCases:
         }
         self.fd = aurel.FiniteDifference(param, verbose=False)
         x, y, z = self.fd.cartesian_coords
-        
+
         t = 1.0
         self.single_data = {
             't': [t],
@@ -598,7 +598,7 @@ class TestOverTimeEdgeCases:
             'Kdown3': [sol.Kdown3(t, x, y, z)],
             'rho': [sol.rho(t) * np.ones((self.fd.Nx, self.fd.Ny, self.fd.Nz))]
         }
-    
+
     def test_single_timestep(self):
         """Test over_time with only one timestep."""
         result = aurel.over_time(
@@ -610,14 +610,14 @@ class TestOverTimeEdgeCases:
         )
         assert len(result['gammadet']) == 1
         assert len(result['gammadet_max']) == 1
-    
+
     def test_missing_temporal_key(self):
         """Test that missing temporal key raises appropriate error."""
         bad_data = {
             'gammadown3': [sol.gammadown3(1.0, *self.fd.cartesian_coords)],
             'Kdown3': [sol.Kdown3(1.0, *self.fd.cartesian_coords)]
         }
-        
+
         with pytest.raises(ValueError, match="temporal key"):
             aurel.over_time(
                 bad_data, 
@@ -625,13 +625,13 @@ class TestOverTimeEdgeCases:
                 vars=['gammadet'],
                 verbose=False
             )
-    
+
     def test_alternative_temporal_keys(self):
         """Test that alternative temporal keys work (it, iteration, time)."""
         for temp_key in ['it', 'iteration', 'time']:
             data = self.single_data.copy()
             data[temp_key] = data.pop('t')
-            
+
             result = aurel.over_time(
                 data, 
                 self.fd, 
@@ -645,7 +645,7 @@ class TestOverTimeEdgeCases:
 
 class TestOverTimeCustomVarWithKwargs:
     """Test over_time with custom variable functions that accept kwargs."""
-    
+
     @pytest.fixture(autouse=True)
     def setup(self):
         """Set up test data."""
@@ -656,7 +656,7 @@ class TestOverTimeCustomVarWithKwargs:
         }
         self.fd = aurel.FiniteDifference(param, verbose=False)
         x, y, z = self.fd.cartesian_coords
-        
+
         self.Nt = 3
         tarray = np.linspace(1, 5, self.Nt)
         self.data = {key: [] for key in ['t', 'gammadown3', 'Kdown3', 'rho']}
@@ -665,13 +665,13 @@ class TestOverTimeCustomVarWithKwargs:
             self.data['gammadown3'].append(sol.gammadown3(t, x, y, z))
             self.data['Kdown3'].append(sol.Kdown3(t, x, y, z))
             self.data['rho'].append(sol.rho(t) * np.ones((self.fd.Nx, self.fd.Ny, self.fd.Nz)))
-    
+
     def test_custom_var_with_int_kwarg(self):
         """Test custom variable with integer kwarg."""
         def custom_var(rel):
             """Custom variable: rho raised to a power."""
             return rel['rho'] ** rel.power
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -683,13 +683,13 @@ class TestOverTimeCustomVarWithKwargs:
         assert 'rho_cubed' in result.keys()
         expected = self.data['rho'][0] ** 3
         np.testing.assert_array_almost_equal(result['rho_cubed'][0], expected)
-    
+
     def test_custom_var_with_float_kwarg(self):
         """Test custom variable with float kwarg."""
         def custom_var(rel):
             """Custom variable: scaled rho."""
             return rel['rho'] * rel.scale
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -701,14 +701,14 @@ class TestOverTimeCustomVarWithKwargs:
         assert 'scaled_rho' in result.keys()
         expected = self.data['rho'][0] * 2.5
         np.testing.assert_array_almost_equal(result['scaled_rho'][0], expected)
-    
+
     def test_custom_var_with_bool_kwarg(self):
         """Test custom variable with boolean kwarg."""
         def custom_var(rel):
             """Custom variable: optionally take absolute value."""
             result = rel['gxx'] - rel['gyy']
             return np.abs(result) if rel.use_absolute else result
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -721,13 +721,13 @@ class TestOverTimeCustomVarWithKwargs:
         expected = np.abs(sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)[0, 0] - 
                          sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)[1, 1])
         np.testing.assert_array_almost_equal(result['diff'][0], expected)
-    
+
     def test_custom_var_with_string_kwarg(self):
         """Test custom variable with string kwarg."""
         def custom_var(rel):
             """Custom variable: select gamma component by string."""
             return rel[f'g{rel.component}']
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -739,7 +739,7 @@ class TestOverTimeCustomVarWithKwargs:
         assert 'selected' in result.keys()
         expected = sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)[1, 1]
         np.testing.assert_array_almost_equal(result['selected'][0], expected)
-    
+
     def test_custom_var_with_list_kwarg(self):
         """Test custom variable with list kwarg."""
         def custom_var(rel):
@@ -747,7 +747,7 @@ class TestOverTimeCustomVarWithKwargs:
             return (rel.coefficients[0] * rel['gxx'] + 
                     rel.coefficients[1] * rel['gyy'] + 
                     rel.coefficients[2] * rel['gzz'])
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -760,13 +760,13 @@ class TestOverTimeCustomVarWithKwargs:
         gamma = sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)
         expected = 2 * gamma[0, 0] + 3 * gamma[1, 1] + 1 * gamma[2, 2]
         np.testing.assert_array_almost_equal(result['weighted_trace'][0], expected)
-    
+
     def test_custom_var_with_dict_kwarg(self):
         """Test custom variable with dict kwarg."""
         def custom_var(rel):
             """Custom variable: affine transformation of rho."""
             return rel.config['scale'] * rel['rho'] + rel.config['offset']
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -778,7 +778,7 @@ class TestOverTimeCustomVarWithKwargs:
         assert 'transformed_rho' in result.keys()
         expected = 3 * self.data['rho'][0] + 5
         np.testing.assert_array_almost_equal(result['transformed_rho'][0], expected)
-    
+
     def test_custom_var_with_set_kwarg(self):
         """Test custom variable with set kwarg."""
         def custom_var(rel):
@@ -791,7 +791,7 @@ class TestOverTimeCustomVarWithKwargs:
             if 'zz' in rel.included_components:
                 result += rel['gzz']
             return result
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -804,13 +804,13 @@ class TestOverTimeCustomVarWithKwargs:
         gamma = sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)
         expected = gamma[0, 0] + gamma[2, 2]
         np.testing.assert_array_almost_equal(result['partial_trace'][0], expected)
-    
+
     def test_custom_var_with_ndarray_kwarg(self):
         """Test custom variable with numpy array kwarg."""
         def custom_var(rel):
             """Custom variable: spatially weighted sum."""
             return rel['rho'] * rel.weights
-        
+
         weights = np.random.rand(self.fd.Nx, self.fd.Ny, self.fd.Nz)
         result = aurel.over_time(
             self.data.copy(), 
@@ -823,7 +823,7 @@ class TestOverTimeCustomVarWithKwargs:
         assert 'weighted_rho' in result.keys()
         expected = self.data['rho'][0] * weights
         np.testing.assert_array_almost_equal(result['weighted_rho'][0], expected)
-    
+
     def test_custom_var_with_function_kwarg(self):
         """Test custom variable with function kwarg."""
         def custom_var(rel):
@@ -854,7 +854,7 @@ class TestOverTimeCustomVarWithKwargs:
             if rel.use_log:
                 result = np.log(np.abs(result) + 1e-10)
             return result
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 
@@ -878,10 +878,10 @@ class TestOverTimeCustomVarWithKwargs:
         """Test multiple custom variables each using different kwargs."""
         def var1(rel):
             return rel['rho'] * rel.multiplier
-        
+
         def var2(rel):
             return rel['rho'] ** rel.exponent
-        
+
         result = aurel.over_time(
             self.data.copy(), 
             self.fd, 

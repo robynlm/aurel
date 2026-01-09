@@ -15,7 +15,7 @@ symbolic_descriptions = load_symbolic_descriptions()
 
 class AurelCoreSymbolic():
     """Symbolic version of AurelCore, using sympy for symbolic calculations.
-        
+
     Parameters
     ----------
     coords : list of sympy symbols
@@ -24,7 +24,7 @@ class AurelCoreSymbolic():
         If True, print the calculation description. Default is True.
     simplify : bool, optional
         If True, simplify the expressions after calculation. Default is True.
-    
+
     Attributes
     ----------
     dim : int
@@ -62,7 +62,7 @@ class AurelCoreSymbolic():
 
         # Return the function itself if it requires arguments
         return func
-    
+
     def gdown(self):
         if self.dim == 4:
             return sp.Matrix([[-1, 0, 0, 0],
@@ -77,13 +77,13 @@ class AurelCoreSymbolic():
                               ])
         else:
             raise ValueError("Dimension not supported for default gdown.")
-    
+
     def gup(self):
         return self["gdown"].inv()
-    
+
     def gdet(self):
         return self["gdown"].det()
-    
+
     def Gamma_down(self):
         Gamma3 = sp.MutableDenseNDimArray([0]*(self.dim**3), 
                                           (self.dim, self.dim, self.dim))
@@ -103,7 +103,7 @@ class AurelCoreSymbolic():
                         Gamma3[i, k, j] = Gamma3[i, j, k]
                         done[i, k, j] = 1
         return Gamma3
-    
+
     def Gamma_udd(self):
         Gamma3 = sp.MutableDenseNDimArray([0]*(self.dim**3), 
                                           (self.dim, self.dim, self.dim))
@@ -126,7 +126,7 @@ class AurelCoreSymbolic():
                         Gamma3[i, k, j] = Gamma3[i, j, k]
                         done[i, k, j] = 1
         return Gamma3
-    
+
     def Riemann_down(self):
         if "Riemann_uddd" in self.data.keys():
             RiemannD_down = sp.MutableDenseNDimArray(
@@ -228,7 +228,7 @@ class AurelCoreSymbolic():
                                         done[l, k, i, j] = 1
                                         done[l, k, j, i] = 1
         return RiemannD_down
-    
+
     def Riemann_uddd(self):
         Riemann3_up = sp.MutableDenseNDimArray(
             [0]*(self.dim**4), (self.dim, self.dim, self.dim, self.dim))
@@ -318,14 +318,14 @@ class AurelCoreSymbolic():
                         Ricci3_down[j, i] = Ricci3_down[i, j]
                         done[j,i] = 1
         return Ricci3_down
-    
+
     def RicciS(self):
         Ricci3 = 0
         for i in range(self.dim):
             for j in range(self.dim):
                 Ricci3 += self["gup"][i, j] * self["Ricci_down"][i, j]
         return Ricci3
-    
+
     def Einstein_down(self):
         Einstein_down = sp.MutableDenseNDimArray(
             [0]*(self.dim**2), (self.dim, self.dim))
@@ -340,7 +340,7 @@ class AurelCoreSymbolic():
                     Einstein_down[j, i] = Einstein_down[i, j]
                     done[j,i] = 1
         return Einstein_down
-    
+
 # Update __doc__ of the functions listed in descriptions
 for func_name, doc in symbolic_descriptions.items():
     func = getattr(AurelCoreSymbolic, func_name, None)

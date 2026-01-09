@@ -62,7 +62,7 @@ def gammadown3(t, x, y, z, analytical=False):
             [    A,     B, zeros],
             [    B,     C, zeros],
             [zeros, zeros,     D]])
-    
+
 def Kdown3(t, x, y, z):
     """Returns the extrinsic curvature"""
     ones = np.ones(np.shape(x))

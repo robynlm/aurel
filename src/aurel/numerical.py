@@ -75,11 +75,11 @@ def interpolate(val, grid_points, target_points, method='linear'):
     target_flat = []
     for x in target_points:
         target_flat += [x.flatten()]
-    
+
     # Flatten target points and stack into (N, 3) array for interpolator
     target_shape = target_points[0].shape
     points_flat = np.stack(target_flat, axis=-1)
-    
+
     # Check that all target points are within grid bounds
     for i, (grid, target) in enumerate(zip(grid_points, target_points)):
         grid_min, grid_max = grid.min(), grid.max()
@@ -90,7 +90,7 @@ def interpolate(val, grid_points, target_points, method='linear'):
                 f"Grid range: [{grid_min}, {grid_max}], "
                 f"Target range: [{target_min}, {target_max}]"
             )
-    
+
     # Create interpolator and evaluate
     interpolator = scipy.interpolate.RegularGridInterpolator(
         grid_points, val, method=method, bounds_error=False, fill_value=None)

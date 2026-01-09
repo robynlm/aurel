@@ -68,7 +68,7 @@ def fd4_forward(f, i, inverse_dx):
             + (-3) * f[i+2]
             + (4/3) * f[i+3]
             + (-1/4) * f[i+4]) * inverse_dx
-    
+
 # 6th order
 def fd6_backward(f, i, inverse_dx):
     """6th order backward finite difference scheme."""
@@ -138,7 +138,7 @@ def fd8_forward(f, i, inverse_dx):
 def fd_map(func, farray, idx, imin, imax):
     """Map the finite difference function over the grid."""
     return np.array([func(farray, i, idx) for i in np.arange(imin, imax)])
-    
+
 def map1(func, f):
     """Map a function over the indice of a rank 1 tensor."""
     dimj = np.shape(f)[0]
@@ -227,7 +227,7 @@ class FiniteDifference():
         self.fd_order = fd_order
         self.verbose = verbose
         self.veryverbose = veryverbose
-        
+
         self.dx = self.param['dx']
         self.dy = self.param['dy']
         self.dz = self.param['dz']
@@ -251,19 +251,19 @@ class FiniteDifference():
             self.param['zmin'], 
             self.param['zmin'] + self.param['Nz'] * self.param['dz'], 
             self.param['dz'])
-        
+
         self.xmax = self.xarray[-1]
         self.ymax = self.yarray[-1]
         self.zmax = self.zarray[-1]
-        
+
         self.Nx = len(self.xarray)
         self.Ny = len(self.yarray)
         self.Nz = len(self.zarray)
-        
+
         self.ixcenter = np.argmin(abs(self.xarray))
         self.iycenter = np.argmin(abs(self.yarray))
         self.izcenter = np.argmin(abs(self.zarray))
-        
+
         self.x, self.y, self.z = np.meshgrid(
             self.xarray, self.yarray, self.zarray, 
             indexing='ij')
@@ -308,7 +308,7 @@ class FiniteDifference():
             return self.d3_symmetric(f, idx, N)
         else:
             return self.d3_onesided(f, idx, N)
-    
+
     def d3_periodic(self, f, idx, N):
         """Apply the finite difference scheme with periodic boundaries."""
         # The grid is extended along the x direction by the 
@@ -320,7 +320,7 @@ class FiniteDifference():
         return fd_map(
             self.centered, flong, idx, 
             self.mask_len, N+self.mask_len)
-    
+
     def d3_symmetric(self, f, idx, N):
         """Apply the finite difference scheme with symmetric boundaries."""
         # The grid is extended along the x direction by the 
@@ -332,7 +332,7 @@ class FiniteDifference():
         return fd_map(
             self.centered, flong, idx, 
             self.mask_len, N+self.mask_len)
-    
+
     def d3_onesided(self, f, idx, N):
         """Apply the finite difference scheme with one-sided boundaries."""
         # Combination of backward centered and forward schemes are used.
@@ -353,11 +353,11 @@ class FiniteDifference():
             N - self.mask_len, N)
         # Concatenate all the points together
         return np.concatenate((lhs, central_part, rhs), axis=0)
-    
+
     def d3x(self, f): 
         r"""Derivative along x of a scalar: $\partial_x (f)$."""
         return self.d3(f, self.inverse_dx, self.param['Nx'])
-    
+
     def d3y(self, f):  
         r"""Derivative along y of a scalar: $\partial_y (f)$."""
         # Same as D3x but as we apply the FD schemes in the y direction 
@@ -365,7 +365,7 @@ class FiniteDifference():
         f = np.transpose(f, (1, 0, 2))
         dyf = self.d3(f, self.inverse_dy, self.param['Ny'])
         return np.transpose(dyf, (1, 0, 2))
-    
+
     def d3z(self, f):  
         r"""Derivative along z of a scalar: $\partial_z (f)$."""
         # Same as D3x but as we apply the FD schemes in the z direction 
@@ -373,12 +373,12 @@ class FiniteDifference():
         f = np.transpose(f, (2, 1, 0))
         dzf = self.d3(f, self.inverse_dz, self.param['Nz'])
         return np.transpose(dzf, (2, 1, 0))
-    
+
     def d3_scalar(self, f):
         r"""Spatial derivatives of a scalar: 
         $\partial_i (f)$."""
         return np.array([self.d3x(f), self.d3y(f), self.d3z(f)])
-    
+
     def d3_rank1tensor(self, f):
         r"""Spatial derivatives of a spatial rank 1 tensor: 
         $\partial_i (f_{j})$ or $\partial_i (f^{j})$."""
@@ -386,22 +386,22 @@ class FiniteDifference():
             [map1(self.d3x, f), 
              map1(self.d3y, f), 
              map1(self.d3z, f)], axis=0)
-    
+
     def d3x_rank1tensor(self, f):
         r"""Spatial derivatives of a spatial rank 1 tensor: 
         $\partial_x (f_{j})$ or $\partial_x (f^{j})$."""
         return map1(self.d3x, f)
-    
+
     def d3y_rank1tensor(self, f):
         r"""Spatial derivatives of a spatial rank 1 tensor: 
         $\partial_y (f_{j})$ or $\partial_y (f^{j})$."""
         return map1(self.d3y, f)
-    
+
     def d3z_rank1tensor(self, f):
         r"""Spatial derivatives of a spatial rank 1 tensor: 
         $\partial_z (f_{j})$ or $\partial_z (f^{j})$."""
         return map1(self.d3z, f)
-    
+
     def d3_rank2tensor(self, f):
         r"""Spatial derivatives of a spatial rank 2 tensor: 
         $\partial_i (f_{kj})$ or $\partial_i (f^{kj})$ 
@@ -410,52 +410,52 @@ class FiniteDifference():
             [self.d3x_rank2tensor(f),
              self.d3y_rank2tensor(f),
              self.d3z_rank2tensor(f)])
-    
+
     def d3x_rank2tensor(self, f):
         r"""Spatial derivatives along x of a spatial rank 2 tensor: 
         $\partial_x (f_{kj})$ or $\partial_x (f^{kj})$ 
         or $\partial_x (f^{k}_{j})$."""
         return map2(self.d3x, f)
-    
+
     def d3y_rank2tensor(self, f):
         r"""Spatial derivatives along y of a spatial rank 2 tensor: 
         $\partial_y (f_{kj})$ or $\partial_y (f^{kj})$ 
         or $\partial_y (f^{k}_{j})$."""
         return map2(self.d3y, f)
-    
+
     def d3z_rank2tensor(self, f):
         r"""Spatial derivatives along z of a spatial rank 2 tensor: 
         $\partial_z (f_{kj})$ or $\partial_z (f^{kj})$ 
         or $\partial_z (f^{k}_{j})$."""
         return map2(self.d3z, f)
-    
+
     def d3_rank3tensor(self, f):
         r"""Spatial derivatives of a spatial rank 3 tensor."""
         return np.array(
             [self.d3x_rank3tensor(f),
              self.d3y_rank3tensor(f),
              self.d3z_rank3tensor(f)])
-    
+
     def d3x_rank3tensor(self, f):
         r"""Spatial derivatives along x of a spatial rank 3 tensor."""
         return map3(self.d3x, f)
-    
+
     def d3y_rank3tensor(self, f):
         r"""Spatial derivatives along y of a spatial rank 3 tensor."""
         return map3(self.d3y, f)
-    
+
     def d3z_rank3tensor(self, f):
         r"""Spatial derivatives along z of a spatial rank 3 tensor."""
         return map3(self.d3z, f)
-    
+
     def cartesian_to_spherical(self, x, y, z):
         """Convert Cartesian coordinates to Spherical coordinates.
-        
+
         Parameters
         ----------
         x, y, z : numpy.ndarray
             arrays of Cartesian coordinates.
-        
+
         Returns
         -------
         r, theta, phi : numpy.ndarray
@@ -473,27 +473,27 @@ class FiniteDifference():
         # inclination 0 to pi
         theta = np.arccos(maths.safe_division(z, r))
         return r, theta, phi
-    
+
     def spherical_to_cartesian(self, r, theta, phi):
         """Convert Spherical coordinates to Cartesian coordinates.
-        
+
         Parameters
         ----------
         r, theta, phi : numpy.ndarray
             arrays of radius, inclination/polar and 
             azimuth coordinates.
-        
+
         Returns
         -------
         x, y, z : numpy.ndarray
             arrays of Cartesian coordinates.
-        
+
         """
         x = r * np.sin(theta) * np.cos(phi)
         y = r * np.sin(theta) * np.sin(phi)
         z = r * np.cos(theta)
         return x, y, z
-    
+
     def cutoffmask(self, f):
         """Remove boundary points, for when FDs were applied once."""
         if len(f.shape) == 1:
@@ -505,7 +505,7 @@ class FiniteDifference():
             return f[self.mask_len:-self.mask_len, 
                     self.mask_len:-self.mask_len, 
                     self.mask_len:-self.mask_len]
-    
+
     def cutoffmask2(self, f):
         """Remove boundary points, for when FDs were applied twice."""
         if len(f.shape) == 1:
@@ -517,7 +517,7 @@ class FiniteDifference():
             return f[2*self.mask_len:-2*self.mask_len, 
                     2*self.mask_len:-2*self.mask_len, 
                     2*self.mask_len:-2*self.mask_len]
-    
+
     def excision(self, finput, isingularity='find'):
         """Excision of the singularity, for when FDs were applied once."""
         f = np.copy(finput)
@@ -539,7 +539,7 @@ class FiniteDifference():
                 isx, isy, 
                 isz-self.mask_len-b: isz+self.mask_len+1+b] = np.nan
         return f
-    
+
     def excision2(self, finput, isingularity='find'):
         """Double singularity excision, for when FDs were applied twice."""
         f = np.copy(finput)

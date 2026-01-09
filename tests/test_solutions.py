@@ -46,12 +46,12 @@ def test_grid():
 
 class TestCollinsStewart:
     """Tests for Collins_Stewart solution."""
-    
+
     def test_imports(self):
         """Test that module constants are defined."""
         assert hasattr(Collins_Stewart, 'kappa')
         assert hasattr(Collins_Stewart, 'gamma')
-    
+
     def test_rho(self, test_grid):
         """Test energy density function."""
         t, x, y, z = test_grid
@@ -59,7 +59,7 @@ class TestCollinsStewart:
         # Returns scalar value for this solution
         assert isinstance(rho, (float, np.floating))
         assert not np.isnan(rho)
-    
+
     def test_press(self, test_grid):
         """Test pressure function."""
         t, x, y, z = test_grid
@@ -67,14 +67,14 @@ class TestCollinsStewart:
         # Returns scalar value for this solution
         assert isinstance(press, (float, np.floating))
         assert not np.isnan(press)
-    
+
     def test_gammadown3(self, test_grid):
         """Test spatial metric."""
         t, x, y, z = test_grid
         gamma = Collins_Stewart.gammadown3(t, x, y, z)
         assert gamma.shape == (3, 3) + x.shape
         assert not np.any(np.isnan(gamma))
-    
+
     def test_gammadown3_analytical(self, test_grid):
         """Test spatial metric in analytical mode."""
         t, x, y, z = sp.symbols('t x y z')
@@ -84,7 +84,7 @@ class TestCollinsStewart:
         assert isinstance(gamma, sp.Matrix)
         # Check that elements are SymPy expressions
         assert isinstance(gamma[0, 0], sp.Expr)
-    
+
     def test_gdown4_analytical(self):
         """Test spacetime metric in analytical mode."""
         t, x, y, z = sp.symbols('t x y z')
@@ -93,21 +93,21 @@ class TestCollinsStewart:
         assert isinstance(g, sp.Matrix)
         # Check metric signature element
         assert g[0, 0] == -1
-    
+
     def test_Kdown3(self, test_grid):
         """Test extrinsic curvature."""
         t, x, y, z = test_grid
         K = Collins_Stewart.Kdown3(t, x, y, z)
         assert K.shape == (3, 3) + x.shape
         assert not np.any(np.isnan(K))
-    
+
     def test_gdown4(self, test_grid):
         """Test spacetime metric."""
         t, x, y, z = test_grid
         g = Collins_Stewart.gdown4(t, x, y, z)
         assert g.shape == (4, 4) + x.shape
         assert not np.any(np.isnan(g))
-    
+
     def test_data_function(self, test_grid):
         """Test that data() returns complete dictionary."""
         t, x, y, z = test_grid
@@ -124,33 +124,33 @@ class TestCollinsStewart:
 
 class TestConformallyFlat:
     """Tests for Conformally_flat solution."""
-    
+
     def test_imports(self):
         """Test that module constants are defined."""
         assert hasattr(Conformally_flat, 'eps')
         assert hasattr(Conformally_flat, 'kappa')
-    
+
     def test_alpha(self, test_grid):
         """Test lapse function."""
         t, x, y, z = test_grid
         alpha = Conformally_flat.alpha(t, x, y, z)
         assert alpha.shape == x.shape
         assert not np.any(np.isnan(alpha))
-    
+
     def test_gammadown3(self, test_grid):
         """Test spatial metric."""
         t, x, y, z = test_grid
         gamma = Conformally_flat.gammadown3(t, x, y, z)
         assert gamma.shape == (3, 3) + x.shape
         assert not np.any(np.isnan(gamma))
-    
+
     def test_Kdown3(self, test_grid):
         """Test extrinsic curvature."""
         t, x, y, z = test_grid
         K = Conformally_flat.Kdown3(t, x, y, z)
         assert K.shape == (3, 3) + x.shape
         assert not np.any(np.isnan(K))
-    
+
     def test_data_function(self, test_grid):
         """Test that data() returns complete dictionary."""
         t, x, y, z = test_grid
@@ -166,46 +166,46 @@ class TestConformallyFlat:
 
 class TestEdS:
     """Tests for EdS (Einstein-de Sitter) solution."""
-    
+
     def test_imports(self):
         """Test that module constants are defined."""
         assert hasattr(EdS, 'h')
         assert hasattr(EdS, 'Omega_m_EdS')
         assert hasattr(EdS, 'kappa')
-    
+
     def test_a(self):
         """Test scale factor."""
         t = 1.0
         a = EdS.a(t)
         assert isinstance(a, (float, np.ndarray))
         assert a > 0
-    
+
     def test_Hprop(self):
         """Test Hubble function."""
         t = 1.0
         H = EdS.Hprop(t)
         assert isinstance(H, (float, np.ndarray))
         assert H > 0
-    
+
     def test_redshift(self):
         """Test redshift function."""
         t = EdS.t_today
         z = EdS.redshift(t)
         assert np.isclose(z, 0.0, atol=1e-10)  # z=0 at t_today
-    
+
     def test_rho(self):
         """Test energy density."""
         t = 1.0
         rho = EdS.rho(t)
         assert rho > 0
-    
+
     def test_alpha(self, test_grid):
         """Test lapse function."""
         t, x, y, z = test_grid
         alpha = EdS.alpha(t, x, y, z)
         assert alpha.shape == x.shape
         assert np.all(alpha == 1.0)  # Should be unity
-    
+
     def test_betaup3(self, test_grid):
         """Test shift vector."""
         t, x, y, z = test_grid
@@ -220,25 +220,25 @@ class TestEdS:
 
 class TestHarveyTsoubelis:
     """Tests for Harvey_Tsoubelis solution."""
-    
+
     def test_imports(self):
         """Test that module can be imported."""
         assert Harvey_Tsoubelis is not None
-    
+
     def test_rho(self, test_grid):
         """Test energy density function."""
         t, x, y, z = test_grid
         rho = Harvey_Tsoubelis.rho(t, x, y, z)
         assert rho.shape == x.shape
         assert not np.any(np.isnan(rho))
-    
+
     def test_gammadown3(self, test_grid):
         """Test spatial metric."""
         t, x, y, z = test_grid
         gamma = Harvey_Tsoubelis.gammadown3(t, x, y, z)
         assert gamma.shape == (3, 3) + x.shape
         assert not np.any(np.isnan(gamma))
-    
+
     def test_Kdown3(self, test_grid):
         """Test extrinsic curvature."""
         t, x, y, z = test_grid
@@ -253,17 +253,17 @@ class TestHarveyTsoubelis:
 
 class TestICPertFLRW:
     """Tests for ICPertFLRW (perturbed FLRW) solution.
-    
+
     Note: This module has a different API - functions take sol and fd objects.
     """
-    
+
     def test_imports(self):
         """Test that module can be imported and has expected functions."""
         assert hasattr(ICPertFLRW, 'gammadown3')
         assert hasattr(ICPertFLRW, 'Kdown3')
         assert hasattr(ICPertFLRW, 'delta1')
         assert hasattr(ICPertFLRW, 'Rc_func')
-    
+
     def test_Rc_func(self, test_grid):
         """Test comoving curvature perturbation function."""
         t, x, y, z = test_grid
@@ -274,12 +274,12 @@ class TestICPertFLRW:
         assert not np.any(np.isnan(Rc))
         # Check that perturbation is small
         assert np.abs(Rc).max() < 0.1
-    
+
     def test_gammadown3_with_mock_objects(self, test_grid):
         """Test spatial metric with mock sol and fd objects."""
         import aurel
         from aurel.solutions import EdS
-        
+
         t, x, y, z = test_grid
         # Create a FiniteDifference object
         param = {
@@ -288,22 +288,22 @@ class TestICPertFLRW:
             'zmin': -1.0, 'zmax': 1.0, 'Nz': 8, 'dz': 2.0/7,
         }
         fd = aurel.FiniteDifference(param)
-        
+
         # Create perturbation field
         amp = (0.001, 0.001, 0.001)
         lamb = (2.0, 2.0, 2.0)
         Rc = ICPertFLRW.Rc_func(x, y, z, amp, lamb)
-        
+
         # Use EdS as background solution
         gamma = ICPertFLRW.gammadown3(EdS, fd, 1.0, Rc)
         assert gamma.shape == (3, 3) + x.shape
         assert not np.any(np.isnan(gamma))
-    
+
     def test_Kdown3_with_mock_objects(self, test_grid):
         """Test extrinsic curvature with mock sol and fd objects."""
         import aurel
         from aurel.solutions import EdS
-        
+
         t, x, y, z = test_grid
         param = {
             'xmin': -1.0, 'xmax': 1.0, 'Nx': 8, 'dx': 2.0/7,
@@ -311,20 +311,20 @@ class TestICPertFLRW:
             'zmin': -1.0, 'zmax': 1.0, 'Nz': 8, 'dz': 2.0/7,
         }
         fd = aurel.FiniteDifference(param)
-        
+
         amp = (0.001, 0.001, 0.001)
         lamb = (2.0, 2.0, 2.0)
         Rc = ICPertFLRW.Rc_func(x, y, z, amp, lamb)
-        
+
         K = ICPertFLRW.Kdown3(EdS, fd, 1.0, Rc)
         assert K.shape == (3, 3) + x.shape
         assert not np.any(np.isnan(K))
-    
+
     def test_delta1_with_mock_objects(self, test_grid):
         """Test linear density contrast with mock sol and fd objects."""
         import aurel
         from aurel.solutions import EdS
-        
+
         t, x, y, z = test_grid
         param = {
             'xmin': -1.0, 'xmax': 1.0, 'Nx': 8, 'dx': 2.0/7,
@@ -332,11 +332,11 @@ class TestICPertFLRW:
             'zmin': -1.0, 'zmax': 1.0, 'Nz': 8, 'dz': 2.0/7,
         }
         fd = aurel.FiniteDifference(param)
-        
+
         amp = (0.001, 0.001, 0.001)
         lamb = (2.0, 2.0, 2.0)
         Rc = ICPertFLRW.Rc_func(x, y, z, amp, lamb)
-        
+
         delta = ICPertFLRW.delta1(EdS, fd, 1.0, Rc)
         assert delta.shape == x.shape
         assert not np.any(np.isnan(delta))
@@ -348,38 +348,38 @@ class TestICPertFLRW:
 
 class TestLCDM:
     """Tests for LCDM (Lambda CDM) solution."""
-    
+
     def test_imports(self):
         """Test that module constants are defined."""
         assert hasattr(LCDM, 'h')
         assert hasattr(LCDM, 'Omega_m_today')
         assert hasattr(LCDM, 'Lambda')
-    
+
     def test_a(self):
         """Test scale factor."""
         t = 1.0
         a = LCDM.a(t)
         assert isinstance(a, (float, np.ndarray))
         assert a > 0
-    
+
     def test_Hprop(self):
         """Test Hubble function."""
         t = 1.0
         H = LCDM.Hprop(t)
         assert isinstance(H, (float, np.ndarray))
         assert H > 0
-    
+
     def test_redshift(self):
         """Test redshift function exists."""
         assert hasattr(LCDM, 'redshift')
         assert callable(LCDM.redshift)
-    
+
     def test_rho(self):
         """Test energy density."""
         t = 1.0
         rho = LCDM.rho(t)
         assert rho > 0
-    
+
     def test_alpha(self, test_grid):
         """Test lapse function."""
         t, x, y, z = test_grid
@@ -394,13 +394,13 @@ class TestLCDM:
 
 class TestNonDiagonal:
     """Tests for Non_diagonal solution."""
-    
+
     def test_imports(self):
         """Test that module constants and functions are defined."""
         assert hasattr(Non_diagonal, 'kappa')
         assert hasattr(Non_diagonal, 'Lambda')
         assert hasattr(Non_diagonal, 'fq')
-    
+
     def test_A(self, test_grid):
         """Test conformal factor function."""
         t, x, y, z = test_grid
@@ -409,7 +409,7 @@ class TestNonDiagonal:
         assert not np.any(np.isnan(A_val))
         # Check reasonable range
         assert np.all(A_val > 2.0) and np.all(A_val < 2.6)
-    
+
     def test_A_analytical(self):
         """Test conformal factor in analytical mode."""
         import sympy as sp
@@ -418,21 +418,21 @@ class TestNonDiagonal:
         assert A_val is not None
         # Should be a SymPy expression
         assert hasattr(A_val, 'subs')
-    
+
     def test_dzA(self, test_grid):
         """Test conformal factor first derivative."""
         t, x, y, z = test_grid
         dzA = Non_diagonal.dzA(z)
         assert dzA.shape == z.shape
         assert not np.any(np.isnan(dzA))
-    
+
     def test_dzdzA(self, test_grid):
         """Test conformal factor second derivative."""
         t, x, y, z = test_grid
         dzdzA = Non_diagonal.dzdzA(z)
         assert dzdzA.shape == z.shape
         assert not np.any(np.isnan(dzdzA))
-    
+
     def test_gammadown3(self, test_grid):
         """Test spatial metric."""
         t, x, y, z = test_grid
@@ -441,7 +441,7 @@ class TestNonDiagonal:
         assert not np.any(np.isnan(gamma))
         # Check non-diagonal structure - off-diagonal elements should be non-zero
         assert not np.all(gamma[0, 1] == 0.0)  # gxy component
-    
+
     def test_gammadown3_analytical(self):
         """Test spatial metric in analytical mode."""
         t, x, y, z = sp.symbols('t x y z')
@@ -452,7 +452,7 @@ class TestNonDiagonal:
         assert hasattr(gamma, 'det')
         # Check non-diagonal structure
         assert gamma[0, 1] != 0
-    
+
     def test_gdown4(self, test_grid):
         """Test spacetime metric."""
         t, x, y, z = test_grid
@@ -461,7 +461,7 @@ class TestNonDiagonal:
         assert not np.any(np.isnan(g))
         # Check signature: g00 should be negative
         assert np.all(g[0, 0] < 0)
-    
+
     def test_gdown4_analytical(self):
         """Test spacetime metric in analytical mode."""
         t, x, y, z = sp.symbols('t x y z')
@@ -470,7 +470,7 @@ class TestNonDiagonal:
         assert isinstance(g, sp.Matrix)
         # Check metric signature
         assert g[0, 0] == -1
-    
+
     def test_Kdown3(self, test_grid):
         """Test extrinsic curvature."""
         t, x, y, z = test_grid
@@ -479,7 +479,7 @@ class TestNonDiagonal:
         assert not np.any(np.isnan(K))
         # Diagonal components should be non-zero
         assert not np.all(K[0, 0] == 0.0)
-    
+
     def test_Tdown4(self, test_grid):
         """Test stress-energy tensor."""
         t, x, y, z = test_grid
@@ -488,7 +488,7 @@ class TestNonDiagonal:
         assert not np.any(np.isnan(T))
         # Energy density (T00) should be positive
         assert np.all(T[0, 0] > 0)
-    
+
     def test_data_function(self, test_grid):
         """Test that data() returns complete dictionary."""
         t, x, y, z = test_grid
@@ -508,7 +508,7 @@ class TestNonDiagonal:
 
 class TestRosquistJantzen:
     """Tests for Rosquist_Jantzen solution."""
-    
+
     def test_imports(self):
         """Test that module can be imported and has constants defined."""
         assert Rosquist_Jantzen is not None
@@ -516,7 +516,7 @@ class TestRosquistJantzen:
         assert hasattr(Rosquist_Jantzen, 'gamma')
         assert hasattr(Rosquist_Jantzen, 'k')
         assert hasattr(Rosquist_Jantzen, 'm')
-    
+
     def test_gammadown3(self, test_grid):
         """Test spatial metric."""
         t, x, y, z = test_grid
@@ -527,7 +527,7 @@ class TestRosquistJantzen:
         assert not np.all(gamma[0, 1] == 0.0)
         # Check symmetry
         assert np.allclose(gamma[0, 1], gamma[1, 0])
-    
+
     def test_gammadown3_analytical(self):
         """Test spatial metric in analytical mode."""
         t, x, y, z = sp.symbols('t x y z')
@@ -538,7 +538,7 @@ class TestRosquistJantzen:
         assert gamma[0, 1] != 0
         # Check symmetry
         assert gamma[0, 1] == gamma[1, 0]
-    
+
     def test_Kdown3(self, test_grid):
         """Test extrinsic curvature."""
         t, x, y, z = test_grid
@@ -551,7 +551,7 @@ class TestRosquistJantzen:
         assert not np.all(K[2, 2] == 0.0)
         # Check symmetry
         assert np.allclose(K[0, 1], K[1, 0])
-    
+
     def test_gdown4(self, test_grid):
         """Test spacetime metric."""
         t, x, y, z = test_grid
@@ -560,7 +560,7 @@ class TestRosquistJantzen:
         assert not np.any(np.isnan(g))
         # Check metric signature: g00 should be negative
         assert np.all(g[0, 0] < 0)
-    
+
     def test_gdown4_analytical(self):
         """Test spacetime metric in analytical mode."""
         t, x, y, z = sp.symbols('t x y z')
@@ -569,7 +569,7 @@ class TestRosquistJantzen:
         assert isinstance(g, sp.Matrix)
         # Check metric signature
         assert g[0, 0] == -1
-    
+
     def test_Tdown4(self, test_grid):
         """Test stress-energy tensor."""
         t, x, y, z = test_grid
@@ -578,7 +578,7 @@ class TestRosquistJantzen:
         assert not np.any(np.isnan(T))
         # Energy density (T00) should be positive
         assert np.all(T[0, 0] > 0)
-    
+
     def test_data_function(self, test_grid):
         """Test that data() returns complete dictionary."""
         t, x, y, z = test_grid
@@ -598,19 +598,19 @@ class TestRosquistJantzen:
 
 class TestSchwarzschildIsotropic:
     """Tests for Schwarzschild_isotropic solution."""
-    
+
     def test_imports(self):
         """Test that module constants are defined."""
         assert hasattr(Schwarzschild_isotropic, 'kappa')
         assert hasattr(Schwarzschild_isotropic, 'M')
-    
+
     def test_alpha(self, test_grid):
         """Test lapse function."""
         t, x, y, z = test_grid
         alpha = Schwarzschild_isotropic.alpha(t, x, y, z)
         assert alpha.shape == x.shape
         assert not np.any(np.isnan(alpha))
-    
+
     def test_alpha_analytical(self):
         """Test lapse function in analytical mode."""
         t, x, y, z = sp.symbols('t x y z')
@@ -618,7 +618,7 @@ class TestSchwarzschildIsotropic:
         assert alpha is not None
         # Should be a SymPy expression
         assert isinstance(alpha, sp.Expr)
-    
+
     def test_gammadown3_analytical(self):
         """Test spatial metric in analytical mode."""
         t, x, y, z = sp.symbols('t x y z')
@@ -629,7 +629,7 @@ class TestSchwarzschildIsotropic:
         assert gamma[0, 1] == 0
         assert gamma[0, 2] == 0
         assert gamma[1, 2] == 0
-    
+
     def test_gdown4_analytical(self):
         """Test spacetime metric in analytical mode."""
         t, x, y, z = sp.symbols('t x y z')
@@ -640,42 +640,42 @@ class TestSchwarzschildIsotropic:
         assert g[0, 1] == 0
         assert g[0, 2] == 0
         assert g[0, 3] == 0
-    
+
     def test_betaup3(self, test_grid):
         """Test shift vector."""
         t, x, y, z = test_grid
         beta = Schwarzschild_isotropic.betaup3(t, x, y, z)
         assert beta.shape == (3,) + x.shape
         assert np.all(beta == 0.0)
-    
+
     def test_gammadown3(self, test_grid):
         """Test spatial metric."""
         t, x, y, z = test_grid
         gamma = Schwarzschild_isotropic.gammadown3(t, x, y, z)
         assert gamma.shape == (3, 3) + x.shape
         assert not np.any(np.isnan(gamma))
-    
+
     def test_Kdown3(self, test_grid):
         """Test extrinsic curvature."""
         t, x, y, z = test_grid
         K = Schwarzschild_isotropic.Kdown3(t, x, y, z)
         assert K.shape == (3, 3) + x.shape
         assert np.all(K == 0.0)  # Zero for static solution
-    
+
     def test_Tdown4(self, test_grid):
         """Test stress-energy tensor."""
         t, x, y, z = test_grid
         T = Schwarzschild_isotropic.Tdown4(t, x, y, z)
         assert T.shape == (4, 4) + x.shape
         assert np.all(T == 0.0)  # Zero for vacuum
-    
+
     def test_Kretschmann(self, test_grid):
         """Test Kretschmann scalar."""
         t, x, y, z = test_grid
         K = Schwarzschild_isotropic.Kretschmann(t, x, y, z)
         assert K.shape == x.shape
         assert not np.any(np.isnan(K))
-    
+
     def test_data_function(self, test_grid):
         """Test that data() returns complete dictionary."""
         t, x, y, z = test_grid
@@ -691,19 +691,19 @@ class TestSchwarzschildIsotropic:
 
 class TestSzekeres:
     """Tests for Szekeres solution."""
-    
+
     def test_imports(self):
         """Test that module can be imported."""
         assert hasattr(Szekeres, 'Amp')
         assert hasattr(Szekeres, 'L')
-    
+
     def test_rho(self, test_grid):
         """Test energy density function."""
         t, x, y, z = test_grid
         rho = Szekeres.rho(t, x, y, z)
         assert rho.shape == x.shape
         assert not np.any(np.isnan(rho))
-    
+
     def test_press(self, test_grid):
         """Test pressure function."""
         t, x, y, z = test_grid
@@ -718,7 +718,7 @@ class TestSzekeres:
 
 class TestAllSolutions:
     """Integration tests verifying all solutions work together."""
-    
+
     @pytest.mark.parametrize("solution_module", [
         Collins_Stewart,
         Conformally_flat,
@@ -736,7 +736,7 @@ class TestAllSolutions:
         # Some modules may not have docstrings, which is acceptable
         if solution_module.__doc__ is not None:
             assert len(solution_module.__doc__) > 0
-    
+
     @pytest.mark.parametrize("solution_module,expected_functions", [
         (Collins_Stewart, ['rho', 'press', 'gammadown3', 'Kdown3']),
         (Conformally_flat, ['alpha', 'gammadown3', 'Kdown3']),
