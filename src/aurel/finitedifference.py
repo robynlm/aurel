@@ -166,7 +166,7 @@ def map3(func, f):
 # Finite differencing class applying the schemes to data grid.
 ###############################################################################
 
-class FiniteDifference():
+class FiniteDifference:
     """This class applies the FD schemes to the entire data grid.
 
     Parameters

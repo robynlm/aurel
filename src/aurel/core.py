@@ -47,7 +47,7 @@ descriptions = load_descriptions()
 # Core class for aurel
 ###############################################################################
 
-class AurelCore():
+class AurelCore:
     r"""Class able to calculate any variable in aurel.descriptions.
 
     Parameters

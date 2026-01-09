@@ -13,7 +13,7 @@ from .utils.descriptions import load_symbolic_descriptions
 # Load symbolic descriptions from YAML file
 symbolic_descriptions = load_symbolic_descriptions()
 
-class AurelCoreSymbolic():
+class AurelCoreSymbolic:
     """Symbolic version of AurelCore, using sympy for symbolic calculations.
 
     Parameters

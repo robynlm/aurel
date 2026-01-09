@@ -2062,7 +2062,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
                     for c in crange:
                         if actual_cmax!=0:
                             relevant_keys_with_c = [k for k in relevant_keys
-                                     if ((parse_hdf5_key(k)['c'] == c))]
+                                     if (parse_hdf5_key(k)['c'] == c)]
 
                         # For each component
                         for vi, v in enumerate(variables):
