@@ -1,4 +1,4 @@
-""" FLRW spacetime with an Einstein-de Sitter model"""
+"""FLRW spacetime with an Einstein-de Sitter model."""
 
 import numpy as np
 
@@ -18,68 +18,68 @@ Lambda = 0.0 # cosmological constant
 Omega_l_today = 0.0 # dark energy density parameter today
 
 def a(t):
-    """Scale factor"""
+    """Scale factor."""
     return a_today * ((t / t_today) ** (2 / (3 * (1.0 + w))))
 
 def t_func_a(a):
-    """Proper time from scale factor"""
+    """Proper time from scale factor."""
     return t_today * ((a / a_today) ** ((3 * (1.0 + w)) / 2))
 
 def Hprop(t):
-    """Proper Hubble function"""
+    """Proper Hubble function."""
     return Hprop_today * t_today / t
 
 def t_func_Hprop(Hprop):
-    """Proper time from Hubble"""
+    """Proper time from Hubble."""
     return Hprop_today * t_today / Hprop
 
 def Omega_m(t):
-    """Matter density parameter"""
+    """Matter density parameter."""
     return Omega_m_EdS
 
 def an_today(t):
-    """Scale factor normalised by a(z=0)"""
+    """Scale factor normalised by a(z=0)."""
     return a(t) / a_today
 
 def redshift(t):
-    """Redshift"""
+    """Redshift."""
     return -1 + ( a_today / a(t) )
 
 def a_func_z(z):
-    """Scale factor from redshift"""
+    """Scale factor from redshift."""
     return a_today / (1 + z)
 
 def t_func_z(z):
-    """Proper time from redshift"""
+    """Proper time from redshift."""
     return t_func_a(a_func_z(z))
 
 def Hconf(t):
-    """Conformal Hubble function"""
+    """Conformal Hubble function."""
     return a(t) * Hprop(t)
 
 def fL(t):
-    """Growth index = d ln (delta) / d ln (a)"""
+    """Growth index = d ln (delta) / d ln (a)."""
     return Omega_m(t) ** (6 / 11)
 
 def rho(t):
-    """Energy density"""
+    """Energy density."""
     return (3 * Omega_m(t) * Hprop(t)**2) / kappa
 
 def press(t):
-    """Pressure"""
+    """Pressure."""
     return w * rho(t)
 
 def alpha(t, x, y, z):
-    """Lapse"""
+    """Lapse."""
     return np.ones(np.shape(x))
 
 def betaup3(t, x, y, z):
-    """Shift"""
+    """Shift."""
     Nx, Ny, Nz = np.shape(x)
     return np.zeros((3, Nx, Ny, Nz))
 
 def gammadown3(t, x, y, z):
-    """Spatial metric"""
+    """Spatial metric."""
     a2 = (a(t)**2) * np.ones(np.shape(x))
     zeros = np.zeros(np.shape(x))
     return np.array([
@@ -88,6 +88,6 @@ def gammadown3(t, x, y, z):
         [zeros, zeros,    a2]])
 
 def Kdown3(t, x, y, z):
-    """Extrinsic curvature"""
+    """Extrinsic curvature."""
     return - gammadown3(t, x, y, z) * Hprop(t)
 

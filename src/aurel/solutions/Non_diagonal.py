@@ -1,4 +1,4 @@
-"""See section 3.2 of 2211.08133"""
+"""See section 3.2 of 2211.08133."""
 
 import numpy as np
 import sympy as sp
@@ -8,22 +8,22 @@ Lambda = 10.0 # Wavelength in the z direction
 fq = 2 * np.pi / Lambda
 
 def A(z, analytical=False):
-    """Conformal factor"""
+    """Conformal factor."""
     if analytical:
         return 2.3 + 0.2 * sp.sin(fq * z)
     else:
         return 2.3 + 0.2 * np.sin(fq * z)
 
 def dzA(z):
-    """Conformal factor 1st derivative"""
+    """Conformal factor 1st derivative."""
     return 0.2 * fq * np.cos(fq * z)
 
 def dzdzA(z):
-    """Conformal factor 2nd derivative"""
+    """Conformal factor 2nd derivative."""
     return - 0.2 * fq * fq * np.sin(fq * z)
 
 def gammadown3(t, x, y, z, analytical=False):
-    """Spatial metric"""
+    """Spatial metric."""
     B = t*A(z, analytical=analytical)
     if analytical:
         ones = 1
@@ -43,7 +43,7 @@ def gammadown3(t, x, y, z, analytical=False):
     ])
 
 def gdown4(t, x, y, z, analytical=False):
-    """Spacetime metric"""
+    """Spacetime metric."""
     gij = gammadown3(t, x, y, z, analytical=analytical)
     if analytical:
         return sp.Matrix([
@@ -63,14 +63,14 @@ def gdown4(t, x, y, z, analytical=False):
         ])
 
 def Kdown3(t, x, y, z):
-    """Extrinsic curvature"""
+    """Extrinsic curvature."""
     zeros = np.zeros(np.shape(x))
     return (-1/2)*np.array([[A(z), zeros, zeros],
                             [zeros, A(z), zeros],
                             [zeros, zeros, A(z)]])
 
 def Tdown4(t, x, y, z):
-    """Stress-energy tensor, from Einstein's field equations"""
+    """Stress-energy tensor, from Einstein's field equations."""
     ones = np.ones(np.shape(x))
     zeros = np.zeros(np.shape(x))
     udown = np.array([-ones, zeros, zeros, zeros])
@@ -140,7 +140,7 @@ def Tdown4(t, x, y, z):
             + pidown)
 
 def data(t, x, y, z):
-    """Returns dictionary of Non-diagonal data"""
+    """Returns dictionary of Non-diagonal data."""
     return {'gammadown3': gammadown3(t, x, y, z),
             'Kdown3': Kdown3(t, x, y, z),
             'Tdown4': Tdown4(t, x, y, z)}

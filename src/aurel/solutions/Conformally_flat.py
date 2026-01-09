@@ -5,24 +5,24 @@ eps = 2 # arbitraty positive constant
 kappa = 8 * np.pi # Einstein's gravitational constant
 
 def Omega(x):
-    """Returns the conformal factor"""
+    """Returns the conformal factor."""
     return 1 + eps*(x**2)
 # or use Om = sp.Function('Om')(x) for analytic
 
 def dxOmega(x):
-    """Returns the 1st derivative of the conformal factor"""
+    """Returns the 1st derivative of the conformal factor."""
     return 2*eps*x
 
 def dxdxOmega(x):
-    """Returns the 2nd derivatire of the conformal factor"""
+    """Returns the 2nd derivatire of the conformal factor."""
     return 2*eps
 
 def alpha(t, x, y, z):
-    """Lapse"""
+    """Lapse."""
     return Omega(x)
 
 def gdown4(t, x, y, z, analytical=False):
-    """Spacetime metric"""
+    """Spacetime metric."""
     Om2 = Omega(x)**2
     if analytical:
         zeros = 0
@@ -42,7 +42,7 @@ def gdown4(t, x, y, z, analytical=False):
     ])
 
 def gammadown3(t, x, y, z, analytical=False):
-    """Spatial metric"""
+    """Spatial metric."""
     Om2 = Omega(x)**2
     if analytical:
         zeros = 0
@@ -60,16 +60,16 @@ def gammadown3(t, x, y, z, analytical=False):
     ])
 
 def Kdown3(t, x, y, z):
-    """Extrinsic curvature"""
+    """Extrinsic curvature."""
     Nx, Ny, Nz = np.shape(x)
     return np.zeros((3, 3, Nx, Ny, Nz))
 
 def st_RicciS(x):
-    """Spacetime Ricci scalar"""
+    """Spacetime Ricci scalar."""
     return -6 * dxdxOmega(x) / (Omega(x)**3)
 
 def Tdown4(t, x, y, z):
-    """Stress-energy tensor, from Einstein's field equations"""
+    """Stress-energy tensor, from Einstein's field equations."""
     zeros = np.zeros(np.shape(x))
     Om = Omega(x)
     dxOm = dxOmega(x)
@@ -85,7 +85,7 @@ def Tdown4(t, x, y, z):
     return Gdown4 / kappa
 
 def data(t, x, y, z):
-    """Returns dictionary of Collins Stewart data"""
+    """Returns dictionary of Collins Stewart data."""
     return {'gammadown3': gammadown3(t, x, y, z),
             'alpha': alpha(t, x, y, z),
             'Tdown4': Tdown4(t, x, y, z)}

@@ -9,6 +9,7 @@ import aurel
 
 class TestDocstrings:
     """Test docstring coverage."""
+
     aurel_elements = [getattr(aurel, name) for name in dir(aurel)
          if ((inspect.isclass(getattr(aurel, name))
               or inspect.isfunction(getattr(aurel, name)))

@@ -1,6 +1,7 @@
 """This is a Collins and Stewart 1971 solution that describes
 a Bianchi II γ-law perfect fluid homogeneous solution.
-See section 3.3 of 2211.08133"""
+See section 3.3 of 2211.08133.
+"""
 
 import numpy as np
 import sympy as sp
@@ -12,15 +13,15 @@ p2 = (2+gamma)/(4*gamma)
 s = np.sqrt((2 - gamma)*(3*gamma-2))
 
 def rho(t, x, y, z):
-    """Energy density"""
+    """Energy density."""
     return (6 - gamma) / (4 * kappa * (t**2) * (gamma**2))
 
 def press(t, x, y, z):
-    """Pressure"""
+    """Pressure."""
     return (gamma - 1) * rho(t, x, y, z)
 
 def gdown4(t, x, y, z, analytical=False):
-    """Spacetime metric"""
+    """Spacetime metric."""
     gij = gammadown3(t, x, y, z, analytical=analytical)
     if analytical:
         return sp.Matrix([
@@ -40,7 +41,7 @@ def gdown4(t, x, y, z, analytical=False):
         ])
 
 def gammadown3(t, x, y, z, analytical=False):
-    """Spatial metric"""
+    """Spatial metric."""
     if analytical:
         ones = 1
         zeros = 0
@@ -64,7 +65,7 @@ def gammadown3(t, x, y, z, analytical=False):
     ])
 
 def Kdown3(t, x, y, z):
-    """Extrinsic curvature"""
+    """Extrinsic curvature."""
     ones = np.ones(np.shape(x))
     zeros = np.zeros(np.shape(x))
     dtt2p1 = 2 * p1 * (t**(2*p1 - 1)) * ones
@@ -76,7 +77,7 @@ def Kdown3(t, x, y, z):
         [      zeros,                   zeros, dtt2p2]])
 
 def data(t, x, y, z):
-    """Returns dictionary of Collins Stewart data"""
+    """Returns dictionary of Collins Stewart data."""
     return {'gammadown3': gammadown3(t, x, y, z),
             'rho': rho(t, x, y, z),
             'press': press(t, x, y, z),

@@ -1,31 +1,32 @@
 """This is a A.Harvey and T.Tsoubelis solution that describes
 a vacuum Bianchi IV plane wave homogeneous spacetime
 page 191 of 'Dynamical Systems in Cosmology' by J.Wainwright and G.F.R.Ellis
-See section 3.5 of 2211.08133"""
+See section 3.5 of 2211.08133.
+"""
 
 import numpy as np
 import sympy as sp
 
 
 def alpha(t, x, y, z):
-    """Returns the lapse function"""
+    """Returns the lapse function."""
     return np.ones(np.shape(x))
 
 def rho(t, x, y, z):
-    """Returns the energy density"""
+    """Returns the energy density."""
     return np.zeros(np.shape(x))
 
 def press(t, x, y, z):
-    """Returns the pressure"""
+    """Returns the pressure."""
     return np.zeros(np.shape(x))
 
 def betaup3(t, x, y, z):
-    """Returns the shift vector"""
+    """Returns the shift vector."""
     Nx, Ny, Nz = np.shape(x)
     return np.zeros((3, Nx, Ny, Nz))
 
 def uup4(t, x, y, z):
-    """Fluid 4 velocity"""
+    """Fluid 4 velocity."""
     Nx, Ny, Nz = np.shape(x)
     return np.array([np.ones((Nx, Ny, Nz)),
                      np.zeros((Nx, Ny, Nz)),
@@ -33,12 +34,12 @@ def uup4(t, x, y, z):
                      np.zeros((Nx, Ny, Nz))])
 
 def Tdown4(t, x, y, z):
-    """Energy stress tensor"""
+    """Energy stress tensor."""
     Nx, Ny, Nz = np.shape(x)
     return np.zeros((4, 4, Nx, Ny, Nz))
 
 def gdown4(t, x, y, z, analytical=False):
-    """Returns the spacetime metric"""
+    """Returns the spacetime metric."""
     gij = gammadown3(t, x, y, z, analytical=analytical)
     if analytical:
         return sp.Matrix([
@@ -58,7 +59,7 @@ def gdown4(t, x, y, z, analytical=False):
         ])
 
 def gammadown3(t, x, y, z, analytical=False):
-    """Returns the spatial metric"""
+    """Returns the spatial metric."""
     if analytical:
         ex = sp.exp(x)
         B = x + sp.log(t)
@@ -78,7 +79,7 @@ def gammadown3(t, x, y, z, analytical=False):
             [     zeros, t*ex*B, t*ex*(B*B+1)]])
 
 def Kdown3(t, x, y, z):
-    """Returns the extrinsic curvature"""
+    """Returns the extrinsic curvature."""
     B = (x+np.log(t))
     ex = np.exp(x)
     ones = np.ones(np.shape(x))
@@ -92,7 +93,7 @@ def Kdown3(t, x, y, z):
     return (-1/2)*dtgammadown3
 
 def data(t, x, y, z):
-    """Returns dictionary of Harvey Tsoubelis data"""
+    """Returns dictionary of Harvey Tsoubelis data."""
     return {'gammadown3': gammadown3(t, x, y, z),
             'Kdown3': Kdown3(t, x, y, z),
             'Tdown4': Tdown4(t, x, y, z)}

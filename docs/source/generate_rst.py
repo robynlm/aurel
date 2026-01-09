@@ -40,7 +40,6 @@ for name, _ in inspect.getmembers(core.AurelCore, inspect.isfunction):
 # Process categories hierarchy
 def process_category(f, category_name, category_data, varsdone, level=0):
     """Process a category and write to file."""
-
     f.write(category_name + "\n")
 
     # Determine heading level

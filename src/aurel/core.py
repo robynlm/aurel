@@ -1,5 +1,5 @@
 """
-core.py
+core.py.
 
 This module is the main event. It contains:
  - **descriptions**, a dictionary of all the variables used in the aurel
@@ -106,7 +106,6 @@ class AurelCore:
 
     def __init__(self, fd, **kwargs):
         """Initialize the AurelCore class."""
-
         self.param = fd.param
         self.fd = fd
         self.data_shape = (self.param['Nx'],
@@ -1599,7 +1598,7 @@ class AurelCore:
     ###########################################################################
 
     def null_ray_expansion(self, F, direction='out'):
-        """Compute the expansion of null rays normal to a surface discribed F"""
+        """Compute the expansion of null rays normal to a surface discribed F."""
         dF = self.fd.d3_scalar(F)
         dFmag = np.sqrt(np.einsum('ij..., i..., j... -> ...',
                                         self["gammaup3"], dF, dF))
@@ -1671,7 +1670,6 @@ class AurelCore:
           'Linear Algebra, Theory and applications' by W.Cheney and D.Kincaid
 
         """
-
         self.myprint("Tetrad is set to AurelCore.tetrad"
                      + f" = {self.tetrad}")
         if self.tetrad == "quasi-Kinnersley":
@@ -1935,7 +1933,6 @@ class AurelCore:
             The Lie derivative of `f` along β^i, with the same shape as `f`.
 
         """
-
         # Input checks
         if indexing == '':
             rank = 0

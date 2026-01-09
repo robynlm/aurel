@@ -113,7 +113,6 @@ def over_time(data, fd, vars=None, estimates=None,
         If `estimates` is provided, additional keys are added with format
         '{variable}_{estimation_func}'.
     """
-
     # Initialize mutable default arguments
     if vars is None:
         vars = []
@@ -348,8 +347,8 @@ def process_single_timestep(data, fd, vars, estimates,
         If `estimates` is provided, additional keys are added with format
         '{variable}_{estimation_func}'.
     list of str
-        List of scalar keys if `scalarkeys` is None, otherwise returns None."""
-
+        List of scalar keys if `scalarkeys` is None, otherwise returns None.
+    """
     if verbose:
         for temp in ['it', 'iteration', 't', 'time']:
             if temp in list(data.keys()):

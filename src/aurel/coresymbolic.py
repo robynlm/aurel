@@ -33,6 +33,7 @@ class AurelCoreSymbolic:
     data : dict
         (*dict*) - Dictionary to store calculated quantities.
     """
+
     def __init__(self, coords, verbose=True, simplify=True):
         """Initialize the AurelCoreSymbolic class."""
         self.coords = coords

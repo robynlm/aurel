@@ -1,11 +1,12 @@
 """See: https://arxiv.org/pdf/2302.09033
- and: https://arxiv.org/pdf/1307.1478"""
+and: https://arxiv.org/pdf/1307.1478.
+"""
 
 import numpy as np
 
 
 def Rc_func(x, y, z, amp, lamb):
-    """Comoving curvature perturbation"""
+    """Comoving curvature perturbation."""
     Ax, Ay, Az = amp
     Lx, Ly, Lz = lamb
     return (
@@ -14,7 +15,7 @@ def Rc_func(x, y, z, amp, lamb):
         + Az * np.sin( 2 * np.pi * z / Lz))
 
 def gammadown3(sol, fd, t, Rc):
-    """Spatial metric with 1st order perturbations"""
+    """Spatial metric with 1st order perturbations."""
     a2 = sol.a(t)**2
     F = sol.fL(t) + (3/2) * sol.Omega_m(t)
     m2iFH2 = - 2 / ( F *sol.Hprop(t)**2 )
@@ -30,7 +31,7 @@ def gammadown3(sol, fd, t, Rc):
             [gxz, gyz, gzz]])
 
 def Kdown3(sol, fd, t, Rc):
-    """Extrinsic curvature, nonlinear from gammmadown3"""
+    """Extrinsic curvature, nonlinear from gammmadown3."""
     a2 = sol.a(t)**2
     F = sol.fL(t) + (3/2) * sol.Omega_m(t)
     iFH = 1 / ( F * sol.Hprop(t) )
@@ -50,7 +51,7 @@ def Kdown3(sol, fd, t, Rc):
             [kxz, kyz, kzz]])
 
 def delta1(sol, fd, t, Rc):
-    """Linear density contrast"""
+    """Linear density contrast."""
     F = sol.fL(t) + (3/2) * sol.Omega_m(t)
     return (
         (fd.d3x(fd.d3x(Rc)) + fd.d3y(fd.d3y(Rc)) + fd.d3z(fd.d3z(Rc)))

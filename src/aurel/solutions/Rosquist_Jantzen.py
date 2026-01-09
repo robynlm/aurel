@@ -1,6 +1,7 @@
 """This is a Rosquist and Jantzen solution that describes
 a Bianchi VI tilted γ ̃-law perfect fluid homogeneous solution with vorticity
-See section 3.4 of 2211.08133"""
+See section 3.4 of 2211.08133.
+"""
 
 import numpy as np
 import sympy as sp
@@ -17,7 +18,7 @@ m = np.sqrt(-32*q*q*s/((s-q-1)*(s-q-1)*(3*s+3*q-1)))
 
 
 def gdown4(t, x, y, z, analytical=False):
-    """Returns the spacetime metric"""
+    """Returns the spacetime metric."""
     gij = gammadown3(t, x, y, z, analytical=analytical)
     if analytical:
         return sp.Matrix([
@@ -37,7 +38,7 @@ def gdown4(t, x, y, z, analytical=False):
         ])
 
 def gammadown3(t, x, y, z, analytical=False):
-    """Returns the spatial metric"""
+    """Returns the spatial metric."""
     if analytical:
         zeros = 0
         A = k*k*t*t*(1+m*m)
@@ -64,7 +65,7 @@ def gammadown3(t, x, y, z, analytical=False):
             [zeros, zeros,     D]])
 
 def Kdown3(t, x, y, z):
-    """Returns the extrinsic curvature"""
+    """Returns the extrinsic curvature."""
     ones = np.ones(np.shape(x))
     zeros = np.zeros(np.shape(x))
     B = (1+s-q)*m*k*(t**(s-q))*np.exp(x)
@@ -74,7 +75,7 @@ def Kdown3(t, x, y, z):
         [zeros, zeros, (2*(s+q))*(t**(2*(s+q)-1))*np.exp(-2*x)]])
 
 def Tdown4(t, x, y, z):
-    """Returns the energy-stress tensor"""
+    """Returns the energy-stress tensor."""
     Box_zero = np.zeros(np.shape(x))
     Box_ones = np.ones(np.shape(x))
     udown = np.array([-Box_ones, Box_zero, Box_zero, Box_zero])
@@ -110,7 +111,7 @@ def Tdown4(t, x, y, z):
         + pidown)
 
 def data(t, x, y, z):
-    """Returns dictionary of Roquist Jantzen data"""
+    """Returns dictionary of Roquist Jantzen data."""
     return {'gammadown3': gammadown3(t, x, y, z),
             'Kdown3': Kdown3(t, x, y, z),
             'Tdown4': Tdown4(t, x, y, z)}

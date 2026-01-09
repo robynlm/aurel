@@ -1,5 +1,5 @@
 """
-descriptions_utils.py
+descriptions_utils.py.
 
 This module provides utilities for loading and processing variable descriptions
 used throughout the aurel project. Descriptions are stored in a hierarchical

@@ -1,4 +1,4 @@
-r"""FLRW spacetime with a $\Lambda$CDM model"""
+r"""FLRW spacetime with a $\Lambda$CDM model."""
 import numpy as np
 import sympy as sp
 
@@ -16,7 +16,7 @@ Lambda = (Omega_l_today * 3 * (Hprop_today ** 2)
                   / (c ** 2)) # cosmological constant
 
 def a(t, analytical=False):
-    """Scale factor"""
+    """Scale factor."""
     if analytical:
         return (
             a_today
@@ -31,49 +31,49 @@ def a(t, analytical=False):
                     * t / t_today_EdS) ** (2 / 3))
 
 def Hprop(t):
-    """Proper Hubble function"""
+    """Proper Hubble function."""
     return (
         Hprop_today
         * np.sqrt( Omega_m_today / (an_today(t) ** 3)
                   + Omega_l_today ))
 
 def Omega_m(t):
-    """Matter density parameter"""
+    """Matter density parameter."""
     return (Omega_m_today
                 / ( Omega_m_today
                    + Omega_l_today * (an_today(t) ** 3) ))
 
 def an_today(t):
-    """Scale factor normalised by a(z=0)"""
+    """Scale factor normalised by a(z=0)."""
     return a(t) / a_today
 
 def redshift(t):
-    """Redshift"""
+    """Redshift."""
     return -1 + ( a_today / a(t) )
 
 def Hconf(t):
-    """Conformal Hubble function"""
+    """Conformal Hubble function."""
     return a(t) * Hprop(t)
 
 def fL(t):
-    """Growth index = d ln (delta) / d ln (a)"""
+    """Growth index = d ln (delta) / d ln (a)."""
     return Omega_m(t) ** (6/11)
 
 def rho(t):
-    """Energy density"""
+    """Energy density."""
     return (3 * Omega_m(t) * Hprop(t)**2) / kappa
 
 def alpha(t, x, y, z):
-    """Lapse"""
+    """Lapse."""
     return np.ones(np.shape(x))
 
 def betaup3(t, x, y, z):
-    """Shift"""
+    """Shift."""
     Nx, Ny, Nz = np.shape(x)
     return np.zeros((3, Nx, Ny, Nz))
 
 def gammadown3(t, x, y, z, analytical=False):
-    """Spatial metric"""
+    """Spatial metric."""
     a2 = (a(t, analytical=analytical)**2)
     if analytical:
         return sp.Matrix([
@@ -89,5 +89,5 @@ def gammadown3(t, x, y, z, analytical=False):
             [zeros, zeros,    a2]])
 
 def Kdown3(t, x, y, z):
-    """Extrinsic curvature"""
+    """Extrinsic curvature."""
     return - gammadown3(t, x, y, z) * Hprop(t)

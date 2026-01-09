@@ -1,5 +1,5 @@
 """
-finitedifference.py
+finitedifference.py.
 
 This module provides finite difference schemes for computing spatial
 derivatives of scalar or tensor fields on 3D grids.
@@ -214,6 +214,7 @@ class FiniteDifference:
     mask_len : int
         (*int*) - Length of the finite difference mask.
     """
+
     def __init__(
             self,
             param,
@@ -222,7 +223,6 @@ class FiniteDifference:
             verbose=True,
             veryverbose=False):
         """Initialize the FiniteDifference class."""
-
         self.param = param
         self.boundary = boundary
         self.fd_order = fd_order
@@ -377,12 +377,14 @@ class FiniteDifference:
 
     def d3_scalar(self, f):
         r"""Spatial derivatives of a scalar:
-        $\partial_i (f)$."""
+        $\partial_i (f)$.
+        """
         return np.array([self.d3x(f), self.d3y(f), self.d3z(f)])
 
     def d3_rank1tensor(self, f):
         r"""Spatial derivatives of a spatial rank 1 tensor:
-        $\partial_i (f_{j})$ or $\partial_i (f^{j})$."""
+        $\partial_i (f_{j})$ or $\partial_i (f^{j})$.
+        """
         return np.stack(
             [map1(self.d3x, f),
              map1(self.d3y, f),
@@ -390,23 +392,27 @@ class FiniteDifference:
 
     def d3x_rank1tensor(self, f):
         r"""Spatial derivatives of a spatial rank 1 tensor:
-        $\partial_x (f_{j})$ or $\partial_x (f^{j})$."""
+        $\partial_x (f_{j})$ or $\partial_x (f^{j})$.
+        """
         return map1(self.d3x, f)
 
     def d3y_rank1tensor(self, f):
         r"""Spatial derivatives of a spatial rank 1 tensor:
-        $\partial_y (f_{j})$ or $\partial_y (f^{j})$."""
+        $\partial_y (f_{j})$ or $\partial_y (f^{j})$.
+        """
         return map1(self.d3y, f)
 
     def d3z_rank1tensor(self, f):
         r"""Spatial derivatives of a spatial rank 1 tensor:
-        $\partial_z (f_{j})$ or $\partial_z (f^{j})$."""
+        $\partial_z (f_{j})$ or $\partial_z (f^{j})$.
+        """
         return map1(self.d3z, f)
 
     def d3_rank2tensor(self, f):
         r"""Spatial derivatives of a spatial rank 2 tensor:
         $\partial_i (f_{kj})$ or $\partial_i (f^{kj})$
-        or $\partial_i (f^{k}_{j})$."""
+        or $\partial_i (f^{k}_{j})$.
+        """
         return np.array(
             [self.d3x_rank2tensor(f),
              self.d3y_rank2tensor(f),
@@ -415,19 +421,22 @@ class FiniteDifference:
     def d3x_rank2tensor(self, f):
         r"""Spatial derivatives along x of a spatial rank 2 tensor:
         $\partial_x (f_{kj})$ or $\partial_x (f^{kj})$
-        or $\partial_x (f^{k}_{j})$."""
+        or $\partial_x (f^{k}_{j})$.
+        """
         return map2(self.d3x, f)
 
     def d3y_rank2tensor(self, f):
         r"""Spatial derivatives along y of a spatial rank 2 tensor:
         $\partial_y (f_{kj})$ or $\partial_y (f^{kj})$
-        or $\partial_y (f^{k}_{j})$."""
+        or $\partial_y (f^{k}_{j})$.
+        """
         return map2(self.d3y, f)
 
     def d3z_rank2tensor(self, f):
         r"""Spatial derivatives along z of a spatial rank 2 tensor:
         $\partial_z (f_{kj})$ or $\partial_z (f^{kj})$
-        or $\partial_z (f^{k}_{j})$."""
+        or $\partial_z (f^{k}_{j})$.
+        """
         return map2(self.d3z, f)
 
     def d3_rank3tensor(self, f):

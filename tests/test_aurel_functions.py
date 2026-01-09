@@ -6,7 +6,7 @@ import aurel
 
 
 class TestAurelCoreFunctions:
-    """Test aurel functions execute"""
+    """Test aurel functions execute."""
 
     @pytest.fixture(autouse=True)
     def setup(self):
@@ -22,12 +22,12 @@ class TestAurelCoreFunctions:
 
     @pytest.mark.parametrize("key", aurel.descriptions)
     def test_executable(self, key):
-        """Test all functions with default (Minkowski vacuum) assumptions"""
+        """Test all functions with default (Minkowski vacuum) assumptions."""
         output = self.rel[key]
         assert output is not None
 
     def test_with_vacuum_flag(self):
-        """Test vacuum-specific branches in Constraints and dts_Gamma_bssnok"""
+        """Test vacuum-specific branches in Constraints and dts_Gamma_bssnok."""
         rel_vac = aurel.AurelCore(self.fd, vacuum=True, verbose=False)
 
         # These functions have vacuum-specific branches
@@ -41,7 +41,7 @@ class TestAurelCoreFunctions:
         assert gamma is not None
 
     def test_with_matter(self):
-        """Test matter-related quantities with non-zero matter fields"""
+        """Test matter-related quantities with non-zero matter fields."""
         rel_matter = aurel.AurelCore(self.fd, vacuum=False, verbose=False)
 
         # Set non-trivial matter fields
@@ -63,7 +63,7 @@ class TestAurelCoreFunctions:
         assert ham_matter is not None
 
     def test_with_custom_metric_components(self):
-        """Test branches when gdown4 is provided directly"""
+        """Test branches when gdown4 is provided directly."""
         rel = aurel.AurelCore(self.fd, verbose=False)
 
         # Provide gdown4 directly (triggers different branch in gdet)
@@ -87,7 +87,7 @@ class TestAurelCoreFunctions:
         assert gup is not None
 
     def test_with_custom_gammadown3(self):
-        """Test branches when gammadown3 is provided directly"""
+        """Test branches when gammadown3 is provided directly."""
         rel = aurel.AurelCore(self.fd, verbose=False)
 
         # Provide gammadown3 directly (triggers different branches)
@@ -106,7 +106,7 @@ class TestAurelCoreFunctions:
         assert gamma_up is not None
 
     def test_with_custom_Kdown3(self):
-        """Test branches when Kdown3 is provided directly"""
+        """Test branches when Kdown3 is provided directly."""
         rel = aurel.AurelCore(self.fd, verbose=False)
 
         # Provide Kdown3 directly (triggers different branches)
@@ -128,7 +128,7 @@ class TestAurelCoreFunctions:
         assert a_down is not None
 
     def test_with_shift_vector(self):
-        """Test branches when betaup3 is provided"""
+        """Test branches when betaup3 is provided."""
         rel = aurel.AurelCore(self.fd, verbose=False)
 
         # Provide betaup3 directly (triggers different branches in betax/y/z)
@@ -153,7 +153,7 @@ class TestAurelCoreFunctions:
         assert beta_mag is not None
 
     def test_with_dtbetaup3(self):
-        """Test branches when dtbetaup3 is provided"""
+        """Test branches when dtbetaup3 is provided."""
         rel = aurel.AurelCore(self.fd, verbose=False)
 
         # Provide dtbetaup3 directly
@@ -172,7 +172,7 @@ class TestAurelCoreFunctions:
         assert dtbetaz is not None
 
     def test_Ttrace_with_Tdown4(self):
-        """Test Ttrace with and without Tdown4 cached"""
+        """Test Ttrace with and without Tdown4 cached."""
         # Without Tdown4 - should use shortcut
         rel1 = aurel.AurelCore(self.fd, verbose=False)
         ttrace1 = rel1["Ttrace"]
@@ -185,7 +185,7 @@ class TestAurelCoreFunctions:
         assert ttrace2 is not None
 
     def test_Weyl_Psi_with_cached_data(self):
-        """Test Weyl_Psi with and without Weyl_Psi4r/i cached"""
+        """Test Weyl_Psi with and without Weyl_Psi4r/i cached."""
         # Without cached Weyl_Psi4r/i - should compute from tetrad
         rel1 = aurel.AurelCore(self.fd, verbose=False)
         psi1 = rel1["Weyl_Psi"]
@@ -201,7 +201,7 @@ class TestAurelCoreFunctions:
         assert len(psi2) == 5
 
     def test_different_tetrad_choice(self):
-        """Test tetrad-dependent calculations with different tetrad"""
+        """Test tetrad-dependent calculations with different tetrad."""
         rel_qk = aurel.AurelCore(self.fd, tetrad="quasi-Kinnersley", verbose=False)
         rel_other = aurel.AurelCore(self.fd, tetrad="other", verbose=False)
 
@@ -213,7 +213,7 @@ class TestAurelCoreFunctions:
         assert weyl_other is not None
 
     def test_with_cosmological_constant(self):
-        """Test with non-zero cosmological constant"""
+        """Test with non-zero cosmological constant."""
         rel = aurel.AurelCore(self.fd, Lambda=0.1, verbose=False)
 
         # Hamiltonian includes Lambda term
@@ -221,7 +221,7 @@ class TestAurelCoreFunctions:
         assert ham is not None
 
 class TestAurelCoreSymbolicFunctions:
-    """Test aurel symbolic functions execute"""
+    """Test aurel symbolic functions execute."""
 
     @pytest.fixture(autouse=True)
     def setup(self):
@@ -237,18 +237,18 @@ class TestAurelCoreSymbolicFunctions:
 
     @pytest.mark.parametrize("key", aurel.symbolic_descriptions)
     def test_executable_4d(self, key):
-        """Test all symbolic functions with 4D coordinates"""
+        """Test all symbolic functions with 4D coordinates."""
         output = self.rel_4d[key]
         assert output is not None
 
     @pytest.mark.parametrize("key", aurel.symbolic_descriptions)
     def test_executable_3d(self, key):
-        """Test all symbolic functions with 3D coordinates"""
+        """Test all symbolic functions with 3D coordinates."""
         output = self.rel_3d[key]
         assert output is not None
 
     def test_riemann_down_with_cached_uddd(self):
-        """Test Riemann_down when Riemann_uddd is already cached"""
+        """Test Riemann_down when Riemann_uddd is already cached."""
         # First compute Riemann_uddd to cache it
         self.rel_4d["Riemann_uddd"]
         # Then compute Riemann_down (should use cached path)
@@ -257,14 +257,14 @@ class TestAurelCoreSymbolicFunctions:
         assert output.shape == (4, 4, 4, 4)
 
     def test_riemann_down_without_cached_uddd(self):
-        """Test Riemann_down when Riemann_uddd is not cached"""
+        """Test Riemann_down when Riemann_uddd is not cached."""
         # Don't compute Riemann_uddd first
         output = self.rel_4d["Riemann_down"]
         assert output is not None
         assert output.shape == (4, 4, 4, 4)
 
     def test_ricci_down_with_cached_uddd(self):
-        """Test Ricci_down when Riemann_uddd is already cached"""
+        """Test Ricci_down when Riemann_uddd is already cached."""
         # First compute Riemann_uddd to cache it
         self.rel_4d["Riemann_uddd"]
         # Then compute Ricci_down (should use cached path)
@@ -273,14 +273,14 @@ class TestAurelCoreSymbolicFunctions:
         assert output.shape == (4, 4)
 
     def test_ricci_down_without_cached_uddd(self):
-        """Test Ricci_down when Riemann_uddd is not cached"""
+        """Test Ricci_down when Riemann_uddd is not cached."""
         # Don't compute Riemann_uddd first
         output = self.rel_4d["Ricci_down"]
         assert output is not None
         assert output.shape == (4, 4)
 
     def test_custom_metric(self):
-        """Test with a custom metric (Schwarzschild)"""
+        """Test with a custom metric (Schwarzschild)."""
         t, r, theta, phi = sp.symbols('t r theta phi', real=True, positive=True)
         M = sp.Symbol('M', real=True, positive=True)
 

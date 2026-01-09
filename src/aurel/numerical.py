@@ -1,5 +1,5 @@
 """
-numerical.py
+numerical.py.
 
 This module contains numerical methods for various calculations.
 """
@@ -25,6 +25,7 @@ def dichotomy(y_wanted, function, lower_bound, upper_bound, tolerance):
         The upper bound of the interval to search for the root.
     tolerance : float
         The tolerance for the convergence of the method.
+
     Returns
     -------
     float

@@ -1,6 +1,4 @@
-"""
-Tests for the finitedifference module.
-"""
+"""Tests for the finitedifference module."""
 import numpy as np
 import pytest
 

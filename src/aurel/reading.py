@@ -1,5 +1,5 @@
-"""
-reading.py
+r"""
+reading.py.
 
 This module provides comprehensive functionality for reading and writing
 numerical relativity simulation data, with specialized support for
@@ -312,7 +312,6 @@ def save_data(param, data, **kwargs):
 
     Other Parameters
     ----------------
-
     vars : list of str, optional
         Variables to save. Default [] (save all variables in data).
         Note: 'it' and 't' are automatically included if present.
@@ -515,7 +514,6 @@ def parse_hdf5_key(key):
             }
 
     """
-
     match = rx_key.match(key)
     if match:
         return {
@@ -574,7 +572,6 @@ def parse_h5file(filepath):
             }
 
     """
-
     # Extract just the filename if a full path was provided
     if os.path.sep in filepath:
         filename = os.path.basename(filepath)
@@ -622,7 +619,7 @@ def parse_h5file(filepath):
 # =============================================================================
 
 def parameters(simname):
-    """Read and parse Einstein Toolkit simulation parameters.
+    r"""Read and parse Einstein Toolkit simulation parameters.
 
     Extracts comprehensive simulation metadata from Einstein Toolkit parameter
     files (.par), including grid configuration, restart information, and all
@@ -2010,7 +2007,6 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
 
         dict.keys() = ['it', 't', var]
     """
-
     it = sorted(set(kwargs.get('it', [0])))
     rl = kwargs.get('rl', 0)
     veryextraverbose = kwargs.get('veryextraverbose', False)

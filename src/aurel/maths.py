@@ -1,5 +1,5 @@
 """
-maths.py
+maths.py.
 
 This module contains functions for manipulating rank 2 tensors, including:
  - extracting components or formatting components into matrices
@@ -156,7 +156,7 @@ def safe_division(a, b):
     return c
 
 def populate_4Riemann(Riemann_ssss, Riemann_ssst, Riemann_stst):
-    """Populate the 4Riemann tensor with R_ssss, R_ssst, and R_stst"""
+    """Populate the 4Riemann tensor with R_ssss, R_ssst, and R_stst."""
     Nx, Ny, Nz = np.shape(Riemann_ssss[0,0,0,0])
     R = np.zeros((4, 4, 4, 4, Nx, Ny, Nz))
 
@@ -197,14 +197,14 @@ def populate_4Riemann(Riemann_ssss, Riemann_ssst, Riemann_stst):
     return R
 
 def factorial(n):
-    """Returns the factorial of n"""
+    """Returns the factorial of n."""
     if n<=1:
         return 1
     else:
         return sc.factorial(n)
 
 def sYlm(s, el, m, theta, phi):
-    """Spin-weighted spherical harmonics ${}_sY_{lm}$, Eq 3.1 of https://doi.org/10.1063/1.1705135
+    """Spin-weighted spherical harmonics ${}_sY_{lm}$, Eq 3.1 of https://doi.org/10.1063/1.1705135.
 
     Parameters
     ----------
@@ -237,7 +237,7 @@ def sYlm(s, el, m, theta, phi):
     return fac * sumY
 
 def sYlm_coefficients(s, lmax, f, theta, phi, dtheta_weight, dphi):
-    """Coefficients of spin-weighted spherical harmonics decomposition of f
+    """Coefficients of spin-weighted spherical harmonics decomposition of f.
 
     Parameters
     ----------
