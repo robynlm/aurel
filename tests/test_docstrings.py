@@ -6,8 +6,8 @@ import pytest
 
 class TestDocstrings:
     """Test docstring coverage."""
-    aurel_elements = [getattr(aurel, name) for name in dir(aurel) 
-         if ((inspect.isclass(getattr(aurel, name)) 
+    aurel_elements = [getattr(aurel, name) for name in dir(aurel)
+         if ((inspect.isclass(getattr(aurel, name))
               or inspect.isfunction(getattr(aurel, name)))
              and getattr(aurel, name).__module__.startswith('aurel'))]
 
@@ -16,7 +16,7 @@ class TestDocstrings:
         missing_docs = []
 
         if inspect.isclass(module):
-            # Check classes 
+            # Check classes
             methods = inspect.getmembers(module, predicate=inspect.isfunction)
             for name, func in methods:
                 # For every function in the class

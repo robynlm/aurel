@@ -421,7 +421,7 @@ class TestGetContent:
                     f"File {filepath} should be from restart {restart}"
 
         # Verify cache file is created in correct location
-        cache_file = (Path(param['simpath']) / param['simname'] / 
+        cache_file = (Path(param['simpath']) / param['simname'] /
                       f'output-{restart:04d}' / param['simname'] / 'content.txt')
         assert cache_file.exists(), f"Cache file should exist for restart {restart}"
 
@@ -867,7 +867,7 @@ class TestETDataReading:
 
         # Request specific variables in Aurel naming
         data = reading.read_ET_data(
-            param, it=[0], vars=['betaup3'], 
+            param, it=[0], vars=['betaup3'],
             restart=0, split_per_it=False, verbose=False)
 
         assert 'it' in data
@@ -877,7 +877,7 @@ class TestETDataReading:
 
         # Request specific variables in Aurel naming
         data = reading.read_ET_data(
-            param, it=[0], vars=['alpha'], 
+            param, it=[0], vars=['alpha'],
             restart=0, split_per_it=False, verbose=False)
 
         assert 'it' in data
@@ -905,7 +905,7 @@ class TestETDataReading:
 
         # First call with split_per_it=True - reads from ET files and saves to cache
         data1 = reading.read_ET_data(
-            param, it=it_to_read, vars=['betaup3'], 
+            param, it=it_to_read, vars=['betaup3'],
             restart=restart, split_per_it=True, verbose=False)
 
         assert 'it' in data1
@@ -913,7 +913,7 @@ class TestETDataReading:
         assert 'betax' in data1 or 'betaup3' in data1  # Should have shift component
 
         # Check that cache files were created in all_iterations directory
-        all_it_dir = (Path(param['simpath']) / param['simname'] / 
+        all_it_dir = (Path(param['simpath']) / param['simname'] /
                       f'output-{restart:04d}' / param['simname'] / 'all_iterations')
         assert all_it_dir.exists(), "all_iterations directory should be created"
 
@@ -923,7 +923,7 @@ class TestETDataReading:
 
         # Second call with split_per_it=True - should read from cached files
         data2 = reading.read_ET_data(
-            param, it=it_to_read, vars=['betaup3'], 
+            param, it=it_to_read, vars=['betaup3'],
             restart=restart, split_per_it=True, verbose=False)
 
         assert 'it' in data2
@@ -942,7 +942,7 @@ class TestETDataReading:
         # Third call with all iterations including the last one - tests hybrid approach
         # (reading some from cache, some from ET files)
         data3 = reading.read_ET_data(
-            param, it=all_its, vars=['betaup3'], 
+            param, it=all_its, vars=['betaup3'],
             restart=restart, split_per_it=True, verbose=False)
 
         assert 'it' in data3
@@ -952,7 +952,7 @@ class TestETDataReading:
         for var in data1.keys():
             if var not in ['it', 't']:
                 for idx in range(len(it_to_read)):
-                    if (data1[var][idx] is not None 
+                    if (data1[var][idx] is not None
                         and data3[var][idx] is not None):
                         np.testing.assert_array_equal(
                             data1[var][idx], data3[var][idx],
@@ -965,14 +965,14 @@ class TestETDataReading:
                 assert data3[var][last_idx] is not None, \
                     f"Should have read {var} for new iteration"
 
-    @pytest.mark.slow  
+    @pytest.mark.slow
     def test_read_ET_data_with_checkpoints(self, simloc_env):
         """Test reading checkpoint data."""
         param = reading.parameters('test_onefile_ungrouped')
 
         # Try to read with checkpoint usage
         data = reading.read_ET_data(
-            param, it=[0], restart=0, 
+            param, it=[0], restart=0,
             usecheckpoints=True, verbose=False)
         assert 'it' in data
 
@@ -1003,7 +1003,7 @@ class TestETDataReading:
 
         # Read data across restarts with restart=-1 (auto-detect)
         data = reading.read_ET_data(
-            param, it=its_to_read, restart=-1, 
+            param, it=its_to_read, restart=-1,
             vars=['betaup3'], split_per_it=False, verbose=False)
 
         assert 'it' in data
@@ -1147,7 +1147,7 @@ class TestIntegration:
         param = reading.parameters(simname)
 
         data = reading.read_ET_data(
-            param, it=[0], restart=0, 
+            param, it=[0], restart=0,
             split_per_it=False, verbose=False)
 
         # Should successfully read data

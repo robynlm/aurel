@@ -34,14 +34,14 @@ def Kdown3(sol, fd, t, Rc):
     a2 = sol.a(t)**2
     F = sol.fL(t) + (3/2) * sol.Omega_m(t)
     iFH = 1 / ( F * sol.Hprop(t) )
-    kxx = (- a2 * sol.Hprop(t) * ( 1 - 2 * Rc ) 
+    kxx = (- a2 * sol.Hprop(t) * ( 1 - 2 * Rc )
            + ( 2 + sol.fL(t) ) * fd.d3x(fd.d3x(Rc)) * iFH)
     kxy = ( 2 + sol.fL(t) ) * fd.d3x(fd.d3y(Rc)) * iFH
     kxz = ( 2 + sol.fL(t) ) * fd.d3x(fd.d3z(Rc)) * iFH
-    kyy = (- a2 * sol.Hprop(t) * ( 1 - 2 * Rc ) 
+    kyy = (- a2 * sol.Hprop(t) * ( 1 - 2 * Rc )
            + ( 2 + sol.fL(t) ) * fd.d3y(fd.d3y(Rc)) * iFH)
     kyz = ( 2 + sol.fL(t) ) * fd.d3y(fd.d3z(Rc)) * iFH
-    kzz = (- a2 * sol.Hprop(t) * ( 1 - 2 * Rc ) 
+    kzz = (- a2 * sol.Hprop(t) * ( 1 - 2 * Rc )
            + ( 2 + sol.fL(t) ) * fd.d3z(fd.d3z(Rc)) * iFH)
 
     return np.array([
@@ -53,5 +53,5 @@ def delta1(sol, fd, t, Rc):
     """Linear density contrast"""
     F = sol.fL(t) + (3/2) * sol.Omega_m(t)
     return (
-        (fd.d3x(fd.d3x(Rc)) + fd.d3y(fd.d3y(Rc)) + fd.d3z(fd.d3z(Rc))) 
+        (fd.d3x(fd.d3x(Rc)) + fd.d3y(fd.d3y(Rc)) + fd.d3z(fd.d3z(Rc)))
         / (sol.a(t)**2 * F * sol.Hprop(t)**2))

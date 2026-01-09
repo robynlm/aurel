@@ -33,9 +33,9 @@ class TestOverTimeFunction:
     def test_no_vars_no_estimates(self):
         """Test over_time with no variables or estimates requested."""
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[], 
+            self.data.copy(),
+            self.fd,
+            vars=[],
             estimates=[],
             verbose=False
         )
@@ -46,9 +46,9 @@ class TestOverTimeFunction:
     def test_builtin_var_no_estimates(self):
         """Test over_time with built-in variable from descriptions."""
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['gammadet'], 
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet'],
             estimates=[],
             verbose=False
         )
@@ -60,9 +60,9 @@ class TestOverTimeFunction:
     def test_multiple_builtin_vars_no_estimates(self):
         """Test over_time with multiple built-in variables."""
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['gammadet', 'null_ray_exp_in'], 
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet', 'null_ray_exp_in'],
             estimates=[],
             verbose=False
         )
@@ -78,9 +78,9 @@ class TestOverTimeFunction:
             return rel['gxx'] + rel['gyy'] + rel['gzz']
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[{'custom_trace': custom_var}], 
+            self.data.copy(),
+            self.fd,
+            vars=[{'custom_trace': custom_var}],
             estimates=[],
             verbose=False
         )
@@ -95,9 +95,9 @@ class TestOverTimeFunction:
             return rel['gxx'] + rel['gyy'] + rel['gzz']
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['gammadet', {'custom_trace': custom_var}], 
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet', {'custom_trace': custom_var}],
             estimates=[],
             verbose=False
         )
@@ -109,9 +109,9 @@ class TestOverTimeFunction:
     def test_builtin_var_builtin_estimate(self):
         """Test over_time with built-in variable and built-in estimation."""
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['gammadet'], 
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet'],
             estimates=['max'],
             verbose=False
         )
@@ -125,9 +125,9 @@ class TestOverTimeFunction:
     def test_multiple_builtin_estimates(self):
         """Test over_time with multiple built-in estimations."""
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['gammadet'], 
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet'],
             estimates=['max', 'min', 'mean'],
             verbose=False
         )
@@ -148,9 +148,9 @@ class TestOverTimeFunction:
             return array[xcenter, ycenter, zcenter]
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['gammadet'], 
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet'],
             estimates=[{'center': custom_est}],
             verbose=False
         )
@@ -163,9 +163,9 @@ class TestOverTimeFunction:
             return array[0, 0, 0]
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['gammadet'], 
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet'],
             estimates=['max', {'corner': custom_est}],
             verbose=False
         )
@@ -177,9 +177,9 @@ class TestOverTimeFunction:
     def test_estimates_on_input_scalars(self):
         """Test that estimates are also applied to input 3D scalar arrays."""
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[], 
+            self.data.copy(),
+            self.fd,
+            vars=[],
             estimates=['max', 'min'],
             verbose=False
         )
@@ -197,9 +197,9 @@ class TestOverTimeFunction:
             return np.median(array)
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['gammadet', {'custom_var': custom_var}], 
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet', {'custom_var': custom_var}],
             estimates=['max', 'mean', {'custom_median': custom_est}],
             verbose=False
         )
@@ -218,9 +218,9 @@ class TestOverTimeFunction:
     def test_invalid_builtin_var(self):
         """Test that invalid built-in variable names are handled gracefully."""
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['invalid_variable_name'], 
+            self.data.copy(),
+            self.fd,
+            vars=['invalid_variable_name'],
             estimates=[],
             verbose=False
         )
@@ -230,9 +230,9 @@ class TestOverTimeFunction:
     def test_invalid_builtin_estimate(self):
         """Test that invalid built-in estimation names are handled gracefully."""
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['gammadet'], 
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet'],
             estimates=['invalid_estimate_name'],
             verbose=False
         )
@@ -252,9 +252,9 @@ class TestOverTimeFunction:
                 shuffled_data[key].append(self.data[key][idx])
 
         result = aurel.over_time(
-            shuffled_data, 
-            self.fd, 
-            vars=['gammadet'], 
+            shuffled_data,
+            self.fd,
+            vars=['gammadet'],
             estimates=['max'],
             verbose=False
         )
@@ -267,9 +267,9 @@ class TestOverTimeFunction:
         builtin_estimates = list(aurel.time.est_functions.keys())
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['gammadet'], 
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet'],
             estimates=builtin_estimates,
             verbose=False
         )
@@ -282,9 +282,9 @@ class TestOverTimeFunction:
         """Test calling over_time sequentially to add variables with same estimates."""
         # First call: compute gammadet with max estimate
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['gammadet'], 
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet'],
             estimates=['max', 'mean'],
             verbose=False
         )
@@ -296,9 +296,9 @@ class TestOverTimeFunction:
 
         # Second call: add null_ray_exp_in with same estimates
         result = aurel.over_time(
-            result, 
-            self.fd, 
-            vars=['gammadet', 'null_ray_exp_in'], 
+            result,
+            self.fd,
+            vars=['gammadet', 'null_ray_exp_in'],
             verbose=False
         )
 
@@ -310,9 +310,9 @@ class TestOverTimeFunction:
 
         # Third call: add null_ray_exp_in with same estimates
         result = aurel.over_time(
-            result, 
-            self.fd, 
-            vars=['gammadet', 'null_ray_exp_in'], 
+            result,
+            self.fd,
+            vars=['gammadet', 'null_ray_exp_in'],
             estimates=['max', 'mean'],
             verbose=False
         )
@@ -327,9 +327,9 @@ class TestOverTimeFunction:
 
         # Third call: add null_ray_exp_in with same estimates
         result = aurel.over_time(
-            result, 
-            self.fd, 
-            vars=['gammadet', 'null_ray_exp_in', 'Ktrace'], 
+            result,
+            self.fd,
+            vars=['gammadet', 'null_ray_exp_in', 'Ktrace'],
             estimates=['max', 'mean'],
             verbose=False
         )
@@ -360,9 +360,9 @@ class TestOverTimeFunction:
         """Test calling over_time first with vars, then with only estimates."""
         # First call: compute variables without estimates
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['gammadet', 'Ktrace'], 
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet', 'Ktrace'],
             estimates=[],
             verbose=False
         )
@@ -375,9 +375,9 @@ class TestOverTimeFunction:
 
         # Second call: compute estimates only (no new vars)
         result = aurel.over_time(
-            result, 
-            self.fd, 
-            vars=[], 
+            result,
+            self.fd,
+            vars=[],
             estimates=['max', 'min', 'mean'],
             verbose=False
         )
@@ -425,9 +425,9 @@ class TestOverTimeFunction:
 
         # First call: compute first custom var with builtin estimate
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=['gammadet', {'gamma_trace': custom_var1}], 
+            self.data.copy(),
+            self.fd,
+            vars=['gammadet', {'gamma_trace': custom_var1}],
             estimates=['max'],
             verbose=False
         )
@@ -440,9 +440,9 @@ class TestOverTimeFunction:
 
         # Second call: add second custom var with first custom estimate
         result = aurel.over_time(
-            result, 
-            self.fd, 
-            vars=['Ktrace', {'rho_squared': custom_var2}], 
+            result,
+            self.fd,
+            vars=['Ktrace', {'rho_squared': custom_var2}],
             verbose=False
         )
         assert 'gammadet' in result.keys()
@@ -454,8 +454,8 @@ class TestOverTimeFunction:
 
         # Second call: add second custom var with first custom estimate
         result = aurel.over_time(
-            result, 
-            self.fd, 
+            result,
+            self.fd,
             estimates=['max', {'center': custom_est1}],
             verbose=False
         )
@@ -476,9 +476,9 @@ class TestOverTimeFunction:
 
         # Third call: add second custom estimate (no new vars)
         result = aurel.over_time(
-            result, 
-            self.fd, 
-            vars=[], 
+            result,
+            self.fd,
+            vars=[],
             estimates=[{'corner': custom_est2}],
             verbose=False
         )
@@ -526,9 +526,9 @@ class TestOverTimeFunction:
 
         # First call: custom var with power=2
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[{'rho_squared': custom_var_power}], 
+            self.data.copy(),
+            self.fd,
+            vars=[{'rho_squared': custom_var_power}],
             estimates=['max', 'min'],
             power=2,
             verbose=False
@@ -542,9 +542,9 @@ class TestOverTimeFunction:
 
         # Second call: add another custom var with different kwarg
         result = aurel.over_time(
-            result, 
-            self.fd, 
-            vars=[{'scaled_trace': custom_var_scaled}], 
+            result,
+            self.fd,
+            vars=[{'scaled_trace': custom_var_scaled}],
             estimates=['mean'],
             scale=3.5,
             verbose=False
@@ -559,9 +559,9 @@ class TestOverTimeFunction:
 
         # Third call: recompute with different power
         result = aurel.over_time(
-            result, 
-            self.fd, 
-            vars=[{'rho_cubed': custom_var_power}], 
+            result,
+            self.fd,
+            vars=[{'rho_cubed': custom_var_power}],
             estimates=[],
             power=3,
             verbose=False
@@ -602,9 +602,9 @@ class TestOverTimeEdgeCases:
     def test_single_timestep(self):
         """Test over_time with only one timestep."""
         result = aurel.over_time(
-            self.single_data.copy(), 
-            self.fd, 
-            vars=['gammadet'], 
+            self.single_data.copy(),
+            self.fd,
+            vars=['gammadet'],
             estimates=['max'],
             verbose=False
         )
@@ -620,8 +620,8 @@ class TestOverTimeEdgeCases:
 
         with pytest.raises(ValueError, match="temporal key"):
             aurel.over_time(
-                bad_data, 
-                self.fd, 
+                bad_data,
+                self.fd,
                 vars=['gammadet'],
                 verbose=False
             )
@@ -633,9 +633,9 @@ class TestOverTimeEdgeCases:
             data[temp_key] = data.pop('t')
 
             result = aurel.over_time(
-                data, 
-                self.fd, 
-                vars=['gammadet'], 
+                data,
+                self.fd,
+                vars=['gammadet'],
                 estimates=[],
                 verbose=False
             )
@@ -673,9 +673,9 @@ class TestOverTimeCustomVarWithKwargs:
             return rel['rho'] ** rel.power
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[{'rho_cubed': custom_var}], 
+            self.data.copy(),
+            self.fd,
+            vars=[{'rho_cubed': custom_var}],
             estimates=[],
             power=3,
             verbose=False
@@ -691,9 +691,9 @@ class TestOverTimeCustomVarWithKwargs:
             return rel['rho'] * rel.scale
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[{'scaled_rho': custom_var}], 
+            self.data.copy(),
+            self.fd,
+            vars=[{'scaled_rho': custom_var}],
             estimates=[],
             scale=2.5,
             verbose=False
@@ -710,15 +710,15 @@ class TestOverTimeCustomVarWithKwargs:
             return np.abs(result) if rel.use_absolute else result
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[{'diff': custom_var}], 
+            self.data.copy(),
+            self.fd,
+            vars=[{'diff': custom_var}],
             estimates=[],
             use_absolute=True,
             verbose=False
         )
         assert 'diff' in result.keys()
-        expected = np.abs(sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)[0, 0] - 
+        expected = np.abs(sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)[0, 0] -
                          sol.gammadown3(self.data['t'][0], *self.fd.cartesian_coords)[1, 1])
         np.testing.assert_array_almost_equal(result['diff'][0], expected)
 
@@ -729,9 +729,9 @@ class TestOverTimeCustomVarWithKwargs:
             return rel[f'g{rel.component}']
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[{'selected': custom_var}], 
+            self.data.copy(),
+            self.fd,
+            vars=[{'selected': custom_var}],
             estimates=[],
             component='yy',
             verbose=False
@@ -744,14 +744,14 @@ class TestOverTimeCustomVarWithKwargs:
         """Test custom variable with list kwarg."""
         def custom_var(rel):
             """Custom variable: weighted sum of gamma diagonal."""
-            return (rel.coefficients[0] * rel['gxx'] + 
-                    rel.coefficients[1] * rel['gyy'] + 
+            return (rel.coefficients[0] * rel['gxx'] +
+                    rel.coefficients[1] * rel['gyy'] +
                     rel.coefficients[2] * rel['gzz'])
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[{'weighted_trace': custom_var}], 
+            self.data.copy(),
+            self.fd,
+            vars=[{'weighted_trace': custom_var}],
             estimates=[],
             coefficients=[2, 3, 1],
             verbose=False
@@ -768,9 +768,9 @@ class TestOverTimeCustomVarWithKwargs:
             return rel.config['scale'] * rel['rho'] + rel.config['offset']
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[{'transformed_rho': custom_var}], 
+            self.data.copy(),
+            self.fd,
+            vars=[{'transformed_rho': custom_var}],
             estimates=[],
             config={'scale': 3, 'offset': 5},
             verbose=False
@@ -793,9 +793,9 @@ class TestOverTimeCustomVarWithKwargs:
             return result
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[{'partial_trace': custom_var}], 
+            self.data.copy(),
+            self.fd,
+            vars=[{'partial_trace': custom_var}],
             estimates=[],
             included_components={'xx', 'zz'},
             verbose=False
@@ -813,9 +813,9 @@ class TestOverTimeCustomVarWithKwargs:
 
         weights = np.random.rand(self.fd.Nx, self.fd.Ny, self.fd.Nz)
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[{'weighted_rho': custom_var}], 
+            self.data.copy(),
+            self.fd,
+            vars=[{'weighted_rho': custom_var}],
             estimates=[],
             weights=weights,
             verbose=False
@@ -856,9 +856,9 @@ class TestOverTimeCustomVarWithKwargs:
             return result
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
-            vars=[{'complex_var': custom_var}], 
+            self.data.copy(),
+            self.fd,
+            vars=[{'complex_var': custom_var}],
             estimates=[],
             scale=2.5,
             power=2,
@@ -883,12 +883,12 @@ class TestOverTimeCustomVarWithKwargs:
             return rel['rho'] ** rel.exponent
 
         result = aurel.over_time(
-            self.data.copy(), 
-            self.fd, 
+            self.data.copy(),
+            self.fd,
             vars=[
                 {'scaled': var1},
                 {'powered': var2}
-            ], 
+            ],
             estimates=[],
             multiplier=3,
             exponent=2,

@@ -25,7 +25,7 @@ else:
 est_functions = {
     'max': np.max,
     'mean': np.mean,
-    'quartile1': lambda array: np.percentile(array, 25), 
+    'quartile1': lambda array: np.percentile(array, 25),
     'median': lambda array: np.percentile(array, 50),
     'quartile3': lambda array: np.percentile(array, 75),
     'min': np.min,
@@ -36,7 +36,7 @@ est_functions = {
     'maxabs': lambda array: np.max(np.abs(array)),
     'minabs': lambda array: np.min(np.abs(array)),
     'meanabs': lambda array: np.mean(np.abs(array)),
-    'quartile1abs': lambda array: np.percentile(np.abs(array), 25), 
+    'quartile1abs': lambda array: np.percentile(np.abs(array), 25),
     'medianabs': lambda array: np.percentile(np.abs(array), 50),
     'quartile3abs': lambda array: np.percentile(np.abs(array), 75),
     'sumabs': lambda array: np.sum(np.abs(array)),
@@ -53,12 +53,12 @@ est_functions = {
     'x1y1z1': lambda array: array[-1, -1, -1],
 }
 
-def over_time(data, fd, vars=[], estimates=[], 
+def over_time(data, fd, vars=[], estimates=[],
               verbose=True, veryverbose=False, **rel_kwargs):
     """Calculate variables from the data and store them in the data dictionary.
 
-    This function processes time series data by creating AurelCore instances 
-    for each time step, calculating specified variables, and optionally 
+    This function processes time series data by creating AurelCore instances
+    for each time step, calculating specified variables, and optionally
     applying estimation functions to 3D arrays.
 
     Parameters
@@ -76,7 +76,7 @@ def over_time(data, fd, vars=[], estimates=[],
 
         - str: Names of predefined variables from core.descriptions
         - dict: Custom variable definitions with string keys (variable names)
-          and functions that take only an AurelCore instance and return the 
+          and functions that take only an AurelCore instance and return the
           variable value.
 
         Default is an empty list, no variable calculations are performed.
@@ -84,10 +84,10 @@ def over_time(data, fd, vars=[], estimates=[],
         List containing estimation functions to apply to all 3D scalar arrays.
         Elements can be:
 
-        - str: Names of predefined functions from est_functions 
+        - str: Names of predefined functions from est_functions
           ('max', 'mean', 'median', 'min', ...)
-        - dict: Custom estimation functions with string keys (function names) 
-          and functions that take a scalar 3D array of shape 
+        - dict: Custom estimation functions with string keys (function names)
+          and functions that take a scalar 3D array of shape
           (fd.Nx, fd.Ny, fd.Nz) and return a scalar value.
 
         Default is an empty list (no estimation applied).
@@ -105,10 +105,10 @@ def over_time(data, fd, vars=[], estimates=[],
     Returns
     -------
     dict
-        Updated data dictionary with calculated variables. 
-        If `vars` is provided, a new key is added containing a list of 
-        values for each time step. 
-        If `estimates` is provided, additional keys are added with format 
+        Updated data dictionary with calculated variables.
+        If `vars` is provided, a new key is added containing a list of
+        values for each time step.
+        If `estimates` is provided, additional keys are added with format
         '{variable}_{estimation_func}'.
     """
 
@@ -233,7 +233,7 @@ def over_time(data, fd, vars=[], estimates=[],
 
         # Transform dict of lists to a list of dicts
         keys = data.keys()
-        input_data_list = [dict(zip(keys, values)) 
+        input_data_list = [dict(zip(keys, values))
                            for values in zip(*data.values())]
         del data
 
@@ -284,18 +284,18 @@ def over_time(data, fd, vars=[], estimates=[],
                + " returning original data.", flush=True)
         return data
 
-def process_single_timestep(data, fd, vars, estimates, 
+def process_single_timestep(data, fd, vars, estimates,
                             verbose, scalarkeys, rel_kwargs):
     """Process a single time step for variable calculation and estimation.
 
     This function creates an AurelCore instance for the specified time step,
-    calculates requested variables, and applies estimation 
+    calculates requested variables, and applies estimation
     functions to 3D arrays if specified.
 
     Parameters
     ----------
     data : dict
-        Dictionary containing variables of relevant iteration. 
+        Dictionary containing variables of relevant iteration.
         The function will add calculated variables
         to this dictionary.
     fd : FiniteDifference
@@ -317,7 +317,7 @@ def process_single_timestep(data, fd, vars, estimates,
 
         - str: Names of predefined functions from est_functions
         - dict: Custom estimation functions with string keys (function names)
-          and functions that take a 3D array of shape (fd.Nx, fd.Ny, fd.Nz) 
+          and functions that take a 3D array of shape (fd.Nx, fd.Ny, fd.Nz)
           and return a scalar value.
 
         If empty, no estimation applied.
@@ -343,7 +343,7 @@ def process_single_timestep(data, fd, vars, estimates,
     if verbose:
         for temp in ['it', 'iteration', 't', 'time']:
             if temp in list(data.keys()):
-                print(f"Processing {temp} = {data[temp]}", 
+                print(f"Processing {temp} = {data[temp]}",
                       flush=True)
                 break
 
@@ -352,7 +352,7 @@ def process_single_timestep(data, fd, vars, estimates,
         # Create a new AurelCore instance for this time step
         rel = core.AurelCore(fd, verbose=verbose, **rel_kwargs)
 
-        # Set all existing data values for this time step 
+        # Set all existing data values for this time step
         # (except variables to be calculated)
         for key, values in data.items():
             if key not in vars:
@@ -404,11 +404,11 @@ def process_single_timestep(data, fd, vars, estimates,
         for est_item in estimates:
             if verbose:
                 if isinstance(est_item, str):
-                    print(f"Processing estimation item: {est_item}", 
+                    print(f"Processing estimation item: {est_item}",
                           flush=True)
                 elif isinstance(est_item, dict):
                     for func_name, func in est_item.items():
-                        print(f"Processing estimation item: {func_name}", 
+                        print(f"Processing estimation item: {func_name}",
                             flush=True)
             # For each scalar key, process the estimation functions
             for key in scalarkeys:
@@ -422,7 +422,7 @@ def process_single_timestep(data, fd, vars, estimates,
                     # Handle custom estimation functions from dictionary
                     for func_name, func in est_item.items():
                         if key+'_'+func_name not in list(data.keys()):
-                            # Apply the custom estimation function and store 
+                            # Apply the custom estimation function and store
                             data[key+'_'+func_name] = func(data[key])
 
     # Return the updated data and scalar keys if new information requested
@@ -517,7 +517,7 @@ def validate_variable_function(func, func_name, fd,
     fd : FiniteDifference
         Finite difference object to get grid dimensions
     verbose : bool
-        If True, prints debug information about the validation process. 
+        If True, prints debug information about the validation process.
     veryverbose : bool
         If True, prints aurelcore verbose information.
     rel_kwargs : dict

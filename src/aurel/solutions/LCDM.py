@@ -12,35 +12,35 @@ kappa = 8 * np.pi # Einstein's gravitational constant
 Omega_l_today = 1 - Omega_m_today # dark energy density parameter today
 Hprop_today = (h * c) / 2997.9 # Hubble constant
 t_today_EdS = 2 / (3 * Hprop_today) # time today in EdS universe
-Lambda = (Omega_l_today * 3 * (Hprop_today ** 2) 
+Lambda = (Omega_l_today * 3 * (Hprop_today ** 2)
                   / (c ** 2)) # cosmological constant
 
 def a(t, analytical=False):
     """Scale factor"""
     if analytical:
         return (
-            a_today 
-            * (Omega_m_today / Omega_l_today) ** (1 / 3) 
-            * sp.sinh(np.sqrt(Omega_l_today) 
+            a_today
+            * (Omega_m_today / Omega_l_today) ** (1 / 3)
+            * sp.sinh(np.sqrt(Omega_l_today)
                     * t / t_today_EdS) ** (2 / 3))
     else:
         return (
-            a_today 
-            * (Omega_m_today / Omega_l_today) ** (1 / 3) 
-            * np.sinh(np.sqrt(Omega_l_today) 
+            a_today
+            * (Omega_m_today / Omega_l_today) ** (1 / 3)
+            * np.sinh(np.sqrt(Omega_l_today)
                     * t / t_today_EdS) ** (2 / 3))
 
 def Hprop(t):
     """Proper Hubble function"""
     return (
-        Hprop_today 
-        * np.sqrt( Omega_m_today / (an_today(t) ** 3) 
+        Hprop_today
+        * np.sqrt( Omega_m_today / (an_today(t) ** 3)
                   + Omega_l_today ))
 
 def Omega_m(t):
     """Matter density parameter"""
-    return (Omega_m_today 
-                / ( Omega_m_today 
+    return (Omega_m_today
+                / ( Omega_m_today
                    + Omega_l_today * (an_today(t) ** 3) ))
 
 def an_today(t):

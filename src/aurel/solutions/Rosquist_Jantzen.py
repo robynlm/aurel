@@ -1,4 +1,4 @@
-"""This is a Rosquist and Jantzen solution that describes 
+"""This is a Rosquist and Jantzen solution that describes
 a Bianchi VI tilted γ ̃-law perfect fluid homogeneous solution with vorticity
 See section 3.4 of 2211.08133"""
 
@@ -80,15 +80,15 @@ def Tdown4(t, x, y, z):
     udown = np.array([-Box_ones, Box_zero, Box_zero, Box_zero])
     u_axu_b = np.einsum('a..., b... -> ab...', udown, udown)
     hdown = gdown4(t, x, y, z) + u_axu_b
-    rho = -(4 + k*k*(4*q*q + m*m*((1 + q - s)**2) 
+    rho = -(4 + k*k*(4*q*q + m*m*((1 + q - s)**2)
                      - 4*s*(2 + s)))/(4*k*k*kappa*t*t)
-    p = (4 - k*k*(12*q*q + 3*m*m*((1 + q - s)**2) 
+    p = (4 - k*k*(12*q*q + 3*m*m*((1 + q - s)**2)
                   + 4*s*(-2 + 5*s)))/(12*k*k*kappa*t*t)
     qx = Box_ones*(-4*q+m*m*(-1-q+s))/(2*kappa*t)
     qy = -(np.exp(x)*m*(1+q-s)*(t**(-2-q+s)))/(2*k*kappa)
     qdown = np.array([Box_zero, qx, qy, Box_zero])
-    pixx = Box_ones*(-8 - 3*k*k*m*m*m*m*((1 + q - s)**2) - 8*k*k*(-1 + s)*s 
-                     + m*m*(4 - k*k*(3 + 3*q*q - 6*q*(-1 + s) 
+    pixx = Box_ones*(-8 - 3*k*k*m*m*m*m*((1 + q - s)**2) - 8*k*k*(-1 + s)*s
+                     + m*m*(4 - k*k*(3 + 3*q*q - 6*q*(-1 + s)
                                      - 14*s + 11*s*s)))/(6*kappa)
     pixy = -(np.exp(x)*m*(
         -4 + k*k*(3 + 6*q + 3*q*q + 3*m*m*((1 + q - s)**2) - 8*s + 5*s*s))

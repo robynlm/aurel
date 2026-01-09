@@ -77,9 +77,9 @@ def Tdown4(t, x, y, z):
     Rxx = 3.0 * (-Om * dxdxOm + dxOm**2) / Om**2
     Ryy = 1.0 * (-Om * dxdxOm - dxOm**2) / Om**2
     Ricci_down4 = np.array([
-        [-Ryy, zeros, zeros, zeros], 
-        [zeros, Rxx, zeros, zeros], 
-        [zeros, zeros, Ryy, zeros], 
+        [-Ryy, zeros, zeros, zeros],
+        [zeros, Rxx, zeros, zeros],
+        [zeros, zeros, Ryy, zeros],
         [zeros, zeros, zeros, Ryy]])
     Gdown4 = Ricci_down4 - (1/2) * st_RicciS(x) * gdown4(t, x, y, z)
     return Gdown4 / kappa

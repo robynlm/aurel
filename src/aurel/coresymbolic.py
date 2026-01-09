@@ -1,6 +1,6 @@
 """Symbolic version of AurelCore, using sympy for symbolic calculations.
 
-This class is designed in a similar manner to the AurelCore class, 
+This class is designed in a similar manner to the AurelCore class,
 but it takes in different inputs,
 has no cache management,
 and there are much fewer quantities available.
@@ -54,7 +54,7 @@ class AurelCoreSymbolic():
             self.data[key] = func()
             # Print the calculation description if available
             if self.verbose:
-                print(f"Calculated symbolic {key}: " 
+                print(f"Calculated symbolic {key}: "
                       + symbolic_descriptions[key])
             if self.simplify:
                 self.data[key] = sp.simplify(self.data[key])
@@ -85,7 +85,7 @@ class AurelCoreSymbolic():
         return self["gdown"].det()
 
     def Gamma_down(self):
-        Gamma3 = sp.MutableDenseNDimArray([0]*(self.dim**3), 
+        Gamma3 = sp.MutableDenseNDimArray([0]*(self.dim**3),
                                           (self.dim, self.dim, self.dim))
         done = np.zeros((self.dim, self.dim, self.dim))
         for i in range(self.dim):
@@ -94,7 +94,7 @@ class AurelCoreSymbolic():
                     if not done[i,j,k]:
                         val = 0
                         for m in range(self.dim):
-                            val += (self["gdown"][i, m] 
+                            val += (self["gdown"][i, m]
                                     * self["Gamma_udd"][m, j, k])
                         if self.simplify:
                             val = sp.simplify(val)
@@ -105,7 +105,7 @@ class AurelCoreSymbolic():
         return Gamma3
 
     def Gamma_udd(self):
-        Gamma3 = sp.MutableDenseNDimArray([0]*(self.dim**3), 
+        Gamma3 = sp.MutableDenseNDimArray([0]*(self.dim**3),
                                           (self.dim, self.dim, self.dim))
         done = np.zeros((self.dim, self.dim, self.dim))
         for i in range(self.dim):
@@ -130,7 +130,7 @@ class AurelCoreSymbolic():
     def Riemann_down(self):
         if "Riemann_uddd" in self.data.keys():
             RiemannD_down = sp.MutableDenseNDimArray(
-                [0]*(self.dim**4), 
+                [0]*(self.dim**4),
                 (self.dim, self.dim, self.dim, self.dim))
             done = np.zeros((self.dim, self.dim, self.dim, self.dim))
             for l in range(self.dim):
@@ -147,7 +147,7 @@ class AurelCoreSymbolic():
                                 else:
                                     if not done[l,i,j,k]:
                                         RiemannD_down[l, i, j, k] = sum(
-                                            self["gdown"][l, m] 
+                                            self["gdown"][l, m]
                                             * self["Riemann_uddd"][m, i, j, k]
                                             for m in range(self.dim)
                                         )
@@ -190,25 +190,25 @@ class AurelCoreSymbolic():
                                 else:
                                     if not done[i, j, k, l]:
                                         term1 = sp.diff(
-                                            self["Gamma_down"][i, j, l], 
+                                            self["Gamma_down"][i, j, l],
                                             self.coords[k])
                                         term2 = sp.diff(
-                                            self["Gamma_down"][i, j, k], 
+                                            self["Gamma_down"][i, j, k],
                                             self.coords[l])
                                         term3 = sum(
                                             self["Gamma_down"][i, k, m]
-                                            *self["Gamma_udd"][m, j, l] 
+                                            *self["Gamma_udd"][m, j, l]
                                             for m in range(self.dim))
                                         term4 = sum(
                                             self["Gamma_down"][i, l, m]
-                                            *self["Gamma_udd"][m, j, k] 
+                                            *self["Gamma_udd"][m, j, k]
                                             for m in range(self.dim))
                                         if self.simplify:
                                             Rijkl = sp.simplify(
-                                                sp.simplify(term1 - term2) 
+                                                sp.simplify(term1 - term2)
                                                 + sp.simplify(term3 - term4))
                                         else:
-                                            Rijkl = (term1 - term2 
+                                            Rijkl = (term1 - term2
                                                      + term3 - term4)
                                         RiemannD_down[i, j, k, l] = Rijkl
                                         RiemannD_down[i, j, l, k] = - Rijkl
@@ -246,19 +246,19 @@ class AurelCoreSymbolic():
                                 pass
                             else:
                                 if not done[i, j, k, l]:
-                                    term1 = sp.diff(self["Gamma_udd"][i, j, l], 
+                                    term1 = sp.diff(self["Gamma_udd"][i, j, l],
                                                     self.coords[k])
-                                    term2 = sp.diff(self["Gamma_udd"][i, j, k], 
+                                    term2 = sp.diff(self["Gamma_udd"][i, j, k],
                                                     self.coords[l])
                                     term3 = sum(self["Gamma_udd"][i, k, m]
-                                                *self["Gamma_udd"][m, j, l] 
+                                                *self["Gamma_udd"][m, j, l]
                                                 for m in range(self.dim))
                                     term4 = sum(self["Gamma_udd"][i, l, m]
-                                                *self["Gamma_udd"][m, j, k] 
+                                                *self["Gamma_udd"][m, j, k]
                                                 for m in range(self.dim))
                                     if self.simplify:
                                         Rijkl = sp.simplify(
-                                            sp.simplify(term1 - term2) 
+                                            sp.simplify(term1 - term2)
                                             + sp.simplify(term3 - term4))
                                     else:
                                         Rijkl = (term1 - term2
@@ -295,19 +295,19 @@ class AurelCoreSymbolic():
                             if i == k or j == k:
                                 pass
                             else:
-                                term1 = sp.diff(self["Gamma_udd"][k, i, j], 
+                                term1 = sp.diff(self["Gamma_udd"][k, i, j],
                                                 self.coords[k])
-                                term2 = sp.diff(self["Gamma_udd"][k, i, k], 
+                                term2 = sp.diff(self["Gamma_udd"][k, i, k],
                                                 self.coords[j])
                                 term3 = sum(self["Gamma_udd"][k, k, m]
-                                            *self["Gamma_udd"][m, i, j] 
+                                            *self["Gamma_udd"][m, i, j]
                                             for m in range(self.dim))
                                 term4 = sum(self["Gamma_udd"][k, j, m]
-                                            *self["Gamma_udd"][m, i, k] 
+                                            *self["Gamma_udd"][m, i, k]
                                             for m in range(self.dim))
                                 if self.simplify:
                                     val += sp.simplify(
-                                        sp.simplify(term1 - term2) 
+                                        sp.simplify(term1 - term2)
                                         + sp.simplify(term3 - term4))
                                 else:
                                     val += (term1 - term2 + term3 - term4)
@@ -333,8 +333,8 @@ class AurelCoreSymbolic():
         for i in range(self.dim):
             for j in range(self.dim):
                 if not done[i,j]:
-                    Einstein_down[i, j] = ( self["Ricci_down"][i, j] 
-                                            - 0.5 * self["gdown"][i, j] 
+                    Einstein_down[i, j] = ( self["Ricci_down"][i, j]
+                                            - 0.5 * self["gdown"][i, j]
                                             * self["RicciS"] )
                     done[i,j] = 1
                     Einstein_down[j, i] = Einstein_down[i, j]

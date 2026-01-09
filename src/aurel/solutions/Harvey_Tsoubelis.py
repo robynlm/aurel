@@ -1,5 +1,5 @@
-"""This is a A.Harvey and T.Tsoubelis solution that describes 
-a vacuum Bianchi IV plane wave homogeneous spacetime 
+"""This is a A.Harvey and T.Tsoubelis solution that describes
+a vacuum Bianchi IV plane wave homogeneous spacetime
 page 191 of 'Dynamical Systems in Cosmology' by J.Wainwright and G.F.R.Ellis
 See section 3.5 of 2211.08133"""
 
@@ -26,9 +26,9 @@ def betaup3(t, x, y, z):
 def uup4(t, x, y, z):
     """Fluid 4 velocity"""
     Nx, Ny, Nz = np.shape(x)
-    return np.array([np.ones((Nx, Ny, Nz)), 
-                     np.zeros((Nx, Ny, Nz)), 
-                     np.zeros((Nx, Ny, Nz)), 
+    return np.array([np.ones((Nx, Ny, Nz)),
+                     np.zeros((Nx, Ny, Nz)),
+                     np.zeros((Nx, Ny, Nz)),
                      np.zeros((Nx, Ny, Nz))])
 
 def Tdown4(t, x, y, z):

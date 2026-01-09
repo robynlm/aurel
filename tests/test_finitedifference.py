@@ -154,14 +154,14 @@ class TestFiniteDifferenceClass:
     @pytest.fixture
     def test_scalar_field(self, params_3d):
         """Create a test scalar field f(x,y,z) = x^2 + y^2 + z^2."""
-        x = np.arange(params_3d['xmin'], 
-                     params_3d['xmin'] + params_3d['Nx'] * params_3d['dx'], 
+        x = np.arange(params_3d['xmin'],
+                     params_3d['xmin'] + params_3d['Nx'] * params_3d['dx'],
                      params_3d['dx'])
-        y = np.arange(params_3d['ymin'], 
-                     params_3d['ymin'] + params_3d['Ny'] * params_3d['dy'], 
+        y = np.arange(params_3d['ymin'],
+                     params_3d['ymin'] + params_3d['Ny'] * params_3d['dy'],
                      params_3d['dy'])
-        z = np.arange(params_3d['zmin'], 
-                     params_3d['zmin'] + params_3d['Nz'] * params_3d['dz'], 
+        z = np.arange(params_3d['zmin'],
+                     params_3d['zmin'] + params_3d['Nz'] * params_3d['dz'],
                      params_3d['dz'])
         X, Y, Z = np.meshgrid(x, y, z, indexing='ij')
         f = X**2 + Y**2 + Z**2
@@ -171,14 +171,14 @@ class TestFiniteDifferenceClass:
     @pytest.fixture
     def test_vector_field(self, params_3d):
         """Create a test vector field V = [x^2, y^2, z^2]."""
-        x = np.arange(params_3d['xmin'], 
-                     params_3d['xmin'] + params_3d['Nx'] * params_3d['dx'], 
+        x = np.arange(params_3d['xmin'],
+                     params_3d['xmin'] + params_3d['Nx'] * params_3d['dx'],
                      params_3d['dx'])
-        y = np.arange(params_3d['ymin'], 
-                     params_3d['ymin'] + params_3d['Ny'] * params_3d['dy'], 
+        y = np.arange(params_3d['ymin'],
+                     params_3d['ymin'] + params_3d['Ny'] * params_3d['dy'],
                      params_3d['dy'])
-        z = np.arange(params_3d['zmin'], 
-                     params_3d['zmin'] + params_3d['Nz'] * params_3d['dz'], 
+        z = np.arange(params_3d['zmin'],
+                     params_3d['zmin'] + params_3d['Nz'] * params_3d['dz'],
                      params_3d['dz'])
         X, Y, Z = np.meshgrid(x, y, z, indexing='ij')
         V = np.array([X**2, Y**2, Z**2])
@@ -223,7 +223,7 @@ class TestFiniteDifferenceClass:
     def test_d3x_no_boundary(self, params_3d, test_scalar_field):
         """Test d3x with no boundary conditions."""
         f, X, Y, Z = test_scalar_field
-        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
+        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary',
                                                fd_order=4, verbose=False)
         result = fd.d3x(f)
 
@@ -240,7 +240,7 @@ class TestFiniteDifferenceClass:
     def test_d3y_no_boundary(self, params_3d, test_scalar_field):
         """Test d3y with no boundary conditions."""
         f, X, Y, Z = test_scalar_field
-        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
+        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary',
                                                fd_order=4, verbose=False)
         result = fd.d3y(f)
 
@@ -257,7 +257,7 @@ class TestFiniteDifferenceClass:
     def test_d3z_no_boundary(self, params_3d, test_scalar_field):
         """Test d3z with no boundary conditions."""
         f, X, Y, Z = test_scalar_field
-        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
+        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary',
                                                fd_order=4, verbose=False)
         result = fd.d3z(f)
 
@@ -274,21 +274,21 @@ class TestFiniteDifferenceClass:
     def test_d3_periodic_boundary(self, params_3d):
         """Test d3 with periodic boundary conditions."""
         # Create a periodic function: sin(2*pi*x/L)
-        x = np.arange(params_3d['xmin'], 
-                     params_3d['xmin'] + params_3d['Nx'] * params_3d['dx'], 
+        x = np.arange(params_3d['xmin'],
+                     params_3d['xmin'] + params_3d['Nx'] * params_3d['dx'],
                      params_3d['dx'])
-        y = np.arange(params_3d['ymin'], 
-                     params_3d['ymin'] + params_3d['Ny'] * params_3d['dy'], 
+        y = np.arange(params_3d['ymin'],
+                     params_3d['ymin'] + params_3d['Ny'] * params_3d['dy'],
                      params_3d['dy'])
-        z = np.arange(params_3d['zmin'], 
-                     params_3d['zmin'] + params_3d['Nz'] * params_3d['dz'], 
+        z = np.arange(params_3d['zmin'],
+                     params_3d['zmin'] + params_3d['Nz'] * params_3d['dz'],
                      params_3d['dz'])
         X, Y, Z = np.meshgrid(x, y, z, indexing='ij')
 
         L = params_3d['Nx'] * params_3d['dx']
         f = np.sin(2 * np.pi * X / L)
 
-        fd = finitedifference.FiniteDifference(params_3d, boundary='periodic', 
+        fd = finitedifference.FiniteDifference(params_3d, boundary='periodic',
                                                fd_order=4, verbose=False)
         result = fd.d3x(f)
 
@@ -301,20 +301,20 @@ class TestFiniteDifferenceClass:
     def test_d3_symmetric_boundary(self, params_3d):
         """Test d3 with symmetric boundary conditions."""
         # Create a symmetric function: x^2
-        x = np.arange(params_3d['xmin'], 
-                     params_3d['xmin'] + params_3d['Nx'] * params_3d['dx'], 
+        x = np.arange(params_3d['xmin'],
+                     params_3d['xmin'] + params_3d['Nx'] * params_3d['dx'],
                      params_3d['dx'])
-        y = np.arange(params_3d['ymin'], 
-                     params_3d['ymin'] + params_3d['Ny'] * params_3d['dy'], 
+        y = np.arange(params_3d['ymin'],
+                     params_3d['ymin'] + params_3d['Ny'] * params_3d['dy'],
                      params_3d['dy'])
-        z = np.arange(params_3d['zmin'], 
-                     params_3d['zmin'] + params_3d['Nz'] * params_3d['dz'], 
+        z = np.arange(params_3d['zmin'],
+                     params_3d['zmin'] + params_3d['Nz'] * params_3d['dz'],
                      params_3d['dz'])
         X, Y, Z = np.meshgrid(x, y, z, indexing='ij')
 
         f = X**2
 
-        fd = finitedifference.FiniteDifference(params_3d, boundary='symmetric', 
+        fd = finitedifference.FiniteDifference(params_3d, boundary='symmetric',
                                                fd_order=4, verbose=False)
         result = fd.d3x(f)
 
@@ -323,13 +323,13 @@ class TestFiniteDifferenceClass:
 
         # With symmetric boundaries, check interior accuracy
         mask = fd.mask_len
-        assert np.allclose(result[mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[mask:-mask, mask:-mask, mask:-mask],
                           analytical[mask:-mask, mask:-mask, mask:-mask], rtol=1e-3)
 
     def test_d3_scalar(self, params_3d, test_scalar_field):
         """Test d3_scalar for gradient computation."""
         f, X, Y, Z = test_scalar_field
-        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
+        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary',
                                                fd_order=4, verbose=False)
         result = fd.d3_scalar(f)
 
@@ -338,17 +338,17 @@ class TestFiniteDifferenceClass:
 
         # Check each component in interior
         mask = fd.mask_len
-        assert np.allclose(result[0, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[0, mask:-mask, mask:-mask, mask:-mask],
                           2 * X[mask:-mask, mask:-mask, mask:-mask], rtol=1e-4)
-        assert np.allclose(result[1, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[1, mask:-mask, mask:-mask, mask:-mask],
                           2 * Y[mask:-mask, mask:-mask, mask:-mask], rtol=1e-4)
-        assert np.allclose(result[2, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[2, mask:-mask, mask:-mask, mask:-mask],
                           2 * Z[mask:-mask, mask:-mask, mask:-mask], rtol=1e-4)
 
     def test_d3x_rank1tensor(self, params_3d, test_vector_field):
         """Test d3x_rank1tensor for vector field derivatives."""
         V, X, Y, Z = test_vector_field
-        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
+        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary',
                                                fd_order=4, verbose=False)
         result = fd.d3x_rank1tensor(V)
 
@@ -360,17 +360,17 @@ class TestFiniteDifferenceClass:
         # dV_y/dx = d(y^2)/dx = 0
         # dV_z/dx = d(z^2)/dx = 0
         mask = fd.mask_len
-        assert np.allclose(result[0, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[0, mask:-mask, mask:-mask, mask:-mask],
                           2 * X[mask:-mask, mask:-mask, mask:-mask], rtol=1e-4)
-        assert np.allclose(result[1, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[1, mask:-mask, mask:-mask, mask:-mask],
                           0, atol=1e-4)
-        assert np.allclose(result[2, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[2, mask:-mask, mask:-mask, mask:-mask],
                           0, atol=1e-4)
 
     def test_d3y_rank1tensor(self, params_3d, test_vector_field):
         """Test d3y_rank1tensor for vector field derivatives."""
         V, X, Y, Z = test_vector_field
-        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
+        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary',
                                                fd_order=4, verbose=False)
         result = fd.d3y_rank1tensor(V)
 
@@ -379,17 +379,17 @@ class TestFiniteDifferenceClass:
         # dV_y/dy = d(y^2)/dy = 2y
         # dV_z/dy = d(z^2)/dy = 0
         mask = fd.mask_len
-        assert np.allclose(result[0, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[0, mask:-mask, mask:-mask, mask:-mask],
                           0, atol=1e-4)
-        assert np.allclose(result[1, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[1, mask:-mask, mask:-mask, mask:-mask],
                           2 * Y[mask:-mask, mask:-mask, mask:-mask], rtol=1e-4)
-        assert np.allclose(result[2, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[2, mask:-mask, mask:-mask, mask:-mask],
                           0, atol=1e-4)
 
     def test_d3z_rank1tensor(self, params_3d, test_vector_field):
         """Test d3z_rank1tensor for vector field derivatives."""
         V, X, Y, Z = test_vector_field
-        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
+        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary',
                                                fd_order=4, verbose=False)
         result = fd.d3z_rank1tensor(V)
 
@@ -398,17 +398,17 @@ class TestFiniteDifferenceClass:
         # dV_y/dz = d(y^2)/dz = 0
         # dV_z/dz = d(z^2)/dz = 2z
         mask = fd.mask_len
-        assert np.allclose(result[0, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[0, mask:-mask, mask:-mask, mask:-mask],
                           0, atol=1e-4)
-        assert np.allclose(result[1, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[1, mask:-mask, mask:-mask, mask:-mask],
                           0, atol=1e-4)
-        assert np.allclose(result[2, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[2, mask:-mask, mask:-mask, mask:-mask],
                           2 * Z[mask:-mask, mask:-mask, mask:-mask], rtol=1e-4)
 
     def test_d3_rank1tensor(self, params_3d, test_vector_field):
         """Test d3_rank1tensor for full gradient of vector field."""
         V, X, Y, Z = test_vector_field
-        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
+        fd = finitedifference.FiniteDifference(params_3d, boundary='no boundary',
                                                fd_order=4, verbose=False)
         result = fd.d3_rank1tensor(V)
 
@@ -418,26 +418,26 @@ class TestFiniteDifferenceClass:
         # Verify individual components
         mask = fd.mask_len
         # dV_x/dx = 2x
-        assert np.allclose(result[0, 0, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[0, 0, mask:-mask, mask:-mask, mask:-mask],
                           2 * X[mask:-mask, mask:-mask, mask:-mask], rtol=1e-4)
         # dV_y/dy = 2y
-        assert np.allclose(result[1, 1, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[1, 1, mask:-mask, mask:-mask, mask:-mask],
                           2 * Y[mask:-mask, mask:-mask, mask:-mask], rtol=1e-4)
         # dV_z/dz = 2z
-        assert np.allclose(result[2, 2, mask:-mask, mask:-mask, mask:-mask], 
+        assert np.allclose(result[2, 2, mask:-mask, mask:-mask, mask:-mask],
                           2 * Z[mask:-mask, mask:-mask, mask:-mask], rtol=1e-4)
 
     def test_order_comparison_2_vs_4(self, params_3d):
         """Test that 4th order is more accurate than 2nd order."""
         # Use a more complex function to avoid hitting machine precision
-        x = np.arange(params_3d['xmin'], 
-                     params_3d['xmin'] + params_3d['Nx'] * params_3d['dx'], 
+        x = np.arange(params_3d['xmin'],
+                     params_3d['xmin'] + params_3d['Nx'] * params_3d['dx'],
                      params_3d['dx'])
-        y = np.arange(params_3d['ymin'], 
-                     params_3d['ymin'] + params_3d['Ny'] * params_3d['dy'], 
+        y = np.arange(params_3d['ymin'],
+                     params_3d['ymin'] + params_3d['Ny'] * params_3d['dy'],
                      params_3d['dy'])
-        z = np.arange(params_3d['zmin'], 
-                     params_3d['zmin'] + params_3d['Nz'] * params_3d['dz'], 
+        z = np.arange(params_3d['zmin'],
+                     params_3d['zmin'] + params_3d['Nz'] * params_3d['dz'],
                      params_3d['dz'])
         X, Y, Z = np.meshgrid(x, y, z, indexing='ij')
 
@@ -445,9 +445,9 @@ class TestFiniteDifferenceClass:
         f = X**3
         analytical = 3 * X**2
 
-        fd2 = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
+        fd2 = finitedifference.FiniteDifference(params_3d, boundary='no boundary',
                                                 fd_order=2, verbose=False)
-        fd4 = finitedifference.FiniteDifference(params_3d, boundary='no boundary', 
+        fd4 = finitedifference.FiniteDifference(params_3d, boundary='no boundary',
                                                 fd_order=4, verbose=False)
 
         result2 = fd2.d3x(f)
@@ -455,9 +455,9 @@ class TestFiniteDifferenceClass:
 
         # Use larger mask for comparison
         mask = 4
-        error2 = np.abs(result2[mask:-mask, mask:-mask, mask:-mask] - 
+        error2 = np.abs(result2[mask:-mask, mask:-mask, mask:-mask] -
                        analytical[mask:-mask, mask:-mask, mask:-mask]).max()
-        error4 = np.abs(result4[mask:-mask, mask:-mask, mask:-mask] - 
+        error4 = np.abs(result4[mask:-mask, mask:-mask, mask:-mask] -
                        analytical[mask:-mask, mask:-mask, mask:-mask]).max()
 
         assert error4 < error2

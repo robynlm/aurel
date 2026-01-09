@@ -1,11 +1,11 @@
 """
-maths.py 
+maths.py
 
 This module contains functions for manipulating rank 2 tensors, including:
  - extracting components or formatting components into matrices
  - computing determinants and inverses
  - symmetrizing or antisymmetrizing tensors
- - safe division 
+ - safe division
  - spin weighted spherical harmonics
 
 """
@@ -30,7 +30,7 @@ def getcomponents3(f):
     if isinstance(f, list):
         return f
     elif isinstance(f, np.ndarray) or isinstance(f, np.ndarray):
-        return [f[0, 0], f[0, 1], f[0, 2], 
+        return [f[0, 0], f[0, 1], f[0, 2],
                 f[1, 1], f[1, 2], f[2, 2]]
 
 def getcomponents4(f):
@@ -50,14 +50,14 @@ def getcomponents4(f):
     if isinstance(f, list):
         return f
     elif isinstance(f, np.ndarray) or isinstance(f, np.ndarray):
-        return [f[0, 0], f[0, 1], f[0, 2], f[0, 3], 
-                f[1, 1], f[1, 2], f[1, 3], 
+        return [f[0, 0], f[0, 1], f[0, 2], f[0, 3],
+                f[1, 1], f[1, 2], f[1, 3],
                 f[2, 2], f[2, 3], f[3, 3]]
 
 def format_rank2_3(f):
     """Format a rank 2 tensor with 3D indices into a 3x3 array."""
     xx, xy, xz, yy, yz, zz = getcomponents3(f)
-    farray = np.array([[xx, xy, xz], 
+    farray = np.array([[xx, xy, xz],
                         [xy, yy, yz],
                         [xz, yz, zz]])
     return farray
@@ -66,7 +66,7 @@ def format_rank2_4(f):
     """Format a rank 2 tensor with 4D indices into a 4x4 array."""
     tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = getcomponents4(f)
     farray = np.array([[tt, tx, ty, tz],
-                        [tx, xx, xy, xz], 
+                        [tx, xx, xy, xz],
                         [ty, xy, yy, yz],
                         [tz, xz, yz, zz]])
     return farray
@@ -79,17 +79,17 @@ def determinant3(f):
 def determinant4(f):
     """Determinant of a 4x4 matrix in every position of the data grid."""
     tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = getcomponents4(f)
-    return (tz*tz*xy*xy - 2*ty*tz*xy*xz + ty*ty*xz*xz 
-            - tz*tz*xx*yy + 2*tx*tz*xz*yy - tt*xz*xz*yy 
-            + 2*ty*tz*xx*yz - 2*tx*tz*xy*yz - 2*tx*ty*xz*yz 
-            + 2*tt*xy*xz*yz + tx*tx*yz*yz - tt*xx*yz*yz 
-            - ty*ty*xx*zz + 2*tx*ty*xy*zz - tt*xy*xy*zz 
+    return (tz*tz*xy*xy - 2*ty*tz*xy*xz + ty*ty*xz*xz
+            - tz*tz*xx*yy + 2*tx*tz*xz*yy - tt*xz*xz*yy
+            + 2*ty*tz*xx*yz - 2*tx*tz*xy*yz - 2*tx*ty*xz*yz
+            + 2*tt*xy*xz*yz + tx*tx*yz*yz - tt*xx*yz*yz
+            - ty*ty*xx*zz + 2*tx*ty*xy*zz - tt*xy*xy*zz
             - tx*tx*yy*zz + tt*xx*yy*zz)
 
 def inverse3(f):
     """Inverse of a 3x3 matrix in every position of the data grid."""
     xx, xy, xz, yy, yz, zz = getcomponents3(f)
-    fup = np.array([[yy*zz - yz*yz, -(xy*zz - yz*xz), xy*yz - yy*xz], 
+    fup = np.array([[yy*zz - yz*yz, -(xy*zz - yz*xz), xy*yz - yy*xz],
                      [-(xy*zz - xz*yz), xx*zz - xz*xz, -(xx*yz - xy*xz)],
                      [xy*yz - xz*yy, -(xx*yz - xz*xy), xx*yy - xy*xy]])
     return safe_division(fup, determinant3(f))
@@ -98,21 +98,21 @@ def inverse4(f):
     """Inverse of a 4x4 matrix in every position of the data grid."""
     tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = getcomponents4(f)
     fup = np.array([
-        [-xz*xz*yy + 2*xy*xz*yz - xx*yz*yz - xy*xy*zz + xx*yy*zz, 
-         tz*xz*yy - tz*xy*yz - ty*xz*yz + tx*yz*yz + ty*xy*zz - tx*yy*zz, 
-         -tz*xy*xz + ty*xz*xz + tz*xx*yz - tx*xz*yz - ty*xx*zz + tx*xy*zz, 
-         tz*xy*xy - ty*xy*xz - tz*xx*yy + tx*xz*yy + ty*xx*yz - tx*xy*yz], 
-        [tz*xz*yy - tz*xy*yz - ty*xz*yz + tx*yz*yz + ty*xy*zz - tx*yy*zz, 
+        [-xz*xz*yy + 2*xy*xz*yz - xx*yz*yz - xy*xy*zz + xx*yy*zz,
+         tz*xz*yy - tz*xy*yz - ty*xz*yz + tx*yz*yz + ty*xy*zz - tx*yy*zz,
+         -tz*xy*xz + ty*xz*xz + tz*xx*yz - tx*xz*yz - ty*xx*zz + tx*xy*zz,
+         tz*xy*xy - ty*xy*xz - tz*xx*yy + tx*xz*yy + ty*xx*yz - tx*xy*yz],
+        [tz*xz*yy - tz*xy*yz - ty*xz*yz + tx*yz*yz + ty*xy*zz - tx*yy*zz,
          -tz*tz*yy + 2*ty*tz*yz - tt*yz*yz - ty*ty*zz + tt*yy*zz,
-         tz*tz*xy - ty*tz*xz - tx*tz*yz + tt*xz*yz + tx*ty*zz - tt*xy*zz, 
-         -ty*tz*xy + ty*ty*xz + tx*tz*yy - tt*xz*yy - tx*ty*yz + tt*xy*yz], 
-        [-tz*xy*xz + ty*xz*xz + tz*xx*yz - tx*xz*yz - ty*xx*zz + tx*xy*zz, 
-         tz*tz*xy - ty*tz*xz - tx*tz*yz + tt*xz*yz + tx*ty*zz - tt*xy*zz, 
-         -tz*tz*xx + 2*tx*tz*xz - tt*xz*xz - tx*tx*zz + tt*xx*zz, 
-         ty*tz*xx - tx*tz*xy - tx*ty*xz + tt*xy*xz + tx*tx*yz - tt*xx*yz], 
-        [tz*xy*xy - ty*xy*xz - tz*xx*yy + tx*xz*yy + ty*xx*yz - tx*xy*yz, 
-         -ty*tz*xy + ty*ty*xz + tx*tz*yy - tt*xz*yy - tx*ty*yz + tt*xy*yz, 
-         ty*tz*xx - tx*tz*xy - tx*ty*xz + tt*xy*xz + tx*tx*yz - tt*xx*yz, 
+         tz*tz*xy - ty*tz*xz - tx*tz*yz + tt*xz*yz + tx*ty*zz - tt*xy*zz,
+         -ty*tz*xy + ty*ty*xz + tx*tz*yy - tt*xz*yy - tx*ty*yz + tt*xy*yz],
+        [-tz*xy*xz + ty*xz*xz + tz*xx*yz - tx*xz*yz - ty*xx*zz + tx*xy*zz,
+         tz*tz*xy - ty*tz*xz - tx*tz*yz + tt*xz*yz + tx*ty*zz - tt*xy*zz,
+         -tz*tz*xx + 2*tx*tz*xz - tt*xz*xz - tx*tx*zz + tt*xx*zz,
+         ty*tz*xx - tx*tz*xy - tx*ty*xz + tt*xy*xz + tx*tx*yz - tt*xx*yz],
+        [tz*xy*xy - ty*xy*xz - tz*xx*yy + tx*xz*yy + ty*xx*yz - tx*xy*yz,
+         -ty*tz*xy + ty*ty*xz + tx*tz*yy - tt*xz*yy - tx*ty*yz + tt*xy*yz,
+         ty*tz*xx - tx*tz*xy - tx*ty*xz + tt*xy*xz + tx*tx*yz - tt*xx*yz,
          -ty*ty*xx + 2*tx*ty*xy - tt*xy*xy - tx*tx*yy + tt*xx*yy]])
     return safe_division(fup, determinant4(f))
 
@@ -230,7 +230,7 @@ def sYlm(s, l, m, theta, phi):
     for r in range(max(m - s, 0), min(l + m, l - s) + 1):
         cos = costh2**(2*r + s - m)
         sin = sinth2**(2*l - 2*r - s + m)
-        sumY += (sc.binom(l-s, r) * sc.binom(l+s, r+s-m) 
+        sumY += (sc.binom(l-s, r) * sc.binom(l+s, r+s-m)
             * ((-1)**(l - r - s)) * np.exp(1j * m * phi) * cos * sin)
     return fac * sumY
 
@@ -248,7 +248,7 @@ def sYlm_coefficients(s, lmax, f, theta, phi, dtheta_weight, dphi):
     theta, phi : ndarray
         Angular grids.
     dtheta_weight : ndarray
-        Weights for integration over theta, e.g. including sin(theta), 
+        Weights for integration over theta, e.g. including sin(theta),
         depending on sampling scheme.
     dphi : float
         Step size in phi direction.
@@ -262,7 +262,7 @@ def sYlm_coefficients(s, lmax, f, theta, phi, dtheta_weight, dphi):
     for l in range(lmax+1):
         for m in range(-l, l+1):
             alm[l,m] = np.sum(
-                np.conj(sYlm(s, l, m, theta, phi)) 
+                np.conj(sYlm(s, l, m, theta, phi))
                 * f
                 * dtheta_weight * dphi)
     return alm

@@ -77,7 +77,7 @@ def Tdown4(t, x, y, z):
     u_axu_b = np.einsum('a...,b...->ab...', udown, udown)
     hdown = gdown4(t, x, y, z) + u_axu_b
 
-    # energy density 
+    # energy density
     aux0=(8.*((A(z))*((t)*(dzdzA(z)))))+(-2.*(((A(z))**3.)*(3.+(2.*(((t)**3.)*(dzdzA(z)))))))
     aux1=(2.*((t)*(((dzA(z))**2))))+((3.*((((A(z))**2))*(((t)**3.)*(((dzA(z))**2)))))+aux0)
     aux2=((-2.+((((A(z))**2))*(((t)**2))))**-2.)*((3.*(((A(z))**5.)*(((t)**2))))+aux1)

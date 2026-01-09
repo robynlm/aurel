@@ -148,8 +148,8 @@ def map2(func, f):
     """Map a function over the two indices of a rank 2 tensor."""
     dimk = np.shape(f)[0]
     dimj = np.shape(f)[1]
-    return np.array([[func(f[k, j]) 
-                      for j in range(dimj)] 
+    return np.array([[func(f[k, j])
+                      for j in range(dimj)]
                       for k in range(dimk)])
 
 def map3(func, f):
@@ -157,9 +157,9 @@ def map3(func, f):
     dimk = np.shape(f)[0]
     dimj = np.shape(f)[1]
     dimi = np.shape(f)[2]
-    return np.array([[[func(f[k, j, i]) 
+    return np.array([[[func(f[k, j, i])
                        for i in range(dimi)]
-                       for j in range(dimj)] 
+                       for j in range(dimj)]
                        for k in range(dimk)])
 
 ###############################################################################
@@ -205,18 +205,18 @@ class FiniteDifference():
     cartesian_coords : numpy.ndarray
         (*numpy.ndarray*) - 3D array of x, y, and z coordinates.
     r, phi, theta : numpy.ndarray
-        (*numpy.ndarray*) - 3D arrays of radius, inclination/polar and azimuth 
+        (*numpy.ndarray*) - 3D arrays of radius, inclination/polar and azimuth
         coordinates.
     spherical_coords : numpy.ndarray
-        (*numpy.ndarray*) - 3D array of radius, inclination/polar and azimuth 
+        (*numpy.ndarray*) - 3D array of radius, inclination/polar and azimuth
         coordinates.
     mask_len : int
         (*int*) - Length of the finite difference mask.
     """
     def __init__(
             self,
-            param, 
-            boundary='no boundary', 
+            param,
+            boundary='no boundary',
             fd_order=4,
             verbose=True,
             veryverbose=False):
@@ -240,16 +240,16 @@ class FiniteDifference():
         self.zmin = self.param['zmin']
 
         self.xarray = np.arange(
-            self.param['xmin'], 
-            self.param['xmin'] + self.param['Nx'] * self.param['dx'], 
+            self.param['xmin'],
+            self.param['xmin'] + self.param['Nx'] * self.param['dx'],
             self.param['dx'])
         self.yarray = np.arange(
-            self.param['ymin'], 
-            self.param['ymin'] + self.param['Ny'] * self.param['dy'], 
+            self.param['ymin'],
+            self.param['ymin'] + self.param['Ny'] * self.param['dy'],
             self.param['dy'])
         self.zarray = np.arange(
-            self.param['zmin'], 
-            self.param['zmin'] + self.param['Nz'] * self.param['dz'], 
+            self.param['zmin'],
+            self.param['zmin'] + self.param['Nz'] * self.param['dz'],
             self.param['dz'])
 
         self.xmax = self.xarray[-1]
@@ -265,7 +265,7 @@ class FiniteDifference():
         self.izcenter = np.argmin(abs(self.zarray))
 
         self.x, self.y, self.z = np.meshgrid(
-            self.xarray, self.yarray, self.zarray, 
+            self.xarray, self.yarray, self.zarray,
             indexing='ij')
         self.cartesian_coords = np.array([self.x, self.y, self.z])
 
@@ -311,26 +311,26 @@ class FiniteDifference():
 
     def d3_periodic(self, f, idx, N):
         """Apply the finite difference scheme with periodic boundaries."""
-        # The grid is extended along the x direction by the 
+        # The grid is extended along the x direction by the
         # FD mask number of points from the opposite edge.
         flong = np.concatenate((
-            f[-self.mask_len:], f, f[:self.mask_len]), 
+            f[-self.mask_len:], f, f[:self.mask_len]),
             axis=0)
         # excluding the edge points.  We retrieve shape (Nx, Ny, Nz).
         return fd_map(
-            self.centered, flong, idx, 
+            self.centered, flong, idx,
             self.mask_len, N+self.mask_len)
 
     def d3_symmetric(self, f, idx, N):
         """Apply the finite difference scheme with symmetric boundaries."""
-        # The grid is extended along the x direction by the 
+        # The grid is extended along the x direction by the
         # FD mask number of points from the opposite edge.
         iend = N - 1
         flong = np.concatenate((
-            f[1:1+self.mask_len][::-1], f, f[iend-self.mask_len:iend][::-1]), 
+            f[1:1+self.mask_len][::-1], f, f[iend-self.mask_len:iend][::-1]),
             axis=0)
         return fd_map(
-            self.centered, flong, idx, 
+            self.centered, flong, idx,
             self.mask_len, N+self.mask_len)
 
     def d3_onesided(self, f, idx, N):
@@ -344,67 +344,67 @@ class FiniteDifference():
         # Apply the centered FD scheme to all points not affected
         # by the boundary condition.
         central_part = fd_map(
-            self.centered, f, idx, 
+            self.centered, f, idx,
             self.mask_len, N - self.mask_len)
         # rhs : Apply the forward FD scheme to the edge points in the x
         # direction that can not use the centered FD scheme.
         rhs = fd_map(
-            self.backward, f, idx, 
+            self.backward, f, idx,
             N - self.mask_len, N)
         # Concatenate all the points together
         return np.concatenate((lhs, central_part, rhs), axis=0)
 
-    def d3x(self, f): 
+    def d3x(self, f):
         r"""Derivative along x of a scalar: $\partial_x (f)$."""
         return self.d3(f, self.inverse_dx, self.param['Nx'])
 
-    def d3y(self, f):  
+    def d3y(self, f):
         r"""Derivative along y of a scalar: $\partial_y (f)$."""
-        # Same as D3x but as we apply the FD schemes in the y direction 
+        # Same as D3x but as we apply the FD schemes in the y direction
         # we transpose
         f = np.transpose(f, (1, 0, 2))
         dyf = self.d3(f, self.inverse_dy, self.param['Ny'])
         return np.transpose(dyf, (1, 0, 2))
 
-    def d3z(self, f):  
+    def d3z(self, f):
         r"""Derivative along z of a scalar: $\partial_z (f)$."""
-        # Same as D3x but as we apply the FD schemes in the z direction 
+        # Same as D3x but as we apply the FD schemes in the z direction
         # we transpose
         f = np.transpose(f, (2, 1, 0))
         dzf = self.d3(f, self.inverse_dz, self.param['Nz'])
         return np.transpose(dzf, (2, 1, 0))
 
     def d3_scalar(self, f):
-        r"""Spatial derivatives of a scalar: 
+        r"""Spatial derivatives of a scalar:
         $\partial_i (f)$."""
         return np.array([self.d3x(f), self.d3y(f), self.d3z(f)])
 
     def d3_rank1tensor(self, f):
-        r"""Spatial derivatives of a spatial rank 1 tensor: 
+        r"""Spatial derivatives of a spatial rank 1 tensor:
         $\partial_i (f_{j})$ or $\partial_i (f^{j})$."""
         return np.stack(
-            [map1(self.d3x, f), 
-             map1(self.d3y, f), 
+            [map1(self.d3x, f),
+             map1(self.d3y, f),
              map1(self.d3z, f)], axis=0)
 
     def d3x_rank1tensor(self, f):
-        r"""Spatial derivatives of a spatial rank 1 tensor: 
+        r"""Spatial derivatives of a spatial rank 1 tensor:
         $\partial_x (f_{j})$ or $\partial_x (f^{j})$."""
         return map1(self.d3x, f)
 
     def d3y_rank1tensor(self, f):
-        r"""Spatial derivatives of a spatial rank 1 tensor: 
+        r"""Spatial derivatives of a spatial rank 1 tensor:
         $\partial_y (f_{j})$ or $\partial_y (f^{j})$."""
         return map1(self.d3y, f)
 
     def d3z_rank1tensor(self, f):
-        r"""Spatial derivatives of a spatial rank 1 tensor: 
+        r"""Spatial derivatives of a spatial rank 1 tensor:
         $\partial_z (f_{j})$ or $\partial_z (f^{j})$."""
         return map1(self.d3z, f)
 
     def d3_rank2tensor(self, f):
-        r"""Spatial derivatives of a spatial rank 2 tensor: 
-        $\partial_i (f_{kj})$ or $\partial_i (f^{kj})$ 
+        r"""Spatial derivatives of a spatial rank 2 tensor:
+        $\partial_i (f_{kj})$ or $\partial_i (f^{kj})$
         or $\partial_i (f^{k}_{j})$."""
         return np.array(
             [self.d3x_rank2tensor(f),
@@ -412,20 +412,20 @@ class FiniteDifference():
              self.d3z_rank2tensor(f)])
 
     def d3x_rank2tensor(self, f):
-        r"""Spatial derivatives along x of a spatial rank 2 tensor: 
-        $\partial_x (f_{kj})$ or $\partial_x (f^{kj})$ 
+        r"""Spatial derivatives along x of a spatial rank 2 tensor:
+        $\partial_x (f_{kj})$ or $\partial_x (f^{kj})$
         or $\partial_x (f^{k}_{j})$."""
         return map2(self.d3x, f)
 
     def d3y_rank2tensor(self, f):
-        r"""Spatial derivatives along y of a spatial rank 2 tensor: 
-        $\partial_y (f_{kj})$ or $\partial_y (f^{kj})$ 
+        r"""Spatial derivatives along y of a spatial rank 2 tensor:
+        $\partial_y (f_{kj})$ or $\partial_y (f^{kj})$
         or $\partial_y (f^{k}_{j})$."""
         return map2(self.d3y, f)
 
     def d3z_rank2tensor(self, f):
-        r"""Spatial derivatives along z of a spatial rank 2 tensor: 
-        $\partial_z (f_{kj})$ or $\partial_z (f^{kj})$ 
+        r"""Spatial derivatives along z of a spatial rank 2 tensor:
+        $\partial_z (f_{kj})$ or $\partial_z (f^{kj})$
         or $\partial_z (f^{k}_{j})$."""
         return map2(self.d3z, f)
 
@@ -480,7 +480,7 @@ class FiniteDifference():
         Parameters
         ----------
         r, theta, phi : numpy.ndarray
-            arrays of radius, inclination/polar and 
+            arrays of radius, inclination/polar and
             azimuth coordinates.
 
         Returns
@@ -499,11 +499,11 @@ class FiniteDifference():
         if len(f.shape) == 1:
             return f[self.mask_len:-self.mask_len]
         elif len(f.shape) == 2:
-            return f[self.mask_len:-self.mask_len, 
+            return f[self.mask_len:-self.mask_len,
                      self.mask_len:-self.mask_len]
         elif len(f.shape) == 3:
-            return f[self.mask_len:-self.mask_len, 
-                    self.mask_len:-self.mask_len, 
+            return f[self.mask_len:-self.mask_len,
+                    self.mask_len:-self.mask_len,
                     self.mask_len:-self.mask_len]
 
     def cutoffmask2(self, f):
@@ -511,11 +511,11 @@ class FiniteDifference():
         if len(f.shape) == 1:
             return f[2*self.mask_len:-2*self.mask_len]
         elif len(f.shape) == 2:
-            return f[2*self.mask_len:-2*self.mask_len, 
+            return f[2*self.mask_len:-2*self.mask_len,
                      2*self.mask_len:-2*self.mask_len]
         elif len(f.shape) == 3:
-            return f[2*self.mask_len:-2*self.mask_len, 
-                    2*self.mask_len:-2*self.mask_len, 
+            return f[2*self.mask_len:-2*self.mask_len,
+                    2*self.mask_len:-2*self.mask_len,
                     2*self.mask_len:-2*self.mask_len]
 
     def excision(self, finput, isingularity='find'):
@@ -528,15 +528,15 @@ class FiniteDifference():
         b = 1 # b for buffer
         if isx is not None:
             f[
-                isx-self.mask_len-b: isx+self.mask_len+1+b, 
+                isx-self.mask_len-b: isx+self.mask_len+1+b,
                 isy, isz] = np.nan
         if isy is not None:
             f[
-                isx, isy-self.mask_len-b: isy+self.mask_len+1+b, 
+                isx, isy-self.mask_len-b: isy+self.mask_len+1+b,
                 isz] = np.nan
         if isz is not None:
             f[
-                isx, isy, 
+                isx, isy,
                 isz-self.mask_len-b: isz+self.mask_len+1+b] = np.nan
         return f
 
@@ -549,47 +549,47 @@ class FiniteDifference():
             isx, isy, isz = isingularity
         b = 1 # b for buffer
         if (isx is not None) and (isy is not None) and (isz is not None):
-            f[isx-self.mask_len-b: isx+self.mask_len+1+b, 
-              isy-self.mask_len-b: isy+self.mask_len+1+b, 
+            f[isx-self.mask_len-b: isx+self.mask_len+1+b,
+              isy-self.mask_len-b: isy+self.mask_len+1+b,
               isz-self.mask_len-b: isz+self.mask_len+1+b] = np.nan
-            f[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b, 
-              isy-self.mask_len-b: isy+self.mask_len+1+b, 
+            f[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b,
+              isy-self.mask_len-b: isy+self.mask_len+1+b,
               isz-self.mask_len-b: isz+self.mask_len+1+b] = np.nan
-            f[isx-self.mask_len-b: isx+self.mask_len+1+b, 
-              isy-2*self.mask_len-b: isy+2*self.mask_len+1+b, 
+            f[isx-self.mask_len-b: isx+self.mask_len+1+b,
+              isy-2*self.mask_len-b: isy+2*self.mask_len+1+b,
               isz-self.mask_len-b: isz+self.mask_len+1+b] = np.nan
-            f[isx-self.mask_len-b: isx+self.mask_len+1+b, 
-              isy-self.mask_len-b: isy+self.mask_len+1+b, 
+            f[isx-self.mask_len-b: isx+self.mask_len+1+b,
+              isy-self.mask_len-b: isy+self.mask_len+1+b,
               isz-2*self.mask_len-b: isz+2*self.mask_len+1+b] = np.nan
         elif (isx is not None) and (isy is not None):
-            f[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b, 
-              isy-self.mask_len-b: isy+self.mask_len+1+b, 
+            f[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b,
+              isy-self.mask_len-b: isy+self.mask_len+1+b,
               isz] = np.nan
-            f[isx-self.mask_len-b: isx+self.mask_len+1+b, 
-              isy-2*self.mask_len-b: isy+2*self.mask_len+1+b, 
+            f[isx-self.mask_len-b: isx+self.mask_len+1+b,
+              isy-2*self.mask_len-b: isy+2*self.mask_len+1+b,
               isz] = np.nan
         elif (isx is not None) and (isz is not None):
-            f[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b, 
-              isy, 
+            f[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b,
+              isy,
               isz-self.mask_len-b: isz+self.mask_len+1+b] = np.nan
-            f[isx-self.mask_len-b: isx+self.mask_len+1+b, 
-              isy, 
+            f[isx-self.mask_len-b: isx+self.mask_len+1+b,
+              isy,
               isz-2*self.mask_len-b: isz+2*self.mask_len+1+b] = np.nan
         elif (isy is not None) and (isz is not None):
-            f[isx, 
-              isy-2*self.mask_len-b: isy+2*self.mask_len+1+b, 
+            f[isx,
+              isy-2*self.mask_len-b: isy+2*self.mask_len+1+b,
               isz-self.mask_len-b: isz+self.mask_len+1+b] = np.nan
-            f[isx, 
-              isy-self.mask_len-b: isy+self.mask_len+1+b, 
+            f[isx,
+              isy-self.mask_len-b: isy+self.mask_len+1+b,
               isz-2*self.mask_len-b: isz+2*self.mask_len+1+b] = np.nan
         elif (isx is not None):
-            f[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b, 
+            f[isx-2*self.mask_len-b: isx+2*self.mask_len+1+b,
               isy, isz] = np.nan
         elif (isy is not None):
-            f[isx, isy-2*self.mask_len-b: isy+2*self.mask_len+1+b, 
+            f[isx, isy-2*self.mask_len-b: isy+2*self.mask_len+1+b,
               isz] = np.nan
         elif (isz is not None):
-            f[isx, isy, 
+            f[isx, isy,
               isz-2*self.mask_len-b: isz+2*self.mask_len+1+b] = np.nan
         return f
 

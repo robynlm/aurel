@@ -54,22 +54,22 @@ def interpolate(val, grid_points, target_points, method='linear'):
     Parameters
     ----------
     val : ndarray
-        Scalar field values on the regular grid. Shape should match the grid 
+        Scalar field values on the regular grid. Shape should match the grid
         dimensions.
     grid_points : tuple of ndarray
-        Tuple of coordinate arrays defining the regular grid 
+        Tuple of coordinate arrays defining the regular grid
         coordinates. Each array should be 1D.
     target_points : tuple of ndarray
         Tuple of target coordinate positions. Arrays can be any shape but must
         have matching dimensions.
     method : str, optional
-        Interpolation method used. See 
+        Interpolation method used. See
         `scipy.interpolate.RegularGridInterpolator documentation <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html>`_
 
     Returns
     -------
     ndarray
-        Interpolated values at the target points, with the same shape as the 
+        Interpolated values at the target points, with the same shape as the
         target coordinate arrays.
     """
     target_flat = []

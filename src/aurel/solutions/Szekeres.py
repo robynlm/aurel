@@ -29,7 +29,7 @@ def Z_terms(t, x, y, z, analytical=False):
     if analytical:
         hyperthing = sp.hyper([5/6, 3/2], [11/6], -pac.sinh(tau)**2)
     else:
-        hyperthing = sc.hyp2f1(5/6, 3/2, 11/6, -pac.sinh(tau)**2) 
+        hyperthing = sc.hyp2f1(5/6, 3/2, 11/6, -pac.sinh(tau)**2)
     integrated_part = ((3/5) * pac.sqrt(pac.cosh(tau)**2)
                        * hyperthing * (pac.sinh(tau)**(5/3)) / pac.cosh(tau))
     fP = fM*integrated_part

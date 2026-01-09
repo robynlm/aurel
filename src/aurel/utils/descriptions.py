@@ -75,7 +75,7 @@ def load_descriptions():
     """Load descriptions from YAML file and process ASSUME markers.
 
     Reads descriptions.yml which contains a hierarchical structure combining
-    categories with variable descriptions. Automatically converts 
+    categories with variable descriptions. Automatically converts
     [ASSUME:key:text] markers (one per description max).
 
     Returns
