@@ -155,7 +155,7 @@ class AurelCore():
 
         # Physics variables
         self.kappa = 8*np.pi  # Einstein's constant with G = c = 1
-        self.myprint(f"Cosmological constant set to AurelCore.Lambda"
+        self.myprint("Cosmological constant set to AurelCore.Lambda"
                      + f" = {self.Lambda:.2e}")
 
         # data dictionary where everything is stored
@@ -217,9 +217,9 @@ class AurelCore():
         if regular_cleanup or memory_limit_exceeded:
             self.myprint('CLEAN-UP: '+
                 f"Cleaning up cache after {self.calculation_count}"
-                + f" calculations...")
+                + " calculations...")
             self.myprint('CLEAN-UP: '+
-                f"data size before cleanup: "
+                "data size before cleanup: "
                 + f"{total_cache_size / 1_048_576:.2f} MB")
 
             scalar_size = (
@@ -245,7 +245,7 @@ class AurelCore():
                     self.myprint('CLEAN-UP: '
                         + f"Removing cached value for '{key}'"
                         + f" used {time_since_last_access}"
-                        + f" calculations ago (size: "
+                        + " calculations ago (size: "
                         + f"{data_size / 1_048_576:.2f} MB).")
                     key_to_remove += [key]
 
@@ -269,9 +269,9 @@ class AurelCore():
                             key_to_remove = key
                 if maxstrain == 0:
                     self.myprint('CLEAN-UP: '
-                        + f"Current cache size "
+                        + "Current cache size "
                         + f"{total_cache_size / 1_048_576:.2f} MB, "
-                        + f"max memory "
+                        + "max memory "
                         + f"{memory_threshold / 1_048_576:.2f} MB")
                     self.myprint('CLEAN-UP: '
                         + "Max memory too small,"
@@ -288,7 +288,7 @@ class AurelCore():
                         self.myprint('CLEAN-UP: '+
                             f"Removing cached value for '{key_to_remove}' "
                             + f"used {calc_age} "
-                            + f"calculations ago (size: "
+                            + "calculations ago (size: "
                             + f"{varsize / 1_048_576:.2f} MB).")
                     del self.data[key_to_remove]
                     del self.last_accessed[key_to_remove]
@@ -299,7 +299,7 @@ class AurelCore():
             self.myprint('CLEAN-UP: '+
                          f"Removed {nbr_keys_removed} items")
             self.myprint('CLEAN-UP: '+
-                         f"data size after cleanup: "
+                         "data size after cleanup: "
                          + f"{total_cache_size / 1_048_576:.2f} MB")
 
     def load_data(self, sim_data, iteration):
@@ -660,7 +660,7 @@ class AurelCore():
 
     # Null ray expansion
     def null_ray_exp_out(self):
-        self.myprint(f"Center of extraction sphere set to"
+        self.myprint("Center of extraction sphere set to"
                      + f" AurelCore.center = {self.center}")
         r = self.fd.cartesian_to_spherical(
             self.fd.x - self.center[0],
@@ -671,7 +671,7 @@ class AurelCore():
 
     # Null ray expansion
     def null_ray_exp_in(self):
-        self.myprint(f"Center of extraction sphere set to"
+        self.myprint("Center of extraction sphere set to"
                      + f" AurelCore.center = {self.center}")
         r = self.fd.cartesian_to_spherical(
             self.fd.x - self.center[0],
@@ -1472,13 +1472,13 @@ class AurelCore():
             return [psi0, psi1, psi2, psi3, psi4]
 
     def Psi4_lm(self):
-        self.myprint(f"Maximum l of spherical decomposition is set to"
+        self.myprint("Maximum l of spherical decomposition is set to"
                      + f" AurelCore.lmax = {self.lmax}")
-        self.myprint(f"Extraction radii set to AurelCore.extract_radii"
+        self.myprint("Extraction radii set to AurelCore.extract_radii"
                      + f" = {self.extract_radii}")
-        self.myprint(f"Center of extraction sphere set to"
+        self.myprint("Center of extraction sphere set to"
                      + f" AurelCore.center = {self.center}")
-        self.myprint(f"Scipy interpolation method is set to"
+        self.myprint("Scipy interpolation method is set to"
                      + f" AurelCore.interp_method = {self.interp_method}")
 
         # Uniform sampling of spherical points
@@ -1671,7 +1671,7 @@ class AurelCore():
 
         """
 
-        self.myprint(f"Tetrad is set to AurelCore.tetrad"
+        self.myprint("Tetrad is set to AurelCore.tetrad"
                      + f" = {self.tetrad}")
         if self.tetrad == "quasi-Kinnersley":
             nup4 = np.array(
@@ -1770,7 +1770,7 @@ class AurelCore():
                                  self["s_Gamma_udd3"], f)
             else:
                 raise ValueError(f"Field if of rank {rank} so indexing"
-                                 + f" must be 'u' or 'd'")
+                                 + " must be 'u' or 'd'")
             covd = df + G1
         elif rank ==2:
             df = self.fd.d3_rank2tensor(f)
@@ -1796,10 +1796,10 @@ class AurelCore():
                                self["s_Gamma_udd3"], f)
             else:
                 raise ValueError(f"Field if of rank {rank} so indexing"
-                                 + f" must be 'uu', 'ud', 'du' or 'dd'")
+                                 + " must be 'uu', 'ud', 'du' or 'dd'")
             covd = df + G1 + G2
         else:
-            raise ValueError(f"Don't know how to compute spatial covariant"
+            raise ValueError("Don't know how to compute spatial covariant"
                              + f" derivative of rank {rank}")
         return covd
 
@@ -1836,10 +1836,10 @@ class AurelCore():
                                  self["st_Gamma_udd4"], f)
             else:
                 raise ValueError(f"Field if of rank {rank} so indexing"+
-                                 + f" must be 'u' or 'd'")
+                                 + " must be 'u' or 'd'")
             covd = df + G1
         else:
-            raise ValueError(f"Don't know how to compute spacetime covariant"+
+            raise ValueError("Don't know how to compute spacetime covariant"+
                              + f" derivative of rank {rank}")
         return covd
 
@@ -1871,7 +1871,7 @@ class AurelCore():
         elif indexing == 'dd':
             return np.einsum('ab..., abc... -> c...', self["gammaup3"], covd)
         else:
-            raise ValueError(f"Don't know how to compute divergence of tensor"+
+            raise ValueError("Don't know how to compute divergence of tensor"+
                              + f" with indices {indexing}")
 
     def s_curl(self, fdown3, indexing):
@@ -1897,7 +1897,7 @@ class AurelCore():
                 np.einsum('cda..., cbd... -> ab...',
                           LCuud3, covd))
         else:
-            raise ValueError(f"Don't know how to compute curl of tensor"+
+            raise ValueError("Don't know how to compute curl of tensor"+
                              + f" with indices {indexing}")
         return curl
 
@@ -1946,7 +1946,7 @@ class AurelCore():
                 rank = len(indices)
                 if rank>2:
                     raise NotImplementedError(
-                        f"Haven't implemented Lie derivative along beta"
+                        "Haven't implemented Lie derivative along beta"
                         + f" for tensor of rank {rank}")
                 for i in indices:
                     if i not in ['u', 'd']:
@@ -1958,14 +1958,14 @@ class AurelCore():
                         + " for rank 2 spacetime tensor")
             else:
                 raise ValueError(
-                    f"indexing must be '' or contain 's_' or 'st_'")
+                    "indexing must be '' or contain 's_' or 'st_'")
 
             # Check shape of f
             dim = {'s':3, 'st':4}
             for i in range(rank):
                 if np.shape(f)[i] != dim[s_or_st]:
                     raise ValueError(
-                        f"In Lie derivative along beta, you say f is"
+                        "In Lie derivative along beta, you say f is"
                         + f" {indexing}, so rank {rank} with dim"
                         + f" {dim[s_or_st]}, but f is of shape {np.shape(f)}")
 

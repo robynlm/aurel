@@ -898,7 +898,7 @@ class TestETDataReading:
 
         # Select all available iterations
         all_its = list(np.arange(itmin, itmax, dit))
-        assert len(all_its) >= 3, f"Need at least 3 iterations for this test"
+        assert len(all_its) >= 3, "Need at least 3 iterations for this test"
 
         # First two calls: read all but the last iteration
         it_to_read = all_its[:-1]

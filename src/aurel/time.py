@@ -373,7 +373,7 @@ def process_single_timestep(data, fd, vars, estimates,
                     rel.var_importance[func_name] = 0 # Freeze this in
                     if verbose:
                         print(f"Calculated and freezed variable '{func_name}'"
-                              + f" in AurelCore", flush=True)
+                              + " in AurelCore", flush=True)
 
         # Calculate and store each requested variable
         for v in vars:
