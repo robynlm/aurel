@@ -16,25 +16,10 @@ permissions:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: ${{ matrix.shell }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ['3.11', '3.12', '3.13', '3.14']
-        shell: [bash, zsh, pwsh]
-        exclude:
-          - os: ubuntu-latest
-            shell: zsh
-          - os: ubuntu-latest
-            shell: pwsh
-          - os: macos-latest
-            shell: pwsh
-          - os: windows-latest
-            shell: bash
-          - os: windows-latest
-            shell: zsh
 
     steps:
     - name: Checkout repository
