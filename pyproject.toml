@@ -142,10 +142,6 @@ ignore = [
     "N999",  # Invalid module name (solutions named after authors/acronyms)
 ]
 
-exclude = [
-    "docs/notebooks/Gravitational_Waves.ipynb"
-]
-
 # -----------------------------------------------------------------------------
 # Per-File Ignores
 # -----------------------------------------------------------------------------
