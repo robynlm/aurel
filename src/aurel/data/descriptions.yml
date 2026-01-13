@@ -83,11 +83,8 @@ Metric quantities:
 # ==============================================================================
 # MATTER QUANTITIES
 # ==============================================================================
-# Eulerian observer follows n^μ
-# Lagrangian observer follows u^μ
-# ==============================================================================
 Matter quantities:
-  note: "Eulerian observer follows n^μ, Lagrangian observer follows u^μ"
+  note: Eulerian observers follow $n^\mu$, Lagrangian observers follow $u^\mu$
   Lagrangian matter variables:
     rho0: $\rho_0$ Rest mass energy density.[ASSUME:rho0:$\rho_0=0$]
     press: $p$ Pressure.[ASSUME:press:$p=0$]

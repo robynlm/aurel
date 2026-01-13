@@ -314,6 +314,8 @@ Proper time
 Matter quantities
 =================
 
+Eulerian observers follow $n^\mu$, Lagrangian observers follow $u^\mu$
+
 Lagrangian matter variables
 ---------------------------
 

@@ -54,7 +54,10 @@ def process_category(f, category_name, category_data, varsdone, level=0):
     if isinstance(category_data, dict):
         for subcat_name, subcat_data in category_data.items():
             # Skip metadata fields
-            if subcat_name in ('category', 'subcategory', 'note'):
+            if subcat_name in ('category', 'subcategory'):
+                continue
+            elif subcat_name == 'note':
+                f.write(f"{subcat_data}\n\n")
                 continue
 
             # Check if this is a variable (has string description) or subcategory
