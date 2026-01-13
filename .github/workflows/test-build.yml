@@ -45,13 +45,13 @@ jobs:
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
       run: ruff check . --respect-gitignore --output-format=github
 
-    - name: Run the tests
-      run: |
-        if [ "${{ matrix.os }}" = "ubuntu-latest" ] && [ "${{ matrix.python-version }}" = "3.12" ]; then
-          pytest --cov=aurel --cov-report=term --cov-report=json
-        else
-          pytest
-        fi
+    - name: Run the tests with coverage
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
+      run: pytest --cov=aurel --cov-report=term --cov-report=json
+
+    - name: Run the tests without coverage
+      if: matrix.os != 'ubuntu-latest' || matrix.python-version != '3.12'
+      run: pytest
 
     - name: Upload coverage data
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
