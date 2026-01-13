@@ -1,14 +1,29 @@
+
+# Byte-compiled / cache / distribution
 __pycache__/
+*.egg-info/
 *.egg-info
-.ipynb_checkpoints/
-*.DS_Store
+.pytest_cache/
+.ruff_cache/
+.coverage
 dist/
-*_version.py
+build/
+
+# Jupyter and notebook checkpoints
+.ipynb_checkpoints/
 docs/_build/
+htmlcov/
+
+# macOS
+*.DS_Store
+
+# User/test output and local config
+mytests/
 docs/notes.txt
 .pypirc
-mytests/
-htmlcov/
-.coverage
-.pytest_cache/
+
+# Papers and drafts
 paper/
+
+# Version files
+*_version.py

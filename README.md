@@ -25,7 +25,7 @@ Designed with ease of use in mind, it will **au**tomatically calculate **rel**at
   - Symbolically ([documentation](https://robynlm.github.io/aurel/source/coresymbolic.html), [example](https://robynlm.github.io/aurel/notebooks/Example_symbolic.html))
 - **Dynamic computation and intelligent caching**: Aurel automatically calculates only what's needed and caches results, significantly improving performance for complex calculations
 - **Clear user feedback**: Progress bars and informative messages guide you through computations
-- **Time evolution support**: Tools for analyzing data across multiple time steps ([example](https://robynlm.github.io/aurel/notebooks/Example_over_time.html))
+- **Time evolution support**: Tools for analyzing data across multiple time steps ([documentation](https://robynlm.github.io/aurel/source/time.html), [example](https://robynlm.github.io/aurel/notebooks/Example_over_time.html))
 - **Flexible data input**: Works seamlessly with numerical simulation data, analytical solutions, or custom numpy arrays
 - **Einstein Toolkit integration**: Native support for reading Carpet HDF5 outputs from [Einstein Toolkit](https://einsteintoolkit.org) simulations ([documentation](https://robynlm.github.io/aurel/source/reading.html), [example](https://robynlm.github.io/aurel/notebooks/tov_ET.html))
 - **Advanced [finite difference schemes](https://robynlm.github.io/aurel/source/finitedifference.html)**: Multiple discretization schemes for 3D spatial grids
@@ -73,7 +73,7 @@ and import the `aurel.AurelCore` class:
 ```
 
 At this point you need to provide the spacetime metric, extrinsic curvature
-and matter fields (see [documentation](https://robynlm.github.io/aurel/source/core.html#assumed-quantities)), where these would otherwise 
+and matter fields (see [assumed quantities](https://robynlm.github.io/aurel/source/core.html#assumed-quantities)), where these would otherwise 
 be assumed to correspond to Minkowski vacuum.
 These are passed as numpy arrays to aurel in the following way:
 
@@ -86,9 +86,12 @@ and so on for the other components and required quantities.
 In this example $g_{xx} = 1$, but you can pass any numpy array;
 it can be of numerical relativity simulation data, 
 or an array generated from an analytical expression.
+Take care to run `rel.freeze_data()` so that your input data 
+is conserved during the cache cleanup.
 
 With everything defined, you can call any entity listed in the 
-[descriptions list](https://robynlm.github.io/aurel/source/core.html#descriptions-of-available-terms). Just call it as:
+[descriptions list](https://robynlm.github.io/aurel/source/core.html#descriptions-of-available-terms). 
+Just call it as:
 
 ```python
 rel["name_of_the_entity"]
@@ -98,7 +101,7 @@ rel["name_of_the_entity"]
 
 For a more in depth example, see the [example notebook](https://robynlm.github.io/aurel/notebooks/Example.html) for applications. 
 Additionally, a symbolic counterpart that works in a very similar way is also available via the 
-`aurel.AurelCoreSymbolic` class, see the [symbolic example](https://robynlm.github.io/aurel/notebooks/Example_symbolic.html) for details.
+`aurel.AurelCoreSymbolic` class, see the [symbolic example notebook](https://robynlm.github.io/aurel/notebooks/Example_symbolic.html) for details.
 
 ## Calculations over time
 

@@ -30,7 +30,7 @@ semicolon on Windows:
 
     ``export SIMLOC="/path1:/path2:/path3"``  # Unix/Mac
 
-    ``set SIMLOC="C:\\path1;C:\\path2;C:\\path3"``  # Windows
+    ``set SIMLOC="C:\path1;C:\path2;C:\path3"``  # Windows
 """
 
 import contextlib

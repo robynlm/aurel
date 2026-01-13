@@ -16,14 +16,22 @@ Found a bug or have a feature request? [Open an issue](https://github.com/robynl
 
 2. **Install and develop:**
    ```bash
-   pip install -e .[test,docs]
+   pip install -e ".[test,docs]"
    # Make your changes, add tests, update docs
    ```
 
 3. **Test and check:**
    ```bash
-   pytest                    # Run tests
-   ruff check .              # Check code style
+   # Check code style
+   ruff check . --respect-gitignore
+   # Clean old builds to avoid conflicts
+   rm -rf dist
+   # Build the package
+   python3 -m build
+   # Install from the built wheel to test packaging
+   pip install --force-reinstall --no-deps dist/*.whl
+   # Run tests
+   pytest
    # Build and view documentation locally
    cd docs && make clean html && python3 -m http.server --directory _build/html
    # Open http://localhost:8000

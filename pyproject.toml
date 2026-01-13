@@ -38,13 +38,6 @@ classifiers = [
 requires-python = ">=3.11"
 
 # =============================================================================
-# Project URLs
-# =============================================================================
-[project.urls]
-Source = "https://github.com/robynlm/aurel"
-Documentation = "https://robynlm.github.io/aurel/"
-
-# =============================================================================
 # Core Dependencies
 # =============================================================================
 dependencies = [
@@ -61,17 +54,22 @@ dependencies = [
 ]
 
 # =============================================================================
+# Project URLs
+# =============================================================================
+[project.urls]
+Source = "https://github.com/robynlm/aurel"
+Documentation = "https://robynlm.github.io/aurel/"
+
+# =============================================================================
 # Optional Dependencies
 # =============================================================================
 [project.optional-dependencies]
-# Testing dependencies - install with: pip install aurel[test]
 test = [
     "ruff>=0.8.0",  # Linting and code formatting
     "pytest",       # Testing framework
     "pytest-cov"    # Code coverage plugin for pytest
 ]
 
-# Documentation building dependencies - install with: pip install aurel[docs]
 docs = [
     "sphinx>=8.0",          # Documentation generator
     "sphinx-rtd-theme",     # Read the Docs theme
@@ -91,6 +89,10 @@ exclude = ["*.ipynb_checkpoints", "*.ipynb_checkpoints.*"]
 
 [tool.setuptools.package-data]
 "*" = ["!.ipynb_checkpoints/*"]
+"aurel.data" = ["*.yml"]
+
+[tool.setuptools]
+include-package-data = true
 
 # =============================================================================
 # Pytest Configuration
@@ -138,6 +140,10 @@ ignore = [
     "N814",  # Camelcase imported as constant
     "N816",  # Mixed case variable at module level
     "N999",  # Invalid module name (solutions named after authors/acronyms)
+]
+
+exclude = [
+    "docs/notebooks/Gravitational_Waves.ipynb"
 ]
 
 # -----------------------------------------------------------------------------
