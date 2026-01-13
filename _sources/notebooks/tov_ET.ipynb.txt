@@ -19,8 +19,8 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "import numpy as np\n",
     "import matplotlib.pyplot as plt\n",
+    "import numpy as np\n",
     "\n",
     "import aurel"
    ]
@@ -41,6 +41,7 @@
    "outputs": [],
    "source": [
     "import os\n",
+    "\n",
     "os.environ[\"SIMLOC\"] = \"/Users/rlm36AA/simulations/\""
    ]
   },
@@ -176,11 +177,11 @@
       " =========== Restart 0:\n",
       "vars to get ['gammadown3', 'Kdown3', 'Ktrace', 'alpha', 'dtalpha', 'betaup3', 'dtbetaup3', 'rho0', 'eps', 'press', 'w_lorentz', 'velup3', 'Hamiltonian', 'Momentumup3', 'Weyl_Psi']:\n",
       "Data read from split iterations: []\n",
-      "Variables read from ET files: ['velz', 'betay', 'eps', 'gyz', 'gxz', 'it', 'kyz', 't', 'dtbetax', 'gyy', 'Ktrace', 'alpha', 'dtbetay', 'Weyl_Psi4i', 'kxz', 'kyy', 'kzz', 'Momentumz', 'betax', 'kxy', 'Weyl_Psi4r', 'dtbetaz', 'gxx', 'press', 'gzz', 'w_lorentz', 'vely', 'dtalpha', 'betaz', 'kxx', 'velx', 'rho0', 'Hamiltonian', 'Momentumy', 'Momentumx', 'gxy']\n",
-      "Variables saved to split iterations files: ['velz', 'betay', 'eps', 'gyz', 'gxz', 'kyz', 'dtbetax', 'gyy', 'Ktrace', 'alpha', 'dtbetay', 'Weyl_Psi4i', 'kxz', 'kyy', 'kzz', 'Momentumz', 'betax', 'kxy', 'Weyl_Psi4r', 'dtbetaz', 'gxx', 'press', 'gzz', 'w_lorentz', 'vely', 'dtalpha', 'betaz', 'kxx', 'velx', 'rho0', 'Hamiltonian', 'Momentumy', 'Momentumx', 'gxy']\n",
+      "Variables read from ET files: ['Weyl_Psi4r', 'velz', 'kxz', 'gyz', 'dtbetay', 'eps', 'gxy', 'kzz', 'betay', 'dtbetax', 'w_lorentz', 'gzz', 'kyy', 'Momentumy', 'Weyl_Psi4i', 'betaz', 'gxx', 'vely', 'rho0', 'gxz', 'Momentumz', 'Momentumx', 'gyy', 'Ktrace', 'velx', 'kyz', 'dtalpha', 't', 'betax', 'dtbetaz', 'kxx', 'press', 'Hamiltonian', 'kxy', 'it', 'alpha']\n",
+      "Variables saved to split iterations files: ['Weyl_Psi4r', 'velz', 'kxz', 'gyz', 'dtbetay', 'eps', 'gxy', 'kzz', 'betay', 'dtbetax', 'w_lorentz', 'kyy', 'gzz', 'Momentumy', 'Weyl_Psi4i', 'betaz', 'gxx', 'vely', 'rho0', 'gxz', 'Momentumz', 'Momentumx', 'gyy', 'Ktrace', 'velx', 'kyz', 'dtalpha', 'betax', 'dtbetaz', 'kxx', 'press', 'Hamiltonian', 'kxy', 'alpha']\n",
       "\n",
       " == Data read from the simulation:\n",
-      "dict_keys(['it', 'velz', 'betay', 'eps', 'gyz', 'gxz', 'kyz', 'dtbetax', 'gyy', 'Ktrace', 'alpha', 'dtbetay', 'Weyl_Psi4i', 'kxz', 'kyy', 'kzz', 'Momentumz', 'betax', 'kxy', 'Weyl_Psi4r', 'dtbetaz', 'gxx', 'press', 'gzz', 'w_lorentz', 'vely', 'dtalpha', 'betaz', 'kxx', 'velx', 'rho0', 'Hamiltonian', 'Momentumy', 'Momentumx', 'gxy', 't'])\n",
+      "dict_keys(['it', 'Weyl_Psi4r', 'velz', 'kxz', 'gyz', 'dtbetay', 'eps', 'gxy', 'kzz', 'betay', 'dtbetax', 'w_lorentz', 'kyy', 'gzz', 'Momentumy', 'Weyl_Psi4i', 'betaz', 'gxx', 'vely', 'rho0', 'gxz', 'Momentumz', 'Momentumx', 'gyy', 'Ktrace', 'velx', 'kyz', 'dtalpha', 'betax', 'dtbetaz', 'kxx', 'press', 'Hamiltonian', 'kxy', 'alpha', 't'])\n",
       "it format: type <class 'list'> and shape (100,)\n",
       "rho0 format: type <class 'list'> and shape (100, 12, 12, 12)\n",
       "rho0[0] format: type <class 'numpy.ndarray'> and shape (12, 12, 12)\n"
@@ -189,7 +190,7 @@
    ],
    "source": [
     "data = aurel.read_data(\n",
-    "    param, \n",
+    "    param,\n",
     "    vars = [],\n",
     "    # Specify the fields to read, these have to be 3D outputs of the simulation amongst the available variables listed above\n",
     "    # e.g. ['gammadown3', 'rho0', 'Weyl_Psi']\n",
@@ -229,6 +230,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
+      "Found scalar keys for estimation: ['Weyl_Psi4r', 'velz', 'kxz', 'gyz', 'dtbetay', 'eps', 'gxy', 'kzz', 'betay', 'dtbetax', 'w_lorentz', 'kyy', 'gzz', 'Momentumy', 'Weyl_Psi4i', 'betaz', 'gxx', 'vely', 'rho0', 'gxz', 'Momentumz', 'Momentumx', 'gyy', 'Ktrace', 'velx', 'kyz', 'dtalpha', 'betax', 'dtbetaz', 'kxx', 'press', 'Hamiltonian', 'kxy', 'alpha']\n",
       "Processing it = 0\n",
       "Processing estimation item: max\n",
       "Now processing remaining time steps sequentially\n"
@@ -237,7 +239,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "2b6cef7c56274d2f8a74fc6e0fb86b31",
+       "model_id": "4aa3b8c76c73470bad3ea03e2d027d0f",
        "version_major": 2,
        "version_minor": 0
       },
@@ -368,7 +370,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "12eb2c5be1024bcabc9ae89011ce292f",
+       "model_id": "e112de8af4304aa3bb273a1270d1c743",
        "version_major": 2,
        "version_minor": 0
       },
@@ -455,8 +457,8 @@
       " =========== Restart 0:\n",
       "vars to get ['rho0', 'gammadown3']:\n",
       "Data read from split iterations: []\n",
-      "Variables read from ET files: ['gyy', 'gxx', 'rho0', 'gzz', 'gyz', 'gxz', 'it', 'gxy', 't']\n",
-      "Variables saved to split iterations files: ['gyy', 'gxx', 'rho0', 'gzz', 'gyz', 'gxz', 'gxy']\n",
+      "Variables read from ET files: ['t', 'gyz', 'rho0', 'gxz', 'gzz', 'gxy', 'gyy', 'it', 'gxx']\n",
+      "Variables saved to split iterations files: ['gyz', 'rho0', 'gxz', 'gxy', 'gyy', 'gzz', 'gxx']\n",
       "4th order finite difference schemes are defined\n"
      ]
     }
@@ -469,7 +471,7 @@
     "\n",
     "# load the data from that level\n",
     "data = aurel.read_data(\n",
-    "    param, \n",
+    "    param,\n",
     "    vars=['rho0', 'gammadown3'],\n",
     "    it = np.arange(0, 409600, 4096),\n",
     "    rl = rl, verbose=True)\n",
@@ -548,7 +550,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "4a7fa173cf414cb7bd2e35f29b853c5b",
+       "model_id": "07a02081b00e46b6844f04585722c663",
        "version_major": 2,
        "version_minor": 0
       },
@@ -692,7 +694,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.14.1"
+   "version": "3.14.2"
   }
  },
  "nbformat": 4,

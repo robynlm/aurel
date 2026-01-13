@@ -8,10 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Example symbolic &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5a7fad61" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=3721e3c3" />
 
   
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -23,6 +23,7 @@
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../_static/custom.js?v=67be0c79"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -58,7 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html">Reporting Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#contributing-workflow">Contributing Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -114,8 +115,9 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
 </pre></div>
 </div>
 </div>
@@ -194,7 +196,7 @@ Calculated symbolic RicciS: Ricci scalar
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">relsym</span><span class="o">.</span><span class="n">dim</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">relsym</span><span class="o">.</span><span class="n">dim</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">relsym</span><span class="p">[</span><span class="s1">&#39;Gamma_udd&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">display</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Gamma^</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_</span><span class="se">{{</span><span class="si">{</span><span class="n">j</span><span class="si">}{</span><span class="n">k</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">),</span> 
+                <span class="n">display</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Gamma^</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_</span><span class="se">{{</span><span class="si">{</span><span class="n">j</span><span class="si">}{</span><span class="n">k</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">),</span>
                               <span class="n">relsym</span><span class="p">[</span><span class="s1">&#39;Gamma_udd&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]))</span>
 </pre></div>
 </div>

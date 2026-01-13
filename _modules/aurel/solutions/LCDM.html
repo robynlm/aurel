@@ -7,10 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>aurel.solutions.LCDM &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5a7fad61" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=3721e3c3" />
 
   
     <link rel="shortcut icon" href="../../../_static/favicon.png"/>
@@ -20,6 +20,7 @@
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../../_static/custom.js?v=67be0c79"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -53,7 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../source/advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/CONTRIBUTING.html">Reporting Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/CONTRIBUTING.html#contributing-workflow">Contributing Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/CONTRIBUTING.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -104,7 +105,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for aurel.solutions.LCDM</h1><div class="highlight"><pre>
-<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;FLRW spacetime with a $\Lambda$CDM model&quot;&quot;&quot;</span>
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;FLRW spacetime with a $\Lambda$CDM model.&quot;&quot;&quot;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
 
@@ -118,92 +119,92 @@
 <span class="n">Omega_l_today</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Omega_m_today</span> <span class="c1"># dark energy density parameter today</span>
 <span class="n">Hprop_today</span> <span class="o">=</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span> <span class="n">c</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2997.9</span> <span class="c1"># Hubble constant</span>
 <span class="n">t_today_EdS</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">Hprop_today</span><span class="p">)</span> <span class="c1"># time today in EdS universe</span>
-<span class="n">Lambda</span> <span class="o">=</span> <span class="p">(</span><span class="n">Omega_l_today</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">Hprop_today</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> 
+<span class="n">Lambda</span> <span class="o">=</span> <span class="p">(</span><span class="n">Omega_l_today</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">Hprop_today</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
                   <span class="o">/</span> <span class="p">(</span><span class="n">c</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="c1"># cosmological constant</span>
 
 <div class="viewcode-block" id="a">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.LCDM.a">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scale factor&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scale factor.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="n">a_today</span> 
-            <span class="o">*</span> <span class="p">(</span><span class="n">Omega_m_today</span> <span class="o">/</span> <span class="n">Omega_l_today</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> 
-            <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">sinh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Omega_l_today</span><span class="p">)</span> 
+            <span class="n">a_today</span>
+            <span class="o">*</span> <span class="p">(</span><span class="n">Omega_m_today</span> <span class="o">/</span> <span class="n">Omega_l_today</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">sinh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Omega_l_today</span><span class="p">)</span>
                     <span class="o">*</span> <span class="n">t</span> <span class="o">/</span> <span class="n">t_today_EdS</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="n">a_today</span> 
-            <span class="o">*</span> <span class="p">(</span><span class="n">Omega_m_today</span> <span class="o">/</span> <span class="n">Omega_l_today</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> 
-            <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sinh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Omega_l_today</span><span class="p">)</span> 
+            <span class="n">a_today</span>
+            <span class="o">*</span> <span class="p">(</span><span class="n">Omega_m_today</span> <span class="o">/</span> <span class="n">Omega_l_today</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sinh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Omega_l_today</span><span class="p">)</span>
                     <span class="o">*</span> <span class="n">t</span> <span class="o">/</span> <span class="n">t_today_EdS</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="Hprop">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.LCDM.Hprop">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Proper Hubble function&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Proper Hubble function.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="n">Hprop_today</span> 
-        <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">Omega_m_today</span> <span class="o">/</span> <span class="p">(</span><span class="n">an_today</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> 
+        <span class="n">Hprop_today</span>
+        <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">Omega_m_today</span> <span class="o">/</span> <span class="p">(</span><span class="n">an_today</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span>
                   <span class="o">+</span> <span class="n">Omega_l_today</span> <span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="Omega_m">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.LCDM.Omega_m">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Omega_m</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Matter density parameter&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">Omega_m_today</span> 
-                <span class="o">/</span> <span class="p">(</span> <span class="n">Omega_m_today</span> 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Matter density parameter.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">Omega_m_today</span>
+                <span class="o">/</span> <span class="p">(</span> <span class="n">Omega_m_today</span>
                    <span class="o">+</span> <span class="n">Omega_l_today</span> <span class="o">*</span> <span class="p">(</span><span class="n">an_today</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> <span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="an_today">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.LCDM.an_today">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">an_today</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scale factor normalised by a(z=0)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scale factor normalised by a(z=0).&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">a</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="n">a_today</span></div>
 
 
 <div class="viewcode-block" id="redshift">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.LCDM.redshift">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">redshift</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Redshift&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Redshift.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span> <span class="n">a_today</span> <span class="o">/</span> <span class="n">a</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Hconf">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.LCDM.Hconf">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Hconf</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conformal Hubble function&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conformal Hubble function.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">a</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="fL">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.LCDM.fL">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">fL</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Growth index = d ln (delta) / d ln (a)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Growth index = d ln (delta) / d ln (a).&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">Omega_m</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">6</span><span class="o">/</span><span class="mi">11</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="rho">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.LCDM.rho">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">rho</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Energy density&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Energy density.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">Omega_m</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">kappa</span></div>
 
 
 <div class="viewcode-block" id="alpha">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.LCDM.alpha">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">alpha</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lapse&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lapse.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="betaup3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.LCDM.betaup3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">betaup3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shift&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shift.&quot;&quot;&quot;</span>
     <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span><span class="p">))</span></div>
 
@@ -211,7 +212,7 @@
 <div class="viewcode-block" id="gammadown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.LCDM.gammadown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spatial metric&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spatial metric.&quot;&quot;&quot;</span>
     <span class="n">a2</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="n">analytical</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span>
@@ -230,7 +231,7 @@
 <div class="viewcode-block" id="Kdown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.LCDM.Kdown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrinsic curvature&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrinsic curvature.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="o">-</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">*</span> <span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span></div>
 
 </pre></div>

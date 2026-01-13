@@ -18,8 +18,9 @@
    "outputs": [],
    "source": [
     "import sympy as sp\n",
-    "import aurel\n",
-    "from IPython.display import display"
+    "from IPython.display import display\n",
+    "\n",
+    "import aurel"
    ]
   },
   {
@@ -289,7 +290,7 @@
     "    for j in range(relsym.dim):\n",
     "        for k in range(j, relsym.dim):\n",
     "            if relsym['Gamma_udd'][i, j, k] != 0:\n",
-    "                display(sp.Eq(sp.Symbol(f\"\\\\Gamma^{i}_{{{j}{k}}}\"), \n",
+    "                display(sp.Eq(sp.Symbol(f\"\\\\Gamma^{i}_{{{j}{k}}}\"),\n",
     "                              relsym['Gamma_udd'][i, j, k]))"
    ]
   },

@@ -8,7 +8,7 @@ aurel.core
    <div style='display: none;' aria-hidden='true'>
 
 .. autoclass:: aurel.core.AurelCore
-   :members: gtt, gtx, gty, gtz, gxx, gxy, gxz, gyy, gyz, gzz, gammadown3, gammaup3, dtgammaup3, gammadet, gammadown4, gammaup4, psi_bssnok, phi_bssnok, dtphi_bssnok, gammadown3_bssnok, gammaup3_bssnok, dtgammadown3_bssnok, kxx, kxy, kxz, kyy, kyz, kzz, Kdown3, Kup3, Ktrace, dtKtrace, Adown3, Aup3, A2, Adown3_bssnok, Aup3_bssnok, A2_bssnok, dtAdown3_bssnok, alpha, dtalpha, DDalpha, betax, betay, betaz, betaup3, dtbetax, dtbetay, dtbetaz, dtbetaup3, betadown3, betamag, dttau, nup4, ndown4, gdown4, gup4, gdet, null_ray_exp_out, null_ray_exp_in, rho0, press, eps, rho, enthalpy, w_lorentz, velx, vely, velz, velup3, velup4, veldown3, veldown4, uup0, uup3, uup4, udown3, udown4, hdown4, hdet, hmixed4, hup4, Tdown4, Tup4, Ttrace, rho_n, fluxup3_n, fluxdown3_n, angmomup3_n, angmomdown3_n, Stressup3_n, Stressdown3_n, Stresstrace_n, press_n, anisotropic_press_down3_n, rho_n_fromHam, fluxup3_n_fromMom, conserved_D, conserved_E, conserved_Sdown4, conserved_Sdown3, conserved_Sup4, conserved_Sup3, dtconserved, st_covd_udown4, accelerationdown4, accelerationup4, s_covd_udown4, thetadown4, theta, sheardown4, shear2, omegadown4, omega2, s_RicciS_u, s_Gamma_udd3, s_Riemann_uddd3, s_Riemann_down3, s_Ricci_down3, s_RicciS, st_Gamma_udd4, st_Riemann_uddd4, st_Riemann_down4, st_Riemann_uudd4, st_Ricci_down4, st_Ricci_down3, st_RicciS, Einsteindown4, Kretschmann, s_Gamma_udd3_bssnok, s_Gamma_bssnok, dts_Gamma_bssnok, s_Ricci_down3_bssnok, s_RicciS_bssnok, s_Ricci_down3_phi, Hamiltonian, Hamiltonian_Escale, Hamiltonian_norm, Momentumx, Momentumy, Momentumz, Momentumdownx, Momentumdowny, Momentumdownz, Momentumup3, Momentumdown3, Momentum_Escale, Momentumx_norm, Momentumy_norm, Momentumz_norm, Momentumdownx_norm, Momentumdowny_norm, Momentumdownz_norm, st_Weyl_down4, Weyl_Psi, Psi4_lm, Weyl_invariants, eweyl_u_down4, eweyl_n_down3, bweyl_u_down4, bweyl_n_down3
+   :members: alpha, dtalpha, DDalpha, betax, betay, betaz, betaup3, dtbetax, dtbetay, dtbetaz, dtbetaup3, betadown3, betamag, nup4, ndown4, gxx, gxy, gxz, gyy, gyz, gzz, gammadown3, gammaup3, dtgammaup3, gammadet, gammadown4, gammaup4, gtt, gtx, gty, gtz, gdown4, gup4, gdet, psi_bssnok, phi_bssnok, dtphi_bssnok, gammadown3_bssnok, gammaup3_bssnok, dtgammadown3_bssnok, kxx, kxy, kxz, kyy, kyz, kzz, Kdown3, Kup3, Ktrace, dtKtrace, Adown3, Aup3, A2, Adown3_bssnok, Aup3_bssnok, A2_bssnok, dtAdown3_bssnok, dttau, rho0, press, eps, rho, enthalpy, w_lorentz, velx, vely, velz, velup3, velup4, veldown3, veldown4, uup0, uup3, uup4, udown3, udown4, hdown4, hdet, hmixed4, hup4, Tdown4, Tup4, Ttrace, rho_n, fluxup3_n, fluxdown3_n, angmomup3_n, angmomdown3_n, Stressup3_n, Stressdown3_n, Stresstrace_n, press_n, anisotropic_press_down3_n, rho_n_fromHam, fluxup3_n_fromMom, conserved_D, conserved_E, conserved_Sdown4, conserved_Sdown3, conserved_Sup4, conserved_Sup3, dtconserved, st_covd_udown4, accelerationdown4, accelerationup4, s_covd_udown4, thetadown4, theta, sheardown4, shear2, omegadown4, omega2, s_RicciS_u, s_Gamma_udd3, s_Riemann_uddd3, s_Riemann_down3, s_Ricci_down3, s_RicciS, st_Gamma_udd4, st_Riemann_uddd4, st_Riemann_down4, st_Riemann_uudd4, st_Ricci_down4, st_Ricci_down3, st_RicciS, Einsteindown4, Kretschmann, s_Gamma_udd3_bssnok, s_Gamma_bssnok, dts_Gamma_bssnok, s_Ricci_down3_bssnok, s_RicciS_bssnok, s_Ricci_down3_phi, st_Weyl_down4, Weyl_Psi, Psi4_lm, Weyl_invariants, eweyl_u_down4, eweyl_n_down3, bweyl_u_down4, bweyl_n_down3, null_ray_exp_out, null_ray_exp_in, Hamiltonian, Hamiltonian_Escale, Hamiltonian_norm, Momentumx, Momentumy, Momentumz, Momentumdownx, Momentumdowny, Momentumdownz, Momentumup3, Momentumdown3, Momentum_Escale, Momentumx_norm, Momentumy_norm, Momentumz_norm, Momentumdownx_norm, Momentumdowny_norm, Momentumdownz_norm
    :noindex:
 
 .. raw:: html
@@ -124,22 +124,6 @@ Timelike normal vector
 Spatial metric
 --------------
 
-.. _aurel.core.AurelCore.gtt:
-
-`gtt <../_modules/aurel/core.html#AurelCore.gtt>`_: $g_{tt}$ Metric with tt indices down.
-
-.. _aurel.core.AurelCore.gtx:
-
-`gtx <../_modules/aurel/core.html#AurelCore.gtx>`_: $g_{tx}$ Metric with tx indices down.
-
-.. _aurel.core.AurelCore.gty:
-
-`gty <../_modules/aurel/core.html#AurelCore.gty>`_: $g_{ty}$ Metric with ty indices down.
-
-.. _aurel.core.AurelCore.gtz:
-
-`gtz <../_modules/aurel/core.html#AurelCore.gtz>`_: $g_{tz}$ Metric with tz indices down.
-
 .. _aurel.core.AurelCore.gxx:
 
 `gxx <../_modules/aurel/core.html#AurelCore.gxx>`_: $g_{xx}$ Metric with xx indices down. I assume $g_{xx}=1$, if not then please define AurelCore.data['gxx'] = ... 
@@ -190,6 +174,22 @@ Spatial metric
 
 Spacetime metric
 ----------------
+
+.. _aurel.core.AurelCore.gtt:
+
+`gtt <../_modules/aurel/core.html#AurelCore.gtt>`_: $g_{tt}$ Metric with tt indices down.
+
+.. _aurel.core.AurelCore.gtx:
+
+`gtx <../_modules/aurel/core.html#AurelCore.gtx>`_: $g_{tx}$ Metric with tx indices down.
+
+.. _aurel.core.AurelCore.gty:
+
+`gty <../_modules/aurel/core.html#AurelCore.gty>`_: $g_{ty}$ Metric with ty indices down.
+
+.. _aurel.core.AurelCore.gtz:
+
+`gtz <../_modules/aurel/core.html#AurelCore.gtz>`_: $g_{tz}$ Metric with tz indices down.
 
 .. _aurel.core.AurelCore.gdown4:
 
@@ -314,9 +314,7 @@ Proper time
 Matter quantities
 =================
 
-Eulerian observer follows $n^\mu$
-
-Lagrangian observer follows $u^\mu$
+Eulerian observers follow $n^\mu$, Lagrangian observers follow $u^\mu$
 
 Lagrangian matter variables
 ---------------------------
@@ -552,15 +550,15 @@ Kinematic variables
 
 `omega2 <../_modules/aurel/core.html#AurelCore.omega2>`_: $\omega^2$ Magnitude of fluid vorticity
 
+.. _aurel.core.AurelCore.s_RicciS_u:
+
+`s_RicciS_u <../_modules/aurel/core.html#AurelCore.s_RicciS_u>`_: ${}^{(3)}R^{\{u\}}$ Ricci scalar of the spatial metric orthonormal to fluid flow
+
 Curvature quantities
 ====================
 
 Spatial curvature
 -----------------
-
-.. _aurel.core.AurelCore.s_RicciS_u:
-
-`s_RicciS_u <../_modules/aurel/core.html#AurelCore.s_RicciS_u>`_: ${}^{(3)}R^{\{u\}}$ Ricci scalar of the spatial metric orthonormal to fluid flow
 
 .. _aurel.core.AurelCore.s_Gamma_udd3:
 
@@ -775,5 +773,5 @@ AurelCore Methods
 .. autoclass:: aurel.core.AurelCore
    :show-inheritance:
    :members:
-   :exclude-members: gtt, gtx, gty, gtz, gxx, gxy, gxz, gyy, gyz, gzz, gammadown3, gammaup3, dtgammaup3, gammadet, gammadown4, gammaup4, psi_bssnok, phi_bssnok, dtphi_bssnok, gammadown3_bssnok, gammaup3_bssnok, dtgammadown3_bssnok, kxx, kxy, kxz, kyy, kyz, kzz, Kdown3, Kup3, Ktrace, dtKtrace, Adown3, Aup3, A2, Adown3_bssnok, Aup3_bssnok, A2_bssnok, dtAdown3_bssnok, alpha, dtalpha, DDalpha, betax, betay, betaz, betaup3, dtbetax, dtbetay, dtbetaz, dtbetaup3, betadown3, betamag, dttau, nup4, ndown4, gdown4, gup4, gdet, null_ray_exp_out, null_ray_exp_in, rho0, press, eps, rho, enthalpy, w_lorentz, velx, vely, velz, velup3, velup4, veldown3, veldown4, uup0, uup3, uup4, udown3, udown4, hdown4, hdet, hmixed4, hup4, Tdown4, Tup4, Ttrace, rho_n, fluxup3_n, fluxdown3_n, angmomup3_n, angmomdown3_n, Stressup3_n, Stressdown3_n, Stresstrace_n, press_n, anisotropic_press_down3_n, rho_n_fromHam, fluxup3_n_fromMom, conserved_D, conserved_E, conserved_Sdown4, conserved_Sdown3, conserved_Sup4, conserved_Sup3, dtconserved, st_covd_udown4, accelerationdown4, accelerationup4, s_covd_udown4, thetadown4, theta, sheardown4, shear2, omegadown4, omega2, s_RicciS_u, s_Gamma_udd3, s_Riemann_uddd3, s_Riemann_down3, s_Ricci_down3, s_RicciS, st_Gamma_udd4, st_Riemann_uddd4, st_Riemann_down4, st_Riemann_uudd4, st_Ricci_down4, st_Ricci_down3, st_RicciS, Einsteindown4, Kretschmann, s_Gamma_udd3_bssnok, s_Gamma_bssnok, dts_Gamma_bssnok, s_Ricci_down3_bssnok, s_RicciS_bssnok, s_Ricci_down3_phi, Hamiltonian, Hamiltonian_Escale, Hamiltonian_norm, Momentumx, Momentumy, Momentumz, Momentumdownx, Momentumdowny, Momentumdownz, Momentumup3, Momentumdown3, Momentum_Escale, Momentumx_norm, Momentumy_norm, Momentumz_norm, Momentumdownx_norm, Momentumdowny_norm, Momentumdownz_norm, st_Weyl_down4, Weyl_Psi, Psi4_lm, Weyl_invariants, eweyl_u_down4, eweyl_n_down3, bweyl_u_down4, bweyl_n_down3
+   :exclude-members: alpha, dtalpha, DDalpha, betax, betay, betaz, betaup3, dtbetax, dtbetay, dtbetaz, dtbetaup3, betadown3, betamag, nup4, ndown4, gxx, gxy, gxz, gyy, gyz, gzz, gammadown3, gammaup3, dtgammaup3, gammadet, gammadown4, gammaup4, gtt, gtx, gty, gtz, gdown4, gup4, gdet, psi_bssnok, phi_bssnok, dtphi_bssnok, gammadown3_bssnok, gammaup3_bssnok, dtgammadown3_bssnok, kxx, kxy, kxz, kyy, kyz, kzz, Kdown3, Kup3, Ktrace, dtKtrace, Adown3, Aup3, A2, Adown3_bssnok, Aup3_bssnok, A2_bssnok, dtAdown3_bssnok, dttau, rho0, press, eps, rho, enthalpy, w_lorentz, velx, vely, velz, velup3, velup4, veldown3, veldown4, uup0, uup3, uup4, udown3, udown4, hdown4, hdet, hmixed4, hup4, Tdown4, Tup4, Ttrace, rho_n, fluxup3_n, fluxdown3_n, angmomup3_n, angmomdown3_n, Stressup3_n, Stressdown3_n, Stresstrace_n, press_n, anisotropic_press_down3_n, rho_n_fromHam, fluxup3_n_fromMom, conserved_D, conserved_E, conserved_Sdown4, conserved_Sdown3, conserved_Sup4, conserved_Sup3, dtconserved, st_covd_udown4, accelerationdown4, accelerationup4, s_covd_udown4, thetadown4, theta, sheardown4, shear2, omegadown4, omega2, s_RicciS_u, s_Gamma_udd3, s_Riemann_uddd3, s_Riemann_down3, s_Ricci_down3, s_RicciS, st_Gamma_udd4, st_Riemann_uddd4, st_Riemann_down4, st_Riemann_uudd4, st_Ricci_down4, st_Ricci_down3, st_RicciS, Einsteindown4, Kretschmann, s_Gamma_udd3_bssnok, s_Gamma_bssnok, dts_Gamma_bssnok, s_Ricci_down3_bssnok, s_RicciS_bssnok, s_Ricci_down3_phi, st_Weyl_down4, Weyl_Psi, Psi4_lm, Weyl_invariants, eweyl_u_down4, eweyl_n_down3, bweyl_u_down4, bweyl_n_down3, null_ray_exp_out, null_ray_exp_in, Hamiltonian, Hamiltonian_Escale, Hamiltonian_norm, Momentumx, Momentumy, Momentumz, Momentumdownx, Momentumdowny, Momentumdownz, Momentumup3, Momentumdown3, Momentum_Escale, Momentumx_norm, Momentumy_norm, Momentumz_norm, Momentumdownx_norm, Momentumdowny_norm, Momentumdownz_norm
 

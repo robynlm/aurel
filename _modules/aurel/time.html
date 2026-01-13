@@ -7,10 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>aurel.time &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=5a7fad61" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=3721e3c3" />
 
   
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
@@ -20,6 +20,7 @@
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../_static/custom.js?v=67be0c79"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -53,7 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../source/advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html">Reporting Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html#contributing-workflow">Contributing Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -110,19 +111,18 @@
 <span class="sd">This module provides a function to calculate variables over time series data</span>
 <span class="sd">and applying statistical estimation functions to 3D arrays.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">core</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 
-<span class="c1"># Check if running in a notebook</span>
-<span class="n">is_notebook</span> <span class="o">=</span> <span class="s1">&#39;ipykernel&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span>
-<span class="c1"># Check if stdout is a terminal (not redirected to a file)</span>
-<span class="n">is_terminal</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">isatty</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="s1">&#39;isatty&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
-<span class="n">disable_tqdm</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">is_notebook</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_terminal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="c1"># Import appropriate tqdm version</span>
-<span class="k">if</span> <span class="n">is_notebook</span><span class="p">:</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">core</span>
+
+<span class="c1"># Get appropriate tqdm for environment</span>
+<span class="n">IS_TERMINAL</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">isatty</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="s1">&#39;isatty&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
+<span class="n">DISABLE_TQDM</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">IS_NOTEBOOK</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">IS_TERMINAL</span>
+
+<span class="k">if</span> <span class="n">core</span><span class="o">.</span><span class="n">IS_NOTEBOOK</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">tqdm.notebook</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -134,7 +134,7 @@
 <span class="n">est_functions</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">,</span>
     <span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span>
-    <span class="s1">&#39;quartile1&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> 
+    <span class="s1">&#39;quartile1&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span>
     <span class="s1">&#39;median&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
     <span class="s1">&#39;quartile3&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="mi">75</span><span class="p">),</span>
     <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">,</span>
@@ -145,7 +145,7 @@
     <span class="s1">&#39;maxabs&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="p">)),</span>
     <span class="s1">&#39;minabs&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="p">)),</span>
     <span class="s1">&#39;meanabs&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="p">)),</span>
-    <span class="s1">&#39;quartile1abs&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="p">),</span> <span class="mi">25</span><span class="p">),</span> 
+    <span class="s1">&#39;quartile1abs&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="p">),</span> <span class="mi">25</span><span class="p">),</span>
     <span class="s1">&#39;medianabs&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="p">),</span> <span class="mi">50</span><span class="p">),</span>
     <span class="s1">&#39;quartile3abs&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="p">),</span> <span class="mi">75</span><span class="p">),</span>
     <span class="s1">&#39;sumabs&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="p">)),</span>
@@ -164,14 +164,14 @@
 
 <div class="viewcode-block" id="over_time">
 <a class="viewcode-back" href="../../source/time.html#aurel.time.over_time">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[],</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[],</span> 
+<span class="k">def</span><span class="w"> </span><span class="nf">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">estimates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
               <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">veryverbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">rel_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate variables from the data and store them in the data dictionary.</span>
-<span class="sd">    </span>
-<span class="sd">    This function processes time series data by creating AurelCore instances </span>
-<span class="sd">    for each time step, calculating specified variables, and optionally </span>
+
+<span class="sd">    This function processes time series data by creating AurelCore instances</span>
+<span class="sd">    for each time step, calculating specified variables, and optionally</span>
 <span class="sd">    applying estimation functions to 3D arrays.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    data : dict</span>
@@ -187,7 +187,7 @@
 
 <span class="sd">        - str: Names of predefined variables from core.descriptions</span>
 <span class="sd">        - dict: Custom variable definitions with string keys (variable names)</span>
-<span class="sd">          and functions that take only an AurelCore instance and return the </span>
+<span class="sd">          and functions that take only an AurelCore instance and return the</span>
 <span class="sd">          variable value.</span>
 
 <span class="sd">        Default is an empty list, no variable calculations are performed.</span>
@@ -195,12 +195,12 @@
 <span class="sd">        List containing estimation functions to apply to all 3D scalar arrays.</span>
 <span class="sd">        Elements can be:</span>
 
-<span class="sd">        - str: Names of predefined functions from est_functions </span>
+<span class="sd">        - str: Names of predefined functions from est_functions</span>
 <span class="sd">          (&#39;max&#39;, &#39;mean&#39;, &#39;median&#39;, &#39;min&#39;, ...)</span>
-<span class="sd">        - dict: Custom estimation functions with string keys (function names) </span>
-<span class="sd">          and functions that take a scalar 3D array of shape </span>
+<span class="sd">        - dict: Custom estimation functions with string keys (function names)</span>
+<span class="sd">          and functions that take a scalar 3D array of shape</span>
 <span class="sd">          (fd.Nx, fd.Ny, fd.Nz) and return a scalar value.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Default is an empty list (no estimation applied).</span>
 <span class="sd">    verbose : bool, optional</span>
 <span class="sd">        If True, prints debug information about the calculation process.</span>
@@ -208,20 +208,25 @@
 <span class="sd">        If True, provides more detailed debug information. Defaults to False.</span>
 <span class="sd">    **rel_kwargs : dict, optional</span>
 <span class="sd">        Additional parameters passed to AurelCore initialization, such as:</span>
-<span class="sd">        </span>
+
 <span class="sd">        - Lambda : float, cosmological constant</span>
 <span class="sd">        - tetrad_to_use : str, tetrad choice for Weyl calculations</span>
 <span class="sd">        - any other custom parameters required by user-defined functions.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    dict</span>
-<span class="sd">        Updated data dictionary with calculated variables. </span>
-<span class="sd">        If `vars` is provided, a new key is added containing a list of </span>
-<span class="sd">        values for each time step. </span>
-<span class="sd">        If `estimates` is provided, additional keys are added with format </span>
+<span class="sd">        Updated data dictionary with calculated variables.</span>
+<span class="sd">        If `vars` is provided, a new key is added containing a list of</span>
+<span class="sd">        values for each time step.</span>
+<span class="sd">        If `estimates` is provided, additional keys are added with format</span>
 <span class="sd">        &#39;{variable}_{estimation_func}&#39;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Initialize mutable default arguments</span>
+    <span class="k">if</span> <span class="nb">vars</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">vars</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">estimates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">estimates</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># Check/define temporal key</span>
     <span class="n">temporal_key</span> <span class="o">=</span> <span class="kc">None</span>
@@ -231,7 +236,7 @@
     <span class="k">if</span> <span class="n">temporal_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Data dictionary must contain a temporal key: &quot;</span>
                          <span class="s2">&quot;&#39;it&#39;, &#39;iteration&#39;, &#39;t&#39;, or &#39;time&#39;.&quot;</span><span class="p">)</span>
-    
+
     <span class="c1"># Clean vars list to remove any variables that are already in data</span>
     <span class="n">cleaned_vars</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">:</span>
@@ -256,7 +261,7 @@
                         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping function &#39;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
                         <span class="k">continue</span>
     <span class="nb">vars</span> <span class="o">=</span> <span class="n">cleaned_vars</span>
-    
+
     <span class="c1"># Clean estimate list to remove any estimations that are already in data</span>
     <span class="n">cleaned_estimates</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="nb">vars</span> <span class="o">!=</span> <span class="p">[]:</span>
@@ -294,7 +299,7 @@
                 <span class="n">scalarkeys</span> <span class="o">+=</span> <span class="p">[</span><span class="n">key</span><span class="p">]</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found scalar keys for estimation: &quot;</span>
               <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scalarkeys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        
+
         <span class="c1"># Then only apply estimates to scalars that do not already have them</span>
         <span class="k">for</span> <span class="n">est_item</span> <span class="ow">in</span> <span class="n">estimates</span><span class="p">:</span>
             <span class="c1"># If it&#39;s a string for a predefined function in est_functions</span>
@@ -338,37 +343,39 @@
                             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping function &#39;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
                             <span class="k">continue</span>
     <span class="n">estimates</span> <span class="o">=</span> <span class="n">cleaned_estimates</span>
-    
+
     <span class="c1"># Only perform variable calculations if lists are not empty</span>
     <span class="k">if</span> <span class="nb">vars</span> <span class="ow">or</span> <span class="n">estimates</span><span class="p">:</span>
-        
+
         <span class="c1"># Transform dict of lists to a list of dicts</span>
         <span class="n">keys</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-        <span class="n">input_data_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span> 
-                           <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">())]</span>
+        <span class="n">input_data_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="p">]</span>
         <span class="k">del</span> <span class="n">data</span>
-        
+
         <span class="c1"># Calculate first instance</span>
         <span class="n">data_list_i0</span><span class="p">,</span> <span class="n">scalarkeys</span> <span class="o">=</span> <span class="n">process_single_timestep</span><span class="p">(</span>
             <span class="n">input_data_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">estimates</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rel_kwargs</span><span class="p">)</span>
         <span class="n">data_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_list_i0</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">data_list_i0</span>
-        
+
         <span class="c1"># Calculate all the other</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_data_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            
+
             <span class="c1"># Sequential processing</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Now processing remaining time steps sequentially&quot;</span><span class="p">,</span>
                     <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            
+
             <span class="c1"># When redirected, replace \r with \n so progress appears on new lines</span>
-            <span class="n">tqdm_kwargs</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">disable_tqdm</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">tqdm_kwargs</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">DISABLE_TQDM</span> <span class="k">else</span> <span class="p">{</span>
                 <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{</span>
-                    <span class="s1">&#39;write&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)),</span> 
+                    <span class="s1">&#39;write&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)),</span>
                     <span class="s1">&#39;flush&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()})()</span>
             <span class="p">}</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">process_single_timestep</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">estimates</span><span class="p">,</span> 
+            <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">process_single_timestep</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">estimates</span><span class="p">,</span>
                                                 <span class="n">veryverbose</span><span class="p">,</span> <span class="n">scalarkeys</span><span class="p">,</span> <span class="n">rel_kwargs</span><span class="p">)</span>
                         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">input_data_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="o">**</span><span class="n">tqdm_kwargs</span><span class="p">)]</span>
             <span class="c1"># Combine and sort the results by temporal_key key</span>
@@ -376,7 +383,7 @@
         <span class="k">del</span> <span class="n">input_data_list</span>
         <span class="n">data_list_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data_list</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="n">temporal_key</span><span class="p">])</span>
         <span class="k">del</span> <span class="n">data_list</span>
-        
+
         <span class="c1"># Transform list of dicts to a dict of lists</span>
         <span class="n">keys</span> <span class="o">=</span> <span class="n">data_list_sorted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
@@ -386,7 +393,7 @@
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
         <span class="k">del</span> <span class="n">data_list_sorted</span>
-    
+
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done!&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">data</span>
@@ -398,18 +405,18 @@
 
 <div class="viewcode-block" id="process_single_timestep">
 <a class="viewcode-back" href="../../source/time.html#aurel.time.process_single_timestep">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">process_single_timestep</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">estimates</span><span class="p">,</span> 
+<span class="k">def</span><span class="w"> </span><span class="nf">process_single_timestep</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">estimates</span><span class="p">,</span>
                             <span class="n">verbose</span><span class="p">,</span> <span class="n">scalarkeys</span><span class="p">,</span> <span class="n">rel_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Process a single time step for variable calculation and estimation.</span>
-<span class="sd">    </span>
+
 <span class="sd">    This function creates an AurelCore instance for the specified time step,</span>
-<span class="sd">    calculates requested variables, and applies estimation </span>
+<span class="sd">    calculates requested variables, and applies estimation</span>
 <span class="sd">    functions to 3D arrays if specified.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    data : dict</span>
-<span class="sd">        Dictionary containing variables of relevant iteration. </span>
+<span class="sd">        Dictionary containing variables of relevant iteration.</span>
 <span class="sd">        The function will add calculated variables</span>
 <span class="sd">        to this dictionary.</span>
 <span class="sd">    fd : FiniteDifference</span>
@@ -431,9 +438,9 @@
 
 <span class="sd">        - str: Names of predefined functions from est_functions</span>
 <span class="sd">        - dict: Custom estimation functions with string keys (function names)</span>
-<span class="sd">          and functions that take a 3D array of shape (fd.Nx, fd.Ny, fd.Nz) </span>
+<span class="sd">          and functions that take a 3D array of shape (fd.Nx, fd.Ny, fd.Nz)</span>
 <span class="sd">          and return a scalar value.</span>
-<span class="sd">        </span>
+
 <span class="sd">        If empty, no estimation applied.</span>
 <span class="sd">    verbose : bool</span>
 <span class="sd">        Passed to AurelCore for debug information and calculation process.</span>
@@ -442,7 +449,7 @@
 <span class="sd">        the function will determine these keys automatically.</span>
 <span class="sd">    rel_kwargs : dict</span>
 <span class="sd">        Additional parameters passed to AurelCore initialization.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    dict</span>
@@ -452,21 +459,21 @@
 <span class="sd">        If `estimates` is provided, additional keys are added with format</span>
 <span class="sd">        &#39;{variable}_{estimation_func}&#39;.</span>
 <span class="sd">    list of str</span>
-<span class="sd">        List of scalar keys if `scalarkeys` is None, otherwise returns None.&quot;&quot;&quot;</span>
-    
+<span class="sd">        List of scalar keys if `scalarkeys` is None, otherwise returns None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">temp</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="s1">&#39;iteration&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">temp</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="n">temp</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="n">temp</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> 
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="n">temp</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="n">temp</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                       <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="k">break</span>
-    
+
     <span class="c1"># ====== Calculate vars if requested</span>
     <span class="k">if</span> <span class="nb">vars</span><span class="p">:</span>
         <span class="c1"># Create a new AurelCore instance for this time step</span>
         <span class="n">rel</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">AurelCore</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">rel_kwargs</span><span class="p">)</span>
-        
-        <span class="c1"># Set all existing data values for this time step </span>
+
+        <span class="c1"># Set all existing data values for this time step</span>
         <span class="c1"># (except variables to be calculated)</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">:</span>
@@ -487,16 +494,16 @@
                     <span class="n">rel</span><span class="o">.</span><span class="n">var_importance</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Freeze this in</span>
                     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Calculated and freezed variable &#39;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-                              <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; in AurelCore&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        
+                              <span class="o">+</span> <span class="s2">&quot; in AurelCore&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
         <span class="c1"># Calculate and store each requested variable</span>
         <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="n">data</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">rel</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">function</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="n">data</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">rel</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span>
-        
+
         <span class="c1"># Clean up AurelCore instance to free memory</span>
         <span class="k">del</span> <span class="n">rel</span>
 
@@ -510,19 +517,19 @@
         <span class="n">return_scalarkeys</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">return_scalarkeys</span> <span class="o">=</span> <span class="kc">False</span>
-    
+
     <span class="c1"># ====== Apply estimation functions if requested</span>
     <span class="k">if</span> <span class="n">estimates</span><span class="p">:</span>
-        
+
         <span class="c1"># Process each item in the estimates list</span>
         <span class="k">for</span> <span class="n">est_item</span> <span class="ow">in</span> <span class="n">estimates</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">est_item</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing estimation item: </span><span class="si">{</span><span class="n">est_item</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> 
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing estimation item: </span><span class="si">{</span><span class="n">est_item</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                           <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">est_item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                    <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">est_item</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing estimation item: </span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> 
+                    <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">est_item</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing estimation item: </span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                             <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="c1"># For each scalar key, process the estimation functions</span>
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">scalarkeys</span><span class="p">:</span>
@@ -536,21 +543,21 @@
                     <span class="c1"># Handle custom estimation functions from dictionary</span>
                     <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">est_item</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                         <span class="k">if</span> <span class="n">key</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">func_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                            <span class="c1"># Apply the custom estimation function and store </span>
+                            <span class="c1"># Apply the custom estimation function and store</span>
                             <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">func_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
-    
+
     <span class="c1"># Return the updated data and scalar keys if new information requested</span>
     <span class="k">if</span> <span class="n">return_scalarkeys</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">scalarkeys</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">data</span></div>
 
-    
+
 <div class="viewcode-block" id="validate_estimation_function">
 <a class="viewcode-back" href="../../source/time.html#aurel.time.validate_estimation_function">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">validate_estimation_function</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate that estimation function has correct signature and behaviour.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    func : callable</span>
@@ -561,7 +568,7 @@
 <span class="sd">        Finite difference object to get grid dimensions</span>
 <span class="sd">    verbose : bool, optional</span>
 <span class="sd">        If True, prints debug information about the validation process.</span>
-<span class="sd">        </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    bool</span>
@@ -569,32 +576,32 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Validating estimation function &#39;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&#39;...&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    
+
     <span class="c1"># Check if it&#39;s callable</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimation function &#39;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&#39; must be callable&quot;</span><span class="p">)</span>
-    
+
     <span class="c1"># Check function signature</span>
     <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="n">params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-    
+
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Estimation function &#39;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&#39; must take exactly 1 parameter,&quot;</span>
             <span class="sa">f</span><span class="s2">&quot; a scalar array, instead got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">params</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
-    
+
     <span class="c1"># Test with dummy array</span>
     <span class="n">test_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">fd</span><span class="o">.</span><span class="n">Nx</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">Ny</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">Nz</span><span class="p">))</span>
-    
+
     <span class="k">try</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">test_array</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Estimation function &#39;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&#39; failed when called with &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;array of shape (</span><span class="si">{</span><span class="n">fd</span><span class="o">.</span><span class="n">Nx</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">fd</span><span class="o">.</span><span class="n">Ny</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">fd</span><span class="o">.</span><span class="n">Nz</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
-    
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
     <span class="c1"># Check return type and shape - must be scalar-like</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="c1"># Convert to Python scalar if possible evaluation</span>
@@ -604,14 +611,14 @@
             <span class="n">result_value</span> <span class="o">=</span> <span class="n">result</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="n">result_value</span> <span class="o">=</span> <span class="n">result</span>
-    
+
     <span class="c1"># Check if result is scalar-like: Python scalar or 0-dimensional array</span>
     <span class="n">is_scalar</span> <span class="o">=</span> <span class="p">(</span>
         <span class="nb">isinstance</span><span class="p">(</span><span class="n">result_value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">))</span> <span class="ow">or</span>  <span class="c1"># Python scalars</span>
         <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">result</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">())</span> <span class="ow">or</span>  <span class="c1"># 0-d arrays</span>
         <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;ndim&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">result</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>        <span class="c1"># NumPy scalars</span>
     <span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="ow">not</span> <span class="n">is_scalar</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Estimation function &#39;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&#39; must return a scalar, &quot;</span>
@@ -627,7 +634,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">validate_variable_function</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span>
                                <span class="n">verbose</span><span class="p">,</span> <span class="n">veryverbose</span><span class="p">,</span> <span class="n">rel_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate that variable function has correct signature and behaviour.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    func : callable</span>
@@ -637,12 +644,12 @@
 <span class="sd">    fd : FiniteDifference</span>
 <span class="sd">        Finite difference object to get grid dimensions</span>
 <span class="sd">    verbose : bool</span>
-<span class="sd">        If True, prints debug information about the validation process. </span>
+<span class="sd">        If True, prints debug information about the validation process.</span>
 <span class="sd">    veryverbose : bool</span>
 <span class="sd">        If True, prints aurelcore verbose information.</span>
 <span class="sd">    rel_kwargs : dict</span>
 <span class="sd">        Additional parameters passed to AurelCore initialization.</span>
-<span class="sd">        </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    bool</span>
@@ -654,7 +661,7 @@
     <span class="c1"># Check if it&#39;s callable</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Variable function &#39;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&#39; must be callable&quot;</span><span class="p">)</span>
-    
+
     <span class="c1"># Check function signature</span>
     <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="n">params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -663,7 +670,7 @@
             <span class="sa">f</span><span class="s2">&quot;Variable function &#39;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&#39; must take exactly 1 parameter,&quot;</span>
             <span class="sa">f</span><span class="s2">&quot; the AurelCore class, instead got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">params</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
-    
+
     <span class="c1"># Test with dummy AurelCore instance</span>
     <span class="n">rel</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">AurelCore</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">veryverbose</span><span class="p">,</span> <span class="o">**</span><span class="n">rel_kwargs</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
@@ -672,8 +679,8 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Variable function &#39;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&#39; failed when called with &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;AurelCore instance: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
-    
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Custom function &#39;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&#39; validated successfully&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="kc">True</span></div>

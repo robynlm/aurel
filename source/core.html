@@ -8,10 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>aurel.core &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5a7fad61" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=3721e3c3" />
 
   
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -23,6 +23,7 @@
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../_static/custom.js?v=67be0c79"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -58,7 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Reporting Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#contributing-workflow">Contributing Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -187,11 +188,11 @@
              
   <section id="module-aurel.core">
 <span id="aurel-core"></span><h1>aurel.core<a class="headerlink" href="#module-aurel.core" title="Link to this heading"></a></h1>
-<p>core.py</p>
+<p>core.py.</p>
 <dl>
 <dt>This module is the main event. It contains:</dt><dd><ul>
 <li><p><strong>descriptions</strong>, a dictionary of all the variables used in the aurel
-project</p></li>
+project (loaded from descriptions.yml via descriptions_utils module)</p></li>
 <li><p><strong>AurelCore</strong>, the main class responsible for managing the
 <strong>AurelCore.data</strong> dictionary. For an input spacetime and matter
 distribution, AurelCore can automatically retrieve any relativistic
@@ -1332,10 +1333,6 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 </section>
 <section id="spatial-metric">
 <h4>Spatial metric<a class="headerlink" href="#spatial-metric" title="Link to this heading"></a></h4>
-<p id="aurel-core-aurelcore-gtt"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gtt">gtt</a>: <span class="math notranslate nohighlight">\(g_{tt}\)</span> Metric with tt indices down.</p>
-<p id="aurel-core-aurelcore-gtx"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gtx">gtx</a>: <span class="math notranslate nohighlight">\(g_{tx}\)</span> Metric with tx indices down.</p>
-<p id="aurel-core-aurelcore-gty"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gty">gty</a>: <span class="math notranslate nohighlight">\(g_{ty}\)</span> Metric with ty indices down.</p>
-<p id="aurel-core-aurelcore-gtz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gtz">gtz</a>: <span class="math notranslate nohighlight">\(g_{tz}\)</span> Metric with tz indices down.</p>
 <p id="aurel-core-aurelcore-gxx"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gxx">gxx</a>: <span class="math notranslate nohighlight">\(g_{xx}\)</span> Metric with xx indices down. I assume <span class="math notranslate nohighlight">\(g_{xx}=1\)</span>, if not then please define AurelCore.data[‘gxx’] = …</p>
 <p id="aurel-core-aurelcore-gxy"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gxy">gxy</a>: <span class="math notranslate nohighlight">\(g_{xy}\)</span> Metric with xy indices down. I assume <span class="math notranslate nohighlight">\(g_{xy}=0\)</span>, if not then please define AurelCore.data[‘gxy’] = …</p>
 <p id="aurel-core-aurelcore-gxz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gxz">gxz</a>: <span class="math notranslate nohighlight">\(g_{xz}\)</span> Metric with xz indices down. I assume <span class="math notranslate nohighlight">\(g_{xz}=0\)</span>, if not then please define AurelCore.data[‘gxz’] = …</p>
@@ -1351,6 +1348,10 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 </section>
 <section id="spacetime-metric">
 <h4>Spacetime metric<a class="headerlink" href="#spacetime-metric" title="Link to this heading"></a></h4>
+<p id="aurel-core-aurelcore-gtt"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gtt">gtt</a>: <span class="math notranslate nohighlight">\(g_{tt}\)</span> Metric with tt indices down.</p>
+<p id="aurel-core-aurelcore-gtx"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gtx">gtx</a>: <span class="math notranslate nohighlight">\(g_{tx}\)</span> Metric with tx indices down.</p>
+<p id="aurel-core-aurelcore-gty"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gty">gty</a>: <span class="math notranslate nohighlight">\(g_{ty}\)</span> Metric with ty indices down.</p>
+<p id="aurel-core-aurelcore-gtz"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gtz">gtz</a>: <span class="math notranslate nohighlight">\(g_{tz}\)</span> Metric with tz indices down.</p>
 <p id="aurel-core-aurelcore-gdown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gdown4">gdown4</a>: <span class="math notranslate nohighlight">\(g_{\mu\nu}\)</span> Spacetime metric with spacetime indices down</p>
 <p id="aurel-core-aurelcore-gup4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gup4">gup4</a>: <span class="math notranslate nohighlight">\(g^{\mu\nu}\)</span> Spacetime metric with spacetime indices up</p>
 <p id="aurel-core-aurelcore-gdet"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.gdet">gdet</a>: <span class="math notranslate nohighlight">\(g\)</span> Determinant of spacetime metric</p>
@@ -1394,8 +1395,7 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 </section>
 <section id="matter-quantities">
 <h3>Matter quantities<a class="headerlink" href="#matter-quantities" title="Link to this heading"></a></h3>
-<p>Eulerian observer follows <span class="math notranslate nohighlight">\(n^\mu\)</span></p>
-<p>Lagrangian observer follows <span class="math notranslate nohighlight">\(u^\mu\)</span></p>
+<p>Eulerian observers follow <span class="math notranslate nohighlight">\(n^\mu\)</span>, Lagrangian observers follow <span class="math notranslate nohighlight">\(u^\mu\)</span></p>
 <section id="lagrangian-matter-variables">
 <h4>Lagrangian matter variables<a class="headerlink" href="#lagrangian-matter-variables" title="Link to this heading"></a></h4>
 <p id="aurel-core-aurelcore-rho0"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.rho0">rho0</a>: <span class="math notranslate nohighlight">\(\rho_0\)</span> Rest mass energy density. I assume <span class="math notranslate nohighlight">\(\rho_0=0\)</span>, if not then please define AurelCore.data[‘rho0’] = …</p>
@@ -1467,13 +1467,13 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 <p id="aurel-core-aurelcore-shear2"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.shear2">shear2</a>: <span class="math notranslate nohighlight">\(\sigma^2\)</span> Magnitude of fluid shear</p>
 <p id="aurel-core-aurelcore-omegadown4"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.omegadown4">omegadown4</a>: <span class="math notranslate nohighlight">\(\omega_{\mu\nu}\)</span> Fluid vorticity tensor with spacetime indices down</p>
 <p id="aurel-core-aurelcore-omega2"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.omega2">omega2</a>: <span class="math notranslate nohighlight">\(\omega^2\)</span> Magnitude of fluid vorticity</p>
+<p id="aurel-core-aurelcore-s-riccis-u"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_RicciS_u">s_RicciS_u</a>: <span class="math notranslate nohighlight">\({}^{(3)}R^{\{u\}}\)</span> Ricci scalar of the spatial metric orthonormal to fluid flow</p>
 </section>
 </section>
 <section id="curvature-quantities">
 <h3>Curvature quantities<a class="headerlink" href="#curvature-quantities" title="Link to this heading"></a></h3>
 <section id="spatial-curvature">
 <h4>Spatial curvature<a class="headerlink" href="#spatial-curvature" title="Link to this heading"></a></h4>
-<p id="aurel-core-aurelcore-s-riccis-u"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_RicciS_u">s_RicciS_u</a>: <span class="math notranslate nohighlight">\({}^{(3)}R^{\{u\}}\)</span> Ricci scalar of the spatial metric orthonormal to fluid flow</p>
 <p id="aurel-core-aurelcore-s-gamma-udd3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_Gamma_udd3">s_Gamma_udd3</a>: <span class="math notranslate nohighlight">\({}^{(3)}{\Gamma^{k}}_{ij}\)</span> Christoffel symbols of spatial metric with mixed spatial indices</p>
 <p id="aurel-core-aurelcore-s-riemann-uddd3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_Riemann_uddd3">s_Riemann_uddd3</a>: <span class="math notranslate nohighlight">\({}^{(3)}{R^{i}}_{jkl}\)</span> Riemann tensor of spatial metric with mixed spatial indices</p>
 <p id="aurel-core-aurelcore-s-riemann-down3"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.s_Riemann_down3">s_Riemann_down3</a>: <span class="math notranslate nohighlight">\({}^{(3)}R_{ijkl}\)</span> Riemann tensor of spatial metric with all spatial indices down</p>
@@ -1784,7 +1784,7 @@ each key has a list of values for each iteration.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="aurel.core.AurelCore.null_ray_expansion">
 <span class="sig-name descname"><span class="pre">null_ray_expansion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'out'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.null_ray_expansion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.core.AurelCore.null_ray_expansion" title="Link to this definition"></a></dt>
-<dd><p>Compute the expansion of null rays normal to a surface discribed F</p>
+<dd><p>Compute the expansion of null rays normal to a surface discribed F.</p>
 </dd></dl>
 
 <dl class="py method">

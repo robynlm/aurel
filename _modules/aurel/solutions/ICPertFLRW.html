@@ -7,10 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>aurel.solutions.ICPertFLRW &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5a7fad61" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=3721e3c3" />
 
   
     <link rel="shortcut icon" href="../../../_static/favicon.png"/>
@@ -20,6 +20,7 @@
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../../_static/custom.js?v=67be0c79"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -53,7 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../source/advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/CONTRIBUTING.html">Reporting Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/CONTRIBUTING.html#contributing-workflow">Contributing Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/CONTRIBUTING.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -104,16 +105,19 @@
            <div itemprop="articleBody">
              
   <h1>Source code for aurel.solutions.ICPertFLRW</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;See: https://arxiv.org/pdf/2302.09033</span>
-<span class="sd"> and: https://arxiv.org/pdf/1307.1478&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Perturbed FLRW initial conditions.</span>
+
+<span class="sd">See: https://arxiv.org/pdf/2302.09033</span>
+<span class="sd">and: https://arxiv.org/pdf/1307.1478.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
+
 
 <div class="viewcode-block" id="Rc_func">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.ICPertFLRW.Rc_func">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Rc_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">lamb</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Comoving curvature perturbation&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Comoving curvature perturbation.&quot;&quot;&quot;</span>
     <span class="n">Ax</span><span class="p">,</span> <span class="n">Ay</span><span class="p">,</span> <span class="n">Az</span> <span class="o">=</span> <span class="n">amp</span>
     <span class="n">Lx</span><span class="p">,</span> <span class="n">Ly</span><span class="p">,</span> <span class="n">Lz</span> <span class="o">=</span> <span class="n">lamb</span>
     <span class="k">return</span> <span class="p">(</span>
@@ -125,7 +129,7 @@
 <div class="viewcode-block" id="gammadown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.ICPertFLRW.gammadown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gammadown3</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">Rc</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spatial metric with 1st order perturbations&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spatial metric with 1st order perturbations.&quot;&quot;&quot;</span>
     <span class="n">a2</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
     <span class="n">F</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Omega_m</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
     <span class="n">m2iFH2</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span> <span class="n">F</span> <span class="o">*</span><span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
@@ -144,18 +148,18 @@
 <div class="viewcode-block" id="Kdown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.ICPertFLRW.Kdown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Kdown3</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">Rc</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrinsic curvature, nonlinear from gammmadown3&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrinsic curvature, nonlinear from gammmadown3.&quot;&quot;&quot;</span>
     <span class="n">a2</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
     <span class="n">F</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Omega_m</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
     <span class="n">iFH</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span> <span class="n">F</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">kxx</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">a2</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Rc</span> <span class="p">)</span> 
+    <span class="n">kxx</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">a2</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Rc</span> <span class="p">)</span>
            <span class="o">+</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">*</span> <span class="n">iFH</span><span class="p">)</span>
     <span class="n">kxy</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">*</span> <span class="n">iFH</span>
     <span class="n">kxz</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">*</span> <span class="n">iFH</span>
-    <span class="n">kyy</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">a2</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Rc</span> <span class="p">)</span> 
+    <span class="n">kyy</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">a2</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Rc</span> <span class="p">)</span>
            <span class="o">+</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">*</span> <span class="n">iFH</span><span class="p">)</span>
     <span class="n">kyz</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">*</span> <span class="n">iFH</span>
-    <span class="n">kzz</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">a2</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Rc</span> <span class="p">)</span> 
+    <span class="n">kzz</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">a2</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Rc</span> <span class="p">)</span>
            <span class="o">+</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">*</span> <span class="n">iFH</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
@@ -167,10 +171,10 @@
 <div class="viewcode-block" id="delta1">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.ICPertFLRW.delta1">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">delta1</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">Rc</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Linear density contrast&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Linear density contrast.&quot;&quot;&quot;</span>
     <span class="n">F</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Omega_m</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">+</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">+</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">Rc</span><span class="p">)))</span> 
+        <span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">+</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">+</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">Rc</span><span class="p">)))</span>
         <span class="o">/</span> <span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">F</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
 
 </pre></div>

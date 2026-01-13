@@ -8,10 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>aurel.solutions &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5a7fad61" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=3721e3c3" />
 
   
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -23,6 +23,7 @@
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../_static/custom.js?v=67be0c79"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -58,7 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Reporting Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#contributing-workflow">Contributing Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -237,592 +238,590 @@ Functions in these modules generate numerical data based on
 analytical expressions.</p>
 <section id="module-aurel.solutions.Collins_Stewart">
 <span id="solutions-collins-stewart"></span><h2>solutions.Collins_Stewart<a class="headerlink" href="#module-aurel.solutions.Collins_Stewart" title="Link to this heading"></a></h2>
-<p>This is a Collins and Stewart 1971 solution that describes
-a Bianchi II γ-law perfect fluid homogeneous solution.
-See section 3.3 of 2211.08133</p>
+<p>Collins and Stewart 1971 Bianchi II γ-law perfect fluid solution.</p>
+<p>This is a homogeneous solution, see section 3.3 of 2211.08133.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Collins_Stewart.Kdown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Collins_Stewart.</span></span><span class="sig-name descname"><span class="pre">Kdown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Collins_Stewart.html#Kdown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Collins_Stewart.Kdown3" title="Link to this definition"></a></dt>
-<dd><p>Extrinsic curvature</p>
+<dd><p>Extrinsic curvature.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Collins_Stewart.data">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Collins_Stewart.</span></span><span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Collins_Stewart.html#data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Collins_Stewart.data" title="Link to this definition"></a></dt>
-<dd><p>Returns dictionary of Collins Stewart data</p>
+<dd><p>Return dictionary of Collins Stewart data.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Collins_Stewart.gammadown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Collins_Stewart.</span></span><span class="sig-name descname"><span class="pre">gammadown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Collins_Stewart.html#gammadown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Collins_Stewart.gammadown3" title="Link to this definition"></a></dt>
-<dd><p>Spatial metric</p>
+<dd><p>Spatial metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Collins_Stewart.gdown4">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Collins_Stewart.</span></span><span class="sig-name descname"><span class="pre">gdown4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Collins_Stewart.html#gdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Collins_Stewart.gdown4" title="Link to this definition"></a></dt>
-<dd><p>Spacetime metric</p>
+<dd><p>Spacetime metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Collins_Stewart.press">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Collins_Stewart.</span></span><span class="sig-name descname"><span class="pre">press</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Collins_Stewart.html#press"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Collins_Stewart.press" title="Link to this definition"></a></dt>
-<dd><p>Pressure</p>
+<dd><p>Pressure.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Collins_Stewart.rho">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Collins_Stewart.</span></span><span class="sig-name descname"><span class="pre">rho</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Collins_Stewart.html#rho"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Collins_Stewart.rho" title="Link to this definition"></a></dt>
-<dd><p>Energy density</p>
+<dd><p>Energy density.</p>
 </dd></dl>
 
 </section>
 <section id="module-aurel.solutions.Conformally_flat">
 <span id="solutions-conformally-flat"></span><h2>solutions.Conformally_flat<a class="headerlink" href="#module-aurel.solutions.Conformally_flat" title="Link to this heading"></a></h2>
+<p>Conformally flat spacetime solution.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Conformally_flat.Kdown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Conformally_flat.</span></span><span class="sig-name descname"><span class="pre">Kdown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Conformally_flat.html#Kdown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Conformally_flat.Kdown3" title="Link to this definition"></a></dt>
-<dd><p>Extrinsic curvature</p>
+<dd><p>Extrinsic curvature.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Conformally_flat.Omega">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Conformally_flat.</span></span><span class="sig-name descname"><span class="pre">Omega</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Conformally_flat.html#Omega"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Conformally_flat.Omega" title="Link to this definition"></a></dt>
-<dd><p>Returns the conformal factor</p>
+<dd><p>Return the conformal factor.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Conformally_flat.Tdown4">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Conformally_flat.</span></span><span class="sig-name descname"><span class="pre">Tdown4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Conformally_flat.html#Tdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Conformally_flat.Tdown4" title="Link to this definition"></a></dt>
-<dd><p>Stress-energy tensor, from Einstein’s field equations</p>
+<dd><p>Stress-energy tensor, from Einstein’s field equations.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Conformally_flat.alpha">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Conformally_flat.</span></span><span class="sig-name descname"><span class="pre">alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Conformally_flat.html#alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Conformally_flat.alpha" title="Link to this definition"></a></dt>
-<dd><p>Lapse</p>
+<dd><p>Lapse.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Conformally_flat.data">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Conformally_flat.</span></span><span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Conformally_flat.html#data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Conformally_flat.data" title="Link to this definition"></a></dt>
-<dd><p>Returns dictionary of Collins Stewart data</p>
+<dd><p>Return dictionary of Collins Stewart data.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Conformally_flat.dxOmega">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Conformally_flat.</span></span><span class="sig-name descname"><span class="pre">dxOmega</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Conformally_flat.html#dxOmega"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Conformally_flat.dxOmega" title="Link to this definition"></a></dt>
-<dd><p>Returns the 1st derivative of the conformal factor</p>
+<dd><p>Return the 1st derivative of the conformal factor.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Conformally_flat.dxdxOmega">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Conformally_flat.</span></span><span class="sig-name descname"><span class="pre">dxdxOmega</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Conformally_flat.html#dxdxOmega"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Conformally_flat.dxdxOmega" title="Link to this definition"></a></dt>
-<dd><p>Returns the 2nd derivatire of the conformal factor</p>
+<dd><p>Return the 2nd derivatire of the conformal factor.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Conformally_flat.gammadown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Conformally_flat.</span></span><span class="sig-name descname"><span class="pre">gammadown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Conformally_flat.html#gammadown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Conformally_flat.gammadown3" title="Link to this definition"></a></dt>
-<dd><p>Spatial metric</p>
+<dd><p>Spatial metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Conformally_flat.gdown4">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Conformally_flat.</span></span><span class="sig-name descname"><span class="pre">gdown4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Conformally_flat.html#gdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Conformally_flat.gdown4" title="Link to this definition"></a></dt>
-<dd><p>Spacetime metric</p>
+<dd><p>Spacetime metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Conformally_flat.st_RicciS">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Conformally_flat.</span></span><span class="sig-name descname"><span class="pre">st_RicciS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Conformally_flat.html#st_RicciS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Conformally_flat.st_RicciS" title="Link to this definition"></a></dt>
-<dd><p>Spacetime Ricci scalar</p>
+<dd><p>Spacetime Ricci scalar.</p>
 </dd></dl>
 
 </section>
 <section id="module-aurel.solutions.EdS">
 <span id="solutions-eds"></span><h2>solutions.EdS<a class="headerlink" href="#module-aurel.solutions.EdS" title="Link to this heading"></a></h2>
-<p>FLRW spacetime with an Einstein-de Sitter model</p>
+<p>FLRW spacetime with an Einstein-de Sitter model.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.Hconf">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">Hconf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#Hconf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.Hconf" title="Link to this definition"></a></dt>
-<dd><p>Conformal Hubble function</p>
+<dd><p>Conformal Hubble function.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.Hprop">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">Hprop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#Hprop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.Hprop" title="Link to this definition"></a></dt>
-<dd><p>Proper Hubble function</p>
+<dd><p>Proper Hubble function.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.Kdown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">Kdown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#Kdown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.Kdown3" title="Link to this definition"></a></dt>
-<dd><p>Extrinsic curvature</p>
+<dd><p>Extrinsic curvature.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.Omega_m">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">Omega_m</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#Omega_m"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.Omega_m" title="Link to this definition"></a></dt>
-<dd><p>Matter density parameter</p>
+<dd><p>Matter density parameter.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.a">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">a</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#a"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.a" title="Link to this definition"></a></dt>
-<dd><p>Scale factor</p>
+<dd><p>Scale factor.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.a_func_z">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">a_func_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#a_func_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.a_func_z" title="Link to this definition"></a></dt>
-<dd><p>Scale factor from redshift</p>
+<dd><p>Scale factor from redshift.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.alpha">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.alpha" title="Link to this definition"></a></dt>
-<dd><p>Lapse</p>
+<dd><p>Lapse.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.an_today">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">an_today</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#an_today"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.an_today" title="Link to this definition"></a></dt>
-<dd><p>Scale factor normalised by a(z=0)</p>
+<dd><p>Scale factor normalised by a(z=0).</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.betaup3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">betaup3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#betaup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.betaup3" title="Link to this definition"></a></dt>
-<dd><p>Shift</p>
+<dd><p>Shift.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.fL">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">fL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#fL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.fL" title="Link to this definition"></a></dt>
-<dd><p>Growth index = d ln (delta) / d ln (a)</p>
+<dd><p>Growth index = d ln (delta) / d ln (a).</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.gammadown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">gammadown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#gammadown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.gammadown3" title="Link to this definition"></a></dt>
-<dd><p>Spatial metric</p>
+<dd><p>Spatial metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.press">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">press</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#press"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.press" title="Link to this definition"></a></dt>
-<dd><p>Pressure</p>
+<dd><p>Pressure.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.redshift">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">redshift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#redshift"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.redshift" title="Link to this definition"></a></dt>
-<dd><p>Redshift</p>
+<dd><p>Redshift.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.rho">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">rho</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#rho"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.rho" title="Link to this definition"></a></dt>
-<dd><p>Energy density</p>
+<dd><p>Energy density.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.t_func_Hprop">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">t_func_Hprop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Hprop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#t_func_Hprop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.t_func_Hprop" title="Link to this definition"></a></dt>
-<dd><p>Proper time from Hubble</p>
+<dd><p>Proper time from Hubble.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.t_func_a">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">t_func_a</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#t_func_a"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.t_func_a" title="Link to this definition"></a></dt>
-<dd><p>Proper time from scale factor</p>
+<dd><p>Proper time from scale factor.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.EdS.t_func_z">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.EdS.</span></span><span class="sig-name descname"><span class="pre">t_func_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/EdS.html#t_func_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.EdS.t_func_z" title="Link to this definition"></a></dt>
-<dd><p>Proper time from redshift</p>
+<dd><p>Proper time from redshift.</p>
 </dd></dl>
 
 </section>
 <section id="module-aurel.solutions.Harvey_Tsoubelis">
 <span id="solutions-harvey-tsoubelis"></span><h2>solutions.Harvey_Tsoubelis<a class="headerlink" href="#module-aurel.solutions.Harvey_Tsoubelis" title="Link to this heading"></a></h2>
-<p>This is a A.Harvey and T.Tsoubelis solution that describes
-a vacuum Bianchi IV plane wave homogeneous spacetime
-page 191 of ‘Dynamical Systems in Cosmology’ by J.Wainwright and G.F.R.Ellis
-See section 3.5 of 2211.08133</p>
+<p>A.Harvey and T.Tsoubelis vacuum Bianchi IV plane wave solution.</p>
+<p>This is a homogeneous spacetime, see section 3.5 of 2211.08133 or
+page 191 of ‘Dynamical Systems in Cosmology’ by J.Wainwright and G.F.R.Ellis.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Harvey_Tsoubelis.Kdown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Harvey_Tsoubelis.</span></span><span class="sig-name descname"><span class="pre">Kdown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Harvey_Tsoubelis.html#Kdown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Harvey_Tsoubelis.Kdown3" title="Link to this definition"></a></dt>
-<dd><p>Returns the extrinsic curvature</p>
+<dd><p>Return the extrinsic curvature.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Harvey_Tsoubelis.Tdown4">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Harvey_Tsoubelis.</span></span><span class="sig-name descname"><span class="pre">Tdown4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Harvey_Tsoubelis.html#Tdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Harvey_Tsoubelis.Tdown4" title="Link to this definition"></a></dt>
-<dd><p>Energy stress tensor</p>
+<dd><p>Energy stress tensor.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Harvey_Tsoubelis.alpha">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Harvey_Tsoubelis.</span></span><span class="sig-name descname"><span class="pre">alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Harvey_Tsoubelis.html#alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Harvey_Tsoubelis.alpha" title="Link to this definition"></a></dt>
-<dd><p>Returns the lapse function</p>
+<dd><p>Return the lapse function.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Harvey_Tsoubelis.betaup3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Harvey_Tsoubelis.</span></span><span class="sig-name descname"><span class="pre">betaup3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Harvey_Tsoubelis.html#betaup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Harvey_Tsoubelis.betaup3" title="Link to this definition"></a></dt>
-<dd><p>Returns the shift vector</p>
+<dd><p>Return the shift vector.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Harvey_Tsoubelis.data">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Harvey_Tsoubelis.</span></span><span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Harvey_Tsoubelis.html#data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Harvey_Tsoubelis.data" title="Link to this definition"></a></dt>
-<dd><p>Returns dictionary of Harvey Tsoubelis data</p>
+<dd><p>Return dictionary of Harvey Tsoubelis data.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Harvey_Tsoubelis.gammadown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Harvey_Tsoubelis.</span></span><span class="sig-name descname"><span class="pre">gammadown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Harvey_Tsoubelis.html#gammadown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Harvey_Tsoubelis.gammadown3" title="Link to this definition"></a></dt>
-<dd><p>Returns the spatial metric</p>
+<dd><p>Return the spatial metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Harvey_Tsoubelis.gdown4">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Harvey_Tsoubelis.</span></span><span class="sig-name descname"><span class="pre">gdown4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Harvey_Tsoubelis.html#gdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Harvey_Tsoubelis.gdown4" title="Link to this definition"></a></dt>
-<dd><p>Returns the spacetime metric</p>
+<dd><p>Return the spacetime metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Harvey_Tsoubelis.press">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Harvey_Tsoubelis.</span></span><span class="sig-name descname"><span class="pre">press</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Harvey_Tsoubelis.html#press"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Harvey_Tsoubelis.press" title="Link to this definition"></a></dt>
-<dd><p>Returns the pressure</p>
+<dd><p>Return the pressure.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Harvey_Tsoubelis.rho">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Harvey_Tsoubelis.</span></span><span class="sig-name descname"><span class="pre">rho</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Harvey_Tsoubelis.html#rho"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Harvey_Tsoubelis.rho" title="Link to this definition"></a></dt>
-<dd><p>Returns the energy density</p>
+<dd><p>Return the energy density.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Harvey_Tsoubelis.uup4">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Harvey_Tsoubelis.</span></span><span class="sig-name descname"><span class="pre">uup4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Harvey_Tsoubelis.html#uup4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Harvey_Tsoubelis.uup4" title="Link to this definition"></a></dt>
-<dd><p>Fluid 4 velocity</p>
+<dd><p>Fluid 4 velocity.</p>
 </dd></dl>
 
 </section>
 <section id="module-aurel.solutions.ICPertFLRW">
 <span id="solutions-icpertflrw"></span><h2>solutions.ICPertFLRW<a class="headerlink" href="#module-aurel.solutions.ICPertFLRW" title="Link to this heading"></a></h2>
+<p>Perturbed FLRW initial conditions.</p>
 <p>See: <a class="reference external" href="https://arxiv.org/pdf/2302.09033">https://arxiv.org/pdf/2302.09033</a>
-and: <a class="reference external" href="https://arxiv.org/pdf/1307.1478">https://arxiv.org/pdf/1307.1478</a></p>
+and: <a class="reference external" href="https://arxiv.org/pdf/1307.1478">https://arxiv.org/pdf/1307.1478</a>.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.ICPertFLRW.Kdown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.ICPertFLRW.</span></span><span class="sig-name descname"><span class="pre">Kdown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/ICPertFLRW.html#Kdown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.ICPertFLRW.Kdown3" title="Link to this definition"></a></dt>
-<dd><p>Extrinsic curvature, nonlinear from gammmadown3</p>
+<dd><p>Extrinsic curvature, nonlinear from gammmadown3.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.ICPertFLRW.Rc_func">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.ICPertFLRW.</span></span><span class="sig-name descname"><span class="pre">Rc_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lamb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/ICPertFLRW.html#Rc_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.ICPertFLRW.Rc_func" title="Link to this definition"></a></dt>
-<dd><p>Comoving curvature perturbation</p>
+<dd><p>Comoving curvature perturbation.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.ICPertFLRW.delta1">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.ICPertFLRW.</span></span><span class="sig-name descname"><span class="pre">delta1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/ICPertFLRW.html#delta1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.ICPertFLRW.delta1" title="Link to this definition"></a></dt>
-<dd><p>Linear density contrast</p>
+<dd><p>Linear density contrast.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.ICPertFLRW.gammadown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.ICPertFLRW.</span></span><span class="sig-name descname"><span class="pre">gammadown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/ICPertFLRW.html#gammadown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.ICPertFLRW.gammadown3" title="Link to this definition"></a></dt>
-<dd><p>Spatial metric with 1st order perturbations</p>
+<dd><p>Spatial metric with 1st order perturbations.</p>
 </dd></dl>
 
 </section>
 <section id="module-aurel.solutions.LCDM">
 <span id="solutions-lcdm"></span><h2>solutions.LCDM<a class="headerlink" href="#module-aurel.solutions.LCDM" title="Link to this heading"></a></h2>
-<p>FLRW spacetime with a <span class="math notranslate nohighlight">\(\Lambda\)</span>CDM model</p>
+<p>FLRW spacetime with a <span class="math notranslate nohighlight">\(\Lambda\)</span>CDM model.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.LCDM.Hconf">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.LCDM.</span></span><span class="sig-name descname"><span class="pre">Hconf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/LCDM.html#Hconf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.LCDM.Hconf" title="Link to this definition"></a></dt>
-<dd><p>Conformal Hubble function</p>
+<dd><p>Conformal Hubble function.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.LCDM.Hprop">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.LCDM.</span></span><span class="sig-name descname"><span class="pre">Hprop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/LCDM.html#Hprop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.LCDM.Hprop" title="Link to this definition"></a></dt>
-<dd><p>Proper Hubble function</p>
+<dd><p>Proper Hubble function.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.LCDM.Kdown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.LCDM.</span></span><span class="sig-name descname"><span class="pre">Kdown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/LCDM.html#Kdown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.LCDM.Kdown3" title="Link to this definition"></a></dt>
-<dd><p>Extrinsic curvature</p>
+<dd><p>Extrinsic curvature.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.LCDM.Omega_m">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.LCDM.</span></span><span class="sig-name descname"><span class="pre">Omega_m</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/LCDM.html#Omega_m"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.LCDM.Omega_m" title="Link to this definition"></a></dt>
-<dd><p>Matter density parameter</p>
+<dd><p>Matter density parameter.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.LCDM.a">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.LCDM.</span></span><span class="sig-name descname"><span class="pre">a</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/LCDM.html#a"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.LCDM.a" title="Link to this definition"></a></dt>
-<dd><p>Scale factor</p>
+<dd><p>Scale factor.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.LCDM.alpha">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.LCDM.</span></span><span class="sig-name descname"><span class="pre">alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/LCDM.html#alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.LCDM.alpha" title="Link to this definition"></a></dt>
-<dd><p>Lapse</p>
+<dd><p>Lapse.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.LCDM.an_today">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.LCDM.</span></span><span class="sig-name descname"><span class="pre">an_today</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/LCDM.html#an_today"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.LCDM.an_today" title="Link to this definition"></a></dt>
-<dd><p>Scale factor normalised by a(z=0)</p>
+<dd><p>Scale factor normalised by a(z=0).</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.LCDM.betaup3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.LCDM.</span></span><span class="sig-name descname"><span class="pre">betaup3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/LCDM.html#betaup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.LCDM.betaup3" title="Link to this definition"></a></dt>
-<dd><p>Shift</p>
+<dd><p>Shift.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.LCDM.fL">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.LCDM.</span></span><span class="sig-name descname"><span class="pre">fL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/LCDM.html#fL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.LCDM.fL" title="Link to this definition"></a></dt>
-<dd><p>Growth index = d ln (delta) / d ln (a)</p>
+<dd><p>Growth index = d ln (delta) / d ln (a).</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.LCDM.gammadown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.LCDM.</span></span><span class="sig-name descname"><span class="pre">gammadown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/LCDM.html#gammadown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.LCDM.gammadown3" title="Link to this definition"></a></dt>
-<dd><p>Spatial metric</p>
+<dd><p>Spatial metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.LCDM.redshift">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.LCDM.</span></span><span class="sig-name descname"><span class="pre">redshift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/LCDM.html#redshift"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.LCDM.redshift" title="Link to this definition"></a></dt>
-<dd><p>Redshift</p>
+<dd><p>Redshift.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.LCDM.rho">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.LCDM.</span></span><span class="sig-name descname"><span class="pre">rho</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/LCDM.html#rho"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.LCDM.rho" title="Link to this definition"></a></dt>
-<dd><p>Energy density</p>
+<dd><p>Energy density.</p>
 </dd></dl>
 
 </section>
 <section id="module-aurel.solutions.Non_diagonal">
 <span id="solutions-non-diagonal"></span><h2>solutions.Non_diagonal<a class="headerlink" href="#module-aurel.solutions.Non_diagonal" title="Link to this heading"></a></h2>
-<p>See section 3.2 of 2211.08133</p>
+<p>See section 3.2 of 2211.08133.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Non_diagonal.A">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Non_diagonal.</span></span><span class="sig-name descname"><span class="pre">A</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Non_diagonal.html#A"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Non_diagonal.A" title="Link to this definition"></a></dt>
-<dd><p>Conformal factor</p>
+<dd><p>Conformal factor.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Non_diagonal.Kdown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Non_diagonal.</span></span><span class="sig-name descname"><span class="pre">Kdown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Non_diagonal.html#Kdown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Non_diagonal.Kdown3" title="Link to this definition"></a></dt>
-<dd><p>Extrinsic curvature</p>
+<dd><p>Extrinsic curvature.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Non_diagonal.Tdown4">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Non_diagonal.</span></span><span class="sig-name descname"><span class="pre">Tdown4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Non_diagonal.html#Tdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Non_diagonal.Tdown4" title="Link to this definition"></a></dt>
-<dd><p>Stress-energy tensor, from Einstein’s field equations</p>
+<dd><p>Stress-energy tensor, from Einstein’s field equations.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Non_diagonal.data">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Non_diagonal.</span></span><span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Non_diagonal.html#data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Non_diagonal.data" title="Link to this definition"></a></dt>
-<dd><p>Returns dictionary of Non-diagonal data</p>
+<dd><p>Return dictionary of Non-diagonal data.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Non_diagonal.dzA">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Non_diagonal.</span></span><span class="sig-name descname"><span class="pre">dzA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Non_diagonal.html#dzA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Non_diagonal.dzA" title="Link to this definition"></a></dt>
-<dd><p>Conformal factor 1st derivative</p>
+<dd><p>Conformal factor 1st derivative.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Non_diagonal.dzdzA">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Non_diagonal.</span></span><span class="sig-name descname"><span class="pre">dzdzA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Non_diagonal.html#dzdzA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Non_diagonal.dzdzA" title="Link to this definition"></a></dt>
-<dd><p>Conformal factor 2nd derivative</p>
+<dd><p>Conformal factor 2nd derivative.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Non_diagonal.gammadown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Non_diagonal.</span></span><span class="sig-name descname"><span class="pre">gammadown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Non_diagonal.html#gammadown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Non_diagonal.gammadown3" title="Link to this definition"></a></dt>
-<dd><p>Spatial metric</p>
+<dd><p>Spatial metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Non_diagonal.gdown4">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Non_diagonal.</span></span><span class="sig-name descname"><span class="pre">gdown4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Non_diagonal.html#gdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Non_diagonal.gdown4" title="Link to this definition"></a></dt>
-<dd><p>Spacetime metric</p>
+<dd><p>Spacetime metric.</p>
 </dd></dl>
 
 </section>
 <section id="module-aurel.solutions.Rosquist_Jantzen">
 <span id="solutions-rosquist"></span><h2>solutions.Rosquist<a class="headerlink" href="#module-aurel.solutions.Rosquist_Jantzen" title="Link to this heading"></a></h2>
-<p>This is a Rosquist and Jantzen solution that describes
-a Bianchi VI tilted γ ̃-law perfect fluid homogeneous solution with vorticity
-See section 3.4 of 2211.08133</p>
+<p>Rosquist and Jantzen Bianchi VI tilted γ-law perfect fluid solution.</p>
+<p>This is a homogeneous solution with vorticity, see section 3.4 of 2211.08133.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Rosquist_Jantzen.Kdown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Rosquist_Jantzen.</span></span><span class="sig-name descname"><span class="pre">Kdown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Rosquist_Jantzen.html#Kdown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Rosquist_Jantzen.Kdown3" title="Link to this definition"></a></dt>
-<dd><p>Returns the extrinsic curvature</p>
+<dd><p>Return the extrinsic curvature.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Rosquist_Jantzen.Tdown4">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Rosquist_Jantzen.</span></span><span class="sig-name descname"><span class="pre">Tdown4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Rosquist_Jantzen.html#Tdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Rosquist_Jantzen.Tdown4" title="Link to this definition"></a></dt>
-<dd><p>Returns the energy-stress tensor</p>
+<dd><p>Return the energy-stress tensor.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Rosquist_Jantzen.data">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Rosquist_Jantzen.</span></span><span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Rosquist_Jantzen.html#data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Rosquist_Jantzen.data" title="Link to this definition"></a></dt>
-<dd><p>Returns dictionary of Roquist Jantzen data</p>
+<dd><p>Return dictionary of Roquist Jantzen data.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Rosquist_Jantzen.gammadown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Rosquist_Jantzen.</span></span><span class="sig-name descname"><span class="pre">gammadown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Rosquist_Jantzen.html#gammadown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Rosquist_Jantzen.gammadown3" title="Link to this definition"></a></dt>
-<dd><p>Returns the spatial metric</p>
+<dd><p>Return the spatial metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Rosquist_Jantzen.gdown4">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Rosquist_Jantzen.</span></span><span class="sig-name descname"><span class="pre">gdown4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Rosquist_Jantzen.html#gdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Rosquist_Jantzen.gdown4" title="Link to this definition"></a></dt>
-<dd><p>Returns the spacetime metric</p>
+<dd><p>Return the spacetime metric.</p>
 </dd></dl>
 
 </section>
 <section id="module-aurel.solutions.Schwarzschild_isotropic">
 <span id="solutions-schwarzschild-isotropic"></span><h2>solutions.Schwarzschild_isotropic<a class="headerlink" href="#module-aurel.solutions.Schwarzschild_isotropic" title="Link to this heading"></a></h2>
-<p>This is the Schwarzschild solution in in isotropic coordinates
-with maximal slicing.
-See <a class="reference external" href="https://arxiv.org/pdf/0904.4184">https://arxiv.org/pdf/0904.4184</a></p>
+<p>Schwarzschild solution in isotropic coordinates with maximal slicing.</p>
+<p>See <a class="reference external" href="https://arxiv.org/pdf/0904.4184">https://arxiv.org/pdf/0904.4184</a>.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Schwarzschild_isotropic.Kdown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Schwarzschild_isotropic.</span></span><span class="sig-name descname"><span class="pre">Kdown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Schwarzschild_isotropic.html#Kdown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Schwarzschild_isotropic.Kdown3" title="Link to this definition"></a></dt>
-<dd><p>Returns the extrinsic curvature</p>
+<dd><p>Return the extrinsic curvature.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Schwarzschild_isotropic.Kretschmann">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Schwarzschild_isotropic.</span></span><span class="sig-name descname"><span class="pre">Kretschmann</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Schwarzschild_isotropic.html#Kretschmann"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Schwarzschild_isotropic.Kretschmann" title="Link to this definition"></a></dt>
-<dd><p>Kretschmann scalar</p>
+<dd><p>Kretschmann scalar.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Schwarzschild_isotropic.Tdown4">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Schwarzschild_isotropic.</span></span><span class="sig-name descname"><span class="pre">Tdown4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Schwarzschild_isotropic.html#Tdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Schwarzschild_isotropic.Tdown4" title="Link to this definition"></a></dt>
-<dd><p>Returns the energy-stress tensor</p>
+<dd><p>Return the energy-stress tensor.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Schwarzschild_isotropic.alpha">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Schwarzschild_isotropic.</span></span><span class="sig-name descname"><span class="pre">alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Schwarzschild_isotropic.html#alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Schwarzschild_isotropic.alpha" title="Link to this definition"></a></dt>
-<dd><p>Returns the lapse function</p>
+<dd><p>Return the lapse function.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Schwarzschild_isotropic.betaup3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Schwarzschild_isotropic.</span></span><span class="sig-name descname"><span class="pre">betaup3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Schwarzschild_isotropic.html#betaup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Schwarzschild_isotropic.betaup3" title="Link to this definition"></a></dt>
-<dd><p>Returns the shift vector</p>
+<dd><p>Return the shift vector.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Schwarzschild_isotropic.data">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Schwarzschild_isotropic.</span></span><span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Schwarzschild_isotropic.html#data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Schwarzschild_isotropic.data" title="Link to this definition"></a></dt>
-<dd><p>Returns dictionary of Schwarzschild data</p>
+<dd><p>Return dictionary of Schwarzschild data.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Schwarzschild_isotropic.gammadown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Schwarzschild_isotropic.</span></span><span class="sig-name descname"><span class="pre">gammadown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Schwarzschild_isotropic.html#gammadown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Schwarzschild_isotropic.gammadown3" title="Link to this definition"></a></dt>
-<dd><p>Returns the spatial metric</p>
+<dd><p>Return the spatial metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Schwarzschild_isotropic.gdown4">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Schwarzschild_isotropic.</span></span><span class="sig-name descname"><span class="pre">gdown4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Schwarzschild_isotropic.html#gdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Schwarzschild_isotropic.gdown4" title="Link to this definition"></a></dt>
-<dd><p>Returns the spacetime metric</p>
+<dd><p>Return the spacetime metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Schwarzschild_isotropic.null_ray_exp_out">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Schwarzschild_isotropic.</span></span><span class="sig-name descname"><span class="pre">null_ray_exp_out</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Schwarzschild_isotropic.html#null_ray_exp_out"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Schwarzschild_isotropic.null_ray_exp_out" title="Link to this definition"></a></dt>
-<dd><p>Outward null ray expansion</p>
+<dd><p>Outward null ray expansion.</p>
 </dd></dl>
 
 </section>
 <section id="module-aurel.solutions.Szekeres">
 <span id="solutions-szekeres"></span><h2>solutions.Szekeres<a class="headerlink" href="#module-aurel.solutions.Szekeres" title="Link to this heading"></a></h2>
-<p>This is a <span class="math notranslate nohighlight">\(\Lambda\)</span> - Szekeres solution
-which is perturbed solution of the flat dust FLRW + LCDM spacetime.
-See section 3.1 of 2211.08133</p>
+<p><span class="math notranslate nohighlight">\(\Lambda\)</span> - Szekeres solution.</p>
+<p>Perturbed solution of the flat dust FLRW + LCDM spacetime,
+see section 3.1 of 2211.08133.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Szekeres.Kdown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Szekeres.</span></span><span class="sig-name descname"><span class="pre">Kdown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Szekeres.html#Kdown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Szekeres.Kdown3" title="Link to this definition"></a></dt>
-<dd><p>Returns the extrinsic curvature</p>
+<dd><p>Return the extrinsic curvature.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Szekeres.Z_terms">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Szekeres.</span></span><span class="sig-name descname"><span class="pre">Z_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Szekeres.html#Z_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Szekeres.Z_terms" title="Link to this definition"></a></dt>
-<dd><p>Returns F, Z, dtZ functions</p>
+<dd><p>Return F, Z, dtZ functions.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Szekeres.alpha">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Szekeres.</span></span><span class="sig-name descname"><span class="pre">alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Szekeres.html#alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Szekeres.alpha" title="Link to this definition"></a></dt>
-<dd><p>Returns the lapse function</p>
+<dd><p>Return the lapse function.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Szekeres.betaup3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Szekeres.</span></span><span class="sig-name descname"><span class="pre">betaup3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Szekeres.html#betaup3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Szekeres.betaup3" title="Link to this definition"></a></dt>
-<dd><p>Returns the shift vector</p>
+<dd><p>Return the shift vector.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Szekeres.data">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Szekeres.</span></span><span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Szekeres.html#data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Szekeres.data" title="Link to this definition"></a></dt>
-<dd><p>Returns dictionary of Szekeres data</p>
+<dd><p>Return dictionary of Szekeres data.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Szekeres.gammadown3">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Szekeres.</span></span><span class="sig-name descname"><span class="pre">gammadown3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Szekeres.html#gammadown3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Szekeres.gammadown3" title="Link to this definition"></a></dt>
-<dd><p>Returns the spatial metric</p>
+<dd><p>Return the spatial metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Szekeres.gdown4">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Szekeres.</span></span><span class="sig-name descname"><span class="pre">gdown4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analytical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Szekeres.html#gdown4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Szekeres.gdown4" title="Link to this definition"></a></dt>
-<dd><p>Returns the spacetime metric</p>
+<dd><p>Return the spacetime metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Szekeres.press">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Szekeres.</span></span><span class="sig-name descname"><span class="pre">press</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Szekeres.html#press"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Szekeres.press" title="Link to this definition"></a></dt>
-<dd><p>Returns the pressure</p>
+<dd><p>Return the pressure.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aurel.solutions.Szekeres.rho">
 <span class="sig-prename descclassname"><span class="pre">aurel.solutions.Szekeres.</span></span><span class="sig-name descname"><span class="pre">rho</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/solutions/Szekeres.html#rho"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.solutions.Szekeres.rho" title="Link to this definition"></a></dt>
-<dd><p>Returns the energy density</p>
+<dd><p>Return the energy density.</p>
 </dd></dl>
 
 </section>

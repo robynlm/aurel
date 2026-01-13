@@ -7,10 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>aurel.numerical &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=5a7fad61" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=3721e3c3" />
 
   
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
@@ -20,6 +20,7 @@
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../_static/custom.js?v=67be0c79"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -53,7 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../source/advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html">Reporting Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html#contributing-workflow">Contributing Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../source/CONTRIBUTING.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -105,13 +106,14 @@
              
   <h1>Source code for aurel.numerical</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">numerical.py</span>
+<span class="sd">numerical.py.</span>
 
 <span class="sd">This module contains numerical methods for various calculations.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
+
 
 <div class="viewcode-block" id="dichotomy">
 <a class="viewcode-back" href="../../source/numerical.html#aurel.numerical.dichotomy">[docs]</a>
@@ -132,6 +134,7 @@
 <span class="sd">        The upper bound of the interval to search for the root.</span>
 <span class="sd">    tolerance : float</span>
 <span class="sd">        The tolerance for the convergence of the method.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    float</span>
@@ -140,17 +143,17 @@
     <span class="n">x_low</span> <span class="o">=</span> <span class="n">lower_bound</span>
     <span class="n">x_upp</span> <span class="o">=</span> <span class="n">upper_bound</span>
     <span class="n">x_mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_low</span> <span class="o">+</span> <span class="n">x_upp</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-    <span class="n">y_low</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">x_low</span><span class="p">)</span>
-    <span class="n">y_upp</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">x_upp</span><span class="p">)</span>
+    <span class="c1">#y_low = function(x_low)</span>
+    <span class="c1">#y_upp = function(x_upp)</span>
     <span class="n">y_mid</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">x_mid</span><span class="p">)</span>
     <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">y_wanted</span> <span class="o">/</span> <span class="n">y_mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tolerance</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">y_wanted</span> <span class="o">&gt;</span> <span class="n">y_mid</span><span class="p">:</span>
-            <span class="n">y_low</span> <span class="o">=</span> <span class="n">y_mid</span>
+            <span class="c1">#y_low = y_mid</span>
             <span class="n">x_low</span> <span class="o">=</span> <span class="n">x_mid</span>
             <span class="n">x_mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_low</span> <span class="o">+</span> <span class="n">x_upp</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
             <span class="n">y_mid</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">x_mid</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">y_upp</span> <span class="o">=</span> <span class="n">y_mid</span>
+            <span class="c1">#y_upp = y_mid</span>
             <span class="n">x_upp</span> <span class="o">=</span> <span class="n">x_mid</span>
             <span class="n">x_mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_low</span> <span class="o">+</span> <span class="n">x_upp</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
             <span class="n">y_mid</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">x_mid</span><span class="p">)</span>
@@ -165,34 +168,36 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    val : ndarray</span>
-<span class="sd">        Scalar field values on the regular grid. Shape should match the grid </span>
+<span class="sd">        Scalar field values on the regular grid. Shape should match the grid</span>
 <span class="sd">        dimensions.</span>
 <span class="sd">    grid_points : tuple of ndarray</span>
-<span class="sd">        Tuple of coordinate arrays defining the regular grid </span>
+<span class="sd">        Tuple of coordinate arrays defining the regular grid</span>
 <span class="sd">        coordinates. Each array should be 1D.</span>
 <span class="sd">    target_points : tuple of ndarray</span>
 <span class="sd">        Tuple of target coordinate positions. Arrays can be any shape but must</span>
 <span class="sd">        have matching dimensions.</span>
 <span class="sd">    method : str, optional</span>
-<span class="sd">        Interpolation method used. See </span>
+<span class="sd">        Interpolation method used. See</span>
 <span class="sd">        `scipy.interpolate.RegularGridInterpolator documentation &lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html&gt;`_</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    ndarray</span>
-<span class="sd">        Interpolated values at the target points, with the same shape as the </span>
+<span class="sd">        Interpolated values at the target points, with the same shape as the</span>
 <span class="sd">        target coordinate arrays.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">target_flat</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">target_points</span><span class="p">:</span>
         <span class="n">target_flat</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span>
-    
+
     <span class="c1"># Flatten target points and stack into (N, 3) array for interpolator</span>
     <span class="n">target_shape</span> <span class="o">=</span> <span class="n">target_points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">points_flat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">target_flat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-    
+
     <span class="c1"># Check that all target points are within grid bounds</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">grid_points</span><span class="p">,</span> <span class="n">target_points</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+        <span class="nb">zip</span><span class="p">(</span><span class="n">grid_points</span><span class="p">,</span> <span class="n">target_points</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">):</span>
         <span class="n">grid_min</span><span class="p">,</span> <span class="n">grid_max</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">grid</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">target_min</span><span class="p">,</span> <span class="n">target_max</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">target</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">target_min</span> <span class="o">&lt;</span> <span class="n">grid_min</span> <span class="ow">or</span> <span class="n">target_max</span> <span class="o">&gt;</span> <span class="n">grid_max</span><span class="p">:</span>
@@ -201,7 +206,7 @@
                 <span class="sa">f</span><span class="s2">&quot;Grid range: [</span><span class="si">{</span><span class="n">grid_min</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">grid_max</span><span class="si">}</span><span class="s2">], &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;Target range: [</span><span class="si">{</span><span class="n">target_min</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">target_max</span><span class="si">}</span><span class="s2">]&quot;</span>
             <span class="p">)</span>
-    
+
     <span class="c1"># Create interpolator and evaluate</span>
     <span class="n">interpolator</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">RegularGridInterpolator</span><span class="p">(</span>
         <span class="n">grid_points</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>

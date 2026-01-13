@@ -8,10 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>aurel.finitedifference &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5a7fad61" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=3721e3c3" />
 
   
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -23,6 +23,7 @@
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../_static/custom.js?v=67be0c79"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -58,7 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Reporting Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#contributing-workflow">Contributing Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -160,7 +161,7 @@
              
   <section id="module-aurel.finitedifference">
 <span id="aurel-finitedifference"></span><h1>aurel.finitedifference<a class="headerlink" href="#module-aurel.finitedifference" title="Link to this heading"></a></h1>
-<p>finitedifference.py</p>
+<p>finitedifference.py.</p>
 <p>This module provides finite difference schemes for computing spatial
 derivatives of scalar or tensor fields on 3D grids.</p>
 <p>It contains the following classes and functions:</p>
@@ -182,7 +183,7 @@ tensors along the x, y, and z axes.</p></li>
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aurel.finitedifference.</span></span><span class="sig-name descname"><span class="pre">FiniteDifference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'no</span> <span class="pre">boundary'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fd_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">veryverbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>This class applies the FD schemes to the entire data grid.</p>
+<p>Apply finite difference schemes to entire data grid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -365,15 +366,15 @@ coordinates.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3_rank1tensor">
 <span class="sig-name descname"><span class="pre">d3_rank1tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3_rank1tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3_rank1tensor" title="Link to this definition"></a></dt>
-<dd><p>Spatial derivatives of a spatial rank 1 tensor:
-<span class="math notranslate nohighlight">\(\partial_i (f_{j})\)</span> or <span class="math notranslate nohighlight">\(\partial_i (f^{j})\)</span>.</p>
+<dd><p>Spatial derivatives of a spatial rank 1 tensor.</p>
+<p><span class="math notranslate nohighlight">\(\partial_i (f_{j})\)</span> or <span class="math notranslate nohighlight">\(\partial_i (f^{j})\)</span>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3_rank2tensor">
 <span class="sig-name descname"><span class="pre">d3_rank2tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3_rank2tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3_rank2tensor" title="Link to this definition"></a></dt>
-<dd><p>Spatial derivatives of a spatial rank 2 tensor:
-<span class="math notranslate nohighlight">\(\partial_i (f_{kj})\)</span> or <span class="math notranslate nohighlight">\(\partial_i (f^{kj})\)</span>
+<dd><p>Spatial derivatives of a spatial rank 2 tensor.</p>
+<p><span class="math notranslate nohighlight">\(\partial_i (f_{kj})\)</span> or <span class="math notranslate nohighlight">\(\partial_i (f^{kj})\)</span>
 or <span class="math notranslate nohighlight">\(\partial_i (f^{k}_{j})\)</span>.</p>
 </dd></dl>
 
@@ -386,8 +387,8 @@ or <span class="math notranslate nohighlight">\(\partial_i (f^{k}_{j})\)</span>.
 <dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3_scalar">
 <span class="sig-name descname"><span class="pre">d3_scalar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3_scalar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3_scalar" title="Link to this definition"></a></dt>
-<dd><p>Spatial derivatives of a scalar:
-<span class="math notranslate nohighlight">\(\partial_i (f)\)</span>.</p>
+<dd><p>Spatial derivatives of a scalar.</p>
+<p><span class="math notranslate nohighlight">\(\partial_i (f)\)</span>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -399,21 +400,21 @@ or <span class="math notranslate nohighlight">\(\partial_i (f^{k}_{j})\)</span>.
 <dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3x">
 <span class="sig-name descname"><span class="pre">d3x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3x" title="Link to this definition"></a></dt>
-<dd><p>Derivative along x of a scalar: <span class="math notranslate nohighlight">\(\partial_x (f)\)</span>.</p>
+<dd><p>Calculate derivative along x of a scalar: <span class="math notranslate nohighlight">\(\partial_x (f)\)</span>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3x_rank1tensor">
 <span class="sig-name descname"><span class="pre">d3x_rank1tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3x_rank1tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3x_rank1tensor" title="Link to this definition"></a></dt>
-<dd><p>Spatial derivatives of a spatial rank 1 tensor:
-<span class="math notranslate nohighlight">\(\partial_x (f_{j})\)</span> or <span class="math notranslate nohighlight">\(\partial_x (f^{j})\)</span>.</p>
+<dd><p>Spatial derivatives of a spatial rank 1 tensor.</p>
+<p><span class="math notranslate nohighlight">\(\partial_x (f_{j})\)</span> or <span class="math notranslate nohighlight">\(\partial_x (f^{j})\)</span>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3x_rank2tensor">
 <span class="sig-name descname"><span class="pre">d3x_rank2tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3x_rank2tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3x_rank2tensor" title="Link to this definition"></a></dt>
-<dd><p>Spatial derivatives along x of a spatial rank 2 tensor:
-<span class="math notranslate nohighlight">\(\partial_x (f_{kj})\)</span> or <span class="math notranslate nohighlight">\(\partial_x (f^{kj})\)</span>
+<dd><p>Spatial derivatives along x of a spatial rank 2 tensor.</p>
+<p><span class="math notranslate nohighlight">\(\partial_x (f_{kj})\)</span> or <span class="math notranslate nohighlight">\(\partial_x (f^{kj})\)</span>
 or <span class="math notranslate nohighlight">\(\partial_x (f^{k}_{j})\)</span>.</p>
 </dd></dl>
 
@@ -426,21 +427,21 @@ or <span class="math notranslate nohighlight">\(\partial_x (f^{k}_{j})\)</span>.
 <dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3y">
 <span class="sig-name descname"><span class="pre">d3y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3y"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3y" title="Link to this definition"></a></dt>
-<dd><p>Derivative along y of a scalar: <span class="math notranslate nohighlight">\(\partial_y (f)\)</span>.</p>
+<dd><p>Calculate derivative along y of a scalar: <span class="math notranslate nohighlight">\(\partial_y (f)\)</span>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3y_rank1tensor">
 <span class="sig-name descname"><span class="pre">d3y_rank1tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3y_rank1tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3y_rank1tensor" title="Link to this definition"></a></dt>
-<dd><p>Spatial derivatives of a spatial rank 1 tensor:
-<span class="math notranslate nohighlight">\(\partial_y (f_{j})\)</span> or <span class="math notranslate nohighlight">\(\partial_y (f^{j})\)</span>.</p>
+<dd><p>Spatial derivatives of a spatial rank 1 tensor.</p>
+<p><span class="math notranslate nohighlight">\(\partial_y (f_{j})\)</span> or <span class="math notranslate nohighlight">\(\partial_y (f^{j})\)</span>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3y_rank2tensor">
 <span class="sig-name descname"><span class="pre">d3y_rank2tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3y_rank2tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3y_rank2tensor" title="Link to this definition"></a></dt>
-<dd><p>Spatial derivatives along y of a spatial rank 2 tensor:
-<span class="math notranslate nohighlight">\(\partial_y (f_{kj})\)</span> or <span class="math notranslate nohighlight">\(\partial_y (f^{kj})\)</span>
+<dd><p>Spatial derivatives along y of a spatial rank 2 tensor.</p>
+<p><span class="math notranslate nohighlight">\(\partial_y (f_{kj})\)</span> or <span class="math notranslate nohighlight">\(\partial_y (f^{kj})\)</span>
 or <span class="math notranslate nohighlight">\(\partial_y (f^{k}_{j})\)</span>.</p>
 </dd></dl>
 
@@ -453,21 +454,21 @@ or <span class="math notranslate nohighlight">\(\partial_y (f^{k}_{j})\)</span>.
 <dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3z">
 <span class="sig-name descname"><span class="pre">d3z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3z" title="Link to this definition"></a></dt>
-<dd><p>Derivative along z of a scalar: <span class="math notranslate nohighlight">\(\partial_z (f)\)</span>.</p>
+<dd><p>Calculate derivative along z of a scalar: <span class="math notranslate nohighlight">\(\partial_z (f)\)</span>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3z_rank1tensor">
 <span class="sig-name descname"><span class="pre">d3z_rank1tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3z_rank1tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3z_rank1tensor" title="Link to this definition"></a></dt>
-<dd><p>Spatial derivatives of a spatial rank 1 tensor:
-<span class="math notranslate nohighlight">\(\partial_z (f_{j})\)</span> or <span class="math notranslate nohighlight">\(\partial_z (f^{j})\)</span>.</p>
+<dd><p>Spatial derivatives of a spatial rank 1 tensor.</p>
+<p><span class="math notranslate nohighlight">\(\partial_z (f_{j})\)</span> or <span class="math notranslate nohighlight">\(\partial_z (f^{j})\)</span>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="aurel.finitedifference.FiniteDifference.d3z_rank2tensor">
 <span class="sig-name descname"><span class="pre">d3z_rank2tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/finitedifference.html#FiniteDifference.d3z_rank2tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.finitedifference.FiniteDifference.d3z_rank2tensor" title="Link to this definition"></a></dt>
-<dd><p>Spatial derivatives along z of a spatial rank 2 tensor:
-<span class="math notranslate nohighlight">\(\partial_z (f_{kj})\)</span> or <span class="math notranslate nohighlight">\(\partial_z (f^{kj})\)</span>
+<dd><p>Spatial derivatives along z of a spatial rank 2 tensor.</p>
+<p><span class="math notranslate nohighlight">\(\partial_z (f_{kj})\)</span> or <span class="math notranslate nohighlight">\(\partial_z (f^{kj})\)</span>
 or <span class="math notranslate nohighlight">\(\partial_z (f^{k}_{j})\)</span>.</p>
 </dd></dl>
 

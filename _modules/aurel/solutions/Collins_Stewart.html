@@ -7,10 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>aurel.solutions.Collins_Stewart &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5a7fad61" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=3721e3c3" />
 
   
     <link rel="shortcut icon" href="../../../_static/favicon.png"/>
@@ -20,6 +20,7 @@
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../../_static/custom.js?v=67be0c79"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -53,7 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../source/advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/CONTRIBUTING.html">Reporting Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/CONTRIBUTING.html#contributing-workflow">Contributing Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/CONTRIBUTING.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -104,9 +105,10 @@
            <div itemprop="articleBody">
              
   <h1>Source code for aurel.solutions.Collins_Stewart</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;This is a Collins and Stewart 1971 solution that describes</span>
-<span class="sd">a Bianchi II γ-law perfect fluid homogeneous solution.</span>
-<span class="sd">See section 3.3 of 2211.08133&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Collins and Stewart 1971 Bianchi II γ-law perfect fluid solution.</span>
+
+<span class="sd">This is a homogeneous solution, see section 3.3 of 2211.08133.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
@@ -120,21 +122,21 @@
 <div class="viewcode-block" id="rho">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Collins_Stewart.rho">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">rho</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Energy density&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Energy density.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="mi">6</span> <span class="o">-</span> <span class="n">gamma</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">kappa</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="press">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Collins_Stewart.press">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">press</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pressure&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pressure.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="gdown4">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Collins_Stewart.gdown4">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spacetime metric&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spacetime metric.&quot;&quot;&quot;</span>
     <span class="n">gij</span> <span class="o">=</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="n">analytical</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span>
@@ -157,7 +159,7 @@
 <div class="viewcode-block" id="gammadown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Collins_Stewart.gammadown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spatial metric&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spatial metric.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
         <span class="n">ones</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">zeros</span> <span class="o">=</span> <span class="mi">0</span>
@@ -184,7 +186,7 @@
 <div class="viewcode-block" id="Kdown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Collins_Stewart.Kdown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrinsic curvature&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrinsic curvature.&quot;&quot;&quot;</span>
     <span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
     <span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
     <span class="n">dtt2p1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">p1</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">p1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">ones</span>
@@ -199,7 +201,7 @@
 <div class="viewcode-block" id="data">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Collins_Stewart.data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns dictionary of Collins Stewart data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return dictionary of Collins Stewart data.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;gammadown3&#39;</span><span class="p">:</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
             <span class="s1">&#39;rho&#39;</span><span class="p">:</span> <span class="n">rho</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
             <span class="s1">&#39;press&#39;</span><span class="p">:</span> <span class="n">press</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>

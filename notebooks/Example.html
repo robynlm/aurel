@@ -8,10 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Example &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5a7fad61" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=3721e3c3" />
 
   
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -23,6 +23,7 @@
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../_static/custom.js?v=67be0c79"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -58,7 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html">Reporting Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#contributing-workflow">Contributing Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -133,8 +134,8 @@
 <h1>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
 </pre></div>
@@ -148,8 +149,8 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the grid parameters</span>
 <span class="n">L</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="n">N</span> <span class="o">=</span> <span class="mi">72</span>
-<span class="n">param</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;Nx&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s1">&#39;Ny&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s1">&#39;Nz&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> 
-          <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;zmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> 
+<span class="n">param</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;Nx&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s1">&#39;Ny&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s1">&#39;Nz&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span>
+          <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;zmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
           <span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="n">L</span><span class="o">/</span><span class="n">N</span><span class="p">,</span> <span class="s1">&#39;dy&#39;</span><span class="p">:</span> <span class="n">L</span><span class="o">/</span><span class="n">N</span><span class="p">,</span> <span class="s1">&#39;dz&#39;</span><span class="p">:</span> <span class="n">L</span><span class="o">/</span><span class="n">N</span><span class="p">}</span>
 <span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span>
 
@@ -218,19 +219,20 @@ where <span class="math notranslate nohighlight">\(\Omega(x) = 1 + x^2\)</span>.
     <span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mf">16.0</span><span class="p">,</span>
 <span class="p">})</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_var</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">varname</span><span class="p">,</span> <span class="n">semilogy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot a 1D slice of a 3D variable along the x-axis at the center of y and z.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">semilogy</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> 
-                     <span class="n">var</span><span class="p">[:,</span><span class="n">fd</span><span class="o">.</span><span class="n">iycenter</span><span class="p">,</span><span class="n">fd</span><span class="o">.</span><span class="n">izcenter</span><span class="p">],</span> 
+        <span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span>
+                     <span class="n">var</span><span class="p">[:,</span><span class="n">fd</span><span class="o">.</span><span class="n">iycenter</span><span class="p">,</span><span class="n">fd</span><span class="o">.</span><span class="n">izcenter</span><span class="p">],</span>
                      <span class="n">label</span><span class="o">=</span><span class="n">varname</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> 
-                <span class="n">var</span><span class="p">[:,</span><span class="n">fd</span><span class="o">.</span><span class="n">iycenter</span><span class="p">,</span><span class="n">fd</span><span class="o">.</span><span class="n">izcenter</span><span class="p">],</span> 
-                <span class="n">label</span><span class="o">=</span><span class="n">varname</span><span class="p">)</span>  
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span>
+                <span class="n">var</span><span class="p">[:,</span><span class="n">fd</span><span class="o">.</span><span class="n">iycenter</span><span class="p">,</span><span class="n">fd</span><span class="o">.</span><span class="n">izcenter</span><span class="p">],</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">varname</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; *****************************************************&quot;</span><span class="p">)</span>
-    
+
 
 <span class="c1"># Lapse</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
@@ -247,7 +249,7 @@ where <span class="math notranslate nohighlight">\(\Omega(x) = 1 + x^2\)</span>.
 <span class="c1"># Eulerian pressure</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">233</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - Calculations for trace of energy-stress tensor&quot;</span><span class="p">)</span>
-<span class="n">plot_var</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Ttrace&quot;</span><span class="p">],</span>  
+<span class="n">plot_var</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Ttrace&quot;</span><span class="p">],</span>
          <span class="sa">r</span><span class="s1">&#39;$T = T_{\mu\nu} g^{\mu\nu}$&#39;</span><span class="p">)</span>
 
 <span class="c1"># 3 Ricci scalar</span>
@@ -259,15 +261,15 @@ where <span class="math notranslate nohighlight">\(\Omega(x) = 1 + x^2\)</span>.
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">235</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - Calculations for null_ray_exp&quot;</span><span class="p">)</span>
 <span class="n">plot_var</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;null_ray_exp_out&quot;</span><span class="p">],</span> <span class="sa">r</span><span class="s1">&#39;$\Theta_</span><span class="si">{out}</span><span class="s1">$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> 
-             <span class="o">-</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;null_ray_exp_in&quot;</span><span class="p">][:,</span><span class="n">fd</span><span class="o">.</span><span class="n">iycenter</span><span class="p">,</span><span class="n">fd</span><span class="o">.</span><span class="n">izcenter</span><span class="p">],</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span>
+             <span class="o">-</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;null_ray_exp_in&quot;</span><span class="p">][:,</span><span class="n">fd</span><span class="o">.</span><span class="n">iycenter</span><span class="p">,</span><span class="n">fd</span><span class="o">.</span><span class="n">izcenter</span><span class="p">],</span>
              <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$-\Theta_</span><span class="si">{in}</span><span class="s1">$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="c1"># Kretschmann scalar</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">236</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - Calculations for Kretschmann&quot;</span><span class="p">)</span>
-<span class="n">plot_var</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Kretschmann&quot;</span><span class="p">],</span> 
+<span class="n">plot_var</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Kretschmann&quot;</span><span class="p">],</span>
          <span class="sa">r</span><span class="s1">&#39;$K = {R^{\alpha\beta}}_{\mu\nu} {R_{\alpha\beta}}^{\mu\nu}$&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -277,12 +279,7 @@ where <span class="math notranslate nohighlight">\(\Omega(x) = 1 + x^2\)</span>.
  *****************************************************
  - Calculations for gdet
 
-Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
-Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
-Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
-Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
-Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
-Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gammadet: $\gamma$ Determinant of spatial metric
 Calculated gdet: $g$ Determinant of spacetime metric
  *****************************************************
  - Calculations for trace of energy-stress tensor
@@ -298,6 +295,7 @@ Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
  *****************************************************
  - Calculations for null_ray_exp
 
+Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
 Calculated kxx: $K_{xx}$ Extrinsic curvature with xx indices down. I assume $K_{xx}=0$, if not then please define AurelCore.data[&#39;kxx&#39;] = ... 
 Calculated kxy: $K_{xy}$ Extrinsic curvature with xy indices down. I assume $K_{xy}=0$, if not then please define AurelCore.data[&#39;kxy&#39;] = ... 
 Calculated kxz: $K_{xz}$ Extrinsic curvature with xz indices down. I assume $K_{xz}=0$, if not then please define AurelCore.data[&#39;kxz&#39;] = ... 
@@ -306,24 +304,33 @@ Calculated kyz: $K_{yz}$ Extrinsic curvature with yz indices down. I assume $K_{
 Calculated kzz: $K_{zz}$ Extrinsic curvature with zz indices down. I assume $K_{zz}=0$, if not then please define AurelCore.data[&#39;kzz&#39;] = ... 
 Calculated Kdown3: $K_{ij}$ Extrinsic curvature with spatial indices down
 Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
-CLEAN-UP: Cleaning up cache after 20 calculations...
-CLEAN-UP: data size before cleanup: 287.62 MB
-CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 16 calculations ago (size: 8.54 MB).
-CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 15 calculations ago (size: 8.54 MB).
-CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 14 calculations ago (size: 45.56 MB).
-CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 9 calculations ago (size: 25.63 MB).
-CLEAN-UP: Removed 4 items
-CLEAN-UP: data size after cleanup: 199.34 MB
 Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radially going out
  *****************************************************
 
+Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
 Calculated null_ray_exp_in: $\Theta_{in}$ List of expansion of null rays radially going in
  - Calculations for Kretschmann
 
 Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
 Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
+CLEAN-UP: Cleaning up cache after 20 calculations...
+CLEAN-UP: data size before cleanup: 689.13 MB
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 4 calculations ago (size: 25.63 MB).
+CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 14 calculations ago (size: 25.63 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 2 calculations ago (size: 230.66 MB).
+CLEAN-UP: Removed 3 items
+CLEAN-UP: data size after cleanup: 407.22 MB
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
 Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
+Calculated gtt: $g_{tt}$ Metric with tt indices down.
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
 Calculated rho0: $\rho_0$ Rest mass energy density. I assume $\rho_0=0$, if not then please define AurelCore.data[&#39;rho0&#39;] = ... 
 Calculated eps: $\epsilon$ Specific internal energy. I assume $\epsilon=0$, if not then please define AurelCore.data[&#39;eps&#39;] = ... 
 Calculated rho: $\rho$ Energy density
@@ -334,46 +341,44 @@ Calculated vely: $v^y$ y component of Eulerian fluid three velocity with indice 
 Calculated velz: $v^z$ z component of Eulerian fluid three velocity with indice up. I assume $v^z=0$, if not then please define AurelCore.data[&#39;velz&#39;] = ... 
 Calculated velup3: $v^i$ Eulerian fluid three velocity with spatial indices up.
 Calculated uup3: $u^i$ Lagrangian fluid four velocity with spatial indices up
+CLEAN-UP: Cleaning up cache after 40 calculations...
+CLEAN-UP: data size before cleanup: 617.94 MB
+CLEAN-UP: Removing cached value for &#39;gammadet&#39; used 39 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;gdet&#39; used 38 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;Ttrace&#39; used 37 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;kxx&#39; used 32 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;kxy&#39; used 31 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;kxz&#39; used 30 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;kyy&#39; used 29 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;kyz&#39; used 28 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;kzz&#39; used 27 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;Kdown3&#39; used 10 calculations ago (size: 25.63 MB).
+CLEAN-UP: Removing cached value for &#39;null_ray_exp_out&#39; used 24 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;null_ray_exp_in&#39; used 23 calculations ago (size: 2.85 MB).
+CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 17 calculations ago (size: 230.66 MB).
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 16 calculations ago (size: 25.63 MB).
+CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 15 calculations ago (size: 25.63 MB).
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 12 calculations ago (size: 8.54 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 11 calculations ago (size: 45.56 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 10 calculations ago (size: 45.56 MB).
+CLEAN-UP: Removed 18 items
+CLEAN-UP: data size after cleanup: 179.40 MB
 Calculated uup4: $u^\mu$ Lagrangian fluid four velocity with spacetime indices up
 Calculated press: $p$ Pressure. I assume $p=0$, if not then please define AurelCore.data[&#39;press&#39;] = ... 
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
 Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
-CLEAN-UP: Cleaning up cache after 40 calculations...
-CLEAN-UP: data size before cleanup: 808.74 MB
-CLEAN-UP: Removing cached value for &#39;gdet&#39; used 33 calculations ago (size: 2.85 MB).
-CLEAN-UP: Removing cached value for &#39;Ttrace&#39; used 32 calculations ago (size: 2.85 MB).
-CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 15 calculations ago (size: 25.63 MB).
-CLEAN-UP: Removing cached value for &#39;kxx&#39; used 27 calculations ago (size: 2.85 MB).
-CLEAN-UP: Removing cached value for &#39;kxy&#39; used 26 calculations ago (size: 2.85 MB).
-CLEAN-UP: Removing cached value for &#39;kxz&#39; used 25 calculations ago (size: 2.85 MB).
-CLEAN-UP: Removing cached value for &#39;kyy&#39; used 24 calculations ago (size: 2.85 MB).
-CLEAN-UP: Removing cached value for &#39;kyz&#39; used 23 calculations ago (size: 2.85 MB).
-CLEAN-UP: Removing cached value for &#39;kzz&#39; used 22 calculations ago (size: 2.85 MB).
-CLEAN-UP: Removing cached value for &#39;Kdown3&#39; used 15 calculations ago (size: 25.63 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 17 calculations ago (size: 230.66 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 15 calculations ago (size: 230.66 MB).
-CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 14 calculations ago (size: 25.63 MB).
-CLEAN-UP: Removed 13 items
-CLEAN-UP: data size after cleanup: 247.75 MB
 Calculated udown4: $u_\mu$ Lagrangian fluid four velocity with spacetime indices down
 Calculated hdown4: $h_{\mu\nu}$ Spatial metric orthonomal to fluid flow with spacetime indices down
 Calculated Tdown4: $T_{\mu\nu}$ Energy-stress tensor with spacetime indices down
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
 Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric with spatial indices down
-Calculated kxx: $K_{xx}$ Extrinsic curvature with xx indices down. I assume $K_{xx}=0$, if not then please define AurelCore.data[&#39;kxx&#39;] = ... 
-Calculated kxy: $K_{xy}$ Extrinsic curvature with xy indices down. I assume $K_{xy}=0$, if not then please define AurelCore.data[&#39;kxy&#39;] = ... 
-Calculated kxz: $K_{xz}$ Extrinsic curvature with xz indices down. I assume $K_{xz}=0$, if not then please define AurelCore.data[&#39;kxz&#39;] = ... 
-Calculated kyy: $K_{yy}$ Extrinsic curvature with yy indices down. I assume $K_{yy}=0$, if not then please define AurelCore.data[&#39;kyy&#39;] = ... 
-Calculated kyz: $K_{yz}$ Extrinsic curvature with yz indices down. I assume $K_{yz}=0$, if not then please define AurelCore.data[&#39;kyz&#39;] = ... 
-Calculated kzz: $K_{zz}$ Extrinsic curvature with zz indices down. I assume $K_{zz}=0$, if not then please define AurelCore.data[&#39;kzz&#39;] = ... 
-Calculated Kdown3: $K_{ij}$ Extrinsic curvature with spatial indices down
 Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
 Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
 Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
  *****************************************************
 </pre></div>
 </div>
-<img alt="../_images/3251525ef7a16c1f3fa5ab9962ac3829dec67e12b35bca927d8c2fd0f657a160.png" src="../_images/3251525ef7a16c1f3fa5ab9962ac3829dec67e12b35bca927d8c2fd0f657a160.png" />
+<img alt="../_images/62298547af2729f43ff748dfd396b030bc412218e684afc978f7c754397a338a.png" src="../_images/62298547af2729f43ff748dfd396b030bc412218e684afc978f7c754397a338a.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -449,11 +454,11 @@ s_covd(self, f, indexing)
 <span class="n">L</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># Data grid size</span>
 <span class="n">N</span> <span class="o">=</span> <span class="mi">64</span> <span class="c1"># Number of data points per side</span>
 <span class="n">dx</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">N</span> <span class="c1"># Elementary grid size</span>
-<span class="c1"># If you are running this on your own laptop and don&#39;t want the </span>
-<span class="c1"># computation to take too much time, you should make N smaller. </span>
+<span class="c1"># If you are running this on your own laptop and don&#39;t want the</span>
+<span class="c1"># computation to take too much time, you should make N smaller.</span>
 <span class="c1"># (But keep in mind that the accuracy increases as N increases)</span>
 
-<span class="c1"># Here we use a cube, but aurel is able to work with a rectangular grid of </span>
+<span class="c1"># Here we use a cube, but aurel is able to work with a rectangular grid of</span>
 <span class="c1"># arbitrary size and number of points so each side of the grid can be different</span>
 <span class="n">param</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;Nx&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span>
@@ -469,10 +474,10 @@ s_covd(self, f, indexing)
 
 <span class="c1"># == Finite Difference class</span>
 <span class="n">fd</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">FiniteDifference</span><span class="p">(</span>
-    <span class="n">param</span><span class="p">,</span> 
+    <span class="n">param</span><span class="p">,</span>
     <span class="n">boundary</span> <span class="o">=</span> <span class="s1">&#39;no boundary&#39;</span><span class="p">,</span>
-    <span class="c1"># &#39;no boundary&#39; is the default option, </span>
-    <span class="c1"># it calculates derivatives along edges using a combination of </span>
+    <span class="c1"># &#39;no boundary&#39; is the default option,</span>
+    <span class="c1"># it calculates derivatives along edges using a combination of</span>
     <span class="c1"># backward, centered and forward difference schemes</span>
     <span class="c1"># &#39;periodic&#39; and &#39;symmetric&#39; are also available</span>
     <span class="c1"># careful, if f is periodic, that does not mean dxf is periodic</span>
@@ -531,7 +536,7 @@ The timesteps can then be treated independently.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[]
-[&#39;gxx&#39;, &#39;gxy&#39;, &#39;gxz&#39;, &#39;gyy&#39;, &#39;gyz&#39;, &#39;gzz&#39;, &#39;gammadown3&#39;, &#39;gammaup3&#39;, &#39;dtgammaup3&#39;, &#39;gammadet&#39;, &#39;gammadown4&#39;, &#39;gammaup4&#39;, &#39;psi_bssnok&#39;, &#39;phi_bssnok&#39;, &#39;dtphi_bssnok&#39;, &#39;gammadown3_bssnok&#39;, &#39;gammaup3_bssnok&#39;, &#39;dtgammadown3_bssnok&#39;, &#39;kxx&#39;, &#39;kxy&#39;, &#39;kxz&#39;, &#39;kyy&#39;, &#39;kyz&#39;, &#39;kzz&#39;, &#39;Kdown3&#39;, &#39;Kup3&#39;, &#39;Ktrace&#39;, &#39;dtKtrace&#39;, &#39;Adown3&#39;, &#39;Aup3&#39;, &#39;A2&#39;, &#39;Adown3_bssnok&#39;, &#39;Aup3_bssnok&#39;, &#39;A2_bssnok&#39;, &#39;dtAdown3_bssnok&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;DDalpha&#39;, &#39;betax&#39;, &#39;betay&#39;, &#39;betaz&#39;, &#39;betaup3&#39;, &#39;dtbetax&#39;, &#39;dtbetay&#39;, &#39;dtbetaz&#39;, &#39;dtbetaup3&#39;, &#39;betadown3&#39;, &#39;betamag&#39;, &#39;dttau&#39;, &#39;nup4&#39;, &#39;ndown4&#39;, &#39;gdown4&#39;, &#39;gup4&#39;, &#39;gdet&#39;, &#39;null_ray_exp_out&#39;, &#39;null_ray_exp_in&#39;, &#39;rho0&#39;, &#39;press&#39;, &#39;eps&#39;, &#39;rho&#39;, &#39;enthalpy&#39;, &#39;w_lorentz&#39;, &#39;velx&#39;, &#39;vely&#39;, &#39;velz&#39;, &#39;velup3&#39;, &#39;velup4&#39;, &#39;veldown3&#39;, &#39;veldown4&#39;, &#39;uup0&#39;, &#39;uup3&#39;, &#39;uup4&#39;, &#39;udown3&#39;, &#39;udown4&#39;, &#39;hdown4&#39;, &#39;hdet&#39;, &#39;hmixed4&#39;, &#39;hup4&#39;, &#39;Tdown4&#39;, &#39;Tup4&#39;, &#39;Ttrace&#39;, &#39;rho_n&#39;, &#39;fluxup3_n&#39;, &#39;fluxdown3_n&#39;, &#39;angmomup3_n&#39;, &#39;angmomdown3_n&#39;, &#39;Stressup3_n&#39;, &#39;Stressdown3_n&#39;, &#39;Stresstrace_n&#39;, &#39;press_n&#39;, &#39;anisotropic_press_down3_n&#39;, &#39;rho_n_fromHam&#39;, &#39;fluxup3_n_fromMom&#39;, &#39;conserved_D&#39;, &#39;conserved_E&#39;, &#39;conserved_Sdown4&#39;, &#39;conserved_Sdown3&#39;, &#39;conserved_Sup4&#39;, &#39;conserved_Sup3&#39;, &#39;dtconserved&#39;, &#39;st_covd_udown4&#39;, &#39;accelerationdown4&#39;, &#39;accelerationup4&#39;, &#39;s_covd_udown4&#39;, &#39;thetadown4&#39;, &#39;theta&#39;, &#39;sheardown4&#39;, &#39;shear2&#39;, &#39;omegadown4&#39;, &#39;omega2&#39;, &#39;s_RicciS_u&#39;, &#39;s_Gamma_udd3&#39;, &#39;s_Riemann_uddd3&#39;, &#39;s_Riemann_down3&#39;, &#39;s_Ricci_down3&#39;, &#39;s_RicciS&#39;, &#39;st_Gamma_udd4&#39;, &#39;st_Riemann_uddd4&#39;, &#39;st_Riemann_down4&#39;, &#39;st_Riemann_uudd4&#39;, &#39;st_Ricci_down4&#39;, &#39;st_Ricci_down3&#39;, &#39;st_RicciS&#39;, &#39;Einsteindown4&#39;, &#39;Kretschmann&#39;, &#39;s_Gamma_udd3_bssnok&#39;, &#39;s_Gamma_bssnok&#39;, &#39;s_Ricci_down3_phi&#39;, &#39;Hamiltonian&#39;, &#39;Hamiltonian_Escale&#39;, &#39;Momentumup3&#39;, &#39;Momentum_Escale&#39;, &#39;st_Weyl_down4&#39;, &#39;Weyl_Psi&#39;, &#39;Psi4_lm&#39;, &#39;Weyl_invariants&#39;, &#39;eweyl_u_down4&#39;, &#39;eweyl_n_down3&#39;, &#39;bweyl_u_down4&#39;, &#39;bweyl_n_down3&#39;]
+[&#39;alpha&#39;, &#39;dtalpha&#39;, &#39;DDalpha&#39;, &#39;betax&#39;, &#39;betay&#39;, &#39;betaz&#39;, &#39;betaup3&#39;, &#39;dtbetax&#39;, &#39;dtbetay&#39;, &#39;dtbetaz&#39;, &#39;dtbetaup3&#39;, &#39;betadown3&#39;, &#39;betamag&#39;, &#39;nup4&#39;, &#39;ndown4&#39;, &#39;gxx&#39;, &#39;gxy&#39;, &#39;gxz&#39;, &#39;gyy&#39;, &#39;gyz&#39;, &#39;gzz&#39;, &#39;gammadown3&#39;, &#39;gammaup3&#39;, &#39;dtgammaup3&#39;, &#39;gammadet&#39;, &#39;gammadown4&#39;, &#39;gammaup4&#39;, &#39;gtt&#39;, &#39;gtx&#39;, &#39;gty&#39;, &#39;gtz&#39;, &#39;gdown4&#39;, &#39;gup4&#39;, &#39;gdet&#39;, &#39;psi_bssnok&#39;, &#39;phi_bssnok&#39;, &#39;dtphi_bssnok&#39;, &#39;gammadown3_bssnok&#39;, &#39;gammaup3_bssnok&#39;, &#39;dtgammadown3_bssnok&#39;, &#39;kxx&#39;, &#39;kxy&#39;, &#39;kxz&#39;, &#39;kyy&#39;, &#39;kyz&#39;, &#39;kzz&#39;, &#39;Kdown3&#39;, &#39;Kup3&#39;, &#39;Ktrace&#39;, &#39;dtKtrace&#39;, &#39;Adown3&#39;, &#39;Aup3&#39;, &#39;A2&#39;, &#39;Adown3_bssnok&#39;, &#39;Aup3_bssnok&#39;, &#39;A2_bssnok&#39;, &#39;dtAdown3_bssnok&#39;, &#39;dttau&#39;, &#39;rho0&#39;, &#39;press&#39;, &#39;eps&#39;, &#39;rho&#39;, &#39;enthalpy&#39;, &#39;w_lorentz&#39;, &#39;velx&#39;, &#39;vely&#39;, &#39;velz&#39;, &#39;velup3&#39;, &#39;velup4&#39;, &#39;veldown3&#39;, &#39;veldown4&#39;, &#39;uup0&#39;, &#39;uup3&#39;, &#39;uup4&#39;, &#39;udown3&#39;, &#39;udown4&#39;, &#39;hdown4&#39;, &#39;hdet&#39;, &#39;hmixed4&#39;, &#39;hup4&#39;, &#39;Tdown4&#39;, &#39;Tup4&#39;, &#39;Ttrace&#39;, &#39;rho_n&#39;, &#39;fluxup3_n&#39;, &#39;fluxdown3_n&#39;, &#39;angmomup3_n&#39;, &#39;angmomdown3_n&#39;, &#39;Stressup3_n&#39;, &#39;Stressdown3_n&#39;, &#39;Stresstrace_n&#39;, &#39;press_n&#39;, &#39;anisotropic_press_down3_n&#39;, &#39;rho_n_fromHam&#39;, &#39;fluxup3_n_fromMom&#39;, &#39;conserved_D&#39;, &#39;conserved_E&#39;, &#39;conserved_Sdown4&#39;, &#39;conserved_Sdown3&#39;, &#39;conserved_Sup4&#39;, &#39;conserved_Sup3&#39;, &#39;dtconserved&#39;, &#39;st_covd_udown4&#39;, &#39;accelerationdown4&#39;, &#39;accelerationup4&#39;, &#39;s_covd_udown4&#39;, &#39;thetadown4&#39;, &#39;theta&#39;, &#39;sheardown4&#39;, &#39;shear2&#39;, &#39;omegadown4&#39;, &#39;omega2&#39;, &#39;s_RicciS_u&#39;, &#39;s_Gamma_udd3&#39;, &#39;s_Riemann_uddd3&#39;, &#39;s_Riemann_down3&#39;, &#39;s_Ricci_down3&#39;, &#39;s_RicciS&#39;, &#39;st_Gamma_udd4&#39;, &#39;st_Riemann_uddd4&#39;, &#39;st_Riemann_down4&#39;, &#39;st_Riemann_uudd4&#39;, &#39;st_Ricci_down4&#39;, &#39;st_Ricci_down3&#39;, &#39;st_RicciS&#39;, &#39;Einsteindown4&#39;, &#39;Kretschmann&#39;, &#39;s_Gamma_udd3_bssnok&#39;, &#39;s_Gamma_bssnok&#39;, &#39;dts_Gamma_bssnok&#39;, &#39;s_Ricci_down3_bssnok&#39;, &#39;s_RicciS_bssnok&#39;, &#39;s_Ricci_down3_phi&#39;, &#39;st_Weyl_down4&#39;, &#39;Weyl_Psi&#39;, &#39;Psi4_lm&#39;, &#39;Weyl_invariants&#39;, &#39;eweyl_u_down4&#39;, &#39;eweyl_n_down3&#39;, &#39;bweyl_u_down4&#39;, &#39;bweyl_n_down3&#39;, &#39;null_ray_exp_out&#39;, &#39;null_ray_exp_in&#39;, &#39;Hamiltonian&#39;, &#39;Hamiltonian_Escale&#39;, &#39;Hamiltonian_norm&#39;, &#39;Momentumx&#39;, &#39;Momentumy&#39;, &#39;Momentumz&#39;, &#39;Momentumdownx&#39;, &#39;Momentumdowny&#39;, &#39;Momentumdownz&#39;, &#39;Momentumup3&#39;, &#39;Momentumdown3&#39;, &#39;Momentum_Escale&#39;, &#39;Momentumx_norm&#39;, &#39;Momentumy_norm&#39;, &#39;Momentumz_norm&#39;, &#39;Momentumdownx_norm&#39;, &#39;Momentumdowny_norm&#39;, &#39;Momentumdownz_norm&#39;]
 </pre></div>
 </div>
 </div>
@@ -551,7 +556,7 @@ This creates a recursive automatic process managed by the __ getitem __ function
 <p>If the user does not provide any matter field / spacetime, the vacuum Minkowski spacetime is assumed. See how those assumptions are made when retrieving a variable:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Determinant of the spatial metric: &#39;</span><span class="p">,</span> 
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Determinant of the spatial metric: &#39;</span><span class="p">,</span>
       <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;gammadet&quot;</span><span class="p">]))</span>
 </pre></div>
 </div>
@@ -581,7 +586,7 @@ Determinant of the spatial metric:  1.0
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">del</span> <span class="n">rel</span>
-<span class="n">rel</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCore</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span> 
+<span class="n">rel</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCore</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -622,21 +627,15 @@ This is because the automatic recursive process will only go down to what it nee
     <span class="n">Psi</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask2</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
     <span class="n">real_part</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Psi</span><span class="p">))</span>
     <span class="n">imag_part</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">Psi</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean(abs(Psi_</span><span class="si">{}</span><span class="s1">)) = &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">real_part</span><span class="p">,</span> <span class="s1">&#39; + i(&#39;</span><span class="p">,</span> <span class="n">imag_part</span><span class="p">,</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;mean(abs(Psi_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">)) = &#39;</span><span class="p">,</span> <span class="n">real_part</span><span class="p">,</span> <span class="s1">&#39; + i(&#39;</span><span class="p">,</span> <span class="n">imag_part</span><span class="p">,</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tetrad is set to AurelCore.tetrad = quasi-Kinnersley
 Calculated alpha: $\alpha$ Lapse. I assume $\alpha=1$, if not then please define AurelCore.data[&#39;alpha&#39;] = ... 
-Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
-Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
-Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
-Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
-Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
-Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
-Calculated gdet: $g$ Determinant of spacetime metric
 Calculated gammadet: $\gamma$ Determinant of spatial metric
+Calculated gdet: $g$ Determinant of spacetime metric
 Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
 Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
 Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
@@ -644,28 +643,37 @@ Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
 Calculated Stressup3_n: $S^{\{n\}ij}$ Stress tensor in the $n^\mu$ frame with spatial indices up
 Calculated Stressdown3_n: $S^{\{n\}}_{ij}$ Stress tensor in the $n^\mu$ frame with spatial indices down
 Calculated eweyl_n_down3: $E^{\{n\}}_{ij}$ Electric part of the Weyl tensor on the hypersurface orthogonal to $n^{\mu}$ with spatial indices down
-Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
-Calculated nup4: $n^{\mu}$ Timelike vector normal to the spatial metric with spacetime indices up
+Using $\beta^i = 0$ shortcut for s_to_st
 Calculated bweyl_n_down3: $B^{\{n\}}_{ij}$ Magnetic part of the Weyl tensor on the hypersurface orthogonal to $n^{\mu}$ with spatial indices down
+Using $\beta^i = 0$ shortcut for s_to_st
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
+Calculated gtt: $g_{tt}$ Metric with tt indices down.
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated ndown4: $n_{\mu}$ Timelike vector normal to the spatial metric with spacetime indices down
 CLEAN-UP: Cleaning up cache after 20 calculations...
-CLEAN-UP: data size before cleanup: 344.00 MB
-CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 14 calculations ago (size: 6.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 8 calculations ago (size: 18.00 MB).
-CLEAN-UP: Removing cached value for &#39;Stressup3_n&#39; used 6 calculations ago (size: 18.00 MB).
-CLEAN-UP: Removing cached value for &#39;Stressdown3_n&#39; used 5 calculations ago (size: 18.00 MB).
-CLEAN-UP: Removing cached value for &#39;eweyl_n_down3&#39; used 4 calculations ago (size: 18.00 MB).
-CLEAN-UP: Removing cached value for &#39;gup4&#39; used 3 calculations ago (size: 32.00 MB).
+CLEAN-UP: data size before cleanup: 308.00 MB
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 10 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 14 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;Stressup3_n&#39; used 12 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;Stressdown3_n&#39; used 11 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;eweyl_n_down3&#39; used 10 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;bweyl_n_down3&#39; used 9 calculations ago (size: 18.00 MB).
 CLEAN-UP: Removed 6 items
-CLEAN-UP: data size after cleanup: 234.00 MB
+CLEAN-UP: data size after cleanup: 200.00 MB
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated nup4: $n^{\mu}$ Timelike vector normal to the spatial metric with spacetime indices up
 Calculated st_Weyl_down4: $C_{\alpha\beta\mu\nu}$ Weyl tensor of spacetime metric with spacetime indices down
 Calculated Weyl_Psi: $\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$ List of Weyl scalars for an null vector base defined with AurelCore.tetrad
-mean(abs(Psi_0)) =  -0.056854352588593  + i( 0.0004337842600139842 )
-mean(abs(Psi_1)) =  0.00036435542405428644  + i( 0.0005091692783650128 )
-mean(abs(Psi_2)) =  0.0011930336565166956  + i( -0.004897107788552394 )
-mean(abs(Psi_3)) =  -8.05618522953661e-05  + i( -0.0001326851726266182 )
-mean(abs(Psi_4)) =  -0.044286602383704535  + i( 0.009394586101073372 )
+mean(abs(Psi_0)) =  -0.056854352588593  + i( 0.00043378426001398045 )
+mean(abs(Psi_1)) =  0.00036435542405428655  + i( 0.000509169278365013 )
+mean(abs(Psi_2)) =  0.001193033656516685  + i( -0.004897107788552394 )
+mean(abs(Psi_3)) =  -8.056185229536604e-05  + i( -0.00013268517262661795 )
+mean(abs(Psi_4)) =  -0.04428660238370453  + i( 0.009394586101073375 )
 </pre></div>
 </div>
 </div>
@@ -696,18 +704,18 @@ cutoffmask2(f) method of aurel.finitedifference.FiniteDifference instance
     <span class="n">Psi</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">cutoffmask2</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Weyl_Psi&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
     <span class="n">real_part</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Psi</span><span class="p">))</span>
     <span class="n">imag_part</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">Psi</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean(abs(Psi_</span><span class="si">{}</span><span class="s1">)) = &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">real_part</span><span class="p">,</span> <span class="s1">&#39; + i(&#39;</span><span class="p">,</span> <span class="n">imag_part</span><span class="p">,</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;mean(abs(Psi_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">)) = &#39;</span><span class="p">,</span> <span class="n">real_part</span><span class="p">,</span> <span class="s1">&#39; + i(&#39;</span><span class="p">,</span> <span class="n">imag_part</span><span class="p">,</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tetrad is set to AurelCore.tetrad = not Kinnersley
 Calculated Weyl_Psi: $\Psi_0, \; \Psi_1, \; \Psi_2, \; \Psi_3, \; \Psi_4$ List of Weyl scalars for an null vector base defined with AurelCore.tetrad
-mean(abs(Psi_0)) =  0.2499500983725248  + i( -2.750832833501293e-05 )
+mean(abs(Psi_0)) =  0.24995009837252477  + i( -2.7508328335004755e-05 )
 mean(abs(Psi_1)) =  8.2494878838321e-17  + i( 2.561661433370836e-16 )
-mean(abs(Psi_2)) =  8.306760178328783e-06  + i( -1.2493610844711934e-05 )
+mean(abs(Psi_2)) =  8.306760178337517e-06  + i( -1.2493610844713206e-05 )
 mean(abs(Psi_3)) =  -4.9365893338814685e-17  + i( 2.2303105092043635e-16 )
-mean(abs(Psi_4)) =  -4.995234030063878e-05  + i( -7.456392419711132e-06 )
+mean(abs(Psi_4)) =  -4.995234030064759e-05  + i( -7.456392419718125e-06 )
 </pre></div>
 </div>
 </div>
@@ -726,11 +734,11 @@ mean(abs(Psi_4)) =  -4.995234030063878e-05  + i( -7.456392419711132e-06 )
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: I&#39;m not switching Psi0 and Psi4 here, so the invariants are not correct if Psi4 = 0.Same for Psi1 and Psi3.
 Calculated Weyl_invariants: $I, \; J, \; L, \; K, \; N$ Dictionary of Weyl invariants
-I = 1.2624275719980143e-05
-J = 1.8939608190115552e-10
-L = 7.577425800803073e-10
-K = 5.495319107195999e-23
-N = 3.219885922862559e-14
+I = 1.2624275719982578e-05
+J = 1.8939608190126647e-10
+L = 7.57742580080751e-10
+K = 5.495319107184303e-23
+N = 3.2198859228644216e-14
 </pre></div>
 </div>
 </div>
@@ -747,11 +755,14 @@ N = 3.219885922862559e-14
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
+Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with spatial indices down
 Calculated Stressup3_n: $S^{\{n\}ij}$ Stress tensor in the $n^\mu$ frame with spatial indices up
 Calculated Stressdown3_n: $S^{\{n\}}_{ij}$ Stress tensor in the $n^\mu$ frame with spatial indices down
 Calculated eweyl_n_down3: $E^{\{n\}}_{ij}$ Electric part of the Weyl tensor on the hypersurface orthogonal to $n^{\mu}$ with spatial indices down
-E^2 = 0.015612521054258593
+E^2 = 0.015612521054258557
+
+Calculated bweyl_n_down3: $B^{\{n\}}_{ij}$ Magnetic part of the Weyl tensor on the hypersurface orthogonal to $n^{\mu}$ with spatial indices down
 B^2 = 0.01562500711300769
 </pre></div>
 </div>

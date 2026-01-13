@@ -8,10 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Example over time &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5a7fad61" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=3721e3c3" />
 
   
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -23,6 +23,7 @@
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../_static/custom.js?v=67be0c79"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -58,7 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html">Reporting Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#contributing-workflow">Contributing Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -120,13 +121,13 @@
 <p>First we need a big dictionnary containing the spacetime/matter:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.cm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mcolors</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">aurel.solutions</span><span class="w"> </span><span class="kn">import</span> <span class="n">LCDM</span> <span class="k">as</span> <span class="n">sol</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.cm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cm</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mcolors</span>
 </pre></div>
 </div>
 </div>
@@ -165,7 +166,7 @@ Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;]
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate further terms with AurelCore iterated over time</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;null_ray_exp_in&#39;</span><span class="p">],</span> 
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;null_ray_exp_in&#39;</span><span class="p">],</span>
                        <span class="n">Lambda</span><span class="o">=</span><span class="n">sol</span><span class="o">.</span><span class="n">Lambda</span><span class="p">)</span>
 <span class="c1"># all aurel kwargs can be passed here</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data keys:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
@@ -193,6 +194,7 @@ Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;]
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing t = 1.0
 
 Cosmological constant set to AurelCore.Lambda = 1.04e-07
+Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
 Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
 Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spatial metric with mixed spatial indices
 Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
@@ -200,11 +202,11 @@ Calculated null_ray_exp_in: $\Theta_{in}$ List of expansion of null rays radiall
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "86c45a6472cf4467be01e51c8afa643c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5838ca9ae9bf46a6ba33724aec5807b5", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;]
 </pre></div>
 </div>
-<img alt="../_images/1d7aea3c1be7040be982c8d83457e58c0f7b8664a25cc92679ec1cacfe0cecba.png" src="../_images/1d7aea3c1be7040be982c8d83457e58c0f7b8664a25cc92679ec1cacfe0cecba.png" />
+<img alt="../_images/d79727f337355e5b63cb688377708f283afbeef86370f5ebadc9cc1ba2992b27.png" src="../_images/d79727f337355e5b63cb688377708f283afbeef86370f5ebadc9cc1ba2992b27.png" />
 </div>
 </div>
 </section>
@@ -215,7 +217,7 @@ Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;,
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example of custom function to calculate backreaction</span>
 <span class="c1"># Custom function must only take one argument, the AurelCore class instance</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">backreaction</span><span class="p">(</span><span class="n">rel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Example function &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Demonstrate example functionality.&quot;&quot;&quot;</span>
     <span class="n">sqrgdet</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s1">&#39;gammadet&#39;</span><span class="p">])</span>
     <span class="n">dcube</span> <span class="o">=</span> <span class="n">rel</span><span class="o">.</span><span class="n">fd</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="n">rel</span><span class="o">.</span><span class="n">fd</span><span class="o">.</span><span class="n">dy</span> <span class="o">*</span> <span class="n">rel</span><span class="o">.</span><span class="n">fd</span><span class="o">.</span><span class="n">dz</span>
     <span class="n">volume</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sqrgdet</span><span class="p">)</span> <span class="o">*</span> <span class="n">dcube</span>
@@ -225,7 +227,7 @@ Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;,
     <span class="k">return</span> <span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">av_theta2</span> <span class="o">-</span> <span class="n">av_theta</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">av_shear2</span>
 
 <span class="c1"># Custom function are passed as dict with name and function</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;backreaction&#39;</span><span class="p">:</span> <span class="n">backreaction</span><span class="p">}],</span> 
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;backreaction&#39;</span><span class="p">:</span> <span class="n">backreaction</span><span class="p">}],</span>
                        <span class="n">Lambda</span><span class="o">=</span><span class="n">sol</span><span class="o">.</span><span class="n">Lambda</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data keys:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 
@@ -249,6 +251,8 @@ Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I
 Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
+Calculated gtt: $g_{tt}$ Metric with tt indices down.
 Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
 Calculated w_lorentz: $W$ Lorentz factor. I assume $W=1$, if not then please define AurelCore.data[&#39;w_lorentz&#39;] = ... 
@@ -260,16 +264,18 @@ Calculated velup3: $v^i$ Eulerian fluid three velocity with spatial indices up.
 Calculated uup3: $u^i$ Lagrangian fluid four velocity with spatial indices up
 Calculated uup4: $u^\mu$ Lagrangian fluid four velocity with spacetime indices up
 Calculated hup4: $h^{\mu\nu}$ Spatial metric orthonomal to fluid flow with spacetime indices up
+CLEAN-UP: Cleaning up cache after 20 calculations...
+CLEAN-UP: data size before cleanup: 192.00 MB
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 11 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 10 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 9 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removed 3 items
+CLEAN-UP: data size after cleanup: 122.00 MB
+Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
 Calculated udown4: $u_\mu$ Lagrangian fluid four velocity with spacetime indices down
 Calculated hdown4: $h_{\mu\nu}$ Spatial metric orthonomal to fluid flow with spacetime indices down
-CLEAN-UP: Cleaning up cache after 20 calculations...
-CLEAN-UP: data size before cleanup: 188.00 MB
-CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 13 calculations ago (size: 6.00 MB).
-CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 2 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removing cached value for &#39;hup4&#39; used 2 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removed 4 items
-CLEAN-UP: data size after cleanup: 86.00 MB
 Calculated hmixed4: ${h^{\mu}}_{\nu}$ Spatial metric orthonomal to fluid flow with mixed spacetime indices
 WARNING: dtconserved only works for constant press/rho
 Calculated conserved_D: $D$ Conserved mass-energy density in Wilson&#39;s formalism
@@ -279,9 +285,6 @@ Calculated press: $p$ Pressure. I assume $p=0$, if not then please define AurelC
 Calculated enthalpy: $h$ Specific enthalpy of the fluid
 Calculated conserved_Sdown4: $S_{\mu}$ Conserved energy flux (or momentum density) in Wilson&#39;s formalism with spacetime indices down
 Calculated conserved_Sdown3: $S_{i}$ Conserved energy flux (or momentum density) in Wilson&#39;s formalism with spatial indices down
-Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
-Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
-Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
 Calculated conserved_Sup4: $S^{\mu}$ Conserved energy flux (or momentum density) in Wilson&#39;s formalism with spacetime indices up
 Calculated conserved_Sup3: $S^{i}$ Conserved energy flux (or momentum density) in Wilson&#39;s formalism with spatial indices up
 Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
@@ -289,36 +292,39 @@ Calculated s_Gamma_udd3: ${}^{(3)}{\Gamma^{k}}_{ij}$ Christoffel symbols of spat
 Calculated Ktrace: $K = \gamma^{ij}K_{ij}$ Trace of extrinsic curvature
 Calculated Kup3: $K^{ij}$ Extrinsic curvature with spatial indices up
 Calculated dtgammaup3: $\partial_t \gamma^{ij}$ Coordinate time derivative of spatial metric with spatial indices up
-Calculated dtconserved: $\partial_t D, \; \partial_t E, \partial_t S_{i}$ List of coordinate time derivatives of conserved rest mass-energy density, internal energy density and energy flux (or momentum density) with spatial indices down in Wilson&#39;s formalism
-Calculated udown3: $u_\mu$ Lagrangian fluid four velocity with spatial indices down
 CLEAN-UP: Cleaning up cache after 40 calculations...
-CLEAN-UP: data size before cleanup: 324.01 MB
+CLEAN-UP: data size before cleanup: 412.00 MB
 CLEAN-UP: Removing cached value for &#39;betax&#39; used 37 calculations ago (size: 2.00 MB).
 CLEAN-UP: Removing cached value for &#39;betay&#39; used 36 calculations ago (size: 2.00 MB).
 CLEAN-UP: Removing cached value for &#39;betaz&#39; used 35 calculations ago (size: 2.00 MB).
-CLEAN-UP: Removing cached value for &#39;uup0&#39; used 29 calculations ago (size: 2.00 MB).
-CLEAN-UP: Removing cached value for &#39;velx&#39; used 28 calculations ago (size: 2.00 MB).
-CLEAN-UP: Removing cached value for &#39;vely&#39; used 27 calculations ago (size: 2.00 MB).
-CLEAN-UP: Removing cached value for &#39;velz&#39; used 26 calculations ago (size: 2.00 MB).
-CLEAN-UP: Removing cached value for &#39;velup3&#39; used 25 calculations ago (size: 6.00 MB).
-CLEAN-UP: Removing cached value for &#39;uup3&#39; used 24 calculations ago (size: 6.00 MB).
-CLEAN-UP: Removing cached value for &#39;uup4&#39; used 19 calculations ago (size: 8.00 MB).
-CLEAN-UP: Removing cached value for &#39;hdown4&#39; used 20 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removing cached value for &#39;hmixed4&#39; used 19 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removing cached value for &#39;conserved_Sdown4&#39; used 7 calculations ago (size: 8.00 MB).
-CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 7 calculations ago (size: 6.00 MB).
-CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 10 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removing cached value for &#39;gup4&#39; used 9 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removing cached value for &#39;conserved_Sup4&#39; used 8 calculations ago (size: 8.00 MB).
-CLEAN-UP: Removing cached value for &#39;Kup3&#39; used 3 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;betamag&#39; used 32 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;uup0&#39; used 27 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;velx&#39; used 26 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;vely&#39; used 25 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;velz&#39; used 24 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;velup3&#39; used 23 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;uup3&#39; used 22 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;uup4&#39; used 14 calculations ago (size: 8.00 MB).
+CLEAN-UP: Removing cached value for &#39;hup4&#39; used 20 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 7 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;gup4&#39; used 7 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;udown4&#39; used 9 calculations ago (size: 8.00 MB).
+CLEAN-UP: Removing cached value for &#39;hdown4&#39; used 15 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;hmixed4&#39; used 14 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;conserved_Sup4&#39; used 6 calculations ago (size: 8.00 MB).
 CLEAN-UP: Removed 18 items
-CLEAN-UP: data size after cleanup: 122.00 MB
+CLEAN-UP: data size after cleanup: 200.00 MB
+Calculated dtconserved: $\partial_t D, \; \partial_t E, \partial_t S_{i}$ List of coordinate time derivatives of conserved rest mass-energy density, internal energy density and energy flux (or momentum density) with spatial indices down in Wilson&#39;s formalism
+Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
+Calculated uup0: $u^t$ Lagrangian fluid four velocity with time indice up
 Calculated velx: $v^x$ x component of Eulerian fluid three velocity with indice up. I assume $v^x=0$, if not then please define AurelCore.data[&#39;velx&#39;] = ... 
 Calculated vely: $v^y$ y component of Eulerian fluid three velocity with indice up. I assume $v^y=0$, if not then please define AurelCore.data[&#39;vely&#39;] = ... 
 Calculated velz: $v^z$ z component of Eulerian fluid three velocity with indice up. I assume $v^z=0$, if not then please define AurelCore.data[&#39;velz&#39;] = ... 
 Calculated velup3: $v^i$ Eulerian fluid three velocity with spatial indices up.
 Calculated uup3: $u^i$ Lagrangian fluid four velocity with spatial indices up
-Calculated uup0: $u^t$ Lagrangian fluid four velocity with time indice up
+Calculated uup4: $u^\mu$ Lagrangian fluid four velocity with spacetime indices up
+Calculated udown4: $u_\mu$ Lagrangian fluid four velocity with spacetime indices down
+Calculated udown3: $u_\mu$ Lagrangian fluid four velocity with spatial indices down
 Calculated dtalpha: $\partial_t \alpha$ Coordinate time derivative of the lapse. I assume $\partial_t \alpha=0$, if not then please define AurelCore.data[&#39;dtalpha&#39;] = ... 
 Calculated dtbetax: $\partial_t\beta^{x}$ Coordinate time derivative of the x component of the shift vector with indices up. I assume $\partial_t\beta^{x}=0$, if not then please define AurelCore.data[&#39;dtbetax&#39;] = ... 
 Calculated dtbetay: $\partial_t\beta^{y}$ Coordinate time derivative of the y component of the shift vector with indices up. I assume $\partial_t\beta^{y}=0$, if not then please define AurelCore.data[&#39;dtbetay&#39;] = ... 
@@ -328,56 +334,47 @@ Calculated st_Gamma_udd4: ${}^{(4)}{\Gamma^{\alpha}}_{\mu\nu}$ Christoffel symbo
 Calculated st_covd_udown4: $\nabla_{\mu} u_{\nu}$ Spacetime covariant derivative of Lagrangian fluid four velocity with spacetime indices down
 Calculated s_covd_udown4: $\mathcal{D}^{\{u\}}_{\mu} u_{\nu}$ Spatial covariant derivative of Lagrangian fluid four velocity with spacetime indices down, with respect to spatial hypersurfaces orthonormal to the fluid flow
 Calculated thetadown4: $\Theta_{\mu\nu}$ Fluid expansion tensor with spacetime indices down
+CLEAN-UP: Cleaning up cache after 60 calculations...
+CLEAN-UP: data size before cleanup: 522.00 MB
+CLEAN-UP: Removing cached value for &#39;gammadet&#39; used 34 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 19 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;eps&#39; used 31 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;enthalpy&#39; used 29 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;conserved_Sdown4&#39; used 25 calculations ago (size: 8.00 MB).
+CLEAN-UP: Removing cached value for &#39;conserved_Sdown3&#39; used 9 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;conserved_Sup3&#39; used 25 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 4 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;Ktrace&#39; used 22 calculations ago (size: 2.00 MB).
+CLEAN-UP: Removing cached value for &#39;Kup3&#39; used 21 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;dtgammaup3&#39; used 9 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for &#39;dtconserved&#39; used 19 calculations ago (size: 10.00 MB).
+CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 18 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for &#39;velup3&#39; used 13 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;uup3&#39; used 9 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;uup4&#39; used 11 calculations ago (size: 8.00 MB).
+CLEAN-UP: Removing cached value for &#39;udown4&#39; used 8 calculations ago (size: 8.00 MB).
+CLEAN-UP: Removing cached value for &#39;udown3&#39; used 9 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_Gamma_udd4&#39; used 3 calculations ago (size: 128.00 MB).
+CLEAN-UP: Removing cached value for &#39;st_covd_udown4&#39; used 2 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removed 20 items
+CLEAN-UP: data size after cleanup: 198.00 MB
 Calculated theta: $\Theta$ Fluid expansion scalar
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
 Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
+Calculated velup3: $v^i$ Eulerian fluid three velocity with spatial indices up.
+Calculated uup3: $u^i$ Lagrangian fluid four velocity with spatial indices up
 Calculated uup4: $u^\mu$ Lagrangian fluid four velocity with spacetime indices up
-CLEAN-UP: Cleaning up cache after 60 calculations...
-CLEAN-UP: data size before cleanup: 460.01 MB
-CLEAN-UP: Removing cached value for &#39;gammadet&#39; used 39 calculations ago (size: 2.00 MB).
-CLEAN-UP: Removing cached value for &#39;udown4&#39; used 13 calculations ago (size: 8.00 MB).
-CLEAN-UP: Removing cached value for &#39;conserved_D&#39; used 20 calculations ago (size: 2.00 MB).
-CLEAN-UP: Removing cached value for &#39;eps&#39; used 36 calculations ago (size: 2.00 MB).
-CLEAN-UP: Removing cached value for &#39;conserved_E&#39; used 20 calculations ago (size: 2.00 MB).
-CLEAN-UP: Removing cached value for &#39;press&#39; used 22 calculations ago (size: 2.00 MB).
-CLEAN-UP: Removing cached value for &#39;enthalpy&#39; used 34 calculations ago (size: 2.00 MB).
-CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 9 calculations ago (size: 18.00 MB).
-CLEAN-UP: Removing cached value for &#39;Ktrace&#39; used 24 calculations ago (size: 2.00 MB).
-CLEAN-UP: Removing cached value for &#39;dtgammaup3&#39; used 20 calculations ago (size: 18.00 MB).
-CLEAN-UP: Removing cached value for &#39;velup3&#39; used 16 calculations ago (size: 6.00 MB).
-CLEAN-UP: Removing cached value for &#39;dtbetaup3&#39; used 9 calculations ago (size: 6.00 MB).
-CLEAN-UP: Removing cached value for &#39;st_Gamma_udd4&#39; used 8 calculations ago (size: 128.00 MB).
-CLEAN-UP: Removing cached value for &#39;st_covd_udown4&#39; used 7 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_covd_udown4&#39; used 6 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removing cached value for &#39;thetadown4&#39; used 5 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 2 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removed 17 items
-CLEAN-UP: data size after cleanup: 134.00 MB
 Calculated hup4: $h^{\mu\nu}$ Spatial metric orthonomal to fluid flow with spacetime indices up
-Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated udown4: $u_\mu$ Lagrangian fluid four velocity with spacetime indices down
 Calculated hdown4: $h_{\mu\nu}$ Spatial metric orthonomal to fluid flow with spacetime indices down
-Calculated hmixed4: ${h^{\mu}}_{\nu}$ Spatial metric orthonomal to fluid flow with mixed spacetime indices
-Calculated gammadet: $\gamma$ Determinant of spatial metric
-Calculated conserved_D: $D$ Conserved mass-energy density in Wilson&#39;s formalism
-Calculated eps: $\epsilon$ Specific internal energy. I assume $\epsilon=0$, if not then please define AurelCore.data[&#39;eps&#39;] = ... 
-Calculated conserved_E: $E$ Conserved internal energy density in Wilson&#39;s formalism
-Calculated gammaup3: $\gamma^{ij}$ Spatial metric with spatial indices up
-Calculated Kup3: $K^{ij}$ Extrinsic curvature with spatial indices up
-Calculated dtgammaup3: $\partial_t \gamma^{ij}$ Coordinate time derivative of spatial metric with spatial indices up
-Calculated dtbetaup3: $\partial_t\beta^{i}$ Coordinate time derivative of the shift vector with spatial indices up
-Calculated st_Gamma_udd4: ${}^{(4)}{\Gamma^{\alpha}}_{\mu\nu}$ Christoffel symbols of spacetime metric with mixed spacetime indices
-Calculated st_covd_udown4: $\nabla_{\mu} u_{\nu}$ Spacetime covariant derivative of Lagrangian fluid four velocity with spacetime indices down
-Calculated s_covd_udown4: $\mathcal{D}^{\{u\}}_{\mu} u_{\nu}$ Spatial covariant derivative of Lagrangian fluid four velocity with spacetime indices down, with respect to spatial hypersurfaces orthonormal to the fluid flow
-Calculated thetadown4: $\Theta_{\mu\nu}$ Fluid expansion tensor with spacetime indices down
 Calculated sheardown4: $\sigma_{\mu\nu}$ Fluid shear tensor with spacetime indices down
 Calculated shear2: $\sigma^2$ Magnitude of fluid shear
 Calculated and freezed variable &#39;backreaction&#39; in AurelCore
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b73b04d83b38425ab14c42ab8782bd9e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "030798ff2f0b400f85dcba6b5a08b771", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;]
 Backreaction values: [-3.55271368e-15 -1.62832710e-15  0.00000000e+00  0.00000000e+00
  -2.59052039e-16  0.00000000e+00 -8.07271281e-33 -5.55111512e-17
@@ -392,15 +389,15 @@ Backreaction values: [-3.55271368e-15 -1.62832710e-15  0.00000000e+00  0.0000000
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example of custom function with custom extra kwargs</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">square_root</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Example function &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Demonstrate example functionality.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">custom_function</span><span class="p">(</span><span class="n">rel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Example function &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Demonstrate example functionality.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">rel</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rel</span><span class="p">[</span><span class="s1">&#39;gdet&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="n">rel</span><span class="o">.</span><span class="n">my_value</span>
 
 <span class="c1"># Custom function are passed as dict with name and function</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;custom_function&#39;</span><span class="p">:</span> <span class="n">custom_function</span><span class="p">}],</span> 
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;custom_function&#39;</span><span class="p">:</span> <span class="n">custom_function</span><span class="p">}],</span>
                        <span class="n">Lambda</span><span class="o">=</span><span class="n">sol</span><span class="o">.</span><span class="n">Lambda</span><span class="p">,</span> <span class="n">my_value</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">sqrt</span><span class="o">=</span><span class="n">square_root</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data keys:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 </pre></div>
@@ -421,7 +418,7 @@ Calculated and freezed variable &#39;custom_function&#39; in AurelCore
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e0facc825f564cd59eebb48aabf1e604", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5fbbbb37451d4497b52626498315d43e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;custom_function&#39;]
 </pre></div>
 </div>
@@ -437,7 +434,7 @@ Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Available estimations: [&#39;max&#39;, &#39;mean&#39;, &#39;median&#39;, &#39;min&#39;, &#39;sum&#39;, &#39;std&#39;, &#39;var&#39;, &#39;maxabs&#39;, &#39;minabs&#39;, &#39;meanabs&#39;, &#39;medianabs&#39;, &#39;sumabs&#39;, &#39;stdabs&#39;, &#39;varabs&#39;, &#39;OD&#39;, &#39;UD&#39;]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Available estimations: [&#39;max&#39;, &#39;mean&#39;, &#39;quartile1&#39;, &#39;median&#39;, &#39;quartile3&#39;, &#39;min&#39;, &#39;sum&#39;, &#39;std&#39;, &#39;var&#39;, &#39;maxabs&#39;, &#39;minabs&#39;, &#39;meanabs&#39;, &#39;quartile1abs&#39;, &#39;medianabs&#39;, &#39;quartile3abs&#39;, &#39;sumabs&#39;, &#39;stdabs&#39;, &#39;varabs&#39;, &#39;x0y0z0&#39;, &#39;x0y0z1&#39;, &#39;x0y1z0&#39;, &#39;x0y1z1&#39;, &#39;x1y0z0&#39;, &#39;x1y0z1&#39;, &#39;x1y1z0&#39;, &#39;x1y1z1&#39;]
 </pre></div>
 </div>
 </div>
@@ -445,7 +442,7 @@ Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;,
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate further terms with AurelCore iterated over time</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">],</span> 
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">],</span>
                        <span class="n">Lambda</span><span class="o">=</span><span class="n">sol</span><span class="o">.</span><span class="n">Lambda</span><span class="p">)</span>
 <span class="c1"># all aurel kwargs can be passed here</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data keys:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
@@ -453,12 +450,13 @@ Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing t = 1.0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found scalar keys for estimation: [&#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;custom_function&#39;]
+Processing t = 1.0
 Processing estimation item: max
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e8f35259fe1e4eb0afcce30e3a318aa0", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1b3edf3767c94d4fa6ee7b1479b18405", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;custom_function&#39;, &#39;rho0_max&#39;, &#39;null_ray_exp_in_max&#39;, &#39;custom_function_max&#39;]
 </pre></div>
 </div>
@@ -469,7 +467,7 @@ Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;,
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate further terms with AurelCore iterated over time</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Ktrace&#39;</span><span class="p">],</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">],</span> 
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Ktrace&#39;</span><span class="p">],</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">],</span>
                        <span class="n">Lambda</span><span class="o">=</span><span class="n">sol</span><span class="o">.</span><span class="n">Lambda</span><span class="p">)</span>
 <span class="c1"># all aurel kwargs can be passed here</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data keys:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
@@ -486,7 +484,7 @@ Processing estimation item: max
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4c24aca28f53463a82c451326dc8cbce", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "70fe04396fc24fb89df4851dedb16a06", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;custom_function&#39;, &#39;rho0_max&#39;, &#39;null_ray_exp_in_max&#39;, &#39;custom_function_max&#39;, &#39;Ktrace&#39;, &#39;Ktrace_max&#39;]
 </pre></div>
 </div>
@@ -500,25 +498,26 @@ Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;,
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example of custom function to calculate scalar range</span>
 <span class="c1"># Custom function must only take one argument, a scalar array</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">range</span><span class="p">(</span><span class="n">scalar</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Example function &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Demonstrate example functionality.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span>
 
 <span class="c1"># Custom function are passed as dict with name and function</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="nb">range</span><span class="p">}],</span> 
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="nb">range</span><span class="p">}],</span>
                        <span class="n">Lambda</span><span class="o">=</span><span class="n">sol</span><span class="o">.</span><span class="n">Lambda</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data keys:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Validating estimation function &#39;range&#39;...
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found scalar keys for estimation: [&#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;custom_function&#39;, &#39;Ktrace&#39;]
+Validating estimation function &#39;range&#39;...
 ✓ Custom function &#39;range&#39; validated successfully
 Processing t = 1.0
 Processing estimation item: range
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d154f543397b4cf9a44ffe8c86e23256", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "699ddd1ecbbb4a01bbe6bb723e7c8f39", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 Data keys: [&#39;t&#39;, &#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;rho0&#39;, &#39;null_ray_exp_in&#39;, &#39;backreaction&#39;, &#39;custom_function&#39;, &#39;rho0_max&#39;, &#39;null_ray_exp_in_max&#39;, &#39;custom_function_max&#39;, &#39;Ktrace&#39;, &#39;Ktrace_max&#39;, &#39;rho0_range&#39;, &#39;null_ray_exp_in_range&#39;, &#39;custom_function_range&#39;, &#39;Ktrace_range&#39;]
 </pre></div>
 </div>

@@ -8,10 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Key Features &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5a7fad61" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=3721e3c3" />
 
   
     <link rel="shortcut icon" href="_static/favicon.png"/>
@@ -23,6 +23,7 @@
       <script src="_static/design-tabs.js?v=f930bc37"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="_static/custom.js?v=67be0c79"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -57,7 +58,7 @@
 <li class="toctree-l1"><a class="reference internal" href="source/advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/CONTRIBUTING.html">Reporting Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/CONTRIBUTING.html#contributing-workflow">Contributing Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/CONTRIBUTING.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -128,20 +129,25 @@ Designed with ease of use in mind, it will <strong>au</strong>tomatically calcul
 </li>
 <li><p><strong>Dynamic computation and intelligent caching</strong>: Aurel automatically calculates only what’s needed and caches results, significantly improving performance for complex calculations</p></li>
 <li><p><strong>Clear user feedback</strong>: Progress bars and informative messages guide you through computations</p></li>
+<li><p><strong>Time evolution support</strong>: Tools for analyzing data across multiple time steps (<a class="reference external" href="https://robynlm.github.io/aurel/source/time.html">documentation</a>, <a class="reference external" href="https://robynlm.github.io/aurel/notebooks/Example_over_time.html">example</a>)</p></li>
 <li><p><strong>Flexible data input</strong>: Works seamlessly with numerical simulation data, analytical solutions, or custom numpy arrays</p></li>
 <li><p><strong>Einstein Toolkit integration</strong>: Native support for reading Carpet HDF5 outputs from <a class="reference external" href="https://einsteintoolkit.org">Einstein Toolkit</a> simulations (<a class="reference external" href="https://robynlm.github.io/aurel/source/reading.html">documentation</a>, <a class="reference external" href="https://robynlm.github.io/aurel/notebooks/tov_ET.html">example</a>)</p></li>
 <li><p><strong>Advanced <a class="reference external" href="https://robynlm.github.io/aurel/source/finitedifference.html">finite difference schemes</a></strong>: Multiple discretization schemes for 3D spatial grids</p></li>
 <li><p><strong>Built-in <a class="reference external" href="https://robynlm.github.io/aurel/source/solutions.html">analytical solutions</a></strong>: Pre-implemented spacetimes for testing and validation (<a class="reference external" href="https://robynlm.github.io/aurel/notebooks/ICPertFLRW.html">examples</a>)</p></li>
-<li><p><strong>Time evolution support</strong>: Tools for analyzing data across multiple time steps (<a class="reference external" href="https://robynlm.github.io/aurel/notebooks/Example_over_time.html">example</a>)</p></li>
 </ul>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
-<p>Install aurel using <a class="reference external" href="https://pip.pypa.io/en/stable/installation/">pip</a>:</p>
+<p><strong>Requirements:</strong></p>
+<ul class="simple">
+<li><p>Python 3.11 or higher (<a class="reference external" href="https://www.python.org/downloads/">download here</a>)</p></li>
+<li><p>pip (usually included with Python, or <a class="reference external" href="https://pip.pypa.io/en/stable/installation/">install separately</a>)</p></li>
+</ul>
+<p>Install aurel using pip (all other dependencies will be installed automatically):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>aurel
 </pre></div>
 </div>
-<p>All required dependencies (Python 3.11+, numpy, scipy, sympy, matplotlib, h5py, ipython, jupyter, tqdm) will be installed automatically. To get the latest development version, use:</p>
+<p>To get the latest development version:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/robynlm/aurel.git@development
 </pre></div>
 </div>
@@ -168,7 +174,7 @@ and import the <code class="docutils literal notranslate"><span class="pre">aure
 </pre></div>
 </div>
 <p>At this point you need to provide the spacetime metric, extrinsic curvature
-and matter fields (see <a class="reference external" href="https://robynlm.github.io/aurel/source/core.html#assumed-quantities">documentation</a>), where these would otherwise
+and matter fields (see <a class="reference external" href="https://robynlm.github.io/aurel/source/core.html#assumed-quantities">assumed quantities</a>), where these would otherwise
 be assumed to correspond to Minkowski vacuum.
 These are passed as numpy arrays to aurel in the following way:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the xx component of the spacetime metric</span>
@@ -178,16 +184,19 @@ These are passed as numpy arrays to aurel in the following way:</p>
 <p>and so on for the other components and required quantities.
 In this example <span class="math notranslate nohighlight">\(g_{xx} = 1\)</span>, but you can pass any numpy array;
 it can be of numerical relativity simulation data,
-or an array generated from an analytical expression.</p>
+or an array generated from an analytical expression.
+Take care to run <code class="docutils literal notranslate"><span class="pre">rel.freeze_data()</span></code> so that your input data
+is conserved during the cache cleanup.</p>
 <p>With everything defined, you can call any entity listed in the
-<a class="reference external" href="https://robynlm.github.io/aurel/source/core.html#descriptions-of-available-terms">descriptions list</a>. Just call it as:</p>
+<a class="reference external" href="https://robynlm.github.io/aurel/source/core.html#descriptions-of-available-terms">descriptions list</a>.
+Just call it as:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;name_of_the_entity&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p><strong>Aurel will automatically do its best to calculate any relativistic term you ask for.</strong></p>
 <p>For a more in depth example, see the <a class="reference external" href="https://robynlm.github.io/aurel/notebooks/Example.html">example notebook</a> for applications.
 Additionally, a symbolic counterpart that works in a very similar way is also available via the
-<code class="docutils literal notranslate"><span class="pre">aurel.AurelCoreSymbolic</span></code> class, see the <a class="reference external" href="https://robynlm.github.io/aurel/notebooks/Example_symbolic.html">symbolic example</a> for details.</p>
+<code class="docutils literal notranslate"><span class="pre">aurel.AurelCoreSymbolic</span></code> class, see the <a class="reference external" href="https://robynlm.github.io/aurel/notebooks/Example_symbolic.html">symbolic example notebook</a> for details.</p>
 <section id="calculations-over-time">
 <h2>Calculations over time<a class="headerlink" href="#calculations-over-time" title="Link to this heading"></a></h2>
 <p>If you want calculations over multiple moments in coordinate time, you can

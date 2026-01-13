@@ -8,10 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tov_ET &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5a7fad61" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=3721e3c3" />
 
   
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -21,6 +21,7 @@
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/custom.js?v=67be0c79"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -56,7 +57,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../source/advice.html">Working on an HPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/advice.html#convergence">Convergence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html">Reporting Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#code-contributions">Code Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#contributing-workflow">Contributing Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/CONTRIBUTING.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -118,8 +119,8 @@
 <p>Aurel reads in 3D data so update the tov_ET.par file accordingly, see below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
 </pre></div>
@@ -132,6 +133,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SIMLOC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;/Users/rlm36AA/simulations/&quot;</span>
 </pre></div>
 </div>
@@ -215,7 +217,7 @@ content : {(&#39;gyy&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span>
-    <span class="n">param</span><span class="p">,</span> 
+    <span class="n">param</span><span class="p">,</span>
     <span class="nb">vars</span> <span class="o">=</span> <span class="p">[],</span>
     <span class="c1"># Specify the fields to read, these have to be 3D outputs of the simulation amongst the available variables listed above</span>
     <span class="c1"># e.g. [&#39;gammadown3&#39;, &#39;rho0&#39;, &#39;Weyl_Psi&#39;]</span>
@@ -249,11 +251,11 @@ Loaded 34 variables from cache.
  =========== Restart 0:
 vars to get [&#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;betaup3&#39;, &#39;dtbetaup3&#39;, &#39;rho0&#39;, &#39;eps&#39;, &#39;press&#39;, &#39;w_lorentz&#39;, &#39;velup3&#39;, &#39;Hamiltonian&#39;, &#39;Momentumup3&#39;, &#39;Weyl_Psi&#39;]:
 Data read from split iterations: []
-Variables read from ET files: [&#39;velz&#39;, &#39;betay&#39;, &#39;eps&#39;, &#39;gyz&#39;, &#39;gxz&#39;, &#39;it&#39;, &#39;kyz&#39;, &#39;t&#39;, &#39;dtbetax&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtbetay&#39;, &#39;Weyl_Psi4i&#39;, &#39;kxz&#39;, &#39;kyy&#39;, &#39;kzz&#39;, &#39;Momentumz&#39;, &#39;betax&#39;, &#39;kxy&#39;, &#39;Weyl_Psi4r&#39;, &#39;dtbetaz&#39;, &#39;gxx&#39;, &#39;press&#39;, &#39;gzz&#39;, &#39;w_lorentz&#39;, &#39;vely&#39;, &#39;dtalpha&#39;, &#39;betaz&#39;, &#39;kxx&#39;, &#39;velx&#39;, &#39;rho0&#39;, &#39;Hamiltonian&#39;, &#39;Momentumy&#39;, &#39;Momentumx&#39;, &#39;gxy&#39;]
-Variables saved to split iterations files: [&#39;velz&#39;, &#39;betay&#39;, &#39;eps&#39;, &#39;gyz&#39;, &#39;gxz&#39;, &#39;kyz&#39;, &#39;dtbetax&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtbetay&#39;, &#39;Weyl_Psi4i&#39;, &#39;kxz&#39;, &#39;kyy&#39;, &#39;kzz&#39;, &#39;Momentumz&#39;, &#39;betax&#39;, &#39;kxy&#39;, &#39;Weyl_Psi4r&#39;, &#39;dtbetaz&#39;, &#39;gxx&#39;, &#39;press&#39;, &#39;gzz&#39;, &#39;w_lorentz&#39;, &#39;vely&#39;, &#39;dtalpha&#39;, &#39;betaz&#39;, &#39;kxx&#39;, &#39;velx&#39;, &#39;rho0&#39;, &#39;Hamiltonian&#39;, &#39;Momentumy&#39;, &#39;Momentumx&#39;, &#39;gxy&#39;]
+Variables read from ET files: [&#39;Weyl_Psi4r&#39;, &#39;velz&#39;, &#39;kxz&#39;, &#39;gyz&#39;, &#39;dtbetay&#39;, &#39;eps&#39;, &#39;gxy&#39;, &#39;kzz&#39;, &#39;betay&#39;, &#39;dtbetax&#39;, &#39;w_lorentz&#39;, &#39;gzz&#39;, &#39;kyy&#39;, &#39;Momentumy&#39;, &#39;Weyl_Psi4i&#39;, &#39;betaz&#39;, &#39;gxx&#39;, &#39;vely&#39;, &#39;rho0&#39;, &#39;gxz&#39;, &#39;Momentumz&#39;, &#39;Momentumx&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;velx&#39;, &#39;kyz&#39;, &#39;dtalpha&#39;, &#39;t&#39;, &#39;betax&#39;, &#39;dtbetaz&#39;, &#39;kxx&#39;, &#39;press&#39;, &#39;Hamiltonian&#39;, &#39;kxy&#39;, &#39;it&#39;, &#39;alpha&#39;]
+Variables saved to split iterations files: [&#39;Weyl_Psi4r&#39;, &#39;velz&#39;, &#39;kxz&#39;, &#39;gyz&#39;, &#39;dtbetay&#39;, &#39;eps&#39;, &#39;gxy&#39;, &#39;kzz&#39;, &#39;betay&#39;, &#39;dtbetax&#39;, &#39;w_lorentz&#39;, &#39;kyy&#39;, &#39;gzz&#39;, &#39;Momentumy&#39;, &#39;Weyl_Psi4i&#39;, &#39;betaz&#39;, &#39;gxx&#39;, &#39;vely&#39;, &#39;rho0&#39;, &#39;gxz&#39;, &#39;Momentumz&#39;, &#39;Momentumx&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;velx&#39;, &#39;kyz&#39;, &#39;dtalpha&#39;, &#39;betax&#39;, &#39;dtbetaz&#39;, &#39;kxx&#39;, &#39;press&#39;, &#39;Hamiltonian&#39;, &#39;kxy&#39;, &#39;alpha&#39;]
 
  == Data read from the simulation:
-dict_keys([&#39;it&#39;, &#39;velz&#39;, &#39;betay&#39;, &#39;eps&#39;, &#39;gyz&#39;, &#39;gxz&#39;, &#39;kyz&#39;, &#39;dtbetax&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtbetay&#39;, &#39;Weyl_Psi4i&#39;, &#39;kxz&#39;, &#39;kyy&#39;, &#39;kzz&#39;, &#39;Momentumz&#39;, &#39;betax&#39;, &#39;kxy&#39;, &#39;Weyl_Psi4r&#39;, &#39;dtbetaz&#39;, &#39;gxx&#39;, &#39;press&#39;, &#39;gzz&#39;, &#39;w_lorentz&#39;, &#39;vely&#39;, &#39;dtalpha&#39;, &#39;betaz&#39;, &#39;kxx&#39;, &#39;velx&#39;, &#39;rho0&#39;, &#39;Hamiltonian&#39;, &#39;Momentumy&#39;, &#39;Momentumx&#39;, &#39;gxy&#39;, &#39;t&#39;])
+dict_keys([&#39;it&#39;, &#39;Weyl_Psi4r&#39;, &#39;velz&#39;, &#39;kxz&#39;, &#39;gyz&#39;, &#39;dtbetay&#39;, &#39;eps&#39;, &#39;gxy&#39;, &#39;kzz&#39;, &#39;betay&#39;, &#39;dtbetax&#39;, &#39;w_lorentz&#39;, &#39;kyy&#39;, &#39;gzz&#39;, &#39;Momentumy&#39;, &#39;Weyl_Psi4i&#39;, &#39;betaz&#39;, &#39;gxx&#39;, &#39;vely&#39;, &#39;rho0&#39;, &#39;gxz&#39;, &#39;Momentumz&#39;, &#39;Momentumx&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;velx&#39;, &#39;kyz&#39;, &#39;dtalpha&#39;, &#39;betax&#39;, &#39;dtbetaz&#39;, &#39;kxx&#39;, &#39;press&#39;, &#39;Hamiltonian&#39;, &#39;kxy&#39;, &#39;alpha&#39;, &#39;t&#39;])
 it format: type &lt;class &#39;list&#39;&gt; and shape (100,)
 rho0 format: type &lt;class &#39;list&#39;&gt; and shape (100, 12, 12, 12)
 rho0[0] format: type &lt;class &#39;numpy.ndarray&#39;&gt; and shape (12, 12, 12)
@@ -289,12 +291,13 @@ rho0[0] format: type &lt;class &#39;numpy.ndarray&#39;&gt; and shape (12, 12, 12
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing it = 0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found scalar keys for estimation: [&#39;Weyl_Psi4r&#39;, &#39;velz&#39;, &#39;kxz&#39;, &#39;gyz&#39;, &#39;dtbetay&#39;, &#39;eps&#39;, &#39;gxy&#39;, &#39;kzz&#39;, &#39;betay&#39;, &#39;dtbetax&#39;, &#39;w_lorentz&#39;, &#39;kyy&#39;, &#39;gzz&#39;, &#39;Momentumy&#39;, &#39;Weyl_Psi4i&#39;, &#39;betaz&#39;, &#39;gxx&#39;, &#39;vely&#39;, &#39;rho0&#39;, &#39;gxz&#39;, &#39;Momentumz&#39;, &#39;Momentumx&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;velx&#39;, &#39;kyz&#39;, &#39;dtalpha&#39;, &#39;betax&#39;, &#39;dtbetaz&#39;, &#39;kxx&#39;, &#39;press&#39;, &#39;Hamiltonian&#39;, &#39;kxy&#39;, &#39;alpha&#39;]
+Processing it = 0
 Processing estimation item: max
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2b6cef7c56274d2f8a74fc6e0fb86b31", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4aa3b8c76c73470bad3ea03e2d027d0f", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;$max(\\rho_0) / \\rho_0(0)$&#39;)
@@ -341,7 +344,7 @@ Processing estimation item: max
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "12eb2c5be1024bcabc9ae89011ce292f", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e112de8af4304aa3bb273a1270d1c743", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;max($\\gamma$)&#39;)
@@ -362,7 +365,7 @@ Now processing remaining time steps sequentially
 
 <span class="c1"># load the data from that level</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span>
-    <span class="n">param</span><span class="p">,</span> 
+    <span class="n">param</span><span class="p">,</span>
     <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">,</span> <span class="s1">&#39;gammadown3&#39;</span><span class="p">],</span>
     <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">409600</span><span class="p">,</span> <span class="mi">4096</span><span class="p">),</span>
     <span class="n">rl</span> <span class="o">=</span> <span class="n">rl</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -392,8 +395,8 @@ Loaded 34 variables from cache.
  =========== Restart 0:
 vars to get [&#39;rho0&#39;, &#39;gammadown3&#39;]:
 Data read from split iterations: []
-Variables read from ET files: [&#39;gyy&#39;, &#39;gxx&#39;, &#39;rho0&#39;, &#39;gzz&#39;, &#39;gyz&#39;, &#39;gxz&#39;, &#39;it&#39;, &#39;gxy&#39;, &#39;t&#39;]
-Variables saved to split iterations files: [&#39;gyy&#39;, &#39;gxx&#39;, &#39;rho0&#39;, &#39;gzz&#39;, &#39;gyz&#39;, &#39;gxz&#39;, &#39;gxy&#39;]
+Variables read from ET files: [&#39;t&#39;, &#39;gyz&#39;, &#39;rho0&#39;, &#39;gxz&#39;, &#39;gzz&#39;, &#39;gxy&#39;, &#39;gyy&#39;, &#39;it&#39;, &#39;gxx&#39;]
+Variables saved to split iterations files: [&#39;gyz&#39;, &#39;rho0&#39;, &#39;gxz&#39;, &#39;gxy&#39;, &#39;gyy&#39;, &#39;gzz&#39;, &#39;gxx&#39;]
 4th order finite difference schemes are defined
 </pre></div>
 </div>
@@ -415,7 +418,7 @@ Processing estimation item: max
 Now processing remaining time steps sequentially
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4a7fa173cf414cb7bd2e35f29b853c5b", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "07a02081b00e46b6844f04585722c663", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 </pre></div>
 </div>
 </div>

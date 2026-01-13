@@ -15,9 +15,8 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "import numpy as np\n",
     "import matplotlib.pyplot as plt\n",
-    "import sympy as sp\n",
+    "import numpy as np\n",
     "\n",
     "# Import the module\n",
     "import aurel\n",
@@ -2161,7 +2160,7 @@
     {
      "data": {
       "text/latex": [
-       "CLEAN-UP: data size before cleanup: 18430.04 MB"
+       "CLEAN-UP: data size before cleanup: 18430.03 MB"
       ],
       "text/plain": [
        "<IPython.core.display.Latex object>"
@@ -2885,8 +2884,8 @@
     "for N in allN:\n",
     "    print(\" *** N = \", N)\n",
     "    dx = 2*L / N\n",
-    "    param = { 'Nx': N, 'Ny': N, 'Nz': N, \n",
-    "            'xmin': -L+0.01, 'ymin': -L+0.01, 'zmin': -L+0.01, \n",
+    "    param = { 'Nx': N, 'Ny': N, 'Nz': N,\n",
+    "            'xmin': -L+0.01, 'ymin': -L+0.01, 'zmin': -L+0.01,\n",
     "            'dx': dx, 'dy': dx, 'dz': dx}\n",
     "    fd = aurel.FiniteDifference(param, fd_order=8)\n",
     "    rel = aurel.AurelCore(fd)\n",
@@ -2907,7 +2906,7 @@
     "    N_exact = sol.null_ray_exp_out(nt, fd.x, fd.y, fd.z)\n",
     "    Nerror = abs((N_numerical - N_exact) / N_exact)\n",
     "    NNerror += [np.nanmedian(fd.excision2(Nerror))]\n",
-    "    \n",
+    "\n",
     "    if N != allN[-1]:\n",
     "        del fd, rel"
    ]
@@ -2946,19 +2945,19 @@
     "order = 8\n",
     "ical = -3\n",
     "converge = [NRerror[ical]*((allN[ical]/allN[i])**(order))for i in range(len(allN))]\n",
-    "plt.loglog(allN, converge, '--', color='C0', label='{}th order'.format(order))\n",
+    "plt.loglog(allN, converge, '--', color='C0', label=f'{order}th order')\n",
     "\n",
     "plt.loglog(allN, NKerror, 'o-', color='C1', label='Kretschmann')\n",
     "order = 8\n",
     "ical = -3\n",
     "converge = [NKerror[ical]*((allN[ical]/allN[i])**(order))for i in range(len(allN))]\n",
-    "plt.loglog(allN, converge, '--', color='C1', label='{}th order'.format(order))\n",
+    "plt.loglog(allN, converge, '--', color='C1', label=f'{order}th order')\n",
     "\n",
     "plt.loglog(allN, NNerror, 'o-', color='C2', label=r'$\\Theta_{out}$')\n",
     "order = 8\n",
     "ical = -3\n",
     "converge = [NNerror[ical]*((allN[ical]/allN[i])**(order))for i in range(len(allN))]\n",
-    "plt.loglog(allN, converge, '--', color='C2', label='{}th order'.format(order))\n",
+    "plt.loglog(allN, converge, '--', color='C2', label=f'{order}th order')\n",
     "\n",
     "plt.grid()\n",
     "plt.xlabel('N')\n",
