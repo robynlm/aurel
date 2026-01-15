@@ -148,16 +148,15 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
-<span class="n">aurel_tensor_to_scalar</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;gammadown3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;gxx&#39;</span><span class="p">,</span> <span class="s1">&#39;gxy&#39;</span><span class="p">,</span> <span class="s1">&#39;gxz&#39;</span><span class="p">,</span> <span class="s1">&#39;gyy&#39;</span><span class="p">,</span> <span class="s1">&#39;gyz&#39;</span><span class="p">,</span> <span class="s1">&#39;gzz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;Kdown3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;kxx&#39;</span><span class="p">,</span> <span class="s1">&#39;kxy&#39;</span><span class="p">,</span> <span class="s1">&#39;kxz&#39;</span><span class="p">,</span> <span class="s1">&#39;kyy&#39;</span><span class="p">,</span> <span class="s1">&#39;kyz&#39;</span><span class="p">,</span> <span class="s1">&#39;kzz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;betaup3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;betax&#39;</span><span class="p">,</span> <span class="s1">&#39;betay&#39;</span><span class="p">,</span> <span class="s1">&#39;betaz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;dtbetaup3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;dtbetax&#39;</span><span class="p">,</span> <span class="s1">&#39;dtbetay&#39;</span><span class="p">,</span> <span class="s1">&#39;dtbetaz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;velup3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;velx&#39;</span><span class="p">,</span> <span class="s1">&#39;vely&#39;</span><span class="p">,</span> <span class="s1">&#39;velz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;Momentumup3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Momentumx&#39;</span><span class="p">,</span> <span class="s1">&#39;Momentumy&#39;</span><span class="p">,</span> <span class="s1">&#39;Momentumz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;Weyl_Psi&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Weyl_Psi4r&#39;</span><span class="p">,</span> <span class="s1">&#39;Weyl_Psi4i&#39;</span><span class="p">],</span>
-<span class="p">}</span>
+<span class="n">_varmap_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;var_mappings.yml&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">_varmap_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">_varmaps</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">aurel_tensor_to_scalar</span> <span class="o">=</span> <span class="n">_varmaps</span><span class="p">[</span><span class="s1">&#39;aurel_tensor_to_scalar&#39;</span><span class="p">]</span>
+<span class="n">aurel_to_ET_varnames</span> <span class="o">=</span> <span class="n">_varmaps</span><span class="p">[</span><span class="s1">&#39;aurel_to_ET_varnames&#39;</span><span class="p">]</span>
+<span class="n">ET_to_aurel_varnames</span> <span class="o">=</span> <span class="n">_varmaps</span><span class="p">[</span><span class="s1">&#39;ET_to_aurel_varnames&#39;</span><span class="p">]</span>
+<span class="n">known_groups</span> <span class="o">=</span> <span class="n">_varmaps</span><span class="p">[</span><span class="s1">&#39;known_groups&#39;</span><span class="p">]</span>
 
 <div class="viewcode-block" id="transform_vars_tensor_to_scalar">
 <a class="viewcode-back" href="../../source/reading.html#aurel.reading.transform_vars_tensor_to_scalar">[docs]</a>
@@ -507,31 +506,6 @@
 <span class="c1">#                   Aurel to Einstein Toolkit variables</span>
 <span class="c1"># =============================================================================</span>
 
-<span class="n">aurel_to_ET_varnames</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;gammadown3&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;gxx&#39;</span><span class="p">,</span> <span class="s1">&#39;gxy&#39;</span><span class="p">,</span> <span class="s1">&#39;gxz&#39;</span><span class="p">,</span> <span class="s1">&#39;gyy&#39;</span><span class="p">,</span> <span class="s1">&#39;gyz&#39;</span><span class="p">,</span> <span class="s1">&#39;gzz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;Kdown3&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;kxx&#39;</span><span class="p">,</span> <span class="s1">&#39;kxy&#39;</span><span class="p">,</span> <span class="s1">&#39;kxz&#39;</span><span class="p">,</span> <span class="s1">&#39;kyy&#39;</span><span class="p">,</span> <span class="s1">&#39;kyz&#39;</span><span class="p">,</span> <span class="s1">&#39;kzz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;Ktrace&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;trK&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;alpha&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;alp&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;dtalpha&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;dtalp&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;betaup3&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;betax&#39;</span><span class="p">,</span> <span class="s1">&#39;betay&#39;</span><span class="p">,</span> <span class="s1">&#39;betaz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;dtbetaup3&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;dtbetax&#39;</span><span class="p">,</span> <span class="s1">&#39;dtbetay&#39;</span><span class="p">,</span> <span class="s1">&#39;dtbetaz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;rho0&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;rho&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;eps&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;eps&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;press&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;press&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;w_lorentz&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;w_lorentz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;velup3&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;vel[0]&#39;</span><span class="p">,</span> <span class="s1">&#39;vel[1]&#39;</span><span class="p">,</span> <span class="s1">&#39;vel[2]&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;velx&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;vel[0]&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;vely&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;vel[1]&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;velz&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;vel[2]&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;Hamiltonian&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;Momentumup3&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;M2&#39;</span><span class="p">,</span> <span class="s1">&#39;M3&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;Momentumx&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;Momentumy&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M2&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;Momentumz&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M3&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;Weyl_Psi&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Psi4r&#39;</span><span class="p">,</span> <span class="s1">&#39;Psi4i&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;Weyl_Psi4r&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Psi4r&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;Weyl_Psi4i&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Psi4i&#39;</span><span class="p">]</span>
-<span class="p">}</span>
 <div class="viewcode-block" id="transform_vars_aurel_to_ET">
 <a class="viewcode-back" href="../../source/reading.html#aurel.reading.transform_vars_aurel_to_ET">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">transform_vars_aurel_to_ET</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
@@ -581,13 +555,6 @@
     <span class="k">return</span> <span class="n">aurel_vars</span></div>
 
 
-<span class="n">ET_to_aurel_varnames</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;rho&#39;</span><span class="p">:</span><span class="s1">&#39;rho0&#39;</span><span class="p">,</span> <span class="s1">&#39;alp&#39;</span><span class="p">:</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="s1">&#39;dtalp&#39;</span><span class="p">:</span><span class="s1">&#39;dtalpha&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;trK&#39;</span><span class="p">:</span><span class="s1">&#39;Ktrace&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">:</span><span class="s1">&#39;Hamiltonian&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;vel[0]&#39;</span><span class="p">:</span><span class="s1">&#39;velx&#39;</span><span class="p">,</span> <span class="s1">&#39;vel[1]&#39;</span><span class="p">:</span><span class="s1">&#39;vely&#39;</span><span class="p">,</span> <span class="s1">&#39;vel[2]&#39;</span><span class="p">:</span><span class="s1">&#39;velz&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;M1&#39;</span><span class="p">:</span><span class="s1">&#39;Momentumx&#39;</span><span class="p">,</span> <span class="s1">&#39;M2&#39;</span><span class="p">:</span><span class="s1">&#39;Momentumy&#39;</span><span class="p">,</span> <span class="s1">&#39;M3&#39;</span><span class="p">:</span><span class="s1">&#39;Momentumz&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Psi4r&#39;</span><span class="p">:</span><span class="s1">&#39;Weyl_Psi4r&#39;</span><span class="p">,</span> <span class="s1">&#39;Psi4i&#39;</span><span class="p">:</span><span class="s1">&#39;Weyl_Psi4i&#39;</span>
-<span class="p">}</span>
 <div class="viewcode-block" id="transform_vars_ET_to_aurel">
 <a class="viewcode-back" href="../../source/reading.html#aurel.reading.transform_vars_ET_to_aurel">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">transform_vars_ET_to_aurel</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
@@ -1500,29 +1467,6 @@
     <span class="k">return</span> <span class="n">its_available</span></div>
 
 
-<span class="n">known_groups</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;hydrobase-rho&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;rho&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;hydrobase-eps&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;eps&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;hydrobase-press&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;press&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;hydrobase-w_lorentz&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;w_lorentz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;hydrobase-vel&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;vel[0]&#39;</span><span class="p">,</span> <span class="s1">&#39;vel[1]&#39;</span><span class="p">,</span> <span class="s1">&#39;vel[2]&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;admbase-lapse&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;alp&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;admbase-dtlapse&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;dtalp&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;admbase-shift&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;betax&#39;</span><span class="p">,</span> <span class="s1">&#39;betay&#39;</span><span class="p">,</span> <span class="s1">&#39;betaz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;admbase-dtshift&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;dtbetax&#39;</span><span class="p">,</span> <span class="s1">&#39;dtbetay&#39;</span><span class="p">,</span> <span class="s1">&#39;dtbetaz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;admbase-metric&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;gxx&#39;</span><span class="p">,</span> <span class="s1">&#39;gxy&#39;</span><span class="p">,</span> <span class="s1">&#39;gxz&#39;</span><span class="p">,</span> <span class="s1">&#39;gyy&#39;</span><span class="p">,</span> <span class="s1">&#39;gyz&#39;</span><span class="p">,</span> <span class="s1">&#39;gzz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;admbase-curv&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;kxx&#39;</span><span class="p">,</span> <span class="s1">&#39;kxy&#39;</span><span class="p">,</span> <span class="s1">&#39;kxz&#39;</span><span class="p">,</span> <span class="s1">&#39;kyy&#39;</span><span class="p">,</span> <span class="s1">&#39;kyz&#39;</span><span class="p">,</span> <span class="s1">&#39;kzz&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;ml_bssn-ml_trace_curv&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;trK&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;ml_bssn-ml_ham&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;ml_admconstraints-ml_ham&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;ml_bssn-ml_mom&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;M2&#39;</span><span class="p">,</span> <span class="s1">&#39;M3&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;ml_admconstraints-ml_mom&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;M2&#39;</span><span class="p">,</span> <span class="s1">&#39;M3&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;weylscal4-psi4r_group&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Psi4r&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;weylscal4-psi4i_group&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Psi4i&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;cosmolapse-kthreshold&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Ktransition&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;cosmolapse-propertime&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;tau&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;carpetreduce-weight&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span>
-    <span class="p">}</span>
 <div class="viewcode-block" id="get_content">
 <a class="viewcode-back" href="../../source/reading.html#aurel.reading.get_content">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_content</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1651,8 +1595,8 @@
                                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Reading variables in file:&#39;</span><span class="p">,</span>
                                       <span class="n">filepath</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Consider adding </span><span class="si">{</span><span class="n">base_name</span><span class="si">}</span><span class="s2"> to&quot;</span>
-                                      <span class="o">+</span> <span class="s2">&quot; known_groups in reading.py for&quot;</span>
-                                      <span class="o">+</span> <span class="s2">&quot; faster processing.&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                                      <span class="o">+</span> <span class="s2">&quot; known_groups in aurel/data/var_mappings.yml&quot;</span>
+                                      <span class="o">+</span> <span class="s2">&quot; for faster processing.&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                             <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">h5f</span><span class="p">:</span>
                                 <span class="n">variables</span> <span class="o">=</span> <span class="p">{</span><span class="n">parse_hdf5_key</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="s1">&#39;variable&#39;</span><span class="p">]</span>
                                              <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">h5f</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
