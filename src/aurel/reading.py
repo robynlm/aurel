@@ -41,16 +41,15 @@ import re
 
 import h5py
 import numpy as np
+import yaml
 
-aurel_tensor_to_scalar = {
-    'gammadown3': ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
-    'Kdown3': ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
-    'betaup3': ['betax', 'betay', 'betaz'],
-    'dtbetaup3': ['dtbetax', 'dtbetay', 'dtbetaz'],
-    'velup3': ['velx', 'vely', 'velz'],
-    'Momentumup3': ['Momentumx', 'Momentumy', 'Momentumz'],
-    'Weyl_Psi': ['Weyl_Psi4r', 'Weyl_Psi4i'],
-}
+_varmap_path = os.path.join(os.path.dirname(__file__), 'data', 'var_mappings.yml')
+with open(_varmap_path) as f:
+    _varmaps = yaml.safe_load(f)
+aurel_tensor_to_scalar = _varmaps['aurel_tensor_to_scalar']
+aurel_to_ET_varnames = _varmaps['aurel_to_ET_varnames']
+ET_to_aurel_varnames = _varmaps['ET_to_aurel_varnames']
+known_groups = _varmaps['known_groups']
 
 def transform_vars_tensor_to_scalar(var):
     """Transform Aurel tensor variable names to their scalar component names.
@@ -388,31 +387,6 @@ def save_data(param, data, **kwargs):
 #                   Aurel to Einstein Toolkit variables
 # =============================================================================
 
-aurel_to_ET_varnames = {
-    'gammadown3' : ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
-    'Kdown3' : ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
-    'Ktrace' : ['trK'],
-    'alpha' : ['alp'],
-    'dtalpha' : ['dtalp'],
-    'betaup3' : ['betax', 'betay', 'betaz'],
-    'dtbetaup3' : ['dtbetax', 'dtbetay', 'dtbetaz'],
-    'rho0' : ['rho'],
-    'eps' : ['eps'],
-    'press' : ['press'],
-    'w_lorentz' : ['w_lorentz'],
-    'velup3' : ['vel[0]', 'vel[1]', 'vel[2]'],
-    'velx' : ['vel[0]'],
-    'vely' : ['vel[1]'],
-    'velz' : ['vel[2]'],
-    'Hamiltonian' : ['H'],
-    'Momentumup3' : ['M1', 'M2', 'M3'],
-    'Momentumx' : ['M1'],
-    'Momentumy' : ['M2'],
-    'Momentumz' : ['M3'],
-    'Weyl_Psi' : ['Psi4r', 'Psi4i'],
-    'Weyl_Psi4r' : ['Psi4r'],
-    'Weyl_Psi4i' : ['Psi4i']
-}
 def transform_vars_aurel_to_ET(var):
     """Transform ET variable names to Aurel variable names.
 
@@ -456,13 +430,6 @@ def transform_vars_ET_to_aurel_groups(vars):
     aurel_vars += vars
     return aurel_vars
 
-ET_to_aurel_varnames = {
-    'rho':'rho0', 'alp':'alpha', 'dtalp':'dtalpha',
-    'trK':'Ktrace', 'H':'Hamiltonian',
-    'vel[0]':'velx', 'vel[1]':'vely', 'vel[2]':'velz',
-    'M1':'Momentumx', 'M2':'Momentumy', 'M3':'Momentumz',
-    'Psi4r':'Weyl_Psi4r', 'Psi4i':'Weyl_Psi4i'
-}
 def transform_vars_ET_to_aurel(var):
     """Transform ET variable name to Aurel variable name.
 
@@ -1351,29 +1318,6 @@ def collect_overall_iterations(its_available, verbose):
             rl_to_do = True
     return its_available
 
-known_groups = {
-    'hydrobase-rho': ['rho'],
-    'hydrobase-eps': ['eps'],
-    'hydrobase-press': ['press'],
-    'hydrobase-w_lorentz': ['w_lorentz'],
-    'hydrobase-vel': ['vel[0]', 'vel[1]', 'vel[2]'],
-    'admbase-lapse': ['alp'],
-    'admbase-dtlapse': ['dtalp'],
-    'admbase-shift': ['betax', 'betay', 'betaz'],
-    'admbase-dtshift': ['dtbetax', 'dtbetay', 'dtbetaz'],
-    'admbase-metric': ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz'],
-    'admbase-curv': ['kxx', 'kxy', 'kxz', 'kyy', 'kyz', 'kzz'],
-    'ml_bssn-ml_trace_curv': ['trK'],
-    'ml_bssn-ml_ham': ['H'],
-    'ml_admconstraints-ml_ham': ['H'],
-    'ml_bssn-ml_mom': ['M1', 'M2', 'M3'],
-    'ml_admconstraints-ml_mom': ['M1', 'M2', 'M3'],
-    'weylscal4-psi4r_group': ['Psi4r'],
-    'weylscal4-psi4i_group': ['Psi4i'],
-    'cosmolapse-kthreshold': ['Ktransition'],
-    'cosmolapse-propertime': ['tau'],
-    'carpetreduce-weight': ['weight']
-    }
 def get_content(param, **kwargs):
     """Analyze Einstein Toolkit output directory and map variables to files.
 
@@ -1500,8 +1444,8 @@ def get_content(param, **kwargs):
                                 print('Reading variables in file:',
                                       filepath, flush=True)
                                 print(f"Consider adding {base_name} to"
-                                      + " known_groups in reading.py for"
-                                      + " faster processing.", flush=True)
+                                      + " known_groups in aurel/data/var_mappings.yml"
+                                      + " for faster processing.", flush=True)
                             with h5py.File(filepath, "r") as h5f:
                                 variables = {parse_hdf5_key(k)['variable']
                                              for k in h5f.keys()

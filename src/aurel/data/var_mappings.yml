@@ -1,0 +1,75 @@
+# Aurel variable mappings and tensor decompositions for reading.py
+
+
+aurel_tensor_to_scalar:
+  gammadown3: ["gxx", "gxy", "gxz", "gyy", "gyz", "gzz"]
+  Kdown3: ["kxx", "kxy", "kxz", "kyy", "kyz", "kzz"]
+  betaup3: ["betax", "betay", "betaz"]
+  dtbetaup3: ["dtbetax", "dtbetay", "dtbetaz"]
+  velup3: ["velx", "vely", "velz"]
+  Momentumup3: ["Momentumx", "Momentumy", "Momentumz"]
+  Weyl_Psi: ["Weyl_Psi4r", "Weyl_Psi4i"]
+
+
+aurel_to_ET_varnames:
+  gammadown3: ["gxx", "gxy", "gxz", "gyy", "gyz", "gzz"]
+  Kdown3: ["kxx", "kxy", "kxz", "kyy", "kyz", "kzz"]
+  Ktrace: ["trK"]
+  alpha: ["alp"]
+  dtalpha: ["dtalp"]
+  betaup3: ["betax", "betay", "betaz"]
+  dtbetaup3: ["dtbetax", "dtbetay", "dtbetaz"]
+  rho0: ["rho"]
+  eps: ["eps"]
+  press: ["press"]
+  w_lorentz: ["w_lorentz"]
+  velup3: ["vel[0]", "vel[1]", "vel[2]"]
+  velx: ["vel[0]"]
+  vely: ["vel[1]"]
+  velz: ["vel[2]"]
+  Hamiltonian: ["H"]
+  Momentumup3: ["M1", "M2", "M3"]
+  Momentumx: ["M1"]
+  Momentumy: ["M2"]
+  Momentumz: ["M3"]
+  Weyl_Psi: ["Psi4r", "Psi4i"]
+  Weyl_Psi4r: ["Psi4r"]
+  Weyl_Psi4i: ["Psi4i"]
+
+ET_to_aurel_varnames:
+  rho: rho0
+  alp: alpha
+  dtalp: dtalpha
+  trK: Ktrace
+  H: Hamiltonian
+  vel[0]: velx
+  vel[1]: vely
+  vel[2]: velz
+  M1: Momentumx
+  M2: Momentumy
+  M3: Momentumz
+  Psi4r: Weyl_Psi4r
+  Psi4i: Weyl_Psi4i
+
+known_groups:
+  hydrobase-rho: ["rho"]
+  hydrobase-eps: ["eps"]
+  hydrobase-press: ["press"]
+  hydrobase-w_lorentz: ["w_lorentz"]
+  hydrobase-vel: ["vel[0]", "vel[1]", "vel[2]"]
+  admbase-lapse: ["alp"]
+  admbase-dtlapse: ["dtalp"]
+  admbase-shift: ["betax", "betay", "betaz"]
+  admbase-dtshift: ["dtbetax", "dtbetay", "dtbetaz"]
+  admbase-metric: ["gxx", "gxy", "gxz", "gyy", "gyz", "gzz"]
+  admbase-curv: ["kxx", "kxy", "kxz", "kyy", "kyz", "kzz"]
+  ml_bssn-ml_trace_curv: ["trK"]
+  ml_bssn-ml_ham: ["H"]
+  ml_admconstraints-ml_ham: ["H"]
+  ml_bssn-ml_mom: ["M1", "M2", "M3"]
+  ml_admconstraints-ml_mom: ["M1", "M2", "M3"]
+  weylscal4-psi4r_group: ["Psi4r"]
+  weylscal4-psi4i_group: ["Psi4i"]
+  cosmolapse-kthreshold: ["Ktransition"]
+  cosmolapse-propertime: ["tau"]
+  carpetreduce-weight: ["weight"]
