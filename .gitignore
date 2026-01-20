@@ -22,8 +22,5 @@ mytests/
 docs/notes.txt
 .pypirc
 
-# Papers and drafts
-paper/
-
 # Version files
 *_version.py
