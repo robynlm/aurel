@@ -1,5 +1,5 @@
 ---
-title: '`aurel`: A Python package for automatic relativistic calculations'
+title: "aurel: A Python package for automatic relativistic calculations"
 tags:
  - Python
  - General Relativity
