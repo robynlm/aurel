@@ -7,14 +7,14 @@ tags:
  - tensor calculus
 authors:
  - name: Robyn L. Munoz
-    orcid: 0000-0003-3345-8520
-    affiliation: 1
+   orcid: 0000-0003-3345-8520
+   affiliation: 1
  - name: Christian T. Byrnes
-    orcid: 0000-0003-2583-6536
-    affiliation: 1
+   orcid: 0000-0003-2583-6536
+   affiliation: 1
  - name: Will Roper
-    orcid: 0000-0002-3257-8806
-    affiliation: 1
+   orcid: 0000-0002-3257-8806
+   affiliation: 1
 affiliations:
  - name: Department of Physics and Astronomy, University of Sussex, Brighton, BN1 9QH, United Kingdom
    index: 1
