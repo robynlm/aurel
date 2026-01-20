@@ -12,7 +12,7 @@ authors:
  - name: Christian T. Byrnes
    orcid: 0000-0003-2583-6536
    affiliation: 1
- - name: Will Roper
+ - name: Will J. Roper
    orcid: 0000-0002-3257-8806
    affiliation: 1
 affiliations:
