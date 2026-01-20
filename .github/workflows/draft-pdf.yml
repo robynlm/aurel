@@ -5,6 +5,9 @@ on:
       - docs/paper/**
       - .github/workflows/draft-pdf.yml
 
+permissions:
+  contents: write # Allow uploading draft PDF artifact
+
 jobs:
   paper:
     runs-on: ubuntu-latest
@@ -12,13 +15,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Build draft PDF
         uses: openjournals/openjournals-draft-action@master
         with:
           journal: joss
           paper-path: docs/paper/paper.md
+
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: paper
           path: docs/paper/paper.pdf
+
+      - name: Commit paper.pdf to repository
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/paper/paper.pdf
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update paper.pdf"
+            git push
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
