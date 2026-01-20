@@ -110,7 +110,7 @@ markers = [
 # Ruff Configuration (Linting and Formatting)
 # =============================================================================
 [tool.ruff]
-target-version = "0.9.2"  # Target Python 3.11+ syntax
+target-version = "py311"  # Target Python 3.11+ syntax
 line-length = 88          # Standard line length (Black-compatible)
 
 # -----------------------------------------------------------------------------

@@ -31,7 +31,7 @@ jobs:
 
     - name: Update pyproject.toml version
       run: |
-        sed -i 's|version = ".*"|version = "${{ steps.get_version.outputs.version }}"|' pyproject.toml
+        sed -i 's|^version = \".*\"$|version = \"${{ steps.get_version.outputs.version }}\"|' pyproject.toml
 
     - name: Update __init__.py version
       run: |
