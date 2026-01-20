@@ -16,7 +16,7 @@ Metric quantities:
   Lapse:
     alpha: $\alpha$ Lapse.[ASSUME:alpha:$\alpha=1$]
     dtalpha: $\partial_t \alpha$ Coordinate time derivative of the lapse.[ASSUME:dtalpha:$\partial_t \alpha=0$]
-    DDalpha: D_iD_j\alpha$ Spatial covariant second derivative of the lapse with spatial indices down
+    DDalpha: $D_iD_j\alpha$ Spatial covariant second derivative of the lapse with spatial indices down
   Shift:
     betax: $\beta^{x}$ x component of the shift vector with indices up.[ASSUME:betax:$\beta^{x}=0$]
     betay: $\beta^{y}$ y component of the shift vector with indices up.[ASSUME:betay:$\beta^{y}=0$]
