@@ -5,7 +5,8 @@ on:
       - development
       - main
     paths:
-      - docs/paper/**
+      - docs/paper/paper.md
+      - docs/paper/paper.bib
       - .github/workflows/draft-pdf.yml
 
 permissions:
