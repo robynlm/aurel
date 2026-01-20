@@ -1,6 +1,6 @@
 """Aurel: A Python package for automatic relativistic calculations."""
 
-__version__ = "0.9.1"
+__version__ = "0.9.2"
 from .core import *
 from .coresymbolic import *
 from .finitedifference import *
