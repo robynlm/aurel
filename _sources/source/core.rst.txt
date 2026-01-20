@@ -65,7 +65,7 @@ Lapse
 
 .. _aurel.core.AurelCore.DDalpha:
 
-`DDalpha <../_modules/aurel/core.html#AurelCore.DDalpha>`_: D_iD_j\alpha$ Spatial covariant second derivative of the lapse with spatial indices down
+`DDalpha <../_modules/aurel/core.html#AurelCore.DDalpha>`_: $D_iD_j\alpha$ Spatial covariant second derivative of the lapse with spatial indices down
 
 Shift
 -----

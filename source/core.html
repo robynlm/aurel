@@ -18,11 +18,11 @@
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=8d170800"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
       <script src="../_static/custom.js?v=67be0c79"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -215,7 +215,7 @@ saves it in the AurelCore.data dictionary.</p></li>
 </dl>
 <div style='display: none;' aria-hidden='true'><dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aurel.core.</span></span><span class="sig-name descname"><span class="pre">AurelCore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aurel.core.</span></span><span class="sig-name descname"><span class="pre">AurelCore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Class able to calculate any variable in aurel.descriptions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -359,7 +359,7 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">DDalpha</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore.DDalpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>D_iD_jalpha$ Spatial covariant second derivative of the lapse with spatial indices down</p>
+<dd><p><span class="math notranslate nohighlight">\(D_iD_j\alpha\)</span> Spatial covariant second derivative of the lapse with spatial indices down</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1311,7 +1311,7 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 <h4>Lapse<a class="headerlink" href="#lapse" title="Link to this heading"></a></h4>
 <p id="aurel-core-aurelcore-alpha"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.alpha">alpha</a>: <span class="math notranslate nohighlight">\(\alpha\)</span> Lapse. I assume <span class="math notranslate nohighlight">\(\alpha=1\)</span>, if not then please define AurelCore.data[‘alpha’] = …</p>
 <p id="aurel-core-aurelcore-dtalpha"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.dtalpha">dtalpha</a>: <span class="math notranslate nohighlight">\(\partial_t \alpha\)</span> Coordinate time derivative of the lapse. I assume <span class="math notranslate nohighlight">\(\partial_t \alpha=0\)</span>, if not then please define AurelCore.data[‘dtalpha’] = …</p>
-<p id="aurel-core-aurelcore-ddalpha"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.DDalpha">DDalpha</a>: D_iD_jalpha$ Spatial covariant second derivative of the lapse with spatial indices down</p>
+<p id="aurel-core-aurelcore-ddalpha"><a class="reference external" href="../_modules/aurel/core.html#AurelCore.DDalpha">DDalpha</a>: <span class="math notranslate nohighlight">\(D_iD_j\alpha\)</span> Spatial covariant second derivative of the lapse with spatial indices down</p>
 </section>
 <section id="shift">
 <h4>Shift<a class="headerlink" href="#shift" title="Link to this heading"></a></h4>
@@ -1544,7 +1544,7 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 <h2>AurelCore Methods<a class="headerlink" href="#aurelcore-methods" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="aurel.core.AurelCore">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aurel.core.</span></span><span class="sig-name descname"><span class="pre">AurelCore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.core.AurelCore" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aurel.core.</span></span><span class="sig-name descname"><span class="pre">AurelCore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aurel/core.html#AurelCore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aurel.core.AurelCore" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class able to calculate any variable in aurel.descriptions.</p>
 <dl class="field-list simple">

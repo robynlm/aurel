@@ -18,11 +18,11 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=8d170800"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/design-tabs.js?v=f930bc37"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
       <script src="_static/custom.js?v=67be0c79"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -156,19 +156,19 @@ Designed with ease of use in mind, it will <strong>au</strong>tomatically calcul
 <h1>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
 <p>Start your Python session on a jupyter notebook or in a Python script
 and import the <code class="docutils literal notranslate"><span class="pre">aurel.AurelCore</span></code> class:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   
    <span class="kn">import</span><span class="w"> </span><span class="nn">aurel</span>
-
+   
    <span class="c1"># Define your grid parameters</span>
    <span class="n">param</span> <span class="o">=</span> <span class="p">{</span>
        <span class="s1">&#39;Nx&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s1">&#39;Ny&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s1">&#39;Nz&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span>
        <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;zmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span>
        <span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="mf">0.03125</span><span class="p">,</span> <span class="s1">&#39;dy&#39;</span><span class="p">:</span> <span class="mf">0.03125</span><span class="p">,</span> <span class="s1">&#39;dz&#39;</span><span class="p">:</span> <span class="mf">0.03125</span><span class="p">,</span>
    <span class="p">}</span>
-
+   
    <span class="c1"># Initialize the finite difference class</span>
    <span class="n">fd</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">FiniteDifference</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
-
+   
    <span class="c1"># Initialize the AurelCore class</span>
    <span class="n">rel</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCore</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
 </pre></div>
@@ -214,8 +214,8 @@ containing the spacetime and matter fields over time:</p>
 list of numpy arrays, one for each time step. Calculations will be performed
 for each of these time steps as:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span>
-   <span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span>
-   <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name_of_the_entity&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;custom_quantity&#39;</span><span class="p">:</span> <span class="n">custom_quantity</span><span class="p">}],</span>
+   <span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> 
+   <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name_of_the_entity&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;custom_quantity&#39;</span><span class="p">:</span> <span class="n">custom_quantity</span><span class="p">}],</span> 
    <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name_of_estimate&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;custom_estimate&#39;</span><span class="p">:</span> <span class="n">custom_estimate</span><span class="p">}],</span>
    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
