@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Summary/Abstract &mdash; aurel May 2025 documentation</title>
+  <title>Summary &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -95,7 +95,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Summary/Abstract</li>
+      <li class="breadcrumb-item active">Summary</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/paper/paper.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -105,46 +105,66 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section class="tex2jax_ignore mathjax_ignore" id="summary-abstract">
-<h1>Summary/Abstract<a class="headerlink" href="#summary-abstract" title="Link to this heading"></a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">aurel</span></code> is an open-source Python package designed to <em>au</em>tomatically calculate <em>rel</em>ativistic quantities.
 It uses an efficient, flexible and user-friendly caching and dependency-tracking system, ideal for managing the highly nonlinear nature of general relativity.
 The package supports both symbolic and numerical calculations.
 The symbolic part extends <code class="docutils literal notranslate"><span class="pre">SymPy</span></code> with additional tensorial calculations.
 The numerical part computes a wide range of tensorial quantities, such as curvature, matter kinematics and much more, directly from any spacetime and matter data arrays using finite-difference methods.
-Inputs can be either generated from analytical expressions or imported from numerical relativity simulations.
+Inputs can be either generated from analytical expressions or imported from Numerical Relativity (NR) simulations.
 For users of <code class="docutils literal notranslate"><span class="pre">Einstein</span> <span class="pre">Toolkit</span></code>, <code class="docutils literal notranslate"><span class="pre">aurel</span></code> also provides utilities to load 3D data generated with <code class="docutils literal notranslate"><span class="pre">Carpet</span></code>.
-Given the increasing use of numerical relativity, <code class="docutils literal notranslate"><span class="pre">aurel</span></code> offers a timely post-processing tool to support the popularisation of this field.</p>
+Given the increasing use of NR, <code class="docutils literal notranslate"><span class="pre">aurel</span></code> offers a timely post-processing tool to support the popularisation of this field.</p>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="statement-of-need">
 <h1>Statement of need<a class="headerlink" href="#statement-of-need" title="Link to this heading"></a></h1>
-<p>General relativity describes matter as moving according to how distances shrink or expand; likewise, the intervals of time and space evolve depending on the distribution of matter.
-Handling this dynamic ``mesh’’ of distances and times requires elaborate tensor algebra that, in some cases, can only be managed with symbolic or numerical tools.
-Naturally, numerical relativity has become an essential tool in modern astrophysics, cosmology, and gravitational physics, most notably in the modelling of gravitational-wave signals.</p>
-<p>While established computational frameworks focus on solving and evolving Einstein’s field equations with specific key diagnostics, they leave calculations of the remaining analysis to the discretion of the researchers.
+<p>General relativity describes matter as moving according to how distances shrink or expand; likewise, the intervals of space and time evolve depending on the distribution of matter.
+Handling this dynamic ``mesh” of distances and times requires elaborate tensor algebra that, in some cases, can only be managed with symbolic or numerical tools.
+Naturally, NR has become essential for modern astrophysics, cosmology, and gravitational physics, most notably in the modelling of gravitational-wave signals.</p>
+<p>While established computational frameworks focus on solving and evolving Einstein’s field equations, with specific key diagnostics, they leave calculations of the remaining analysis to the discretion of the researchers.
 Newcomers to the field then face a substantial overhead until they develop their own personal post-processing codes.
 Established researchers also face the tedious task of handling intermediary variables and indices when calculating new quantities.
 The field then suffers from this error-prone, time-consuming process and would benefit from an accessible, open-source, standardised framework to automate these steps.</p>
-<p>Therefore, we present <code class="docutils literal notranslate"><span class="pre">aurel</span></code>, an open-source Python package designed to streamline relativistic calculations.
+<p>We therefore present <code class="docutils literal notranslate"><span class="pre">aurel</span></code>, an open-source Python package designed to streamline relativistic calculations.
 It is hosted on <a class="reference external" href="https://github.com/robynlm/aurel">GitHub</a> and is available on <a class="reference external" href="https://pypi.org/project/aurel/">PyPI</a>.
 The documentation is available through <a class="reference external" href="https://robynlm.github.io/aurel/">GitHub Pages</a>.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="features">
-<h1>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h1>
+<section class="tex2jax_ignore mathjax_ignore" id="state-of-the-field">
+<h1>State of the field<a class="headerlink" href="#state-of-the-field" title="Link to this heading"></a></h1>
+<p>When looking for general relativity Python packages, there are a number of tools that provide symbolic calculations [&#64;GraviPy2014; &#64;SageManifolds2015; &#64;PyHole2017; &#64;EinsteinPy2020; &#64;Pytearcat2022; &#64;PyGRO2025; &#64;OGRePy2025; &#64;GREOPy2025].
+Or, one may also consider computer algebra systems [&#64;Maple2025; &#64;Mathematica2025; &#64;xAct2025].
+However, when non-linearities become too complex for symbolic packages, NR is used instead.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Einstein</span> <span class="pre">Toolkit</span></code> [&#64;ET2012; &#64;ET2025] is a large community-driven software whose tools enable the evolution of Einstein’s field equations.
+Diagnostic and further analysis calculations are typically performed on the fly, during simulations.
+To study the outputs of such simulations, provided by <code class="docutils literal notranslate"><span class="pre">Carpet</span></code>, there are Python reading packages available [&#64;PostCactus; &#64;kuibit2021; &#64;scidata; &#64;mayawaves2025].
+These extra calculations can slow down the simulation of the spacetime evolution, and if certain relativistic quantities are not available in <code class="docutils literal notranslate"><span class="pre">Einstein</span> <span class="pre">Toolkit</span></code>, or in one of the post-processing packages, then the user needs to code that up themselves.</p>
+<p>There are a number of other well-established NR codes [&#64;METHOD2018; &#64;GRAMSES2019; &#64;GRChombo2021; &#64;ExaGRyPE2024; &#64;MHDuet2025] that also have their own diagnostic tools.
+However, these are typically built-in, so going from one code to another, to benchmark or to use their different types of applications, requires learning the ecosystem of each.</p>
+<p>To improve the community’s versatility and limit the repeated implementation of error-prone calculations, there is a motivation to provide packages for computing relativistic quantities in an NR-code-agnostic way.
+Especially in the post-processing sense, where all calculations are done from a given NR spacetime and matter solution.
+A couple of notable packages [&#64;distorted-motsfinder2018; &#64;BiGONLight2021] focus on ray tracing, or apparent-horizon finding, which are currently beyond the scope of <code class="docutils literal notranslate"><span class="pre">aurel</span></code>.
+While others have more overlap [&#64;EBWeyl2023; &#64;EinFields2025] in calculating curvature terms, they differ in scope and workflow.</p>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">aurel</span></code> innovates in its automatic design, which is easily extendable and provides flexibility and robustness with a large and ever-growing catalogue of relativistic quantities.
+A precursor to this package was <code class="docutils literal notranslate"><span class="pre">EBWeyl</span></code> [&#64;EBWeyl2023], as it provided calculations of gravito-electromagnetic contributions from base spacetime and matter quantities.
+<code class="docutils literal notranslate"><span class="pre">aurel</span></code> now has a completely different structure (relying on the automatic dependency resolution), provides calculations of many more terms, over time, and has entirely new features as described in the following section.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="software-design">
+<h1>Software Design<a class="headerlink" href="#software-design" title="Link to this heading"></a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">aurel</span></code> provides an intuitive interface for the automatic calculation of general relativistic quantities, either symbolically (with <code class="docutils literal notranslate"><span class="pre">AurelCoreSymbolic</span></code>, built on <code class="docutils literal notranslate"><span class="pre">SymPy</span></code> [&#64;SymPy2017]) or numerically (with <code class="docutils literal notranslate"><span class="pre">AurelCore</span></code>, which heavily utilises <code class="docutils literal notranslate"><span class="pre">numpy.einsum</span></code> [&#64;NumPy2020] for efficient operations on array data structures).</p>
 <p>Both require base quantities such as the spacetime coordinates or the parameters of the Cartesian numerical grid, as well as the spacetime and matter distributions (the Minkowski vacuum is otherwise assumed).
-These inputs can either come from analytical expressions, with a couple of built-in solutions available, or from output data from any numerical relativity simulations.</p>
-<p>Specifically, for simulations run with <code class="docutils literal notranslate"><span class="pre">Carpet</span></code> in the <code class="docutils literal notranslate"><span class="pre">Einstein</span> <span class="pre">Toolkit</span></code>, the <code class="docutils literal notranslate"><span class="pre">reading</span></code> module provides helper functions to load data in that specific format.
-These can read the parameter file, create summarising files of the iterations and data variables available. Then the <code class="docutils literal notranslate"><span class="pre">read_data</span></code> function can handle data separated into different simulation restarts, join different multiprocessing chunks, and read different refinement levels. Since the raw data can sometimes take a long time to open, <code class="docutils literal notranslate"><span class="pre">read_data</span></code> can also split the data per iteration, instead of per variable, for quicker access in future reads. Additionally, <code class="docutils literal notranslate"><span class="pre">read_data</span></code> also has the capacity to read in data directly from checkpoint files instead.</p>
-<p>Then, once input data is provided, users can directly request a wide range of relativistic quantities, including: spacetime; matter (Eulerian, Lagrangian, or conserved); BSSNOK; constraints; fluid covariant kinematics; null ray expansion; 3- and 4-dimensional curvature; gravito-electromagnetism; Weyl scalars and invariants (including gravitational waves).
+These inputs can either come from analytical expressions, with a couple of built-in solutions available, or from output data from any NR simulations; they just need to be passed as numpy arrays.</p>
+<p>Specifically, for simulations run with <code class="docutils literal notranslate"><span class="pre">Carpet</span></code> in the <code class="docutils literal notranslate"><span class="pre">Einstein</span> <span class="pre">Toolkit</span></code>, the <code class="docutils literal notranslate"><span class="pre">reading</span></code> module provides helper functions to load and organise the 3D data.
+These can read the parameter file, summarise available iterations and variables, and handle data separated across restarts, chunks, or refinement levels for normal <code class="docutils literal notranslate"><span class="pre">Carpet</span></code> data files or checkpoint files.
+To speed up repeated data reading, <code class="docutils literal notranslate"><span class="pre">read_data</span></code> can also split the data per iteration, instead of per variable.</p>
+<p>Then, once input data is provided, users can directly request a wide range of relativistic quantities, including: spacetime; matter (Eulerian, Lagrangian, or conserved); BSSNOK formulation; constraints; fluid covariant kinematics; null ray expansion; 3- and 4-dimensional curvature; gravito-electromagnetism; Weyl scalars and invariants (including gravitational waves).
 To see a full list of available quantities, see: <a class="reference external" href="https://robynlm.github.io/aurel/source/core.html#descriptions-of-available-terms">descriptions</a>.
 Tools are also provided for spatial and spacetime covariant derivatives and Lie derivatives.
 All spatial derivatives are computed by the <code class="docutils literal notranslate"><span class="pre">FiniteDifference</span></code> class that provides 2nd, 4th, 6th and 8th order schemes, using periodic, symmetric or one-sided boundary conditions.</p>
 <section id="automatic-computational-pathway">
 <h2>Automatic Computational Pathway<a class="headerlink" href="#automatic-computational-pathway" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">aurel</span></code> automatic process composes a computational pathway at runtime to evaluate the requested quantities.
-This is implemented through a lazy-evaluation memoised property pattern, where each quantity is defined as a method of the core class that may depend on other quantities.</p>
-<p>Users request quantities via a dictionary-style access, e.g. <code class="docutils literal notranslate"><span class="pre">rel[&quot;s_RicciS&quot;]</span></code>, which triggers the lazy memoised check to see if this is already cached.
+This is implemented through a lazy-evaluation memoised property pattern, where each quantity is defined as a method of the core class that may depend on other quantities. This design has been chosen for its flexibility and accessibility while remaining robust under future extensions.</p>
+<p>Quantities are requested via a user-friendly dictionary-style access, e.g. <code class="docutils literal notranslate"><span class="pre">rel[&quot;s_RicciS&quot;]</span></code>, which triggers the lazy memoised check to see if this is already cached.
 If yes, then the result is directly returned.
 If not, then the corresponding method is called, which recursively triggers the calculation of dependencies (e.g. <code class="docutils literal notranslate"><span class="pre">rel[&quot;s_Ricci_down3&quot;]</span></code>).
 This continues until the requested quantities can be calculated and so returned.</p>
@@ -162,20 +182,21 @@ By design, it is easily extensible, so <code class="docutils literal notranslate
 This makes <code class="docutils literal notranslate"><span class="pre">aurel</span></code> versatile, supporting an infinite number of ways to view a problem and develop diagnostic tools.</p>
 </section>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="related-packages">
-<h1>Related packages<a class="headerlink" href="#related-packages" title="Link to this heading"></a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">EBWeyl</span></code> [&#64;EBWeyl2023] was a precursor to <code class="docutils literal notranslate"><span class="pre">aurel</span></code> as it provided calculations of gravito-electromagnetic contributions from base spacetime and matter quantities.
-<code class="docutils literal notranslate"><span class="pre">aurel</span></code> has a completely different structure (relying on the automatic dependency resolution), provides calculations of many more terms, over time, and has entirely new features: symbolic calculations, reading <code class="docutils literal notranslate"><span class="pre">Einstein</span> <span class="pre">Toolkit</span></code> data, and built-in solutions.
-These capabilities, therefore, overlap with many other codes; below, we list only Python packages.</p>
-<p><code class="docutils literal notranslate"><span class="pre">aurel</span></code> provides symbolic calculations, so may overlap with other general relativity symbolic packages, see: <code class="docutils literal notranslate"><span class="pre">GraviPy</span></code> [&#64;GraviPy2014], <code class="docutils literal notranslate"><span class="pre">SageManifolds</span></code> [&#64;SageManifolds2015], <code class="docutils literal notranslate"><span class="pre">EinsteinPy</span></code> [&#64;EinsteinPy2020], <code class="docutils literal notranslate"><span class="pre">Pytearcat</span></code> [&#64;Pytearcat2022], and <code class="docutils literal notranslate"><span class="pre">OGRePy</span></code> [&#64;OGRePy2025].</p>
-<p><code class="docutils literal notranslate"><span class="pre">aurel</span></code> can work with data from any origin, whether analytically generated or from a numerical relativity simulation; they just need to be passed as numpy arrays. But <code class="docutils literal notranslate"><span class="pre">aurel</span></code> also provides tools to read 3D data from <code class="docutils literal notranslate"><span class="pre">Carpet</span></code> <code class="docutils literal notranslate"><span class="pre">Einstein</span> <span class="pre">Toolkit</span></code> simulations [&#64;ET2012; &#64;ET2025]. Therefore, there is also an overlap with: <code class="docutils literal notranslate"><span class="pre">PostCactus</span></code> [&#64;PostCactus], <code class="docutils literal notranslate"><span class="pre">kuibit</span></code> [&#64;kuibit2021], <code class="docutils literal notranslate"><span class="pre">scidata</span></code> [&#64;scidata], and <code class="docutils literal notranslate"><span class="pre">mayawaves</span></code> [&#64;mayawaves2025].</p>
-<p>Then, several notable Python packages for general relativity focus on different aspects beyond the current targets of <code class="docutils literal notranslate"><span class="pre">aurel</span></code>:</p>
-<ul class="simple">
-<li><p>code generation: <code class="docutils literal notranslate"><span class="pre">NRPy</span></code> [&#64;NRPy2018]</p></li>
-<li><p>evolution codes: <code class="docutils literal notranslate"><span class="pre">COFFEE</span></code> [&#64;COFFEE2019] and <code class="docutils literal notranslate"><span class="pre">Engrenage</span></code> [&#64;Engrenage]</p></li>
-<li><p>geodesic and raytracing: <code class="docutils literal notranslate"><span class="pre">PyHole</span></code> [&#64;PyHole2017], <code class="docutils literal notranslate"><span class="pre">EinsteinPy</span></code> [&#64;EinsteinPy2020], <code class="docutils literal notranslate"><span class="pre">GREOPy</span></code> [&#64;GREOPy2025], <code class="docutils literal notranslate"><span class="pre">PyGRO</span></code> [&#64;PyGRO2025]</p></li>
-<li><p>marginaly trapped outer surfaces: <code class="docutils literal notranslate"><span class="pre">distorted-motsfinder</span></code> [&#64;distorted-motsfinder2018]</p></li>
-</ul>
+<section class="tex2jax_ignore mathjax_ignore" id="research-impact-statement">
+<h1>Research Impact Statement<a class="headerlink" href="#research-impact-statement" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">aurel</span></code> is a specialist tool for general relativity researchers and streamlines numerical relativists’ post-processing workflow.
+Through conference interactions and collaborations involving the authors, this package has gradually been disseminated to individual researchers who appreciate the effortless integration, satisfying dependency resolution and substantial reduction to post-processing overhead.
+Indeed, in ongoing studies involving NR simulations of primordial black hole formation, <code class="docutils literal notranslate"><span class="pre">aurel</span></code> has increased capacity and redirected repetitive and error-prone development efforts towards exploring a broader range of simulated scenarios.
+Additionally, for master students, the straightforward and transparent design has provided an easy gateway for them to analyse NR simulations and so quickly get results within the duration of their projects.
+Going forward, awareness of this code will build upon publication, reaching a wider audience and supporting the popularisation of NR.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="ai-usage-disclosure">
+<h1>AI usage disclosure<a class="headerlink" href="#ai-usage-disclosure" title="Link to this heading"></a></h1>
+<p>GitHub Copilot Claude Sonnet 4 was used for the development and documentation of this package.
+Autocompletion suggestions were accepted via the VSCode Copilot plugin, and upon the developer’s request, edits and code snippets were generated via the large language model’s user interface.
+The most significant AI contributions came in drafting the docstrings and scaffolding the test suite, both of which are essential for the accessibility and robustness of this package.
+Each and every suggestion or contribution was meticulously reviewed and adjusted before being included by the authors, who made all core design decisions and innovated the original structural concept.
+Finally, this paper was prepared without the use of generative language models, solely with grammar checkers.</p>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="acknowledgements">
 <h1>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Link to this heading"></a></h1>
