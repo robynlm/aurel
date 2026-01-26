@@ -1,0 +1,350 @@
+
+% JOSS LaTeX Template
+
+% --- Document Class and Packages ---
+\PassOptionsToPackage{dvipsnames,svgnames}{xcolor}
+\documentclass[10pt,a4paper,onecolumn]{article}
+
+% --- Essential Packages ---
+\usepackage{marginnote}    % Margin notes
+\usepackage{graphicx}      % Images
+\usepackage{xcolor}        % Colors
+\usepackage{etoolbox}      % Programming tools
+\usepackage[affil-it]{authblk} % Author affiliations
+\usepackage{orcidlink}     % ORCID links
+\usepackage{titlesec}      % Section formatting
+\usepackage{calc}          % Calculations
+\usepackage{tikz}          % Drawing
+\usepackage{hyperref}      % Hyperlinks
+\usepackage{caption}       % Caption formatting
+\usepackage{amssymb,amsmath} % Math symbols
+\usepackage{ifxetex,ifluatex} % Engine detection
+\usepackage{seqsplit}      % Split long text
+\usepackage{xstring}       % String manipulation
+\usepackage{float}         % Improved float control
+
+% --- Force figure to be placed exactly here ---
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+  \expandafter\origfigure\expandafter[H]
+} {
+  \endorigfigure
+}
+
+% --- Citation Handling (Pandoc citeproc) ---
+% Definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % Allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % Avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+
+% --- CSL References (Pandoc) ---
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{% 
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % Turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % Set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+
+% --- CSL Macros ---
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+% --- Language and Unicode ---
+\ifLuaTeX
+  \usepackage[bidi=basic]{babel}
+\else
+  \usepackage[bidi=default]{babel}
+\fi
+\babelprovide[main,import]{american}
+
+% --- Unicode character declarations ---
+\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}   % ≥
+\DeclareUnicodeCharacter{0308}{\"{}}
+
+% --- Split long \texttt for URLs ---
+\let\textttOrig=\texttt
+\def\texttt#1{\expandafter\textttOrig{\seqsplit{#1}}}
+\renewcommand{\seqinsert}{\ifmmode
+  \allowbreak
+  \else\penalty6000\hspace{0pt plus 0.02em}\fi}
+
+% --- Hyperlink handling for DOIs ---
+\makeatletter
+\let\href@Orig=\href
+\def\href@Urllike#1#2{\href@Orig{#1}{\begingroup
+    \def\Url@String{#2}\Url@FormatString
+    \endgroup}}
+\def\href@Notdoi#1#2{\def\tempa{#1}\def\tempb{#2}%
+  \ifx\tempa\tempb\relax\href@Urllike{#1}{#2}\else
+  \href@Orig{#1}{#2}\fi}
+\def\href#1#2{% 
+  \IfBeginWith{#1}{https://doi.org}%
+  {\href@Urllike{#1}{#2}}{\href@Notdoi{#1}{#2}}}
+\makeatother
+
+% --- Page Layout ---
+\usepackage[top=3.5cm, bottom=3cm, right=1.5cm, left=1.0cm,
+            headheight=2.2cm, reversemp, includemp, marginparwidth=4.5cm]{geometry}
+
+% --- Default Font ---
+\renewcommand\familydefault{\sfdefault}
+
+% --- Caption and Section Style ---
+\renewcommand{\captionfont}{\small\sffamily}
+\renewcommand{\captionlabelfont}{\bfseries}
+
+% --- Section/Subsection/Subsubsection Formatting ---
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries}
+  {}{0pt}{}
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries}
+  {}{0pt}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\bfseries}
+  {}{0pt}{}
+\titleformat*{\paragraph}
+  {\sffamily\normalsize}
+
+% --- Header / Footer ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+%\renewcommand{\headrulewidth}{0.50pt}
+\renewcommand{\headrulewidth}{0pt}
+%TODO\fancyhead[L]{\hspace{-0.75cm}\includegraphics[width=5.5cm]{logo.png}}
+\fancyhead[C]{}
+\fancyhead[R]{}
+\renewcommand{\footrulewidth}{0.25pt}
+
+\fancyfoot[R]{\sffamily \thepage}
+\makeatletter
+\let\ps@plain\ps@fancy
+\fancyheadoffset[L]{4.5cm}
+\fancyfootoffset[L]{4.5cm}
+\setlength{\headheight}{64pt}
+
+% --- Custom Macros ---
+\definecolor{linky}{rgb}{0.0, 0.5, 1.0}
+
+% External link icon
+\newcommand{\ExternalLink}{%
+   \tikz[x=1.2ex, y=1.2ex, baseline=-0.05ex]{%
+     \begin{scope}[x=1ex, y=1ex]
+       \clip (-0.1,-0.1)
+         --++ (-0, 1.2)
+         --++ (0.6, 0)
+         --++ (0, -0.6)
+         --++ (0.6, 0)
+         --++ (0, -1);
+       \path[draw,
+         line width = 0.5,
+         rounded corners=0.5]
+         (0,0) rectangle (1,1);
+     \end{scope}
+     \path[draw, line width = 0.5] (0.5, 0.5)
+       -- (1, 1);
+     \path[draw, line width = 0.5] (0.6, 1)
+       -- (1, 1) -- (1, 0.6);
+     }
+   }
+
+% --- Title / Authors / Affiliations ---
+% Patch \maketitle so that it doesn't center
+\patchcmd{\@maketitle}{center}{flushleft}{}{}
+\patchcmd{\@maketitle}{center}{flushleft}{}{}
+% Patch \maketitle so that the font size for the title is normal
+\patchcmd{\@maketitle}{\LARGE}{\LARGE\sffamily}{}{}
+% Patch the patch by authblk so that the author block is flush left
+\def\maketitle{{%
+  \renewenvironment{tabular}[2][]
+    {\begin{flushleft}}
+    {\end{flushleft}}
+  \AB@maketitle}}
+\makeatletter
+\renewcommand\AB@affilsepx{ \protect\Affilfont}
+%\renewcommand\AB@affilnote[1]{{\bfseries #1}\hspace{2pt}}
+\renewcommand\AB@affilnote[1]{{\bfseries #1}\hspace{3pt}}
+\renewcommand{\affil}[2][]%
+   {\newaffiltrue\let\AB@blk@and\AB@pand
+      \if\relax#1\relax\def\AB@note{\AB@thenote}\else\def\AB@note{#1}%
+        \setcounter{Maxaffil}{0}\fi
+        \begingroup
+        \let\href=\href@Orig
+        \let\texttt=\textttOrig
+        \let\protect\@unexpandable@protect
+        \def\thanks{\protect\thanks}\def\footnote{\protect\footnote}%
+        \@temptokena=\expandafter{\AB@authors}%
+        {\def\\{\protect\\\protect\Affilfont}\xdef\AB@temp{#2}}%
+         \xdef\AB@authors{\the\@temptokena\AB@las\AB@au@str
+         \protect\\[\affilsep]\protect\Affilfont\AB@temp}%
+         \gdef\AB@las{}\gdef\AB@au@str{}%
+        {\def\\{, \ignorespaces}\xdef\AB@temp{#2}}%
+        \@temptokena=\expandafter{\AB@affillist}%
+        \xdef\AB@affillist{\the\@temptokena \AB@affilsep
+          \AB@affilnote{\AB@note}\protect\Affilfont\AB@temp}%
+      \endgroup
+       \let\AB@affilsep\AB@affilsepx
+}
+\makeatother
+\renewcommand\Authfont{\sffamily\bfseries}
+\renewcommand\Affilfont{\sffamily\small\mdseries}
+\setlength{\affilsep}{1em}
+
+% --- Font Encoding and Input ---
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% Use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+
+% --- Hyperref Setup ---
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdfborder={0 0 0},
+            breaklinks=true,
+            pdflang={en-UK},
+            colorlinks=true,
+            linkcolor={Maroon},
+            filecolor={Maroon},
+            citecolor=[rgb]{0.0, 0.0, 1.0},
+            urlcolor=linky,
+            colorlinks,breaklinks=true,
+            urlcolor=linky,
+            linkcolor=linky}
+\urlstyle{same}  % don't use monospace font for urls
+
+% --- Restore \texttt in sections/captions ---
+\let\addcontentslineOrig=\addcontentsline
+\def\addcontentsline#1#2#3{\bgroup
+  \let\texttt=\textttOrig\addcontentslineOrig{#1}{#2}{#3}\egroup}
+\let\markbothOrig\markboth
+\def\markboth#1#2{\bgroup
+  \let\texttt=\textttOrig\markbothOrig{#1}{#2}\egroup}
+\let\markrightOrig\markright
+\def\markright#1{\bgroup
+  \let\texttt=\textttOrig\markrightOrig{#1}\egroup}
+  
+% --- Paragraph Spacing ---
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% -----------------------------------------------------------------------------
+% --- Meta Data ---
+% -----------------------------------------------------------------------------
+
+\title{aurel: A Python package for automatic relativistic calculations}
+
+\setlength{\affilsep}{1em}
+\author[1]{Robyn L. Munoz%
+    \,\orcidlink{0000-0003-3345-8520}\,%
+    }
+\author[1]{Christian T. Byrnes%
+    \,\orcidlink{0000-0003-2583-6536}\,%
+    }
+\author[1]{Will J. Roper%
+    \,\orcidlink{0000-0002-3257-8806}\,%
+    }
+
+\affil[1]{Department of Physics and Astronomy, University of Sussex, Brighton, BN1 9QH, United Kingdom}
+
+\hypersetup{pdftitle={Code paper name},
+            pdfauthor={Author1 Name, Author2 Name}}
+
+% --- Custom Footer for JOSS ---
+\fancyfoot[L]{\parbox[t]{0.98\headwidth}{\footnotesize{}}}%TODO{{{\sffamily Munoz et al. (2026). aurel: APython package for automatic relativistic calculations.  \textit{Journal of Open Source Software, ?VOL?(?ISSUE?), ?PAGE?} \href{https://doi.org/10.xxxxxx/draft}{\color{linky}{https://doi.org/10.xxxxxx/draft}}.}}}
+
+% --- Begin Document ---
+\begin{document}
+\date{}
+\maketitle
+
+% --- Margin Panel (JOSS style) ---
+\marginpar{
+  \begin{flushleft}
+  \sffamily\small
+
+  %TODO{\bfseries DOI:} \href{https://doi.org/10.xxxxxx/draft}{\color{linky}{10.xxxxxx/draft}} \\
+
+  %TODO\vspace{2mm}
+
+  {\bfseries Software}
+  \begin{itemize}
+    \setlength\itemsep{0em}
+    %TODO\item \href{https://github.com/openjournals}{\color{linky}{Review}} \ExternalLink
+    \item \href{https://github.com/robynlm/aurel}{\color{linky}{Repository}} \ExternalLink
+    %TODO\item \href{https://doi.org/10.5281}{\color{linky}{Archive}} \ExternalLink
+  \end{itemize}
+
+  \vspace{2mm}
+  \par\noindent\hrulefill\par
+  \vspace{2mm}
+
+  %TODO{\bfseries Editor:} \href{https://joss.theoj.org}{\color{linky}{Open Journals}} \ExternalLink \\
+  %TODO\vspace{1mm}
+  %TODO  {\bfseries Reviewers:}
+  %TODO\begin{itemize}
+  %TODO\setlength\itemsep{0em}
+  %TODO  \item \href{https://github.com/openjournals}{\color{linky}{@openjournals}}
+  %TODO  \end{itemize}
+  %TODO  \vspace{2mm}
+
+  %TODO{\bfseries Submitted:} 01 January 1970\\
+  {\bfseries Published:} unpublished
+
+  \vspace{2mm}
+  {\bfseries License}\\
+  Authors of papers retain copyright and release the work under a Creative Commons Attribution 4.0 International License (\href{https://creativecommons.org/licenses/by/4.0/}{\color{linky}{CC BY 4.0}}). 
+  \end{flushleft}
+}
+
+\vspace{-0.8cm}
+
+% --- Main Content (from Pandoc) ---
+% pandoc paper.md --from markdown --to latex --citeproc --bibliography=paper.bib --metadata link-citations=true -o paper.tex
+\input{paper.tex}
+
+\end{document}

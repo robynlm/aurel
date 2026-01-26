@@ -138,7 +138,7 @@ functions to calculate your own estimates). See the [time evolution example](htt
 
 # Citation
 
-If you use aurel in your work, please cite:
+If you use aurel in your work, please cite or reference it in the following way:
 
 <details>
 <summary style="cursor: pointer; padding: 15px; border: 1px solid rgba(128, 128, 128, 0.3); border-radius: 5px; margin: 5px 0; font-weight: bold; font-size: 1.1em;"><b>Munoz, R. L. (2025). Aurel: A Python package for automatic relativistic calculations. <i>GitHub</i>. <a href="https://github.com/robynlm/aurel">https://github.com/robynlm/aurel</a></b></summary>
