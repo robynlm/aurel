@@ -29,8 +29,7 @@ It uses an efficient, flexible and user-friendly caching and dependency-tracking
 The package supports both symbolic and numerical calculations.
 The symbolic part extends `SymPy` with additional tensorial calculations.
 The numerical part computes a wide range of tensorial quantities, such as curvature, matter kinematics and much more, directly from any spacetime and matter data arrays using finite-difference methods.
-Inputs can be either generated from analytical expressions or imported from Numerical Relativity (NR) simulations. 
-For users of `Einstein Toolkit`, `aurel` also provides utilities to load 3D data generated with `Carpet`.
+Inputs can be either generated from analytical expressions or imported from Numerical Relativity (NR) simulations, with helper functions provided to read in data from standard NR codes.
 Given the increasing use of NR, `aurel` offers a timely post-processing tool to support the popularisation of this field.
 
 # Statement of need
@@ -56,7 +55,7 @@ However, when non-linearities become too complex for symbolic packages, NR is us
 
 `Einstein Toolkit` [@ET2012; @ET2025] is a large community-driven software whose tools enable the evolution of Einstein's field equations.
 Diagnostic and further analysis calculations are typically performed on the fly, during simulations.
-To study the outputs of such simulations, provided by `Carpet`, there are Python reading packages available [@PostCactus; @kuibit2021; @scidata; @mayawaves2025].
+To study the outputs, provided by `Carpet`, there are Python reading packages available [@PostCactus; @kuibit2021; @scidata; @mayawaves2025].
 These extra calculations can slow down the simulation of the spacetime evolution, and if certain relativistic quantities are not available in `Einstein Toolkit`, or in one of the post-processing packages, then the user needs to code that up themselves. 
 
 There are a number of other well-established NR codes [@METHOD2018; @GRAMSES2019; @GRChombo2021; @ExaGRyPE2024; @MHDuet2025] that also have their own diagnostic tools.
@@ -82,7 +81,7 @@ Specifically, for simulations run with `Carpet` in the `Einstein Toolkit`, the `
 These can read the parameter file, summarise available iterations and variables, and handle data separated across restarts, chunks, or refinement levels for normal `Carpet` data files or checkpoint files.
 To speed up repeated data reading, `read_data` can also split the data per iteration, instead of per variable. 
 
-Then, once input data is provided, users can directly request a wide range of relativistic quantities, including: spacetime; matter (Eulerian, Lagrangian, or conserved); BSSNOK formulation; constraints; fluid covariant kinematics; null ray expansion; 3- and 4-dimensional curvature; gravito-electromagnetism; Weyl scalars and invariants (including gravitational waves). 
+Then, once input data is provided, users can directly request a wide range of relativistic quantities, including: spacetime; matter (Eulerian, Lagrangian, or conserved); NR formulations; constraints; fluid covariant kinematics; null ray expansion; 3- and 4-dimensional curvature; gravito-electromagnetism; Weyl scalars and invariants (including gravitational waves). 
 To see a full list of available quantities, see: [descriptions](https://robynlm.github.io/aurel/source/core.html#descriptions-of-available-terms).
 Tools are also provided for spatial and spacetime covariant derivatives and Lie derivatives.
 All spatial derivatives are computed by the `FiniteDifference` class that provides 2nd, 4th, 6th and 8th order schemes, using periodic, symmetric or one-sided boundary conditions.

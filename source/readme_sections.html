@@ -127,7 +127,7 @@ Designed with ease of use in mind, it will <strong>au</strong>tomatically calcul
 <ul class="simple">
 <li><p><strong>Comprehensive tensor calculations</strong>:</p>
 <ul>
-<li><p>Numerically (<a class="reference external" href="https://robynlm.github.io/aurel/source/core.html">documentation</a>, <a class="reference external" href="https://robynlm.github.io/aurel/notebooks/Example.html">examples</a>)</p></li>
+<li><p>Numerically (see the following sections and <a class="reference external" href="https://robynlm.github.io/aurel/source/core.html">documentation</a>, <a class="reference external" href="https://robynlm.github.io/aurel/notebooks/Example.html">examples</a>)</p></li>
 <li><p>Symbolically (<a class="reference external" href="https://robynlm.github.io/aurel/source/coresymbolic.html">documentation</a>, <a class="reference external" href="https://robynlm.github.io/aurel/notebooks/Example_symbolic.html">example</a>)</p></li>
 </ul>
 </li>
@@ -178,8 +178,8 @@ and import the <code class="docutils literal notranslate"><span class="pre">aure
 </pre></div>
 </div>
 <p>At this point you need to provide the spacetime metric, extrinsic curvature
-and matter fields (see <a class="reference external" href="https://robynlm.github.io/aurel/source/core.html#assumed-quantities">assumed quantities</a>), where these would otherwise
-be assumed to correspond to Minkowski vacuum.
+and matter fields (see <a class="reference external" href="https://robynlm.github.io/aurel/source/core.html#assumed-quantities">assumed quantities</a>), otherwise these are
+assumed to correspond to Minkowski vacuum.
 These are passed as numpy arrays to aurel in the following way:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the xx component of the spacetime metric</span>
 <span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;gxx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]))</span>

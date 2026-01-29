@@ -112,8 +112,7 @@ It uses an efficient, flexible and user-friendly caching and dependency-tracking
 The package supports both symbolic and numerical calculations.
 The symbolic part extends <code class="docutils literal notranslate"><span class="pre">SymPy</span></code> with additional tensorial calculations.
 The numerical part computes a wide range of tensorial quantities, such as curvature, matter kinematics and much more, directly from any spacetime and matter data arrays using finite-difference methods.
-Inputs can be either generated from analytical expressions or imported from Numerical Relativity (NR) simulations.
-For users of <code class="docutils literal notranslate"><span class="pre">Einstein</span> <span class="pre">Toolkit</span></code>, <code class="docutils literal notranslate"><span class="pre">aurel</span></code> also provides utilities to load 3D data generated with <code class="docutils literal notranslate"><span class="pre">Carpet</span></code>.
+Inputs can be either generated from analytical expressions or imported from Numerical Relativity (NR) simulations, with helper functions provided to read in data from standard NR codes.
 Given the increasing use of NR, <code class="docutils literal notranslate"><span class="pre">aurel</span></code> offers a timely post-processing tool to support the popularisation of this field.</p>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="statement-of-need">
@@ -136,7 +135,7 @@ Or, one may also consider computer algebra systems [&#64;Maple2025; &#64;Mathema
 However, when non-linearities become too complex for symbolic packages, NR is used instead.</p>
 <p><code class="docutils literal notranslate"><span class="pre">Einstein</span> <span class="pre">Toolkit</span></code> [&#64;ET2012; &#64;ET2025] is a large community-driven software whose tools enable the evolution of Einstein’s field equations.
 Diagnostic and further analysis calculations are typically performed on the fly, during simulations.
-To study the outputs of such simulations, provided by <code class="docutils literal notranslate"><span class="pre">Carpet</span></code>, there are Python reading packages available [&#64;PostCactus; &#64;kuibit2021; &#64;scidata; &#64;mayawaves2025].
+To study the outputs, provided by <code class="docutils literal notranslate"><span class="pre">Carpet</span></code>, there are Python reading packages available [&#64;PostCactus; &#64;kuibit2021; &#64;scidata; &#64;mayawaves2025].
 These extra calculations can slow down the simulation of the spacetime evolution, and if certain relativistic quantities are not available in <code class="docutils literal notranslate"><span class="pre">Einstein</span> <span class="pre">Toolkit</span></code>, or in one of the post-processing packages, then the user needs to code that up themselves.</p>
 <p>There are a number of other well-established NR codes [&#64;METHOD2018; &#64;GRAMSES2019; &#64;GRChombo2021; &#64;ExaGRyPE2024; &#64;MHDuet2025] that also have their own diagnostic tools.
 However, these are typically built-in, so going from one code to another, to benchmark or to use their different types of applications, requires learning the ecosystem of each.</p>
@@ -156,7 +155,7 @@ These inputs can either come from analytical expressions, with a couple of built
 <p>Specifically, for simulations run with <code class="docutils literal notranslate"><span class="pre">Carpet</span></code> in the <code class="docutils literal notranslate"><span class="pre">Einstein</span> <span class="pre">Toolkit</span></code>, the <code class="docutils literal notranslate"><span class="pre">reading</span></code> module provides helper functions to load and organise the 3D data.
 These can read the parameter file, summarise available iterations and variables, and handle data separated across restarts, chunks, or refinement levels for normal <code class="docutils literal notranslate"><span class="pre">Carpet</span></code> data files or checkpoint files.
 To speed up repeated data reading, <code class="docutils literal notranslate"><span class="pre">read_data</span></code> can also split the data per iteration, instead of per variable.</p>
-<p>Then, once input data is provided, users can directly request a wide range of relativistic quantities, including: spacetime; matter (Eulerian, Lagrangian, or conserved); BSSNOK formulation; constraints; fluid covariant kinematics; null ray expansion; 3- and 4-dimensional curvature; gravito-electromagnetism; Weyl scalars and invariants (including gravitational waves).
+<p>Then, once input data is provided, users can directly request a wide range of relativistic quantities, including: spacetime; matter (Eulerian, Lagrangian, or conserved); NR formulations; constraints; fluid covariant kinematics; null ray expansion; 3- and 4-dimensional curvature; gravito-electromagnetism; Weyl scalars and invariants (including gravitational waves).
 To see a full list of available quantities, see: <a class="reference external" href="https://robynlm.github.io/aurel/source/core.html#descriptions-of-available-terms">descriptions</a>.
 Tools are also provided for spatial and spacetime covariant derivatives and Lie derivatives.
 All spatial derivatives are computed by the <code class="docutils literal notranslate"><span class="pre">FiniteDifference</span></code> class that provides 2nd, 4th, 6th and 8th order schemes, using periodic, symmetric or one-sided boundary conditions.</p>
