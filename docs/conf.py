@@ -56,7 +56,8 @@ exclude_patterns = [
     'Thumbs.db',
     '.DS_Store',
     'notebooks/docinspect.ipynb',
-    'source/README.md'
+    'source/README.md',
+    'paper'
 ]
 
 html_theme = 'sphinx_rtd_theme'
