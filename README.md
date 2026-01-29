@@ -21,7 +21,7 @@ Designed with ease of use in mind, it will **au**tomatically calculate **rel**at
 # Key Features
 
 - **Comprehensive tensor calculations**:
-  - Numerically ([documentation](https://robynlm.github.io/aurel/source/core.html), [examples](https://robynlm.github.io/aurel/notebooks/Example.html))
+  - Numerically (see the following sections and [documentation](https://robynlm.github.io/aurel/source/core.html), [examples](https://robynlm.github.io/aurel/notebooks/Example.html))
   - Symbolically ([documentation](https://robynlm.github.io/aurel/source/coresymbolic.html), [example](https://robynlm.github.io/aurel/notebooks/Example_symbolic.html))
 - **Dynamic computation and intelligent caching**: Aurel automatically calculates only what's needed and caches results, significantly improving performance for complex calculations
 - **Clear user feedback**: Progress bars and informative messages guide you through computations
@@ -73,8 +73,8 @@ and import the `aurel.AurelCore` class:
 ```
 
 At this point you need to provide the spacetime metric, extrinsic curvature
-and matter fields (see [assumed quantities](https://robynlm.github.io/aurel/source/core.html#assumed-quantities)), where these would otherwise 
-be assumed to correspond to Minkowski vacuum.
+and matter fields (see [assumed quantities](https://robynlm.github.io/aurel/source/core.html#assumed-quantities)), otherwise these are 
+assumed to correspond to Minkowski vacuum.
 These are passed as numpy arrays to aurel in the following way:
 
 ```python

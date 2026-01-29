@@ -11,10 +11,10 @@ tensorial quantities, such as curvature, matter kinematics and much
 more, directly from any spacetime and matter data arrays using
 finite-difference methods. Inputs can be either generated from
 analytical expressions or imported from Numerical Relativity (NR)
-simulations. For users of \texttt{Einstein\ Toolkit}, \texttt{aurel}
-also provides utilities to load 3D data generated with \texttt{Carpet}.
-Given the increasing use of NR, \texttt{aurel} offers a timely
-post-processing tool to support the popularisation of this field.
+simulations, with helper functions provided to read in data from
+standard NR codes. Given the increasing use of NR, \texttt{aurel} offers
+a timely post-processing tool to support the popularisation of this
+field.
 
 \section{Statement of need}\label{statement-of-need}
 
@@ -67,8 +67,8 @@ instead.
 \citeproc{ref-ET2025}{Rizzo et al. 2025}) is a large community-driven
 software whose tools enable the evolution of Einstein's field equations.
 Diagnostic and further analysis calculations are typically performed on
-the fly, during simulations. To study the outputs of such simulations,
-provided by \texttt{Carpet}, there are Python reading packages available
+the fly, during simulations. To study the outputs, provided by
+\texttt{Carpet}, there are Python reading packages available
 (\citeproc{ref-PostCactus}{Kastaun, n.d.};
 \citeproc{ref-kuibit2021}{Bozzola 2021}; \citeproc{ref-scidata}{Radice,
 n.d.}; \citeproc{ref-mayawaves2025}{Ferguson et al. 2025}). These extra
@@ -140,7 +140,7 @@ instead of per variable.
 
 Then, once input data is provided, users can directly request a wide
 range of relativistic quantities, including: spacetime; matter
-(Eulerian, Lagrangian, or conserved); BSSNOK formulation; constraints;
+(Eulerian, Lagrangian, or conserved); NR formulations; constraints;
 fluid covariant kinematics; null ray expansion; 3- and 4-dimensional
 curvature; gravito-electromagnetism; Weyl scalars and invariants
 (including gravitational waves). To see a full list of available
