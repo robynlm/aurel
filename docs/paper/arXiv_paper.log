@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.6.4)  28 JAN 2026 15:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.6.4)  29 JAN 2026 10:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -949,13 +949,13 @@ Package rerunfilecheck Info: File `arXiv_paper.out' has not changed.
 (rerunfilecheck)             Checksum: DCDEF58831D85FFAF90C7B4BCB3D79D9;1264.
  ) 
 Here is how much of TeX's memory you used:
- 27202 strings out of 474116
- 502564 string characters out of 5743683
- 1948187 words of memory out of 5000000
+ 27200 strings out of 474116
+ 502542 string characters out of 5743683
+ 1949187 words of memory out of 5000000
  48911 multiletter control sequences out of 15000+600000
- 579978 words of font info for 154 fonts, out of 8000000 for 9000
+ 579901 words of font info for 153 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,13n,101p,1200b,910s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,12n,101p,1200b,910s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
 ></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsi1000.pfb><
 /usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfss0800.pfb></u
@@ -966,7 +966,7 @@ al/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx0900.pfb></usr/local
 /texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx1200.pfb></usr/local/t
 exlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx1440.pfb></usr/local/tex
 live/2024/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on arXiv_paper.pdf (5 pages, 184321 bytes).
+Output written on arXiv_paper.pdf (5 pages, 184154 bytes).
 PDF statistics:
  237 PDF objects out of 1000 (max. 8388607)
  206 compressed objects within 3 object streams
