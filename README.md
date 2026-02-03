@@ -16,7 +16,6 @@
   <a href="https://github.com/robynlm/aurel/actions/workflows/test-build.yml"><img src="https://github.com/robynlm/aurel/actions/workflows/test-build.yml/badge.svg?branch=main"/></a>
   <a href="https://github.com/robynlm/aurel/actions/workflows/test-build.yml"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/robynlm/aurel/main/.github/badges/coverage.json&logo=pytest&logoColor=white"/></a><br>
   <a href="mailto:r.l.munoz@sussex.ac.uk"><img src="https://img.shields.io/badge/Email-r.l.munoz@sussex.ac.uk-red?logo=gmail&logoColor=white"/></a>
-  <a href=""><img src=""/></a>
 </p>
 
 Aurel is an open source Python package for numerical relativity analysis.
