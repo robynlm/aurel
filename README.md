@@ -6,14 +6,17 @@
 
 # Welcome to aurel’s documentation!
 
-[![Documentation](https://img.shields.io/badge/docs-available-blue)](https://robynlm.github.io/aurel/)
-[![GitHub](https://img.shields.io/badge/GitHub-aurel-blue?logo=github)](https://github.com/robynlm/aurel)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![PyPI](https://img.shields.io/pypi/v/aurel?logo=pypi&logoColor=white)](https://pypi.org/project/aurel/)
-[![Test build](https://github.com/robynlm/aurel/actions/workflows/test-build.yml/badge.svg?branch=main)](https://github.com/robynlm/aurel/actions/workflows/test-build.yml)
-![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/robynlm/aurel/main/.github/badges/coverage.json&logo=pytest&logoColor=white)
-[![Email](https://img.shields.io/badge/Email-r.l.munoz@sussex.ac.uk-red?logo=gmail&logoColor=white)](mailto:r.l.munoz@sussex.ac.uk)
+<p align="left">
+  <a href="https://robynlm.github.io/aurel/"><img src="https://img.shields.io/badge/docs-available-blue?logo=readthedocs"/></a>
+  <a href="https://github.com/robynlm/aurel"><img src="https://img.shields.io/badge/GitHub-aurel-blue?logo=github"/></a>
+  <a href="https://arxiv.org/abs/2602.00155"><img src="https://img.shields.io/badge/arXiv-2602.00155-b31b1b.svg?logo=arxiv&logoColor=white"/></a><br>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11%2B-blue?logo=python&logoColor=white"/></a>
+  <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg?logo=opensourceinitiative&logoColor=white"/></a>
+  <a href="https://pypi.org/project/aurel/"><img src="https://img.shields.io/pypi/v/aurel?logo=pypi&logoColor=white"/></a>
+  <a href="https://github.com/robynlm/aurel/actions/workflows/test-build.yml"><img src="https://github.com/robynlm/aurel/actions/workflows/test-build.yml/badge.svg?branch=main"/></a>
+  <a href="https://github.com/robynlm/aurel/actions/workflows/test-build.yml"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/robynlm/aurel/main/.github/badges/coverage.json&logo=pytest&logoColor=white"/></a><br>
+  <a href="mailto:r.l.munoz@sussex.ac.uk"><img src="https://img.shields.io/badge/Email-r.l.munoz@sussex.ac.uk-red?logo=gmail&logoColor=white"/></a>
+</p>
 
 Aurel is an open source Python package for numerical relativity analysis.
 Designed with ease of use in mind, it will **au**tomatically calculate **rel**ativistic terms.
@@ -138,33 +141,37 @@ functions to calculate your own estimates). See the [time evolution example](htt
 
 # Citation
 
-If you use aurel in your work, please cite or reference it in the following way:
+If you use aurel in your work, please cite or reference the arXiv preprint in the following way:
 
 <details>
-<summary style="cursor: pointer; padding: 15px; border: 1px solid rgba(128, 128, 128, 0.3); border-radius: 5px; margin: 5px 0; font-weight: bold; font-size: 1.1em;"><b>Munoz, R. L. (2025). Aurel: A Python package for automatic relativistic calculations. <i>GitHub</i>. <a href="https://github.com/robynlm/aurel">https://github.com/robynlm/aurel</a></b></summary>
+<summary style="cursor: pointer; padding: 15px; border: 1px solid rgba(128, 128, 128, 0.3); border-radius: 5px; margin: 5px 0; font-weight: bold; font-size: 1.1em;"><b>Munoz, R. L., Byrnes, C. T., & Roper, W. J. (2026). aurel: A Python package for automatic relativistic calculations. <a href="
+https://doi.org/10.48550/arXiv.2602.00155">DOI:10.48550/arXiv.2602.00155</a></b></summary>
 
 ```bibtex
-@misc{aurel2025,
-  title     = {Aurel: A Python package for automatic relativistic calculations},
-  author    = {Munoz, Robyn L.},
-  publisher = {GitHub},
-  year      = {2025},
-  url       = {https://github.com/robynlm/aurel}
+@misc{aurel2026,
+  title         = {aurel: A Python package for automatic relativistic calculations},
+  author        = {Robyn L. Munoz and Christian T. Byrnes and Will J. Roper},
+  year          = {2026},
+  doi           = {10.48550/arXiv.2602.00155},
+  eprint        = {2602.00155},
+  archivePrefix = {arXiv},
+  primaryClass  = {astro-ph.IM},
+  url           = {https://robynlm.github.io/aurel/}
 }
 ```
 </details>
 
 <br>
 
-This code is not published yet, so to add to citation count please also include:
+This code is not published yet, so to add to citation count please also include its predecessor:
 
 <details>
-<summary style="cursor: pointer; padding: 15px; border: 1px solid rgba(128, 128, 128, 0.3); border-radius: 5px; margin: 5px 0; font-weight: bold; font-size: 1.1em;"><b>Munoz, R. L., & Bruni, M. (2023). EBWeyl: a Code to Invariantly Characterize Numerical Spacetimes. <i>Classical and Quantum Gravity</i>, 40(13), 135010. <a href="https://doi.org/10.1088/1361-6382/acd6cf">https://doi.org/10.1088/1361-6382/acd6cf</a></b></summary>
+<summary style="cursor: pointer; padding: 15px; border: 1px solid rgba(128, 128, 128, 0.3); border-radius: 5px; margin: 5px 0; font-weight: bold; font-size: 1.1em;"><b>Munoz, R. L., & Bruni, M. (2023). EBWeyl: a Code to Invariantly Characterize Numerical Spacetimes. <i>Classical and Quantum Gravity</i>, 40(13), 135010. <a href="https://doi.org/10.1088/1361-6382/acd6cf">DOI:10.1088/1361-6382/acd6cf</a></b></summary>
 
 ```bibtex
 @article{R.L.Munoz_M.Bruni_2023,
   title     = {EBWeyl: a Code to Invariantly Characterize Numerical Spacetimes},
-  author    = {Munoz, Robyn L. and Bruni, Marco},
+  author    = {Robyn L. Munoz and Marco Bruni},
   journal   = {Classical and Quantum Gravity},
   volume    = {40},
   number    = {13},
