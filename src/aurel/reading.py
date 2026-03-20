@@ -1397,23 +1397,36 @@ def get_content(param, **kwargs):
         if os.path.exists(content_file):
             os.remove(content_file)
 
+    if os.path.exists(content_file):
+        content_available = True
+    else:
+        content_available = False
+        if verbose:
+            print("No existing content file found.")
+
     # Try to load existing content file
-    try:
+    if content_available:
+        try:
+            if verbose:
+                print(f"Loading existing content from {content_file}...")
+            with open(content_file) as f:
+                content_data = json.load(f)
+                # Convert keys back to tuples of variable names
+                vars_and_files = {}
+                for key_str, files in content_data.items():
+                    # Convert key string back to tuple of variable names
+                    key_tuple = tuple(key_str.split(','))
+                    vars_and_files[key_tuple] = files
+            if verbose:
+                print(f"Loaded {len(vars_and_files)} variables from cache.")
+        except (json.JSONDecodeError):
+            content_available = False
+            if verbose:
+                print("Existing content file in invalid format.")
+
+    if not content_available:
         if verbose:
-            print(f"Loading existing content from {content_file}...")
-        with open(content_file) as f:
-            content_data = json.load(f)
-            # Convert keys back to tuples of variable names
-            vars_and_files = {}
-            for key_str, files in content_data.items():
-                # Convert key string back to tuple of variable names
-                key_tuple = tuple(key_str.split(','))
-                vars_and_files[key_tuple] = files
-        if verbose:
-            print(f"Loaded {len(vars_and_files)} variables from cache.")
-    except (FileNotFoundError, json.JSONDecodeError):
-        print("No existing content file found or invalid format."
-              + " Calculating from scratch...")
+            print("Collecting content from scratch...")
 
         vars_and_files = {}
         processed_groups = {}  # Track which groups we've already read
