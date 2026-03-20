@@ -1032,30 +1032,36 @@ def iterations(param, **kwargs):
                 param['simpath'] + param['simname']
                 + f'/output-{restart:04d}/'
                 + param['simname'] + '/checkpoint.chkpt.it_*.h5')
+            # Use just one file pert chunk
             if checkpoint_files != []:
                 if '.file_' in checkpoint_files[0]:
                     checkpoint_files = [
                         cf for cf in checkpoint_files if '.file_0.' in cf]
-
+            # Extract iteration numbers from checkpoint filenames
             checkpoint_its = []
             for chkfile in checkpoint_files:
                 chk_it = int(chkfile.split('checkpoint.chkpt.it_')[1].split('.')[0])
                 checkpoint_its += [chk_it]
             checkpoint_its = sorted(set(checkpoint_its))
 
-            if 'its available' not in its_available[restart].keys():
-                its_available[restart]['its available'] = [
-                    np.min(checkpoint_its), np.max(checkpoint_its)]
-                saveprint(
-                    it_file,
-                    f'it = {np.min(checkpoint_its)} -> {np.max(checkpoint_its)}',
-                    verbose=verbose_file
-                )
-
-            its_available[restart]['checkpoints'] = checkpoint_its
-            saveprint(it_file,
-                      f'Checkpoints available at its: {list(checkpoint_its)}',
-                          verbose=verbose_file)
+            if checkpoint_its != []:
+                if 'its available' not in its_available[restart].keys():
+                    its_available[restart]['its available'] = [
+                        np.min(checkpoint_its), np.max(checkpoint_its)]
+                    saveprint(
+                        it_file,
+                        f'it = {np.min(checkpoint_its)} -> {np.max(checkpoint_its)}',
+                        verbose=verbose_file
+                    )
+                # Save checkpoints iterations
+                its_available[restart]['checkpoints'] = checkpoint_its
+                saveprint(it_file,
+                        f'Checkpoints available at its: {list(checkpoint_its)}',
+                            verbose=verbose_file)
+            else:
+                its_available[restart]['checkpoints'] = []
+                saveprint(it_file, 'No checkpoints found',
+                            verbose=verbose_file)
         # Overall iterations
         its_available = collect_overall_iterations(its_available, verbose_file)
         return its_available
