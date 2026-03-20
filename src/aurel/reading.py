@@ -1161,7 +1161,10 @@ def read_iterations(param, **kwargs):
                     else:
                         it_list = [int(li.split('[')[1].split(']')[0])]
                         its_available[restart_nbr][rlkey] = it_list
-
+                # No checkpoints
+                elif 'No checkpoints found' in li:
+                    its_available[restart_nbr]['checkpoints'] = []
+                # Checkpoints available at its: [0, 10, ...]
                 elif 'Checkpoints available at its' in li:
                     chk_its = li.split('Checkpoints available at its: ')[1]
                     chk_its = chk_its.replace('[', '').replace(']', '')
@@ -1401,8 +1404,6 @@ def get_content(param, **kwargs):
         content_available = True
     else:
         content_available = False
-        if verbose:
-            print("No existing content file found.")
 
     # Try to load existing content file
     if content_available:
