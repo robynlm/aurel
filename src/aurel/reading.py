@@ -794,6 +794,7 @@ def iterations(param, **kwargs):
                     'rl = 0': [itmin, itmax, dit],
                     'rl = 1': [itmin, itmax, dit],
                     ...
+                    'checkpoint its available': [itmin, itmax],
                     'checkpoints': [it1, it2, ...]
                 },
                 ...
@@ -870,32 +871,35 @@ def iterations(param, **kwargs):
             all_restarts = all_restarts[:-1]
 
         # Cut off what has already been processed
-        lines = contents.split("\n")
-        restarts_done = [int(line.split("restart ")[1])
-                         for line in lines
-                         if 'restart' in line]
-        all_restarts = [rnbr for rnbr in all_restarts
+        restarts_done = [k for k in list(its_available.keys())
+                         if isinstance(k, int)]
+        restarts_todo = [rnbr for rnbr in all_restarts
                         if rnbr not in restarts_done]
-        if all_restarts == [] and restarts_done == []:
-            if skip_last:
-                raise ImportError(
-                    'Nothing to process. Consider running with'
-                    + ' skip_last=False to analyse the last restart'
-                    + ' (if it is not an active restart).')
-            else:
-                raise ImportError('Nothing to process.')
+
+        # Error handling for no restarts or all restarts already processed
+        if all_restarts == []:
+            raise ImportError('Nothing to process in '
+                              + param['simpath'] + param['simname'])
+
         if verbose:
-            print('Restarts to process: ' + str(all_restarts), flush=True)
-            if all_restarts == [] and skip_last:
-                print('Nothing new to process. Consider running with'
-                      + ' skip_last=False to analyse the last restart'
-                      + ' (if it is not an active restart).', flush=True)
+            if restarts_todo:
+                print('Restarts to process: ' + str(restarts_todo), flush=True)
+            else:
+                if skip_last:
+                    print('Nothing new to process. Consider running with'
+                        + ' skip_last=False to analyse the last restart'
+                        + ' (if it is not an active restart).', flush=True)
 
         # Process each restart directory
-        for restart in all_restarts:
+        for restart in restarts_todo:
             saveprint(it_file, f' === restart {restart}',
                       verbose=verbose_file)
             its_available[restart] = {}
+            datapath = (param['simpath']+param['simname']
+                        +f'/output-{restart:04d}/'
+                        +param['simname']+'/')
+
+            # ======== Iterations and variables for 3D data files ========
 
             # Analyze available variables in this restart
             vars_and_files = get_content(param,
@@ -906,11 +910,10 @@ def iterations(param, **kwargs):
 
             # Error handling for empty restart directories
             if vars_available == []:
-                # Path to this restart's output directory that was checked
-                datapath = (param['simpath']+param['simname']
-                            +f'/output-{restart:04d}/'
-                            +param['simname']+'/')
-                saveprint(it_file, 'Could not find 3D data in ' + datapath)
+                saveprint(it_file, 'Could not find 3D data in ' + datapath,
+                          verbose=verbose_file)
+                its_available[restart]['var available'] = []
+                its_available[restart]['its available'] = []
             else:
                 # Transform ET variable names to Aurel conventions
                 aurel_vars_available = transform_vars_ET_to_aurel_groups(
@@ -921,46 +924,34 @@ def iterations(param, **kwargs):
                 its_available[restart]['var available'] = aurel_vars_available
 
                 # Select representative file for iteration analysis
-                # Preferably a light file that only has one variable
+                # Preferably a light file
+                files_with_single_var  = sorted(vars_and_files.keys(), key=len)
                 files_with_single_var = [
-                    var for var in list(vars_and_files.keys())
-                    if len(var)==1]
-                if files_with_single_var == []:
-                    for var_to_read in list(vars_and_files.keys()):
-                        file_for_it = vars_and_files[var_to_read][0]
-                        try:
-                            if verbose:
-                                print('Checking if ' + file_for_it
-                                      + ' can be read', flush=True)
-                            with h5py.File(file_for_it, 'r') as f:
-                                fkeys = list(f.keys())
-                            file_to_read = True
-                            break
-                        except OSError:
-                            if verbose:
-                                print('ERROR: Could not read '
-                                      + file_for_it, flush=True)
-                            file_to_read = False
-                            continue
-                else:
-                    for var_to_read in files_with_single_var:
-                        if 'NaNmask' not in var_to_read:
-                            file_for_it = vars_and_files[var_to_read][0]
-                            try:
-                                if verbose:
-                                    print('Checking if ' + file_for_it
-                                        + ' can be read', flush=True)
-                                with h5py.File(file_for_it, 'r') as f:
-                                    fkeys = list(f.keys())
-                                file_to_read = True
-                                break
-                            except OSError:
-                                if verbose:
-                                    print('ERROR: Could not read '
-                                        + file_for_it, flush=True)
-                                file_to_read = False
-                                continue
-                if file_to_read:
+                    fvar for fvar in files_with_single_var
+                    if 'NaNmask' not in fvar]
+
+                # File keys of the representative file, to get iteration numbers from
+                fkeys = None
+
+                # Try to read from files with just one variable first
+                # Repeat until a file is successfully read or we run out of files to try
+                for var_to_read in files_with_single_var:
+                    # Just one chunk will do
+                    file_for_it = vars_and_files[var_to_read][0]
+                    try:
+                        if verbose:
+                            print('Checking if ' + file_for_it
+                                + ' can be read', flush=True)
+                        with h5py.File(file_for_it, 'r') as f:
+                            fkeys = list(f.keys())
+                        break
+                    except OSError:
+                        if verbose:
+                            print('ERROR: Could not read '
+                                + file_for_it, flush=True)
+                        continue
+
+                if fkeys:
                     saveprint(it_file, 'Reading iterations in: '
                             + file_for_it, verbose=verbose_file)
                     with h5py.File(file_for_it, 'r') as f:
@@ -999,33 +990,44 @@ def iterations(param, **kwargs):
                                     if parse_hdf5_key(k)['rl'] == rl]
 
                             if keysrl!=[]:
-                                # Check if there are chunk numbers
-                                if parse_hdf5_key(keysrl[0])['c'] is not None:
-                                    cs = list({parse_hdf5_key(k)['c']
-                                               for k in keysrl})
-                                    chosen_c = ' c=' + str(np.sort(cs)[-1])
-                                else:
-                                    chosen_c = ''
-                                keysrl = [k for k in keysrl if chosen_c in k]
+                                # All iterations available
+                                allits = np.sort(list({
+                                    parse_hdf5_key(k)['it'] for k in keysrl}))
 
-                                # and look at what iterations they have
-                                allits = np.sort([parse_hdf5_key(k)['it']
-                                                for k in keysrl])
-
+                                # Print and save
                                 rlkey = f'rl = {rl}'
                                 if len(allits)>1:
-                                    itkey = (
-                                        f'it = np.arange({np.min(allits)}, '
-                                        f'{np.max(allits)}, {np.diff(allits)[0]})'
-                                    )
-                                    its_available[restart][rlkey] = [
-                                        np.min(allits), np.max(allits),
-                                        np.diff(allits)[0]]
+                                    dit = np.diff(allits)
+                                    if np.all(dit == dit[0]):
+                                        # Regular iterations, print as range with step
+                                        itkey = (
+                                            f'it = np.arange({np.min(allits)}, '
+                                            f'{np.max(allits)}, {dit[0]})'
+                                        )
+                                        its_available[restart][rlkey] = [
+                                            np.min(allits), np.max(allits),
+                                            dit[0]]
+                                    else:
+                                        # Irregular iterations, just print the list
+                                        itkey = f'it = {allits}'
+                                        its_available[restart][rlkey] = allits
                                 else:
+                                    # Just one iteration, print it
                                     itkey = f'it = {allits}'
                                     its_available[restart][rlkey] = allits
                                 saveprint(it_file, rlkey+' at '+itkey,
                                         verbose=verbose_file)
+                            #else:
+                                # Skip
+                                # This refinement level was not stored
+                else:
+                    # Error handling for unreadable files
+                    saveprint(it_file, 'Could not find 3D data in ' + datapath,
+                              verbose=verbose_file)
+                    its_available[restart]['var available'] = []
+                    its_available[restart]['its available'] = []
+
+            # ======== Iterations for checkpoint files ========
 
             # List checkpoints available
             checkpoint_files = glob.glob(
@@ -1044,25 +1046,27 @@ def iterations(param, **kwargs):
                 checkpoint_its += [chk_it]
             checkpoint_its = sorted(set(checkpoint_its))
 
-            if checkpoint_its != []:
-                if 'its available' not in its_available[restart].keys():
-                    its_available[restart]['its available'] = [
+            if checkpoint_its:
+                its_available[restart]['checkpoint its available'] = [
                         np.min(checkpoint_its), np.max(checkpoint_its)]
-                    saveprint(
-                        it_file,
-                        f'it = {np.min(checkpoint_its)} -> {np.max(checkpoint_its)}',
-                        verbose=verbose_file
-                    )
+                saveprint(
+                    it_file,
+                    f'checkpoint it = {
+                        np.min(checkpoint_its)} -> {np.max(checkpoint_its)}',
+                    verbose=verbose_file
+                )
                 # Save checkpoints iterations
                 its_available[restart]['checkpoints'] = checkpoint_its
                 saveprint(it_file,
                         f'Checkpoints available at its: {list(checkpoint_its)}',
                             verbose=verbose_file)
             else:
+                its_available[restart]['checkpoint its available'] = []
                 its_available[restart]['checkpoints'] = []
                 saveprint(it_file, 'No checkpoints found',
                             verbose=verbose_file)
-        # Overall iterations
+
+        # ======== Overall iterations ========
         its_available = collect_overall_iterations(its_available, verbose_file)
         return its_available
 
@@ -1104,6 +1108,7 @@ def read_iterations(param, **kwargs):
                     'rl = 0': [itmin, itmax, dit],
                     'rl = 1': [itmin, itmax, dit],
                     ...
+                    'checkpoint its available': [itmin, itmax],
                     'checkpoints': [it1, it2, ...]
                 },
                 ...
@@ -1145,10 +1150,21 @@ def read_iterations(param, **kwargs):
                     vars = li.split('3D variables available: [')[1].split(', ')
                     vars = [v.split("'")[1] for v in vars]
                     its_available[restart_nbr]['var available'] = vars
+                elif 'Could not find 3D data' in li:
+                    its_available[restart_nbr]['var available'] = []
+                    its_available[restart_nbr]['its available'] = []
                 # iterations available (inclusive interval)
                 elif '->' in li:
-                    its_available[restart_nbr]['its available'] = [
-                        int(li.split(' ')[2]), int(li.split(' ')[4])]
+                    if 'checkpoint' in li:
+                        its_available[restart_nbr]['checkpoint its available'] = [
+                            int(li.split('checkpoint it = ')[1].split(' -> ')[0]),
+                            int(li.split('checkpoint it = ')[1].split(' -> ')[1])]
+                    else:
+                        its_available[restart_nbr]['its available'] = [
+                            int(li.split('it = ')[1].split(' -> ')[0]),
+                            int(li.split('it = ')[1].split(' -> ')[1])]
+                elif 'No iterations found' in li:
+                    its_available[restart_nbr]['its available'] = []
                 # iterations available for said refinement level
                 elif 'rl = ' in li:
                     rl = li.split('rl = ')[1].split(' ')[0]
@@ -1163,6 +1179,7 @@ def read_iterations(param, **kwargs):
                         its_available[restart_nbr][rlkey] = it_list
                 # No checkpoints
                 elif 'No checkpoints found' in li:
+                    its_available[restart_nbr]['checkpoint its available'] = []
                     its_available[restart_nbr]['checkpoints'] = []
                 # Checkpoints available at its: [0, 10, ...]
                 elif 'Checkpoints available at its' in li:
@@ -1639,6 +1656,8 @@ def read_ET_data(param, **kwargs):
         # create new element containing iterations to do
         for restart in list(its_available.keys()):
                 its_available[restart]['it to do'] = []
+        # TODO: bug when 'overall' is present
+        # Plus restart is being renamed
 
         # reverse order so that I'm always taking the most recent iteration
         for iit in it[::-1]:

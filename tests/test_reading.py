@@ -416,38 +416,43 @@ class TestGetContent:
         content = reading.get_content(param, restart=restart, verbose=False)
 
         # Basic structure checks
-        assert len(content) > 0, f"No content found for {simname} restart {restart}"
         assert isinstance(content, dict), "Content should be a dictionary"
+        if simname == 'test_onefile_grouped' and restart == 2:
+            assert content == {}, "No content should be available"
+        else:
+            assert len(content) > 0, f"No content found for {simname} restart {restart}"
 
-        # Check that we have some variables
-        all_vars = []
-        for var_tuple in content.keys():
-            assert isinstance(var_tuple, tuple), "Keys should be tuples"
-            all_vars.extend(var_tuple)
-        assert len(all_vars) > 0, "Should have at least one variable"
+            # Check that we have some variables
+            all_vars = []
+            for var_tuple in content.keys():
+                assert isinstance(var_tuple, tuple), "Keys should be tuples"
+                all_vars.extend(var_tuple)
+            assert len(all_vars) > 0, "Should have at least one variable"
 
-        # Check that file paths are strings and exist
-        for var_tuple, file_list in content.items():
-            assert isinstance(file_list, list), "File lists should be lists"
-            assert len(file_list) > 0, f"No files for {var_tuple}"
-            for filepath in file_list:
-                assert isinstance(filepath, str), "File paths should be strings"
-                assert Path(filepath).exists(), f"File does not exist: {filepath}"
-                # Verify file path points to correct restart
-                assert f'output-{restart:04d}' in filepath, \
-                    f"File {filepath} should be from restart {restart}"
+            # Check that file paths are strings and exist
+            for var_tuple, file_list in content.items():
+                assert isinstance(file_list, list), "File lists should be lists"
+                assert len(file_list) > 0, f"No files for {var_tuple}"
+                for filepath in file_list:
+                    assert isinstance(filepath, str), "File paths should be strings"
+                    assert Path(filepath).exists(), f"File does not exist: {filepath}"
+                    # Verify file path points to correct restart
+                    assert f'output-{restart:04d}' in filepath, \
+                        f"File {filepath} should be from restart {restart}"
+
+            # Check if simulation has grouped or chunked files
+            if '_grouped' in simname:
+                # Grouped simulations should have multi-variable tuples
+                has_grouped = any(len(var_tuple) > 1 for var_tuple in content.keys())
+                # Note: May be True or False depending on how variables are organized
+                assert has_grouped, (
+                    "Grouped simulations should have multi-variable tuples"
+                )
 
         # Verify cache file is created in correct location
         cache_file = (Path(param['simpath']) / param['simname'] /
                       f'output-{restart:04d}' / param['simname'] / 'content.txt')
         assert cache_file.exists(), f"Cache file should exist for restart {restart}"
-
-        # Check if simulation has grouped or chunked files
-        if '_grouped' in simname:
-            # Grouped simulations should have multi-variable tuples
-            has_grouped = any(len(var_tuple) > 1 for var_tuple in content.keys())
-            # Note: May be True or False depending on how variables are organized
-            assert has_grouped, "Grouped simulations should have multi-variable tuples"
 
     def test_get_content_caching(self, simloc_env):
         """Test that content.txt cache file is created and used."""
@@ -652,7 +657,7 @@ RESTART 0
             # This should raise ImportError because all restarts are done
             # and skip_last=True
             with pytest.raises(
-                ImportError, match="Nothing to process.*skip_last=False"
+                ImportError, match="Nothing to process*"
             ):
                 reading.iterations(param, skip_last=True, verbose=False)
         finally:
@@ -700,7 +705,7 @@ CoordBase::dz = 0.5
             # Should have processed restart 0 even though no 3D data
             assert 0 in its_available
             # The restart should not have 'var available' key since no 3D data was found
-            assert 'var available' not in its_available[0]
+            assert its_available[0]['var available'] == []
             # But should have checkpoint information
             assert 'checkpoints' in its_available[0]
             assert 0 in its_available[0]['checkpoints']
@@ -848,27 +853,31 @@ class TestETDataReading:
         # Get available iterations for this restart
         its_available = reading.iterations(param, skip_last=False, verbose=False)
         assert restart in its_available, f"Restart {restart} not found for {simname}"
-
         restart_its = its_available[restart]
-        assert len(restart_its['its available']) > 0, (
-            f"No iterations available for {simname} restart {restart}"
-        )
+        assert 'var available' in restart_its
+        assert 'its available' in restart_its
+        assert 'checkpoints' in restart_its
+        assert 'checkpoint its available' in restart_its
 
         # Read first available iteration from specified restart
-        itmin, itmax, dit = restart_its['rl = 0']
-        it_to_read = np.arange(itmin, itmax, dit)
-        data = reading.read_ET_data(
-            param, it=it_to_read, restart=restart, split_per_it=False, verbose=False)
+        if restart_its['its available']:
+            itmin, itmax, dit = restart_its['rl = 0']
+            it_to_read = np.arange(itmin, itmax, dit)
+            data = reading.read_ET_data(
+                param, it=it_to_read, restart=restart,
+                split_per_it=False, verbose=False)
 
-        assert 'it' in data
-        assert len(data['it']) > 0
-        assert data['it'][0] == it_to_read[0], (
-            f"Expected iteration {it_to_read[0]}, got {data['it'][0]}"
-        )
+            assert 'it' in data
+            assert len(data['it']) > 0
+            assert data['it'][0] == it_to_read[0], (
+                f"Expected iteration {it_to_read[0]}, got {data['it'][0]}"
+            )
 
-        # Should have some variables (more than just 'it' and 't')
-        var_keys = [k for k in data.keys() if k not in ['it', 't']]
-        assert len(var_keys) > 0, f"No variables found for {simname} restart {restart}"
+            # Should have some variables (more than just 'it' and 't')
+            var_keys = [k for k in data.keys() if k not in ['it', 't']]
+            assert len(var_keys) > 0, (
+                f"No variables found for {simname} restart {restart}"
+            )
 
     @pytest.mark.slow
     def test_read_ET_data_multiple_restarts(self, simloc_env):
