@@ -1051,8 +1051,8 @@ def iterations(param, **kwargs):
                         np.min(checkpoint_its), np.max(checkpoint_its)]
                 saveprint(
                     it_file,
-                    f'checkpoint it = {
-                        np.min(checkpoint_its)} -> {np.max(checkpoint_its)}',
+                    ('checkpoint it = '
+                    + f'{np.min(checkpoint_its)} -> {np.max(checkpoint_its)}'),
                     verbose=verbose_file
                 )
                 # Save checkpoints iterations
