@@ -878,8 +878,13 @@ def iterations(param, **kwargs):
 
         # Error handling for no restarts or all restarts already processed
         if all_restarts == []:
-            raise ImportError('Nothing to process in '
-                              + param['simpath'] + param['simname'])
+            if skip_last:
+                raise ImportError('Nothing to process in '
+                    + param['simpath'] + param['simname'] + '. '
+                    + 'Consider setting skip_last=False to include last restart.')
+            else:
+                raise ImportError('Nothing to process in '
+                    + param['simpath'] + param['simname'])
 
         if verbose:
             if restarts_todo:
