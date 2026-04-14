@@ -865,10 +865,10 @@ def iterations(param, **kwargs):
         all_restarts = sorted([int(fl.split('-')[1])
                                 for fl in relevant_files])
 
-        # Determine which restarts need processing
-        # Cut off the active one
-        if skip_last:
-            all_restarts = all_restarts[:-1]
+        # Error handling for no restarts or all restarts already processed
+        if all_restarts == []:
+            raise ImportError('Nothing to process in '
+                              + param['simpath'] + param['simname'])
 
         # Cut off what has already been processed
         restarts_done = [k for k in list(its_available.keys())
@@ -876,24 +876,23 @@ def iterations(param, **kwargs):
         restarts_todo = [rnbr for rnbr in all_restarts
                         if rnbr not in restarts_done]
 
-        # Error handling for no restarts or all restarts already processed
-        if all_restarts == []:
+        # Verbose output about restarts to process
+        if restarts_todo == []:
+            if verbose:
+                print('All restarts already processed. Nothing new to do.',
+                      flush=True)
+        else:
+            # Cut off active restart
             if skip_last:
-                raise ImportError('Nothing to process in '
-                    + param['simpath'] + param['simname'] + '. '
-                    + 'Consider setting skip_last=False to include last restart.')
-            else:
-                raise ImportError('Nothing to process in '
-                    + param['simpath'] + param['simname'])
-
-        if verbose:
-            if restarts_todo:
-                print('Restarts to process: ' + str(restarts_todo), flush=True)
-            else:
-                if skip_last:
+                restarts_todo = restarts_todo[:-1]
+            if restarts_todo == []:
+                if verbose:
                     print('Nothing new to process. Consider running with'
-                        + ' skip_last=False to analyse the last restart'
-                        + ' (if it is not an active restart).', flush=True)
+                    + ' skip_last=False to analyse the last restart'
+                    + ' (if it is not an active restart).', flush=True)
+            else:
+                if verbose:
+                    print('Restarts to process: ' + str(restarts_todo), flush=True)
 
         # Process each restart directory
         for restart in restarts_todo:

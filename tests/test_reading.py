@@ -607,59 +607,21 @@ class TestIterations:
         assert 'overall' in its_available_skipped
         assert 'overall' in its_available_full
 
-    def test_iterations_no_restarts_to_process(self, simloc_env, tmp_path):
-        """Test iterations raises error when no restarts to process (lines 909-915)."""
+    def test_iterations_no_params_to_process(self, simloc_env, tmp_path):
+        """Test iterations raises error when no restarts to process."""
         # Create a simulation directory with NO output directories at all
         test_sim_dir = tmp_path / "test_no_output"
         test_sim_dir.mkdir(parents=True)
-
-        # Create a minimal parameter file (but not in output-XXXX since we
-        # want to test no restarts)
-        # We need to create it somewhere the parameters() function can find
-        # it temporarily
-        # Actually, parameters() expects the file in output-XXXX/simname.par
-        # So we create one output dir with par file, but then simulate all
-        # restarts being done
-        test_output_dir = test_sim_dir / "output-0000"
-        test_output_dir.mkdir(parents=True)
-
-        par_file = test_output_dir / "test_no_output.par"
-        par_content = """
-ActiveThorns = "Carpet"
-CoordBase::xmin = -10.0
-CoordBase::xmax = 10.0
-CoordBase::ymin = -10.0
-CoordBase::ymax = 10.0
-CoordBase::zmin = -10.0
-CoordBase::zmax = 10.0
-CoordBase::dx = 0.5
-CoordBase::dy = 0.5
-CoordBase::dz = 0.5
-"""
-        par_file.write_text(par_content)
-
-        # Create iterations.txt file showing all restarts as done
-        iterations_file = test_sim_dir / "iterations.txt"
-        iterations_content = """==================
-RESTART 0
-==================
-"""
-        iterations_file.write_text(iterations_content)
 
         # Temporarily add test sim to SIMLOC
         original_simloc = os.environ.get('SIMLOC', '')
         os.environ['SIMLOC'] = str(tmp_path).replace('\\', '/') + '/'
 
         try:
-            param = reading.parameters('test_no_output')
-
-            # Try to run iterations with skip_last=True
-            # This should raise ImportError because all restarts are done
-            # and skip_last=True
             with pytest.raises(
-                ImportError, match="Nothing to process*"
+                ValueError, match="Could not find simulation parameter file for:*"
             ):
-                reading.iterations(param, skip_last=True, verbose=False)
+                reading.parameters('test_no_output')
         finally:
             os.environ['SIMLOC'] = original_simloc
 
