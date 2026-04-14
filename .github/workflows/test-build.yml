@@ -35,7 +35,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -e ".[test,docs]"
+        pip install --no-cache-dir -e ".[test,docs]"
         pip install build twine
 
     - name: Build the package
