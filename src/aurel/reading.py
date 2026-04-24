@@ -1575,13 +1575,13 @@ def read_ET_data(param, **kwargs):
     it : list of int, optional
         Iterations to read. Default [0].
 
+    rl : int, optional
+        The refinement level to read from the simulation output files.
+        The default is 0.
+
     vars : list of str, optional.
         Variables in Aurel format. Default [] (all available).
         Examples: ['rho', 'Kdown3'], ['gammadown3', 'alpha']
-
-    restart : int, optional
-        Specific restart to read from.
-        Default -1 (auto-detect).
 
     split_per_it : bool, optional
         Use cached per-iteration files when available and save read data
@@ -1623,8 +1623,9 @@ def read_ET_data(param, **kwargs):
     """
     # reading kwargs
     it = sorted(set(kwargs.get('it', [0])))
+    rl = kwargs.get('rl', 0)
+    rlkey = f'rl = {rl}'
     var = kwargs.get('vars', [])
-    restart = kwargs.get('restart', -1)
     split_per_it = kwargs.get('split_per_it', True)
     usecheckpoints = kwargs.get('usecheckpoints', False)
     verbose = kwargs.get('verbose', True)
@@ -1635,77 +1636,54 @@ def read_ET_data(param, **kwargs):
     # Overall information
     kwargs['verbose_file'] = False
     its_available = iterations(param, **kwargs)
-    # use user provided restart
-    if restart >= 0:
-        restarts_available = [restart]
+    restarts_available = [k for k in its_available.keys() if type(k) is int]
+    restarts_with_it = []
+
+    # create new element containing iterations to do
+    for restart in restarts_available:
         its_available[restart]['it to do'] = []
-        for iit in it:
+
+    # reverse order so that I'm always taking the most recent iteration
+    for iit in it[::-1]:
+        for restart in restarts_available[::-1]:
+            it_in_restart = False
+            # Check if iteration is in this restart,
+            # either in checkpoints or in the regular files
             if usecheckpoints:
-                if 'checkpoints' in list(its_available[restart]):
-                    if iit in its_available[restart]['checkpoints']:
-                        its_available[restart]['it to do'] += [iit]
+                if iit in its_available[restart]['checkpoints']:
+                    it_in_restart = True
             else:
-                if 'its available' in list(its_available[restart]):
-                    if len(its_available[restart]['its available']) ==1:
-                        if iit == its_available[restart]['its available'][0]:
-                            its_available[restart]['it to do'] += [iit]
+                if rlkey in list(its_available[restart].keys()):
+                    if type(its_available[restart][rlkey]) is int:
+                        it_in_restart = iit == its_available[restart][rlkey]
                     else:
-                        itmin, itmax = its_available[restart]['its available']
-                        if ((itmin <= iit) and (iit <= itmax)):
-                            its_available[restart]['it to do'] += [iit]
-    # find restart myself
-    elif restart == -1:
-        restarts_available = list(its_available.keys())
-
-        # create new element containing iterations to do
-        for restart in list(its_available.keys()):
-                its_available[restart]['it to do'] = []
-        # TODO: bug when 'overall' is present
-        # Plus restart is being renamed
-
-        # reverse order so that I'm always taking the most recent iteration
-        for iit in it[::-1]:
-            for restart in list(its_available.keys())[::-1]:
-                if usecheckpoints:
-                    if 'checkpoints' not in list(its_available[restart]):
-                        it_in_restart = False
-                    else:
-                        # is this iteration a checkpoint within this restart?
-                        if iit in its_available[restart]['checkpoints']:
+                        itmin, itmax, dit = its_available[restart][rlkey]
+                        if iit in np.arange(itmin, itmax, dit):
                             it_in_restart = True
-                        else:
-                            it_in_restart = False
-                else:
-                    if 'its available' not in list(its_available[restart]):
-                        it_in_restart = False
-                    else:
-                        # is this iteration available within this restart?
-                        if len(its_available[restart]['its available']) ==1:
-                            it_in_restart = (
-                                iit == its_available[restart]['its available'][0])
-                        else:
-                            itmin, itmax = its_available[restart]['its available']
-                            it_in_restart = ((itmin <= iit) and (iit <= itmax))
-                if it_in_restart:
-                    its_available[restart]['it to do'] += [iit]
-                    # I found it, so break to not go through the other restart
-                    break
+            # Save restart with this iteration
+            if it_in_restart:
+                its_available[restart]['it to do'] += [iit]
+                if restart not in restarts_with_it:
+                    restarts_with_it += [restart]
+                # I found it, so break to not go through the other restarts
+                break
+        if not it_in_restart:
+            raise ValueError(
+                f'Iteration {iit} not found in any restart,'
+                + f' try with usecheckpoints={not usecheckpoints}?')
 
-        # sort iterations
-        for restart in list(its_available.keys()):
-                its_available[restart]['it to do'] = list(np.sort(
-                    its_available[restart]['it to do']))
-    # can't read restart value
-    else:
-        raise ValueError(
-            f"Don't know what to do with restart={restart}")
+    # sort iterations
+    restarts_with_it = sorted(restarts_with_it)
+    for restart in restarts_with_it:
+        its_available[restart]['it to do'] = list(np.sort(
+            its_available[restart]['it to do']))
 
     # =========================================================================
     # ======== go collect data in each restart
     # big dictionary to save data and to be flattened
     datar = {}
     old_it = it.copy()
-    for restart in restarts_available:
+    for restart in restarts_with_it:
         # iterations available in this restart
         it = its_available[restart]['it to do']
         # skip this restart if it doesn't have the it we want
@@ -1725,8 +1703,7 @@ def read_ET_data(param, **kwargs):
             if var==[]:
                 var = its_available[restart]['var available']
             if verbose:
-                print(f' =========== Restart {restart}:',
-                        flush=True)
+                print(f' =========== Restart {restart}:', flush=True)
                 print(f'vars to get {var}:', flush=True)
             if veryverbose:
                 print(f'its to get {it}:', flush=True)
@@ -1891,12 +1868,15 @@ def read_ET_variables(param, var, vars_and_files, **kwargs):
     it : list, optional
         The iterations to save from the data.
         The default is [0].
+
     rl : int, optional
         The refinement level to read from the simulation output files.
         The default is 0.
+
     restart : int, optional
         The restart number to save the data to.
         The default is 0.
+
     veryverbose : bool, optional
         If True, print additional information during the joining process.
         The default is False.
@@ -1970,10 +1950,12 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
         The variables to read from the simulation output files.
         Each variable is a string that identifies the variable.
         These should all be found in the same files.
+
     files : list
         The list of files to read the variables from.
         Each file is a string that identifies the file.
         These should all contain the same variables just at different chunks.
+
     cmax : int
         The maximum number of chunks to read from the simulation output files.
         If 'in file', it will be extracted from the file.
@@ -1983,6 +1965,7 @@ def read_ET_group_or_var(variables, files, cmax, **kwargs):
     it : list, optional
         The iterations to save from the data.
         The default is [0].
+
     rl : int, optional
         The refinement level to read from the simulation output files.
         The default is 0.
@@ -2178,6 +2161,12 @@ def read_ET_checkpoints(param, var, **kwargs):
         param['simpath'] + param['simname']
         + f'/output-{restart:04d}/'
         + param['simname'] + '/checkpoint.chkpt.it_*.h5')
+
+    if checkpoint_files == []:
+        raise ImportError(
+            f'No checkpoint files found for restart {restart} at path:'
+            + f' {param["simpath"]}{param["simname"]}/output-{restart:04d}/'
+            + f'{param["simname"]}/checkpoint.chkpt.it_*.h5')
 
     # find cmax
     it0_file = []
