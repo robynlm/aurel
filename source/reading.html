@@ -9,7 +9,7 @@
   <title>aurel.reading &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=3721e3c3" />
 
@@ -302,6 +302,7 @@ Shows contents of iterations.txt file and overall summary.</p></li>
         <span class="s1">&#39;rl = 0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
         <span class="s1">&#39;rl = 1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
         <span class="o">...</span>
+        <span class="s1">&#39;checkpoint its available&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">],</span>
         <span class="s1">&#39;checkpoints&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">it1</span><span class="p">,</span> <span class="n">it2</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
     <span class="p">},</span>
     <span class="o">...</span>
@@ -533,10 +534,10 @@ regardless of the underlying file organization.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>param</strong> (<em>dict</em>) – Simulation parameters from <cite>parameters()</cite> function.</p></li>
 <li><p><strong>it</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Iterations to read. Default [0].</p></li>
+<li><p><strong>rl</strong> (<em>int</em><em>, </em><em>optional</em>) – The refinement level to read from the simulation output files.
+The default is 0.</p></li>
 <li><p><strong>vars</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional.</em>) – Variables in Aurel format. Default [] (all available).
 Examples: [‘rho’, ‘Kdown3’], [‘gammadown3’, ‘alpha’]</p></li>
-<li><p><strong>restart</strong> (<em>int</em><em>, </em><em>optional</em>) – Specific restart to read from.
-Default -1 (auto-detect).</p></li>
 <li><p><strong>split_per_it</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use cached per-iteration files when available and save read data
 in per-iteration files. Default True.</p></li>
 <li><p><strong>usecheckpoints</strong> (<em>bool</em><em>, </em><em>optional</em>) – For ET data: whether to use checkpoint iterations if available.
@@ -758,6 +759,7 @@ Also passed to <cite>iterations()</cite>.</p></li>
         <span class="s1">&#39;rl = 0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
         <span class="s1">&#39;rl = 1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
         <span class="o">...</span>
+        <span class="s1">&#39;checkpoint its available&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">],</span>
         <span class="s1">&#39;checkpoints&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">it1</span><span class="p">,</span> <span class="n">it2</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
     <span class="p">},</span>
     <span class="o">...</span>

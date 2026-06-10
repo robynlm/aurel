@@ -8,7 +8,7 @@
   <title>aurel.reading &mdash; aurel May 2025 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=3721e3c3" />
 
@@ -936,6 +936,7 @@
 <span class="sd">                    &#39;rl = 0&#39;: [itmin, itmax, dit],</span>
 <span class="sd">                    &#39;rl = 1&#39;: [itmin, itmax, dit],</span>
 <span class="sd">                    ...</span>
+<span class="sd">                    &#39;checkpoint its available&#39;: [itmin, itmax],</span>
 <span class="sd">                    &#39;checkpoints&#39;: [it1, it2, ...]</span>
 <span class="sd">                },</span>
 <span class="sd">                ...</span>
@@ -1006,38 +1007,45 @@
         <span class="n">all_restarts</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">fl</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
                                 <span class="k">for</span> <span class="n">fl</span> <span class="ow">in</span> <span class="n">relevant_files</span><span class="p">])</span>
 
-        <span class="c1"># Determine which restarts need processing</span>
-        <span class="c1"># Cut off the active one</span>
-        <span class="k">if</span> <span class="n">skip_last</span><span class="p">:</span>
-            <span class="n">all_restarts</span> <span class="o">=</span> <span class="n">all_restarts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># Error handling for no restarts or all restarts already processed</span>
+        <span class="k">if</span> <span class="n">all_restarts</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;Nothing to process in &#39;</span>
+                              <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;simpath&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">])</span>
 
         <span class="c1"># Cut off what has already been processed</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">contents</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">restarts_done</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;restart &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
-                         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span>
-                         <span class="k">if</span> <span class="s1">&#39;restart&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
-        <span class="n">all_restarts</span> <span class="o">=</span> <span class="p">[</span><span class="n">rnbr</span> <span class="k">for</span> <span class="n">rnbr</span> <span class="ow">in</span> <span class="n">all_restarts</span>
+        <span class="n">restarts_done</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">its_available</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">int</span><span class="p">)]</span>
+        <span class="n">restarts_todo</span> <span class="o">=</span> <span class="p">[</span><span class="n">rnbr</span> <span class="k">for</span> <span class="n">rnbr</span> <span class="ow">in</span> <span class="n">all_restarts</span>
                         <span class="k">if</span> <span class="n">rnbr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">restarts_done</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">all_restarts</span> <span class="o">==</span> <span class="p">[]</span> <span class="ow">and</span> <span class="n">restarts_done</span> <span class="o">==</span> <span class="p">[]:</span>
+
+        <span class="c1"># Verbose output about restarts to process</span>
+        <span class="k">if</span> <span class="n">restarts_todo</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;All restarts already processed. Nothing new to do.&#39;</span><span class="p">,</span>
+                      <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Cut off active restart</span>
             <span class="k">if</span> <span class="n">skip_last</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-                    <span class="s1">&#39;Nothing to process. Consider running with&#39;</span>
+                <span class="n">restarts_todo</span> <span class="o">=</span> <span class="n">restarts_todo</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">restarts_todo</span> <span class="o">==</span> <span class="p">[]:</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Nothing new to process. Consider running with&#39;</span>
                     <span class="o">+</span> <span class="s1">&#39; skip_last=False to analyse the last restart&#39;</span>
-                    <span class="o">+</span> <span class="s1">&#39; (if it is not an active restart).&#39;</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="s1">&#39; (if it is not an active restart).&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;Nothing to process.&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Restarts to process: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">all_restarts</span><span class="p">),</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">all_restarts</span> <span class="o">==</span> <span class="p">[]</span> <span class="ow">and</span> <span class="n">skip_last</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Nothing new to process. Consider running with&#39;</span>
-                      <span class="o">+</span> <span class="s1">&#39; skip_last=False to analyse the last restart&#39;</span>
-                      <span class="o">+</span> <span class="s1">&#39; (if it is not an active restart).&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Restarts to process: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">restarts_todo</span><span class="p">),</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Process each restart directory</span>
-        <span class="k">for</span> <span class="n">restart</span> <span class="ow">in</span> <span class="n">all_restarts</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">restart</span> <span class="ow">in</span> <span class="n">restarts_todo</span><span class="p">:</span>
             <span class="n">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39; === restart </span><span class="si">{</span><span class="n">restart</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
                       <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_file</span><span class="p">)</span>
             <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">datapath</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;simpath&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span>
+                        <span class="o">+</span><span class="sa">f</span><span class="s1">&#39;/output-</span><span class="si">{</span><span class="n">restart</span><span class="si">:</span><span class="s1">04d</span><span class="si">}</span><span class="s1">/&#39;</span>
+                        <span class="o">+</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+
+            <span class="c1"># ======== Iterations and variables for 3D data files ========</span>
 
             <span class="c1"># Analyze available variables in this restart</span>
             <span class="n">vars_and_files</span> <span class="o">=</span> <span class="n">get_content</span><span class="p">(</span><span class="n">param</span><span class="p">,</span>
@@ -1048,11 +1056,10 @@
 
             <span class="c1"># Error handling for empty restart directories</span>
             <span class="k">if</span> <span class="n">vars_available</span> <span class="o">==</span> <span class="p">[]:</span>
-                <span class="c1"># Path to this restart&#39;s output directory that was checked</span>
-                <span class="n">datapath</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;simpath&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span>
-                            <span class="o">+</span><span class="sa">f</span><span class="s1">&#39;/output-</span><span class="si">{</span><span class="n">restart</span><span class="si">:</span><span class="s1">04d</span><span class="si">}</span><span class="s1">/&#39;</span>
-                            <span class="o">+</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
-                <span class="n">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span> <span class="s1">&#39;Could not find 3D data in &#39;</span> <span class="o">+</span> <span class="n">datapath</span><span class="p">)</span>
+                <span class="n">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span> <span class="s1">&#39;Could not find 3D data in &#39;</span> <span class="o">+</span> <span class="n">datapath</span><span class="p">,</span>
+                          <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_file</span><span class="p">)</span>
+                <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;var available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;its available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Transform ET variable names to Aurel conventions</span>
                 <span class="n">aurel_vars_available</span> <span class="o">=</span> <span class="n">transform_vars_ET_to_aurel_groups</span><span class="p">(</span>
@@ -1063,46 +1070,34 @@
                 <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;var available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aurel_vars_available</span>
 
                 <span class="c1"># Select representative file for iteration analysis</span>
-                <span class="c1"># Preferably a light file that only has one variable</span>
+                <span class="c1"># Preferably a light file</span>
+                <span class="n">files_with_single_var</span>  <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">vars_and_files</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span>
                 <span class="n">files_with_single_var</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">var</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">vars_and_files</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">var</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">files_with_single_var</span> <span class="o">==</span> <span class="p">[]:</span>
-                    <span class="k">for</span> <span class="n">var_to_read</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">vars_and_files</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                        <span class="n">file_for_it</span> <span class="o">=</span> <span class="n">vars_and_files</span><span class="p">[</span><span class="n">var_to_read</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                        <span class="k">try</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Checking if &#39;</span> <span class="o">+</span> <span class="n">file_for_it</span>
-                                      <span class="o">+</span> <span class="s1">&#39; can be read&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                            <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">file_for_it</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                                <span class="n">fkeys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-                            <span class="n">file_to_read</span> <span class="o">=</span> <span class="kc">True</span>
-                            <span class="k">break</span>
-                        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ERROR: Could not read &#39;</span>
-                                      <span class="o">+</span> <span class="n">file_for_it</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                            <span class="n">file_to_read</span> <span class="o">=</span> <span class="kc">False</span>
-                            <span class="k">continue</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">var_to_read</span> <span class="ow">in</span> <span class="n">files_with_single_var</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="s1">&#39;NaNmask&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">var_to_read</span><span class="p">:</span>
-                            <span class="n">file_for_it</span> <span class="o">=</span> <span class="n">vars_and_files</span><span class="p">[</span><span class="n">var_to_read</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                            <span class="k">try</span><span class="p">:</span>
-                                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Checking if &#39;</span> <span class="o">+</span> <span class="n">file_for_it</span>
-                                        <span class="o">+</span> <span class="s1">&#39; can be read&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                                <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">file_for_it</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                                    <span class="n">fkeys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-                                <span class="n">file_to_read</span> <span class="o">=</span> <span class="kc">True</span>
-                                <span class="k">break</span>
-                            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-                                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ERROR: Could not read &#39;</span>
-                                        <span class="o">+</span> <span class="n">file_for_it</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                                <span class="n">file_to_read</span> <span class="o">=</span> <span class="kc">False</span>
-                                <span class="k">continue</span>
-                <span class="k">if</span> <span class="n">file_to_read</span><span class="p">:</span>
+                    <span class="n">fvar</span> <span class="k">for</span> <span class="n">fvar</span> <span class="ow">in</span> <span class="n">files_with_single_var</span>
+                    <span class="k">if</span> <span class="s1">&#39;NaNmask&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fvar</span><span class="p">]</span>
+
+                <span class="c1"># File keys of the representative file, to get iteration numbers from</span>
+                <span class="n">fkeys</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="c1"># Try to read from files with just one variable first</span>
+                <span class="c1"># Repeat until a file is successfully read or we run out of files to try</span>
+                <span class="k">for</span> <span class="n">var_to_read</span> <span class="ow">in</span> <span class="n">files_with_single_var</span><span class="p">:</span>
+                    <span class="c1"># Just one chunk will do</span>
+                    <span class="n">file_for_it</span> <span class="o">=</span> <span class="n">vars_and_files</span><span class="p">[</span><span class="n">var_to_read</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Checking if &#39;</span> <span class="o">+</span> <span class="n">file_for_it</span>
+                                <span class="o">+</span> <span class="s1">&#39; can be read&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">file_for_it</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                            <span class="n">fkeys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                        <span class="k">break</span>
+                    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ERROR: Could not read &#39;</span>
+                                <span class="o">+</span> <span class="n">file_for_it</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">fkeys</span><span class="p">:</span>
                     <span class="n">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span> <span class="s1">&#39;Reading iterations in: &#39;</span>
                             <span class="o">+</span> <span class="n">file_for_it</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_file</span><span class="p">)</span>
                     <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">file_for_it</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -1141,64 +1136,83 @@
                                     <span class="k">if</span> <span class="n">parse_hdf5_key</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="s1">&#39;rl&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">rl</span><span class="p">]</span>
 
                             <span class="k">if</span> <span class="n">keysrl</span><span class="o">!=</span><span class="p">[]:</span>
-                                <span class="c1"># Check if there are chunk numbers</span>
-                                <span class="k">if</span> <span class="n">parse_hdf5_key</span><span class="p">(</span><span class="n">keysrl</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                                    <span class="n">cs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">({</span><span class="n">parse_hdf5_key</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>
-                                               <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keysrl</span><span class="p">})</span>
-                                    <span class="n">chosen_c</span> <span class="o">=</span> <span class="s1">&#39; c=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">cs</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-                                <span class="k">else</span><span class="p">:</span>
-                                    <span class="n">chosen_c</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-                                <span class="n">keysrl</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keysrl</span> <span class="k">if</span> <span class="n">chosen_c</span> <span class="ow">in</span> <span class="n">k</span><span class="p">]</span>
+                                <span class="c1"># All iterations available</span>
+                                <span class="n">allits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="nb">list</span><span class="p">({</span>
+                                    <span class="n">parse_hdf5_key</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="s1">&#39;it&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keysrl</span><span class="p">}))</span>
 
-                                <span class="c1"># and look at what iterations they have</span>
-                                <span class="n">allits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span><span class="n">parse_hdf5_key</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="s1">&#39;it&#39;</span><span class="p">]</span>
-                                                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keysrl</span><span class="p">])</span>
-
+                                <span class="c1"># Print and save</span>
                                 <span class="n">rlkey</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;rl = </span><span class="si">{</span><span class="n">rl</span><span class="si">}</span><span class="s1">&#39;</span>
                                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">allits</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
-                                    <span class="n">itkey</span> <span class="o">=</span> <span class="p">(</span>
-                                        <span class="sa">f</span><span class="s1">&#39;it = np.arange(</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">allits</span><span class="p">)</span><span class="si">}</span><span class="s1">, &#39;</span>
-                                        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">allits</span><span class="p">)</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">allits</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span>
-                                    <span class="p">)</span>
-                                    <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="n">rlkey</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                                        <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">allits</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">allits</span><span class="p">),</span>
-                                        <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">allits</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+                                    <span class="n">dit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">allits</span><span class="p">)</span>
+                                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">dit</span> <span class="o">==</span> <span class="n">dit</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                                        <span class="c1"># Regular iterations, print as range with step</span>
+                                        <span class="n">itkey</span> <span class="o">=</span> <span class="p">(</span>
+                                            <span class="sa">f</span><span class="s1">&#39;it = np.arange(</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">allits</span><span class="p">)</span><span class="si">}</span><span class="s1">, &#39;</span>
+                                            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">allits</span><span class="p">)</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">dit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span>
+                                        <span class="p">)</span>
+                                        <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="n">rlkey</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                                            <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">allits</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">allits</span><span class="p">),</span>
+                                            <span class="n">dit</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                                    <span class="k">else</span><span class="p">:</span>
+                                        <span class="c1"># Irregular iterations, just print the list</span>
+                                        <span class="n">itkey</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;it = </span><span class="si">{</span><span class="n">allits</span><span class="si">}</span><span class="s1">&#39;</span>
+                                        <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="n">rlkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">allits</span>
                                 <span class="k">else</span><span class="p">:</span>
+                                    <span class="c1"># Just one iteration, print it</span>
                                     <span class="n">itkey</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;it = </span><span class="si">{</span><span class="n">allits</span><span class="si">}</span><span class="s1">&#39;</span>
                                     <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="n">rlkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">allits</span>
                                 <span class="n">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span> <span class="n">rlkey</span><span class="o">+</span><span class="s1">&#39; at &#39;</span><span class="o">+</span><span class="n">itkey</span><span class="p">,</span>
                                         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_file</span><span class="p">)</span>
+                            <span class="c1">#else:</span>
+                                <span class="c1"># Skip</span>
+                                <span class="c1"># This refinement level was not stored</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Error handling for unreadable files</span>
+                    <span class="n">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span> <span class="s1">&#39;Could not find 3D data in &#39;</span> <span class="o">+</span> <span class="n">datapath</span><span class="p">,</span>
+                              <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_file</span><span class="p">)</span>
+                    <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;var available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;its available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># ======== Iterations for checkpoint files ========</span>
 
             <span class="c1"># List checkpoints available</span>
             <span class="n">checkpoint_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
                 <span class="n">param</span><span class="p">[</span><span class="s1">&#39;simpath&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span>
                 <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;/output-</span><span class="si">{</span><span class="n">restart</span><span class="si">:</span><span class="s1">04d</span><span class="si">}</span><span class="s1">/&#39;</span>
                 <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/checkpoint.chkpt.it_*.h5&#39;</span><span class="p">)</span>
+            <span class="c1"># Use just one file pert chunk</span>
             <span class="k">if</span> <span class="n">checkpoint_files</span> <span class="o">!=</span> <span class="p">[]:</span>
                 <span class="k">if</span> <span class="s1">&#39;.file_&#39;</span> <span class="ow">in</span> <span class="n">checkpoint_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                     <span class="n">checkpoint_files</span> <span class="o">=</span> <span class="p">[</span>
                         <span class="n">cf</span> <span class="k">for</span> <span class="n">cf</span> <span class="ow">in</span> <span class="n">checkpoint_files</span> <span class="k">if</span> <span class="s1">&#39;.file_0.&#39;</span> <span class="ow">in</span> <span class="n">cf</span><span class="p">]</span>
-
+            <span class="c1"># Extract iteration numbers from checkpoint filenames</span>
             <span class="n">checkpoint_its</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">chkfile</span> <span class="ow">in</span> <span class="n">checkpoint_files</span><span class="p">:</span>
                 <span class="n">chk_it</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">chkfile</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;checkpoint.chkpt.it_&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="n">checkpoint_its</span> <span class="o">+=</span> <span class="p">[</span><span class="n">chk_it</span><span class="p">]</span>
             <span class="n">checkpoint_its</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">checkpoint_its</span><span class="p">))</span>
 
-            <span class="k">if</span> <span class="s1">&#39;its available&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;its available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">checkpoint_its</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">checkpoint_its</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">checkpoint_its</span><span class="p">:</span>
+                <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;checkpoint its available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">checkpoint_its</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">checkpoint_its</span><span class="p">)]</span>
                 <span class="n">saveprint</span><span class="p">(</span>
                     <span class="n">it_file</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s1">&#39;it = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">checkpoint_its</span><span class="p">)</span><span class="si">}</span><span class="s1"> -&gt; </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">checkpoint_its</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s1">&#39;checkpoint it = &#39;</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">checkpoint_its</span><span class="p">)</span><span class="si">}</span><span class="s1"> -&gt; </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">checkpoint_its</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span>
                     <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_file</span>
                 <span class="p">)</span>
+                <span class="c1"># Save checkpoints iterations</span>
+                <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;checkpoints&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">checkpoint_its</span>
+                <span class="n">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s1">&#39;Checkpoints available at its: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">checkpoint_its</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_file</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;checkpoint its available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;checkpoints&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span> <span class="s1">&#39;No checkpoints found&#39;</span><span class="p">,</span>
+                            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_file</span><span class="p">)</span>
 
-            <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;checkpoints&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">checkpoint_its</span>
-            <span class="n">saveprint</span><span class="p">(</span><span class="n">it_file</span><span class="p">,</span>
-                      <span class="sa">f</span><span class="s1">&#39;Checkpoints available at its: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">checkpoint_its</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
-                          <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_file</span><span class="p">)</span>
-        <span class="c1"># Overall iterations</span>
+        <span class="c1"># ======== Overall iterations ========</span>
         <span class="n">its_available</span> <span class="o">=</span> <span class="n">collect_overall_iterations</span><span class="p">(</span><span class="n">its_available</span><span class="p">,</span> <span class="n">verbose_file</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">its_available</span></div>
 
@@ -1243,6 +1257,7 @@
 <span class="sd">                    &#39;rl = 0&#39;: [itmin, itmax, dit],</span>
 <span class="sd">                    &#39;rl = 1&#39;: [itmin, itmax, dit],</span>
 <span class="sd">                    ...</span>
+<span class="sd">                    &#39;checkpoint its available&#39;: [itmin, itmax],</span>
 <span class="sd">                    &#39;checkpoints&#39;: [it1, it2, ...]</span>
 <span class="sd">                },</span>
 <span class="sd">                ...</span>
@@ -1284,10 +1299,21 @@
                     <span class="nb">vars</span> <span class="o">=</span> <span class="n">li</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;3D variables available: [&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">)</span>
                     <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">]</span>
                     <span class="n">its_available</span><span class="p">[</span><span class="n">restart_nbr</span><span class="p">][</span><span class="s1">&#39;var available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">vars</span>
+                <span class="k">elif</span> <span class="s1">&#39;Could not find 3D data&#39;</span> <span class="ow">in</span> <span class="n">li</span><span class="p">:</span>
+                    <span class="n">its_available</span><span class="p">[</span><span class="n">restart_nbr</span><span class="p">][</span><span class="s1">&#39;var available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">its_available</span><span class="p">[</span><span class="n">restart_nbr</span><span class="p">][</span><span class="s1">&#39;its available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="c1"># iterations available (inclusive interval)</span>
                 <span class="k">elif</span> <span class="s1">&#39;-&gt;&#39;</span> <span class="ow">in</span> <span class="n">li</span><span class="p">:</span>
-                    <span class="n">its_available</span><span class="p">[</span><span class="n">restart_nbr</span><span class="p">][</span><span class="s1">&#39;its available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                        <span class="nb">int</span><span class="p">(</span><span class="n">li</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">li</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">4</span><span class="p">])]</span>
+                    <span class="k">if</span> <span class="s1">&#39;checkpoint&#39;</span> <span class="ow">in</span> <span class="n">li</span><span class="p">:</span>
+                        <span class="n">its_available</span><span class="p">[</span><span class="n">restart_nbr</span><span class="p">][</span><span class="s1">&#39;checkpoint its available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="n">li</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;checkpoint it = &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; -&gt; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="n">li</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;checkpoint it = &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; -&gt; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">its_available</span><span class="p">[</span><span class="n">restart_nbr</span><span class="p">][</span><span class="s1">&#39;its available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="n">li</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;it = &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; -&gt; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="n">li</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;it = &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; -&gt; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])]</span>
+                <span class="k">elif</span> <span class="s1">&#39;No iterations found&#39;</span> <span class="ow">in</span> <span class="n">li</span><span class="p">:</span>
+                    <span class="n">its_available</span><span class="p">[</span><span class="n">restart_nbr</span><span class="p">][</span><span class="s1">&#39;its available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="c1"># iterations available for said refinement level</span>
                 <span class="k">elif</span> <span class="s1">&#39;rl = &#39;</span> <span class="ow">in</span> <span class="n">li</span><span class="p">:</span>
                     <span class="n">rl</span> <span class="o">=</span> <span class="n">li</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;rl = &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -1300,7 +1326,11 @@
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">it_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">li</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])]</span>
                         <span class="n">its_available</span><span class="p">[</span><span class="n">restart_nbr</span><span class="p">][</span><span class="n">rlkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">it_list</span>
-
+                <span class="c1"># No checkpoints</span>
+                <span class="k">elif</span> <span class="s1">&#39;No checkpoints found&#39;</span> <span class="ow">in</span> <span class="n">li</span><span class="p">:</span>
+                    <span class="n">its_available</span><span class="p">[</span><span class="n">restart_nbr</span><span class="p">][</span><span class="s1">&#39;checkpoint its available&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">its_available</span><span class="p">[</span><span class="n">restart_nbr</span><span class="p">][</span><span class="s1">&#39;checkpoints&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="c1"># Checkpoints available at its: [0, 10, ...]</span>
                 <span class="k">elif</span> <span class="s1">&#39;Checkpoints available at its&#39;</span> <span class="ow">in</span> <span class="n">li</span><span class="p">:</span>
                     <span class="n">chk_its</span> <span class="o">=</span> <span class="n">li</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;Checkpoints available at its: &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
                     <span class="n">chk_its</span> <span class="o">=</span> <span class="n">chk_its</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -1542,23 +1572,34 @@
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">content_file</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">content_file</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">content_file</span><span class="p">):</span>
+        <span class="n">content_available</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">content_available</span> <span class="o">=</span> <span class="kc">False</span>
+
     <span class="c1"># Try to load existing content file</span>
-    <span class="k">try</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">content_available</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading existing content from </span><span class="si">{</span><span class="n">content_file</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">content_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">content_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="c1"># Convert keys back to tuples of variable names</span>
+                <span class="n">vars_and_files</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">key_str</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">content_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="c1"># Convert key string back to tuple of variable names</span>
+                    <span class="n">key_tuple</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">key_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">))</span>
+                    <span class="n">vars_and_files</span><span class="p">[</span><span class="n">key_tuple</span><span class="p">]</span> <span class="o">=</span> <span class="n">files</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">vars_and_files</span><span class="p">)</span><span class="si">}</span><span class="s2"> variables from cache.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">):</span>
+            <span class="n">content_available</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Existing content file in invalid format.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">content_available</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading existing content from </span><span class="si">{</span><span class="n">content_file</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">content_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">content_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-            <span class="c1"># Convert keys back to tuples of variable names</span>
-            <span class="n">vars_and_files</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">key_str</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">content_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="c1"># Convert key string back to tuple of variable names</span>
-                <span class="n">key_tuple</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">key_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">))</span>
-                <span class="n">vars_and_files</span><span class="p">[</span><span class="n">key_tuple</span><span class="p">]</span> <span class="o">=</span> <span class="n">files</span>
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">vars_and_files</span><span class="p">)</span><span class="si">}</span><span class="s2"> variables from cache.&quot;</span><span class="p">)</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No existing content file found or invalid format.&quot;</span>
-              <span class="o">+</span> <span class="s2">&quot; Calculating from scratch...&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Collecting content from scratch...&quot;</span><span class="p">)</span>
 
         <span class="n">vars_and_files</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">processed_groups</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Track which groups we&#39;ve already read</span>
@@ -1688,13 +1729,13 @@
 <span class="sd">    it : list of int, optional</span>
 <span class="sd">        Iterations to read. Default [0].</span>
 
+<span class="sd">    rl : int, optional</span>
+<span class="sd">        The refinement level to read from the simulation output files.</span>
+<span class="sd">        The default is 0.</span>
+
 <span class="sd">    vars : list of str, optional.</span>
 <span class="sd">        Variables in Aurel format. Default [] (all available).</span>
 <span class="sd">        Examples: [&#39;rho&#39;, &#39;Kdown3&#39;], [&#39;gammadown3&#39;, &#39;alpha&#39;]</span>
-
-<span class="sd">    restart : int, optional</span>
-<span class="sd">        Specific restart to read from.</span>
-<span class="sd">        Default -1 (auto-detect).</span>
 
 <span class="sd">    split_per_it : bool, optional</span>
 <span class="sd">        Use cached per-iteration files when available and save read data</span>
@@ -1736,8 +1777,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># reading kwargs</span>
     <span class="n">it</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+    <span class="n">rl</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rl&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">rlkey</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;rl = </span><span class="si">{</span><span class="n">rl</span><span class="si">}</span><span class="s1">&#39;</span>
     <span class="n">var</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vars&#39;</span><span class="p">,</span> <span class="p">[])</span>
-    <span class="n">restart</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;restart&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">split_per_it</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;split_per_it&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
     <span class="n">usecheckpoints</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;usecheckpoints&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="n">verbose</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
@@ -1748,75 +1790,54 @@
     <span class="c1"># Overall information</span>
     <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;verbose_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">its_available</span> <span class="o">=</span> <span class="n">iterations</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="c1"># use user provided restart</span>
-    <span class="k">if</span> <span class="n">restart</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">restarts_available</span> <span class="o">=</span> <span class="p">[</span><span class="n">restart</span><span class="p">]</span>
+    <span class="n">restarts_available</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">its_available</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">]</span>
+    <span class="n">restarts_with_it</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># create new element containing iterations to do</span>
+    <span class="k">for</span> <span class="n">restart</span> <span class="ow">in</span> <span class="n">restarts_available</span><span class="p">:</span>
         <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;it to do&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">iit</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+
+    <span class="c1"># reverse order so that I&#39;m always taking the most recent iteration</span>
+    <span class="k">for</span> <span class="n">iit</span> <span class="ow">in</span> <span class="n">it</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">restart</span> <span class="ow">in</span> <span class="n">restarts_available</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">it_in_restart</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># Check if iteration is in this restart,</span>
+            <span class="c1"># either in checkpoints or in the regular files</span>
             <span class="k">if</span> <span class="n">usecheckpoints</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s1">&#39;checkpoints&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">]):</span>
-                    <span class="k">if</span> <span class="n">iit</span> <span class="ow">in</span> <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;checkpoints&#39;</span><span class="p">]:</span>
-                        <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;it to do&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">iit</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">iit</span> <span class="ow">in</span> <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;checkpoints&#39;</span><span class="p">]:</span>
+                    <span class="n">it_in_restart</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s1">&#39;its available&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">]):</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;its available&#39;</span><span class="p">])</span> <span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">iit</span> <span class="o">==</span> <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;its available&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
-                            <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;it to do&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">iit</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">rlkey</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="n">rlkey</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+                        <span class="n">it_in_restart</span> <span class="o">=</span> <span class="n">iit</span> <span class="o">==</span> <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="n">rlkey</span><span class="p">]</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span> <span class="o">=</span> <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;its available&#39;</span><span class="p">]</span>
-                        <span class="k">if</span> <span class="p">((</span><span class="n">itmin</span> <span class="o">&lt;=</span> <span class="n">iit</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">iit</span> <span class="o">&lt;=</span> <span class="n">itmax</span><span class="p">)):</span>
-                            <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;it to do&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">iit</span><span class="p">]</span>
-    <span class="c1"># find restart myself</span>
-    <span class="k">elif</span> <span class="n">restart</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-        <span class="n">restarts_available</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">its_available</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-
-        <span class="c1"># create new element containing iterations to do</span>
-        <span class="k">for</span> <span class="n">restart</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">its_available</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;it to do&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="c1"># reverse order so that I&#39;m always taking the most recent iteration</span>
-        <span class="k">for</span> <span class="n">iit</span> <span class="ow">in</span> <span class="n">it</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">for</span> <span class="n">restart</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">its_available</span><span class="o">.</span><span class="n">keys</span><span class="p">())[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="k">if</span> <span class="n">usecheckpoints</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="s1">&#39;checkpoints&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">]):</span>
-                        <span class="n">it_in_restart</span> <span class="o">=</span> <span class="kc">False</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="c1"># is this iteration a checkpoint within this restart?</span>
-                        <span class="k">if</span> <span class="n">iit</span> <span class="ow">in</span> <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;checkpoints&#39;</span><span class="p">]:</span>
+                        <span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span> <span class="o">=</span> <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="n">rlkey</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">iit</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">):</span>
                             <span class="n">it_in_restart</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">it_in_restart</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="s1">&#39;its available&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">]):</span>
-                        <span class="n">it_in_restart</span> <span class="o">=</span> <span class="kc">False</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="c1"># is this iteration available within this restart?</span>
-                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;its available&#39;</span><span class="p">])</span> <span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-                            <span class="n">it_in_restart</span> <span class="o">=</span> <span class="p">(</span>
-                                <span class="n">iit</span> <span class="o">==</span> <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;its available&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span> <span class="o">=</span> <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;its available&#39;</span><span class="p">]</span>
-                            <span class="n">it_in_restart</span> <span class="o">=</span> <span class="p">((</span><span class="n">itmin</span> <span class="o">&lt;=</span> <span class="n">iit</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">iit</span> <span class="o">&lt;=</span> <span class="n">itmax</span><span class="p">))</span>
-                <span class="k">if</span> <span class="n">it_in_restart</span><span class="p">:</span>
-                    <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;it to do&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">iit</span><span class="p">]</span>
-                    <span class="c1"># I found it, so break to not go through the other restart</span>
-                    <span class="k">break</span>
+            <span class="c1"># Save restart with this iteration</span>
+            <span class="k">if</span> <span class="n">it_in_restart</span><span class="p">:</span>
+                <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;it to do&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">iit</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">restart</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">restarts_with_it</span><span class="p">:</span>
+                    <span class="n">restarts_with_it</span> <span class="o">+=</span> <span class="p">[</span><span class="n">restart</span><span class="p">]</span>
+                <span class="c1"># I found it, so break to not go through the other restarts</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">it_in_restart</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;Iteration </span><span class="si">{</span><span class="n">iit</span><span class="si">}</span><span class="s1"> not found in any restart,&#39;</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39; try with usecheckpoints=</span><span class="si">{</span><span class="ow">not</span><span class="w"> </span><span class="n">usecheckpoints</span><span class="si">}</span><span class="s1">?&#39;</span><span class="p">)</span>
 
-        <span class="c1"># sort iterations</span>
-        <span class="k">for</span> <span class="n">restart</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">its_available</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;it to do&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span>
-                    <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;it to do&#39;</span><span class="p">]))</span>
-    <span class="c1"># can&#39;t read restart value</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Don&#39;t know what to do with restart=</span><span class="si">{</span><span class="n">restart</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># sort iterations</span>
+    <span class="n">restarts_with_it</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">restarts_with_it</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">restart</span> <span class="ow">in</span> <span class="n">restarts_with_it</span><span class="p">:</span>
+        <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;it to do&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span>
+            <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;it to do&#39;</span><span class="p">]))</span>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># ======== go collect data in each restart</span>
     <span class="c1"># big dictionary to save data and to be flattened</span>
     <span class="n">datar</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">old_it</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">restart</span> <span class="ow">in</span> <span class="n">restarts_available</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">restart</span> <span class="ow">in</span> <span class="n">restarts_with_it</span><span class="p">:</span>
         <span class="c1"># iterations available in this restart</span>
         <span class="n">it</span> <span class="o">=</span> <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;it to do&#39;</span><span class="p">]</span>
         <span class="c1"># skip this restart if it doesn&#39;t have the it we want</span>
@@ -1836,8 +1857,7 @@
             <span class="k">if</span> <span class="n">var</span><span class="o">==</span><span class="p">[]:</span>
                 <span class="n">var</span> <span class="o">=</span> <span class="n">its_available</span><span class="p">[</span><span class="n">restart</span><span class="p">][</span><span class="s1">&#39;var available&#39;</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; =========== Restart </span><span class="si">{</span><span class="n">restart</span><span class="si">}</span><span class="s1">:&#39;</span><span class="p">,</span>
-                        <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; =========== Restart </span><span class="si">{</span><span class="n">restart</span><span class="si">}</span><span class="s1">:&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;vars to get </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">:&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">veryverbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;its to get </span><span class="si">{</span><span class="n">it</span><span class="si">}</span><span class="s1">:&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -2005,12 +2025,15 @@
 <span class="sd">    it : list, optional</span>
 <span class="sd">        The iterations to save from the data.</span>
 <span class="sd">        The default is [0].</span>
+
 <span class="sd">    rl : int, optional</span>
 <span class="sd">        The refinement level to read from the simulation output files.</span>
 <span class="sd">        The default is 0.</span>
+
 <span class="sd">    restart : int, optional</span>
 <span class="sd">        The restart number to save the data to.</span>
 <span class="sd">        The default is 0.</span>
+
 <span class="sd">    veryverbose : bool, optional</span>
 <span class="sd">        If True, print additional information during the joining process.</span>
 <span class="sd">        The default is False.</span>
@@ -2087,10 +2110,12 @@
 <span class="sd">        The variables to read from the simulation output files.</span>
 <span class="sd">        Each variable is a string that identifies the variable.</span>
 <span class="sd">        These should all be found in the same files.</span>
+
 <span class="sd">    files : list</span>
 <span class="sd">        The list of files to read the variables from.</span>
 <span class="sd">        Each file is a string that identifies the file.</span>
 <span class="sd">        These should all contain the same variables just at different chunks.</span>
+
 <span class="sd">    cmax : int</span>
 <span class="sd">        The maximum number of chunks to read from the simulation output files.</span>
 <span class="sd">        If &#39;in file&#39;, it will be extracted from the file.</span>
@@ -2100,6 +2125,7 @@
 <span class="sd">    it : list, optional</span>
 <span class="sd">        The iterations to save from the data.</span>
 <span class="sd">        The default is [0].</span>
+
 <span class="sd">    rl : int, optional</span>
 <span class="sd">        The refinement level to read from the simulation output files.</span>
 <span class="sd">        The default is 0.</span>
@@ -2298,6 +2324,12 @@
         <span class="n">param</span><span class="p">[</span><span class="s1">&#39;simpath&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span>
         <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;/output-</span><span class="si">{</span><span class="n">restart</span><span class="si">:</span><span class="s1">04d</span><span class="si">}</span><span class="s1">/&#39;</span>
         <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;simname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/checkpoint.chkpt.it_*.h5&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">checkpoint_files</span> <span class="o">==</span> <span class="p">[]:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;No checkpoint files found for restart </span><span class="si">{</span><span class="n">restart</span><span class="si">}</span><span class="s1"> at path:&#39;</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;simpath&quot;</span><span class="p">]</span><span class="si">}{</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;simname&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">/output-</span><span class="si">{</span><span class="n">restart</span><span class="si">:</span><span class="s1">04d</span><span class="si">}</span><span class="s1">/&#39;</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;simname&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">/checkpoint.chkpt.it_*.h5&#39;</span><span class="p">)</span>
 
     <span class="c1"># find cmax</span>
     <span class="n">it0_file</span> <span class="o">=</span> <span class="p">[]</span>
