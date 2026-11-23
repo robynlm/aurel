@@ -35,7 +35,7 @@ classifiers = [
 
 # Minimum Python version requirement
 # Note: If this changes, update the Python version shield in README.md
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.15"
 
 # =============================================================================
 # Core Dependencies
@@ -44,7 +44,7 @@ dependencies = [
     "numpy",        # Array operations and numerical computing
     "matplotlib",   # Plotting and visualization
     "sympy",        # Symbolic mathematics
-    "h5py",         # HDF5 file format support for Einstein Toolkit data
+    "h5py",         # HDF5 file format support for Einstein Toolkit data (requires Python < 3.15, as of 23 Nov 2026)
     "scipy",        # Scientific computing (requires Python >= 3.11)
     "ipython",      # Enhanced interactive Python shell
     "tqdm",         # Progress bars for long computations

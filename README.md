@@ -12,7 +12,7 @@
   <a href="https://arxiv.org/abs/2602.00155"><img src="https://img.shields.io/badge/arXiv-2602.00155-b31b1b.svg?logo=arxiv&logoColor=white"/></a>
   <a href="https://joss.theoj.org/papers/acde0bf6036016f0b9c24a7e8b64cae3"><img src="https://joss.theoj.org/papers/acde0bf6036016f0b9c24a7e8b64cae3/status.svg"></a>
   <br>
-  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11%2B-blue?logo=python&logoColor=white"/></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11--3.14-blue?logo=python&logoColor=white"/></a>
   <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg?logo=opensourceinitiative&logoColor=white"/></a>
   <a href="https://pypi.org/project/aurel/"><img src="https://img.shields.io/pypi/v/aurel?logo=pypi&logoColor=white"/></a>
   <a href="https://github.com/robynlm/aurel/actions/workflows/test-build.yml"><img src="https://github.com/robynlm/aurel/actions/workflows/test-build.yml/badge.svg?branch=main"/></a>
@@ -40,19 +40,18 @@ Designed with ease of use in mind, it will **au**tomatically calculate **rel**at
 # Installation
 
 **Requirements:** 
-- Python 3.11 or higher ([download here](https://www.python.org/downloads/))
-- pip (usually included with Python, or [install separately](https://pip.pypa.io/en/stable/installation/))
+- Python ([download here](https://www.python.org/downloads/))
 
 Install aurel using pip (all other dependencies will be installed automatically):
 
 ```bash
-pip install aurel
+python -m pip install aurel
 ```
 
 To get the latest development version:
 
 ```bash
-pip install git+https://github.com/robynlm/aurel.git@development
+python -m pip install git+https://github.com/robynlm/aurel.git@development
 ```
 
 # Getting started
