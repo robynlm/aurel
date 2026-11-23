@@ -54,7 +54,7 @@ jobs:
 
     - name: Upload coverage data
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: coverage-data
         path: coverage.json
@@ -78,7 +78,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Download coverage data
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v6
       with:
         name: coverage-data
 
