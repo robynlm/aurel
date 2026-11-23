@@ -114,7 +114,7 @@ This makes `aurel` versatile, supporting an infinite number of ways to view a pr
 
 `aurel` is a specialist tool for general relativity researchers and streamlines numerical relativists' post-processing workflow.
 Through conference interactions and collaborations involving the authors, this package has gradually been disseminated to individual researchers who appreciate the effortless integration, satisfying dependency resolution and substantial reduction to post-processing overhead.
-Indeed, in ongoing studies involving NR simulations of primordial black hole formation, `aurel` has increased capacity and redirected repetitive and error-prone development efforts towards exploring a broader range of simulated scenarios.
+Indeed, in ongoing studies involving NR simulations of primordial black hole formation [@Munoz2026], `aurel` has increased capacity and redirected repetitive and error-prone development efforts towards exploring a broader range of simulated scenarios.
 Additionally, for master students, the straightforward and transparent design has provided an easy gateway for them to analyse NR simulations and so quickly get results within the duration of their projects.
 Going forward, awareness of this code will build upon publication, reaching a wider audience and supporting the popularisation of NR.
 
