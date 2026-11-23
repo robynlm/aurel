@@ -78,7 +78,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Download coverage data
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         name: coverage-data
 
