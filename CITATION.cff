@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+title: aurel
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Robyn L.
+    family-names: Munoz
+    orcid: 'https://orcid.org/0000-0003-3345-8520'
+  - given-names: Christian T.
+    family-names: Byrnes
+    orcid: 'https://orcid.org/0000-0003-2583-6536'
+  - given-names: Will J.
+    family-names: Roper
+    orcid: 'https://orcid.org/0000-0002-3257-8806'
+identifiers:
+  - type: url
+    value: 'https://arxiv.org/abs/2602.00155'
+repository-code: 'https://github.com/robynlm/aurel'
+url: 'https://robynlm.github.io/aurel/'
+abstract: >-
+  aurel is an open-source Python package designed to
+  automatically calculate relativistic quantities. It uses
+  an efficient, flexible and user-friendly caching and
+  dependency-tracking system, ideal for managing the highly
+  nonlinear nature of general relativity. The package
+  supports both symbolic and numerical calculations. The
+  symbolic part extends SymPy with additional tensorial
+  calculations. The numerical part computes a wide range of
+  tensorial quantities, such as curvature, matter kinematics
+  and much more, directly from any spacetime and matter data
+  arrays using finite-difference methods. Inputs can be
+  either generated from analytical expressions or imported
+  from Numerical Relativity (NR) simulations, with helper
+  functions provided to read in data from standard NR codes.
+  Given the increasing use of NR, aurel offers a timely
+  post-processing tool to support the popularisation of this
+  field.
+keywords:
+  - numerical relativity
+  - general relativity
+license: GPL-3.0
