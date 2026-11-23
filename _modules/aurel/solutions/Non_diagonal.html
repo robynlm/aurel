@@ -9,7 +9,7 @@
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=3721e3c3" />
 
   
@@ -19,7 +19,7 @@
       <script src="../../../_static/documentation_options.js?v=8d170800"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
       <script src="../../../_static/custom.js?v=67be0c79"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -105,19 +105,19 @@
            <div itemprop="articleBody">
              
   <h1>Source code for aurel.solutions.Non_diagonal</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;See section 3.2 of 2211.08133.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""See section 3.2 of 2211.08133."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
 
-<span class="n">kappa</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="c1"># Einstein&#39;s gravitational constant</span>
+<span class="n">kappa</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="c1"># Einstein's gravitational constant</span>
 <span class="n">Lambda</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="c1"># Wavelength in the z direction</span>
 <span class="n">fq</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">Lambda</span>
 
 <div class="viewcode-block" id="A">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Non_diagonal.A">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">A</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conformal factor.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Conformal factor."""</span>
     <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
         <span class="k">return</span> <span class="mf">2.3</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">fq</span> <span class="o">*</span> <span class="n">z</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -127,21 +127,21 @@
 <div class="viewcode-block" id="dzA">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Non_diagonal.dzA">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dzA</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conformal factor 1st derivative.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Conformal factor 1st derivative."""</span>
     <span class="k">return</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">fq</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">fq</span> <span class="o">*</span> <span class="n">z</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="dzdzA">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Non_diagonal.dzdzA">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dzdzA</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conformal factor 2nd derivative.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Conformal factor 2nd derivative."""</span>
     <span class="k">return</span> <span class="o">-</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">fq</span> <span class="o">*</span> <span class="n">fq</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">fq</span> <span class="o">*</span> <span class="n">z</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="gammadown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Non_diagonal.gammadown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spatial metric.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Spatial metric."""</span>
     <span class="n">B</span> <span class="o">=</span> <span class="n">t</span><span class="o">*</span><span class="n">A</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="n">analytical</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
         <span class="n">ones</span> <span class="o">=</span> <span class="mi">1</span>
@@ -164,7 +164,7 @@
 <div class="viewcode-block" id="gdown4">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Non_diagonal.gdown4">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spacetime metric.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Spacetime metric."""</span>
     <span class="n">gij</span> <span class="o">=</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="n">analytical</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span>
@@ -187,7 +187,7 @@
 <div class="viewcode-block" id="Kdown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Non_diagonal.Kdown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrinsic curvature.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Extrinsic curvature."""</span>
     <span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
     <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">A</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">zeros</span><span class="p">],</span>
                             <span class="p">[</span><span class="n">zeros</span><span class="p">,</span> <span class="n">A</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="n">zeros</span><span class="p">],</span>
@@ -197,11 +197,11 @@
 <div class="viewcode-block" id="Tdown4">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Non_diagonal.Tdown4">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Tdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stress-energy tensor, from Einstein&#39;s field equations.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Stress-energy tensor, from Einstein's field equations."""</span>
     <span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
     <span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
     <span class="n">udown</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">ones</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">zeros</span><span class="p">])</span>
-    <span class="n">u_axu_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;a...,b...-&gt;ab...&#39;</span><span class="p">,</span> <span class="n">udown</span><span class="p">,</span> <span class="n">udown</span><span class="p">)</span>
+    <span class="n">u_axu_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'a...,b...-&gt;ab...'</span><span class="p">,</span> <span class="n">udown</span><span class="p">,</span> <span class="n">udown</span><span class="p">)</span>
     <span class="n">hdown</span> <span class="o">=</span> <span class="n">gdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">+</span> <span class="n">u_axu_b</span>
 
     <span class="c1"># energy density</span>
@@ -262,18 +262,18 @@
 
     <span class="k">return</span> <span class="p">(</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">u_axu_b</span>
             <span class="o">+</span> <span class="n">p</span> <span class="o">*</span> <span class="n">hdown</span>
-            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;a...,b...-&gt;ab...&#39;</span><span class="p">,</span> <span class="n">qdown</span><span class="p">,</span> <span class="n">udown</span><span class="p">)</span>
-            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;b...,a...-&gt;ab...&#39;</span><span class="p">,</span> <span class="n">qdown</span><span class="p">,</span> <span class="n">udown</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'a...,b...-&gt;ab...'</span><span class="p">,</span> <span class="n">qdown</span><span class="p">,</span> <span class="n">udown</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'b...,a...-&gt;ab...'</span><span class="p">,</span> <span class="n">qdown</span><span class="p">,</span> <span class="n">udown</span><span class="p">)</span>
             <span class="o">+</span> <span class="n">pidown</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="data">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Non_diagonal.data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return dictionary of Non-diagonal data.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;gammadown3&#39;</span><span class="p">:</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
-            <span class="s1">&#39;Kdown3&#39;</span><span class="p">:</span> <span class="n">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
-            <span class="s1">&#39;Tdown4&#39;</span><span class="p">:</span> <span class="n">Tdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)}</span></div>
+<span class="w">    </span><span class="sd">"""Return dictionary of Non-diagonal data."""</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">'gammadown3'</span><span class="p">:</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
+            <span class="s1">'Kdown3'</span><span class="p">:</span> <span class="n">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
+            <span class="s1">'Tdown4'</span><span class="p">:</span> <span class="n">Tdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)}</span></div>
 
 </pre></div>
 

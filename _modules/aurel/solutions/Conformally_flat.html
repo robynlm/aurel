@@ -9,7 +9,7 @@
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=3721e3c3" />
 
   
@@ -19,7 +19,7 @@
       <script src="../../../_static/documentation_options.js?v=8d170800"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
       <script src="../../../_static/custom.js?v=67be0c79"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -105,47 +105,47 @@
            <div itemprop="articleBody">
              
   <h1>Source code for aurel.solutions.Conformally_flat</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Conformally flat spacetime solution.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Conformally flat spacetime solution."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
 
 <span class="n">eps</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># arbitraty positive constant</span>
-<span class="n">kappa</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="c1"># Einstein&#39;s gravitational constant</span>
+<span class="n">kappa</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="c1"># Einstein's gravitational constant</span>
 
 <div class="viewcode-block" id="Omega">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Conformally_flat.Omega">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Omega</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the conformal factor.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the conformal factor."""</span>
     <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">eps</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
 
-<span class="c1"># or use Om = sp.Function(&#39;Om&#39;)(x) for analytic</span>
+<span class="c1"># or use Om = sp.Function('Om')(x) for analytic</span>
 
 <div class="viewcode-block" id="dxOmega">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Conformally_flat.dxOmega">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dxOmega</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the 1st derivative of the conformal factor.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the 1st derivative of the conformal factor."""</span>
     <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">eps</span><span class="o">*</span><span class="n">x</span></div>
 
 
 <div class="viewcode-block" id="dxdxOmega">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Conformally_flat.dxdxOmega">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dxdxOmega</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the 2nd derivatire of the conformal factor.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the 2nd derivatire of the conformal factor."""</span>
     <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">eps</span></div>
 
 
 <div class="viewcode-block" id="alpha">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Conformally_flat.alpha">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">alpha</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lapse.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Lapse."""</span>
     <span class="k">return</span> <span class="n">Omega</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="gdown4">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Conformally_flat.gdown4">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spacetime metric.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Spacetime metric."""</span>
     <span class="n">Om2</span> <span class="o">=</span> <span class="n">Omega</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
     <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
         <span class="n">zeros</span> <span class="o">=</span> <span class="mi">0</span>
@@ -168,7 +168,7 @@
 <div class="viewcode-block" id="gammadown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Conformally_flat.gammadown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spatial metric.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Spatial metric."""</span>
     <span class="n">Om2</span> <span class="o">=</span> <span class="n">Omega</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
     <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
         <span class="n">zeros</span> <span class="o">=</span> <span class="mi">0</span>
@@ -189,7 +189,7 @@
 <div class="viewcode-block" id="Kdown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Conformally_flat.Kdown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrinsic curvature.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Extrinsic curvature."""</span>
     <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span><span class="p">))</span></div>
 
@@ -197,14 +197,14 @@
 <div class="viewcode-block" id="st_RicciS">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Conformally_flat.st_RicciS">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">st_RicciS</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spacetime Ricci scalar.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Spacetime Ricci scalar."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="mi">6</span> <span class="o">*</span> <span class="n">dxdxOmega</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">Omega</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Tdown4">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Conformally_flat.Tdown4">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Tdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stress-energy tensor, from Einstein&#39;s field equations.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Stress-energy tensor, from Einstein's field equations."""</span>
     <span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
     <span class="n">Om</span> <span class="o">=</span> <span class="n">Omega</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">dxOm</span> <span class="o">=</span> <span class="n">dxOmega</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -223,10 +223,10 @@
 <div class="viewcode-block" id="data">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Conformally_flat.data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return dictionary of Collins Stewart data.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;gammadown3&#39;</span><span class="p">:</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
-            <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">alpha</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
-            <span class="s1">&#39;Tdown4&#39;</span><span class="p">:</span> <span class="n">Tdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)}</span></div>
+<span class="w">    </span><span class="sd">"""Return dictionary of Collins Stewart data."""</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">'gammadown3'</span><span class="p">:</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
+            <span class="s1">'alpha'</span><span class="p">:</span> <span class="n">alpha</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
+            <span class="s1">'Tdown4'</span><span class="p">:</span> <span class="n">Tdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)}</span></div>
 
 </pre></div>
 

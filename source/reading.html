@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=3721e3c3" />
 
   
@@ -20,7 +20,7 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
       <script src="../_static/custom.js?v=67be0c79"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -190,9 +190,9 @@ from <cite>read_iterations()</cite> or <cite>iterations()</cite>.</p></li>
 iteration information across all restarts:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="n">restart_number</span><span class="p">:</span> <span class="p">{</span><span class="o">...</span><span class="p">},</span>  <span class="c1"># Original restart data preserved</span>
-    <span class="s1">&#39;overall&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;rl = 0&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span>
-        <span class="s1">&#39;rl = 1&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span>
+    <span class="s1">'overall'</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">'rl = 0'</span><span class="p">:</span> <span class="p">[[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span>
+        <span class="s1">'rl = 1'</span><span class="p">:</span> <span class="p">[[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span>
         <span class="o">...</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -247,8 +247,8 @@ Shows file scanning progress and caching status.</p></li>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p>Dictionary mapping variable groups to their file lists:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="p">(</span><span class="s1">&#39;var1&#39;</span><span class="p">,</span> <span class="s1">&#39;var2&#39;</span><span class="p">):</span> <span class="p">[</span><span class="s1">&#39;path/to/file1.h5&#39;</span><span class="p">,</span> <span class="s1">&#39;path/to/file2.h5&#39;</span><span class="p">],</span>
-    <span class="p">(</span><span class="s1">&#39;var3&#39;</span><span class="p">,):</span> <span class="p">[</span><span class="s1">&#39;path/to/file3.h5&#39;</span><span class="p">,</span> <span class="s1">&#39;path/to/file4.h5&#39;</span><span class="p">],</span>
+    <span class="p">(</span><span class="s1">'var1'</span><span class="p">,</span> <span class="s1">'var2'</span><span class="p">):</span> <span class="p">[</span><span class="s1">'path/to/file1.h5'</span><span class="p">,</span> <span class="s1">'path/to/file2.h5'</span><span class="p">],</span>
+    <span class="p">(</span><span class="s1">'var3'</span><span class="p">,):</span> <span class="p">[</span><span class="s1">'path/to/file3.h5'</span><span class="p">,</span> <span class="s1">'path/to/file4.h5'</span><span class="p">],</span>
     <span class="o">...</span>
 <span class="p">}</span>
 </pre></div>
@@ -297,18 +297,18 @@ Shows contents of iterations.txt file and overall summary.</p></li>
 <dd class="field-even"><p><p>Dictionary containing iteration information for all restarts:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="n">restart_number</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;var available&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">variable</span> <span class="n">names</span><span class="p">],</span>
-        <span class="s1">&#39;its available&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">],</span>
-        <span class="s1">&#39;rl = 0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
-        <span class="s1">&#39;rl = 1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
+        <span class="s1">'var available'</span><span class="p">:</span> <span class="p">[</span><span class="n">variable</span> <span class="n">names</span><span class="p">],</span>
+        <span class="s1">'its available'</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">],</span>
+        <span class="s1">'rl = 0'</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
+        <span class="s1">'rl = 1'</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
         <span class="o">...</span>
-        <span class="s1">&#39;checkpoint its available&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">],</span>
-        <span class="s1">&#39;checkpoints&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">it1</span><span class="p">,</span> <span class="n">it2</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+        <span class="s1">'checkpoint its available'</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">],</span>
+        <span class="s1">'checkpoints'</span><span class="p">:</span> <span class="p">[</span><span class="n">it1</span><span class="p">,</span> <span class="n">it2</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
     <span class="p">},</span>
     <span class="o">...</span>
-    <span class="s1">&#39;overall&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;rl = 0&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span>
-        <span class="s1">&#39;rl = 1&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span>
+    <span class="s1">'overall'</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">'rl = 0'</span><span class="p">:</span> <span class="p">[[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span>
+        <span class="s1">'rl = 1'</span><span class="p">:</span> <span class="p">[[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span>
         <span class="o">...</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -323,7 +323,7 @@ Shows contents of iterations.txt file and overall summary.</p></li>
 <p class="rubric">Notes</p>
 <p>Creates/appends to ‘{simpath}/{simname}/iterations.txt’ with format:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">===</span> <span class="n">restart</span> <span class="mi">0</span>
-<span class="mi">3</span><span class="n">D</span> <span class="n">variables</span> <span class="n">available</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;rho&#39;</span><span class="p">,</span> <span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="s1">&#39;gxx&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<span class="mi">3</span><span class="n">D</span> <span class="n">variables</span> <span class="n">available</span><span class="p">:</span> <span class="p">[</span><span class="s1">'rho'</span><span class="p">,</span> <span class="s1">'alpha'</span><span class="p">,</span> <span class="s1">'gxx'</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 <span class="n">it</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">-&gt;</span> <span class="mi">1000</span>
 <span class="n">rl</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">at</span> <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="n">rl</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -433,20 +433,20 @@ Conflicting parameter names include thorn prefix.</p>
 <dd class="field-even"><p><p>Returns None if the filename doesn’t match the expected format.
 Otherwise returns dictionary with parsed components:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s1">&#39;thorn_group&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> <span class="c1"># e.g., &#39;admbase-&#39; or None</span>
-    <span class="s1">&#39;thorn&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>       <span class="c1"># e.g., &#39;admbase&#39; or None</span>
-    <span class="s1">&#39;variable_or_group&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>   <span class="c1"># e.g., &#39;metric&#39; or &#39;rho&#39;</span>
-    <span class="s1">&#39;xyz_prefix&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># e.g., &#39;.xyz&#39; or None</span>
-    <span class="s1">&#39;chunk_number&#39;</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span> <span class="c1"># e.g., 123 or None (from file_nbr)</span>
-    <span class="s1">&#39;xyz_suffix&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># e.g., &#39;.xyz&#39; or None</span>
-    <span class="s1">&#39;is_group_file&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>      <span class="c1"># True -&gt; a grouped variable file</span>
+    <span class="s1">'thorn_group'</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> <span class="c1"># e.g., 'admbase-' or None</span>
+    <span class="s1">'thorn'</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>       <span class="c1"># e.g., 'admbase' or None</span>
+    <span class="s1">'variable_or_group'</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>   <span class="c1"># e.g., 'metric' or 'rho'</span>
+    <span class="s1">'xyz_prefix'</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># e.g., '.xyz' or None</span>
+    <span class="s1">'chunk_number'</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span> <span class="c1"># e.g., 123 or None (from file_nbr)</span>
+    <span class="s1">'xyz_suffix'</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># e.g., '.xyz' or None</span>
+    <span class="s1">'is_group_file'</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>      <span class="c1"># True -&gt; a grouped variable file</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>And if it is a checkpoint file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s1">&#39;iteration&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>        <span class="c1"># e.g., 1000</span>
-    <span class="s1">&#39;chunk_number&#39;</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span> <span class="c1"># e.g., 123 or None (from file_nbr)</span>
+    <span class="s1">'iteration'</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>        <span class="c1"># e.g., 1000</span>
+    <span class="s1">'chunk_number'</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span> <span class="c1"># e.g., 123 or None (from file_nbr)</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -470,13 +470,13 @@ Otherwise returns dictionary with parsed components:</p>
 <dd class="field-even"><p><p>Returns None if the key doesn’t match the expected format.
 Otherwise returns dictionary with parsed components:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s1">&#39;thorn&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>        <span class="c1"># e.g., &#39;admbase&#39;</span>
-    <span class="s1">&#39;variable&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>     <span class="c1"># e.g., &#39;gxx&#39;</span>
-    <span class="s1">&#39;it&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>          <span class="c1"># iteration number</span>
-    <span class="s1">&#39;tl&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>          <span class="c1"># time level</span>
-    <span class="s1">&#39;m&#39;</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>   <span class="c1"># m value (if present)</span>
-    <span class="s1">&#39;rl&#39;</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># refinement level (if present)</span>
-    <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span>    <span class="c1"># chunk number (if present)</span>
+    <span class="s1">'thorn'</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>        <span class="c1"># e.g., 'admbase'</span>
+    <span class="s1">'variable'</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>     <span class="c1"># e.g., 'gxx'</span>
+    <span class="s1">'it'</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>          <span class="c1"># iteration number</span>
+    <span class="s1">'tl'</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>          <span class="c1"># time level</span>
+    <span class="s1">'m'</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>   <span class="c1"># m value (if present)</span>
+    <span class="s1">'rl'</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># refinement level (if present)</span>
+    <span class="s1">'c'</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span>    <span class="c1"># chunk number (if present)</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -549,10 +549,10 @@ Default False.</p></li>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p>Simulation data dictionary with structure:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s1">&#39;it&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">iteration_numbers</span><span class="p">],</span>
-    <span class="s1">&#39;t&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">time_values</span><span class="p">],</span>
-    <span class="s1">&#39;var1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
-    <span class="s1">&#39;var2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
+    <span class="s1">'it'</span><span class="p">:</span> <span class="p">[</span><span class="n">iteration_numbers</span><span class="p">],</span>
+    <span class="s1">'t'</span><span class="p">:</span> <span class="p">[</span><span class="n">time_values</span><span class="p">],</span>
+    <span class="s1">'var1'</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
+    <span class="s1">'var2'</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
     <span class="o">...</span>
 <span class="p">}</span>
 </pre></div>
@@ -661,10 +661,10 @@ organized by refinement level with keys like ‘varname rl=0’.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p>Dictionary with simulation data:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s1">&#39;it&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">iteration_numbers</span><span class="p">],</span> <span class="c1"># ints</span>
-    <span class="s1">&#39;t&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">time_values</span><span class="p">],</span>        <span class="c1"># floats or None if not available</span>
-    <span class="s1">&#39;var1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>     <span class="c1"># arrays or Nones if not available</span>
-    <span class="s1">&#39;var2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
+    <span class="s1">'it'</span><span class="p">:</span> <span class="p">[</span><span class="n">iteration_numbers</span><span class="p">],</span> <span class="c1"># ints</span>
+    <span class="s1">'t'</span><span class="p">:</span> <span class="p">[</span><span class="n">time_values</span><span class="p">],</span>        <span class="c1"># floats or None if not available</span>
+    <span class="s1">'var1'</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>     <span class="c1"># arrays or Nones if not available</span>
+    <span class="s1">'var2'</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
     <span class="o">...</span>
 <span class="p">}</span>
 </pre></div>
@@ -710,10 +710,10 @@ Default False.</p></li>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p>Dictionary containing the simulation data with keys:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s1">&#39;it&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">iteration_numbers</span><span class="p">],</span> <span class="c1"># ints</span>
-    <span class="s1">&#39;t&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">time_values</span><span class="p">],</span>        <span class="c1"># floats or None if not available</span>
-    <span class="s1">&#39;var1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>     <span class="c1"># arrays or Nones if not available</span>
-    <span class="s1">&#39;var2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
+    <span class="s1">'it'</span><span class="p">:</span> <span class="p">[</span><span class="n">iteration_numbers</span><span class="p">],</span> <span class="c1"># ints</span>
+    <span class="s1">'t'</span><span class="p">:</span> <span class="p">[</span><span class="n">time_values</span><span class="p">],</span>        <span class="c1"># floats or None if not available</span>
+    <span class="s1">'var1'</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>     <span class="c1"># arrays or Nones if not available</span>
+    <span class="s1">'var2'</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
     <span class="o">...</span>
 <span class="p">}</span>
 </pre></div>
@@ -754,13 +754,13 @@ Also passed to <cite>iterations()</cite>.</p></li>
 <dd class="field-even"><p><p>Dictionary containing iteration information for all restarts:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="n">restart_number</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;var available&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">variable</span> <span class="n">names</span><span class="p">],</span>
-        <span class="s1">&#39;its available&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">],</span>
-        <span class="s1">&#39;rl = 0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
-        <span class="s1">&#39;rl = 1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
+        <span class="s1">'var available'</span><span class="p">:</span> <span class="p">[</span><span class="n">variable</span> <span class="n">names</span><span class="p">],</span>
+        <span class="s1">'its available'</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">],</span>
+        <span class="s1">'rl = 0'</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
+        <span class="s1">'rl = 1'</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">,</span> <span class="n">dit</span><span class="p">],</span>
         <span class="o">...</span>
-        <span class="s1">&#39;checkpoint its available&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">],</span>
-        <span class="s1">&#39;checkpoints&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">it1</span><span class="p">,</span> <span class="n">it2</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+        <span class="s1">'checkpoint its available'</span><span class="p">:</span> <span class="p">[</span><span class="n">itmin</span><span class="p">,</span> <span class="n">itmax</span><span class="p">],</span>
+        <span class="s1">'checkpoints'</span><span class="p">:</span> <span class="p">[</span><span class="n">it1</span><span class="p">,</span> <span class="n">it2</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
     <span class="p">},</span>
     <span class="o">...</span>
 <span class="p">}</span>
@@ -797,10 +797,10 @@ Should include either:
 <li><p><strong>data</strong> (<em>dict</em>) – <p>Dictionary containing simulation data to save.
 Expected structure:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s1">&#39;it&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">iteration_numbers</span><span class="p">],</span>
-    <span class="s1">&#39;t&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">time_values</span><span class="p">],</span>
-    <span class="s1">&#39;var1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
-    <span class="s1">&#39;var2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
+    <span class="s1">'it'</span><span class="p">:</span> <span class="p">[</span><span class="n">iteration_numbers</span><span class="p">],</span>
+    <span class="s1">'t'</span><span class="p">:</span> <span class="p">[</span><span class="n">time_values</span><span class="p">],</span>
+    <span class="s1">'var1'</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
+    <span class="s1">'var2'</span><span class="p">:</span> <span class="p">[</span><span class="n">data_arrays</span><span class="p">],</span>
     <span class="o">...</span>
 <span class="p">}</span>
 </pre></div>

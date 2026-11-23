@@ -9,7 +9,7 @@
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=3721e3c3" />
 
   
@@ -19,7 +19,7 @@
       <script src="../../../_static/documentation_options.js?v=8d170800"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
       <script src="../../../_static/custom.js?v=67be0c79"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -105,11 +105,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for aurel.solutions.Harvey_Tsoubelis</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;A.Harvey and T.Tsoubelis vacuum Bianchi IV plane wave solution.</span>
+<span></span><span class="sd">"""A.Harvey and T.Tsoubelis vacuum Bianchi IV plane wave solution.</span>
 
 <span class="sd">This is a homogeneous spacetime, see section 3.5 of 2211.08133 or</span>
-<span class="sd">page 191 of &#39;Dynamical Systems in Cosmology&#39; by J.Wainwright and G.F.R.Ellis.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">page 191 of 'Dynamical Systems in Cosmology' by J.Wainwright and G.F.R.Ellis.</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
@@ -118,28 +118,28 @@
 <div class="viewcode-block" id="alpha">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Harvey_Tsoubelis.alpha">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">alpha</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the lapse function.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the lapse function."""</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="rho">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Harvey_Tsoubelis.rho">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">rho</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the energy density.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the energy density."""</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="press">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Harvey_Tsoubelis.press">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">press</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the pressure.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the pressure."""</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="betaup3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Harvey_Tsoubelis.betaup3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">betaup3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the shift vector.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the shift vector."""</span>
     <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span><span class="p">))</span></div>
 
@@ -147,7 +147,7 @@
 <div class="viewcode-block" id="uup4">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Harvey_Tsoubelis.uup4">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">uup4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fluid 4 velocity.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Fluid 4 velocity."""</span>
     <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span><span class="p">)),</span>
                      <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span><span class="p">)),</span>
@@ -158,7 +158,7 @@
 <div class="viewcode-block" id="Tdown4">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Harvey_Tsoubelis.Tdown4">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Tdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Energy stress tensor.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Energy stress tensor."""</span>
     <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span><span class="p">))</span></div>
 
@@ -166,7 +166,7 @@
 <div class="viewcode-block" id="gdown4">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Harvey_Tsoubelis.gdown4">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the spacetime metric.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the spacetime metric."""</span>
     <span class="n">gij</span> <span class="o">=</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="n">analytical</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span>
@@ -189,7 +189,7 @@
 <div class="viewcode-block" id="gammadown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Harvey_Tsoubelis.gammadown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the spatial metric.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the spatial metric."""</span>
     <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
         <span class="n">ex</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">B</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">sp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
@@ -212,7 +212,7 @@
 <div class="viewcode-block" id="Kdown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Harvey_Tsoubelis.Kdown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the extrinsic curvature.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the extrinsic curvature."""</span>
     <span class="n">B</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
     <span class="n">ex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
@@ -229,10 +229,10 @@
 <div class="viewcode-block" id="data">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Harvey_Tsoubelis.data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return dictionary of Harvey Tsoubelis data.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;gammadown3&#39;</span><span class="p">:</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
-            <span class="s1">&#39;Kdown3&#39;</span><span class="p">:</span> <span class="n">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
-            <span class="s1">&#39;Tdown4&#39;</span><span class="p">:</span> <span class="n">Tdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)}</span></div>
+<span class="w">    </span><span class="sd">"""Return dictionary of Harvey Tsoubelis data."""</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">'gammadown3'</span><span class="p">:</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
+            <span class="s1">'Kdown3'</span><span class="p">:</span> <span class="n">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
+            <span class="s1">'Tdown4'</span><span class="p">:</span> <span class="n">Tdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)}</span></div>
 
 </pre></div>
 

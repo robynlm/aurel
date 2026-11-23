@@ -9,7 +9,7 @@
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=3721e3c3" />
 
   
@@ -19,7 +19,7 @@
       <script src="../../../_static/documentation_options.js?v=8d170800"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
       <script src="../../../_static/custom.js?v=67be0c79"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -105,11 +105,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for aurel.solutions.Szekeres</h1><div class="highlight"><pre>
-<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;$\Lambda$ - Szekeres solution.</span>
+<span></span><span class="sa">r</span><span class="sd">"""$\Lambda$ - Szekeres solution.</span>
 
 <span class="sd">Perturbed solution of the flat dust FLRW + LCDM spacetime,</span>
 <span class="sd">see section 3.1 of 2211.08133.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.special</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
@@ -128,7 +128,7 @@
 <div class="viewcode-block" id="Z_terms">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Szekeres.Z_terms">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Z_terms</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return F, Z, dtZ functions.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return F, Z, dtZ functions."""</span>
     <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
         <span class="n">pac</span> <span class="o">=</span> <span class="n">sp</span>
     <span class="k">else</span><span class="p">:</span>
@@ -161,7 +161,7 @@
 <div class="viewcode-block" id="rho">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Szekeres.rho">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">rho</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the energy density.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the energy density."""</span>
     <span class="n">F</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">dtZ</span> <span class="o">=</span> <span class="n">Z_terms</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
     <span class="n">delta</span> <span class="o">=</span>  <span class="o">-</span><span class="n">F</span><span class="o">/</span><span class="n">Z</span>
     <span class="k">return</span>  <span class="n">LCDM</span><span class="o">.</span><span class="n">rho</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">delta</span><span class="p">)</span></div>
@@ -170,14 +170,14 @@
 <div class="viewcode-block" id="press">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Szekeres.press">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">press</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the pressure.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the pressure."""</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="gammadown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Szekeres.gammadown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the spatial metric.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the spatial metric."""</span>
     <span class="n">gd3</span> <span class="o">=</span> <span class="n">LCDM</span><span class="o">.</span><span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="n">analytical</span><span class="p">)</span>
     <span class="n">F</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">dtZ</span> <span class="o">=</span> <span class="n">Z_terms</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="n">analytical</span><span class="p">)</span>
     <span class="n">gd3</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*=</span> <span class="n">Z</span><span class="o">**</span><span class="mi">2</span>
@@ -187,7 +187,7 @@
 <div class="viewcode-block" id="Kdown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Szekeres.Kdown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the extrinsic curvature.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the extrinsic curvature."""</span>
     <span class="c1"># Define the Kdown matrix</span>
     <span class="n">Kd3</span> <span class="o">=</span> <span class="n">LCDM</span><span class="o">.</span><span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
     <span class="n">F</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">dtZ</span> <span class="o">=</span> <span class="n">Z_terms</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
@@ -199,14 +199,14 @@
 <div class="viewcode-block" id="alpha">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Szekeres.alpha">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">alpha</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the lapse function.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the lapse function."""</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="betaup3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Szekeres.betaup3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">betaup3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the shift vector.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the shift vector."""</span>
     <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span><span class="p">))</span></div>
 
@@ -214,7 +214,7 @@
 <div class="viewcode-block" id="gdown4">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Szekeres.gdown4">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gdown4</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the spacetime metric.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the spacetime metric."""</span>
     <span class="n">gij</span> <span class="o">=</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="n">analytical</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span>
@@ -237,10 +237,10 @@
 <div class="viewcode-block" id="data">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.Szekeres.data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return dictionary of Szekeres data.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;gammadown3&#39;</span><span class="p">:</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
-            <span class="s1">&#39;rho&#39;</span><span class="p">:</span> <span class="n">rho</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
-            <span class="s1">&#39;Kdown3&#39;</span><span class="p">:</span> <span class="n">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)}</span></div>
+<span class="w">    </span><span class="sd">"""Return dictionary of Szekeres data."""</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">'gammadown3'</span><span class="p">:</span> <span class="n">gammadown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
+            <span class="s1">'rho'</span><span class="p">:</span> <span class="n">rho</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span>
+            <span class="s1">'Kdown3'</span><span class="p">:</span> <span class="n">Kdown3</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)}</span></div>
 
 </pre></div>
 

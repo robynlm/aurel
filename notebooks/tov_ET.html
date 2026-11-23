@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=3721e3c3" />
 
   
@@ -20,7 +20,7 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
       <script src="../_static/custom.js?v=67be0c79"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -134,7 +134,7 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SIMLOC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;/Users/rlm36AA/simulations/&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SIMLOC"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"/Users/rlm36AA/simulations/"</span>
 </pre></div>
 </div>
 </div>
@@ -145,8 +145,8 @@
 <p><code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">$SIMLOC</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a dictionary with the content of the simulation&#39;s parameter file</span>
-<span class="n">param</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="s1">&#39;tov_ET&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a dictionary with the content of the simulation's parameter file</span>
+<span class="n">param</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="s1">'tov_ET'</span><span class="p">)</span>
 <span class="c1"># Define the FiniteDifference class for the base level grid of the simulation</span>
 <span class="n">fd</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">FiniteDifference</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
 </pre></div>
@@ -169,16 +169,16 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This lists all the iterations available across different refinement levels and restarts</span>
 <span class="n">it_dict</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">iterations</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">skip_last</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
 <span class="c1"># By default skip_last = True so that the last restart is skipped to avoid reading active files</span>
-<span class="c1"># This is all nicely written in a human readable file called &#39;iterations.txt&#39;</span>
+<span class="c1"># This is all nicely written in a human readable file called 'iterations.txt'</span>
 <span class="c1"># But also provided as a dictionary</span>
 
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39; == For info&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;it_dict :&#39;</span><span class="p">,</span> <span class="n">it_dict</span><span class="p">)</span>
-<span class="c1"># And a &#39;content.txt&#39; file was also created</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">' == For info'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'it_dict :'</span><span class="p">,</span> <span class="n">it_dict</span><span class="p">)</span>
+<span class="c1"># And a 'content.txt' file was also created</span>
 <span class="c1"># This lists the available variables and what files they are in</span>
 <span class="n">content</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">get_content</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;content :&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'content :'</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -191,7 +191,7 @@ Loading existing content from /Users/rlm36AA/simulations/tov_ET/output-0000/tov_
 No existing content file found or invalid format. Calculating from scratch...
 Saving content to /Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/content.txt...
 Saved 34 variables to content file.
-3D variables available: [&#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;betaup3&#39;, &#39;dtbetaup3&#39;, &#39;rho0&#39;, &#39;eps&#39;, &#39;press&#39;, &#39;w_lorentz&#39;, &#39;velup3&#39;, &#39;Hamiltonian&#39;, &#39;Momentumup3&#39;, &#39;Weyl_Psi&#39;]
+3D variables available: ['gammadown3', 'Kdown3', 'Ktrace', 'alpha', 'dtalpha', 'betaup3', 'dtbetaup3', 'rho0', 'eps', 'press', 'w_lorentz', 'velup3', 'Hamiltonian', 'Momentumup3', 'Weyl_Psi']
 Checking if /Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyy.file_0.h5 can be read
 Reading iterations in: /Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyy.file_0.h5
 Checking variable gyy
@@ -204,8 +204,8 @@ rl = 0 at it = np.arange(0, 409600, 4096)
 rl = 1 at it = np.arange(0, 409600, 4096)
 
  == For info
-it_dict : {0: {&#39;var available&#39;: [&#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;betaup3&#39;, &#39;dtbetaup3&#39;, &#39;rho0&#39;, &#39;eps&#39;, &#39;press&#39;, &#39;w_lorentz&#39;, &#39;velup3&#39;, &#39;Hamiltonian&#39;, &#39;Momentumup3&#39;, &#39;Weyl_Psi&#39;], &#39;its available&#39;: [np.int64(0), np.int64(409600)], &#39;rl = 0&#39;: [np.int64(0), np.int64(409600), np.int64(4096)], &#39;rl = 1&#39;: [np.int64(0), np.int64(409600), np.int64(4096)], &#39;checkpoints&#39;: []}, &#39;overall&#39;: {&#39;rl = 0&#39;: [[np.int64(0), np.int64(409600), np.int64(4096)]], &#39;rl = 1&#39;: [[np.int64(0), np.int64(409600), np.int64(4096)]]}}
-content : {(&#39;gyy&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyy.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyy.file_1.h5&#39;], (&#39;kzz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kzz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kzz.file_1.h5&#39;], (&#39;alp&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/alp.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/alp.file_1.h5&#39;], (&#39;dtbetaz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetaz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetaz.file_1.h5&#39;], (&#39;eps&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/eps.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/eps.file_1.h5&#39;], (&#39;gzz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gzz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gzz.file_1.h5&#39;], (&#39;Psi4r&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/Psi4r.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/Psi4r.file_1.h5&#39;], (&#39;kyy&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kyy.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kyy.file_1.h5&#39;], (&#39;vel[0]&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[0].file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[0].file_1.h5&#39;], (&#39;H&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/H.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/H.file_1.h5&#39;], (&#39;dtalp&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtalp.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtalp.file_1.h5&#39;], (&#39;press&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/press.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/press.file_1.h5&#39;], (&#39;M1&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M1.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M1.file_1.h5&#39;], (&#39;kxz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxz.file_1.h5&#39;], (&#39;betaz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betaz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betaz.file_1.h5&#39;], (&#39;gxz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxz.file_1.h5&#39;], (&#39;vel[2]&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[2].file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[2].file_1.h5&#39;], (&#39;kxy&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxy.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxy.file_1.h5&#39;], (&#39;vel[1]&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[1].file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[1].file_1.h5&#39;], (&#39;dtbetax&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetax.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetax.file_1.h5&#39;], (&#39;trK&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/trK.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/trK.file_1.h5&#39;], (&#39;M3&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M3.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M3.file_1.h5&#39;], (&#39;gxy&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxy.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxy.file_1.h5&#39;], (&#39;betay&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betay.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betay.file_1.h5&#39;], (&#39;dtbetay&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetay.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetay.file_1.h5&#39;], (&#39;w_lorentz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/w_lorentz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/w_lorentz.file_1.h5&#39;], (&#39;rho&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/rho.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/rho.file_1.h5&#39;], (&#39;kxx&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxx.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxx.file_1.h5&#39;], (&#39;Psi4i&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/Psi4i.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/Psi4i.file_1.h5&#39;], (&#39;gyz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyz.file_1.h5&#39;], (&#39;M2&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M2.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M2.file_1.h5&#39;], (&#39;gxx&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxx.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxx.file_1.h5&#39;], (&#39;kyz&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kyz.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kyz.file_1.h5&#39;], (&#39;betax&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betax.file_0.h5&#39;, &#39;/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betax.file_1.h5&#39;]}
+it_dict : {0: {'var available': ['gammadown3', 'Kdown3', 'Ktrace', 'alpha', 'dtalpha', 'betaup3', 'dtbetaup3', 'rho0', 'eps', 'press', 'w_lorentz', 'velup3', 'Hamiltonian', 'Momentumup3', 'Weyl_Psi'], 'its available': [np.int64(0), np.int64(409600)], 'rl = 0': [np.int64(0), np.int64(409600), np.int64(4096)], 'rl = 1': [np.int64(0), np.int64(409600), np.int64(4096)], 'checkpoints': []}, 'overall': {'rl = 0': [[np.int64(0), np.int64(409600), np.int64(4096)]], 'rl = 1': [[np.int64(0), np.int64(409600), np.int64(4096)]]}}
+content : {('gyy',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyy.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyy.file_1.h5'], ('kzz',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kzz.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kzz.file_1.h5'], ('alp',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/alp.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/alp.file_1.h5'], ('dtbetaz',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetaz.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetaz.file_1.h5'], ('eps',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/eps.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/eps.file_1.h5'], ('gzz',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gzz.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gzz.file_1.h5'], ('Psi4r',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/Psi4r.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/Psi4r.file_1.h5'], ('kyy',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kyy.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kyy.file_1.h5'], ('vel[0]',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[0].file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[0].file_1.h5'], ('H',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/H.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/H.file_1.h5'], ('dtalp',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtalp.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtalp.file_1.h5'], ('press',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/press.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/press.file_1.h5'], ('M1',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M1.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M1.file_1.h5'], ('kxz',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxz.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxz.file_1.h5'], ('betaz',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betaz.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betaz.file_1.h5'], ('gxz',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxz.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxz.file_1.h5'], ('vel[2]',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[2].file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[2].file_1.h5'], ('kxy',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxy.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxy.file_1.h5'], ('vel[1]',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[1].file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/vel[1].file_1.h5'], ('dtbetax',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetax.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetax.file_1.h5'], ('trK',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/trK.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/trK.file_1.h5'], ('M3',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M3.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M3.file_1.h5'], ('gxy',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxy.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxy.file_1.h5'], ('betay',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betay.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betay.file_1.h5'], ('dtbetay',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetay.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/dtbetay.file_1.h5'], ('w_lorentz',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/w_lorentz.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/w_lorentz.file_1.h5'], ('rho',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/rho.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/rho.file_1.h5'], ('kxx',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxx.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kxx.file_1.h5'], ('Psi4i',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/Psi4i.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/Psi4i.file_1.h5'], ('gyz',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyz.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gyz.file_1.h5'], ('M2',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M2.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/M2.file_1.h5'], ('gxx',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxx.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/gxx.file_1.h5'], ('kyz',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kyz.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/kyz.file_1.h5'], ('betax',): ['/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betax.file_0.h5', '/Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/betax.file_1.h5']}
 </pre></div>
 </div>
 </div>
@@ -220,22 +220,22 @@ content : {(&#39;gyy&#39;,): [&#39;/Users/rlm36AA/simulations/tov_ET/output-0000
     <span class="n">param</span><span class="p">,</span>
     <span class="nb">vars</span> <span class="o">=</span> <span class="p">[],</span>
     <span class="c1"># Specify the fields to read, these have to be 3D outputs of the simulation amongst the available variables listed above</span>
-    <span class="c1"># e.g. [&#39;gammadown3&#39;, &#39;rho0&#39;, &#39;Weyl_Psi&#39;]</span>
+    <span class="c1"># e.g. ['gammadown3', 'rho0', 'Weyl_Psi']</span>
     <span class="c1"># If var is empty, all available variables will be read</span>
     <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">409600</span><span class="p">,</span> <span class="mi">4096</span><span class="p">),</span> <span class="c1"># Iterations to be read, default is [0]</span>
     <span class="n">rl</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>                          <span class="c1"># Refinement level default is 0</span>
-    <span class="n">restart</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>                     <span class="c1"># Restart number, default is -1, meaning it&#39;ll find the restart of the iteration you want</span>
+    <span class="n">restart</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>                     <span class="c1"># Restart number, default is -1, meaning it'll find the restart of the iteration you want</span>
     <span class="n">split_per_it</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>               <span class="c1"># This will copy the data in per-iteration files for easier access next time and to facilitate parallel reading</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">veryverbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="c1"># The output is a dictionary with the iteration, simulation time, and each requested variables</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39; == Data read from the simulation:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">' == Data read from the simulation:'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;it format: type </span><span class="si">{}</span><span class="s1"> and shape </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;it&#39;</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;it&#39;</span><span class="p">])))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rho0 format: type </span><span class="si">{}</span><span class="s1"> and shape </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">])))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rho0[0] format: type </span><span class="si">{}</span><span class="s1"> and shape </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'it format: type </span><span class="si">{}</span><span class="s1"> and shape </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'it'</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'it'</span><span class="p">])))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'rho0 format: type </span><span class="si">{}</span><span class="s1"> and shape </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'rho0'</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'rho0'</span><span class="p">])))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'rho0[0] format: type </span><span class="si">{}</span><span class="s1"> and shape </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'rho0'</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'rho0'</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
 <span class="c1"># note some variable names may be different to those called</span>
 <span class="c1"># the new names will match the AurelCore naming convention</span>
 <span class="c1"># rho0: rest-mass energy density</span>
@@ -249,16 +249,16 @@ Nothing new to process. Consider running with skip_last=False to analyse the las
 Loading existing content from /Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/content.txt...
 Loaded 34 variables from cache.
  =========== Restart 0:
-vars to get [&#39;gammadown3&#39;, &#39;Kdown3&#39;, &#39;Ktrace&#39;, &#39;alpha&#39;, &#39;dtalpha&#39;, &#39;betaup3&#39;, &#39;dtbetaup3&#39;, &#39;rho0&#39;, &#39;eps&#39;, &#39;press&#39;, &#39;w_lorentz&#39;, &#39;velup3&#39;, &#39;Hamiltonian&#39;, &#39;Momentumup3&#39;, &#39;Weyl_Psi&#39;]:
+vars to get ['gammadown3', 'Kdown3', 'Ktrace', 'alpha', 'dtalpha', 'betaup3', 'dtbetaup3', 'rho0', 'eps', 'press', 'w_lorentz', 'velup3', 'Hamiltonian', 'Momentumup3', 'Weyl_Psi']:
 Data read from split iterations: []
-Variables read from ET files: [&#39;Weyl_Psi4r&#39;, &#39;velz&#39;, &#39;kxz&#39;, &#39;gyz&#39;, &#39;dtbetay&#39;, &#39;eps&#39;, &#39;gxy&#39;, &#39;kzz&#39;, &#39;betay&#39;, &#39;dtbetax&#39;, &#39;w_lorentz&#39;, &#39;gzz&#39;, &#39;kyy&#39;, &#39;Momentumy&#39;, &#39;Weyl_Psi4i&#39;, &#39;betaz&#39;, &#39;gxx&#39;, &#39;vely&#39;, &#39;rho0&#39;, &#39;gxz&#39;, &#39;Momentumz&#39;, &#39;Momentumx&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;velx&#39;, &#39;kyz&#39;, &#39;dtalpha&#39;, &#39;t&#39;, &#39;betax&#39;, &#39;dtbetaz&#39;, &#39;kxx&#39;, &#39;press&#39;, &#39;Hamiltonian&#39;, &#39;kxy&#39;, &#39;it&#39;, &#39;alpha&#39;]
-Variables saved to split iterations files: [&#39;Weyl_Psi4r&#39;, &#39;velz&#39;, &#39;kxz&#39;, &#39;gyz&#39;, &#39;dtbetay&#39;, &#39;eps&#39;, &#39;gxy&#39;, &#39;kzz&#39;, &#39;betay&#39;, &#39;dtbetax&#39;, &#39;w_lorentz&#39;, &#39;kyy&#39;, &#39;gzz&#39;, &#39;Momentumy&#39;, &#39;Weyl_Psi4i&#39;, &#39;betaz&#39;, &#39;gxx&#39;, &#39;vely&#39;, &#39;rho0&#39;, &#39;gxz&#39;, &#39;Momentumz&#39;, &#39;Momentumx&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;velx&#39;, &#39;kyz&#39;, &#39;dtalpha&#39;, &#39;betax&#39;, &#39;dtbetaz&#39;, &#39;kxx&#39;, &#39;press&#39;, &#39;Hamiltonian&#39;, &#39;kxy&#39;, &#39;alpha&#39;]
+Variables read from ET files: ['Weyl_Psi4r', 'velz', 'kxz', 'gyz', 'dtbetay', 'eps', 'gxy', 'kzz', 'betay', 'dtbetax', 'w_lorentz', 'gzz', 'kyy', 'Momentumy', 'Weyl_Psi4i', 'betaz', 'gxx', 'vely', 'rho0', 'gxz', 'Momentumz', 'Momentumx', 'gyy', 'Ktrace', 'velx', 'kyz', 'dtalpha', 't', 'betax', 'dtbetaz', 'kxx', 'press', 'Hamiltonian', 'kxy', 'it', 'alpha']
+Variables saved to split iterations files: ['Weyl_Psi4r', 'velz', 'kxz', 'gyz', 'dtbetay', 'eps', 'gxy', 'kzz', 'betay', 'dtbetax', 'w_lorentz', 'kyy', 'gzz', 'Momentumy', 'Weyl_Psi4i', 'betaz', 'gxx', 'vely', 'rho0', 'gxz', 'Momentumz', 'Momentumx', 'gyy', 'Ktrace', 'velx', 'kyz', 'dtalpha', 'betax', 'dtbetaz', 'kxx', 'press', 'Hamiltonian', 'kxy', 'alpha']
 
  == Data read from the simulation:
-dict_keys([&#39;it&#39;, &#39;Weyl_Psi4r&#39;, &#39;velz&#39;, &#39;kxz&#39;, &#39;gyz&#39;, &#39;dtbetay&#39;, &#39;eps&#39;, &#39;gxy&#39;, &#39;kzz&#39;, &#39;betay&#39;, &#39;dtbetax&#39;, &#39;w_lorentz&#39;, &#39;kyy&#39;, &#39;gzz&#39;, &#39;Momentumy&#39;, &#39;Weyl_Psi4i&#39;, &#39;betaz&#39;, &#39;gxx&#39;, &#39;vely&#39;, &#39;rho0&#39;, &#39;gxz&#39;, &#39;Momentumz&#39;, &#39;Momentumx&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;velx&#39;, &#39;kyz&#39;, &#39;dtalpha&#39;, &#39;betax&#39;, &#39;dtbetaz&#39;, &#39;kxx&#39;, &#39;press&#39;, &#39;Hamiltonian&#39;, &#39;kxy&#39;, &#39;alpha&#39;, &#39;t&#39;])
-it format: type &lt;class &#39;list&#39;&gt; and shape (100,)
-rho0 format: type &lt;class &#39;list&#39;&gt; and shape (100, 12, 12, 12)
-rho0[0] format: type &lt;class &#39;numpy.ndarray&#39;&gt; and shape (12, 12, 12)
+dict_keys(['it', 'Weyl_Psi4r', 'velz', 'kxz', 'gyz', 'dtbetay', 'eps', 'gxy', 'kzz', 'betay', 'dtbetax', 'w_lorentz', 'kyy', 'gzz', 'Momentumy', 'Weyl_Psi4i', 'betaz', 'gxx', 'vely', 'rho0', 'gxz', 'Momentumz', 'Momentumx', 'gyy', 'Ktrace', 'velx', 'kyz', 'dtalpha', 'betax', 'dtbetaz', 'kxx', 'press', 'Hamiltonian', 'kxy', 'alpha', 't'])
+it format: type &lt;class 'list'&gt; and shape (100,)
+rho0 format: type &lt;class 'list'&gt; and shape (100, 12, 12, 12)
+rho0[0] format: type &lt;class 'numpy.ndarray'&gt; and shape (12, 12, 12)
 </pre></div>
 </div>
 </div>
@@ -272,26 +272,26 @@ rho0[0] format: type &lt;class &#39;numpy.ndarray&#39;&gt; and shape (12, 12, 12
 <span class="n">it_index</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># iteration index</span>
 <span class="n">iz</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># z slice index</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">][</span><span class="n">it_index</span><span class="p">][:,:,</span><span class="n">iz</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">'rho0'</span><span class="p">][</span><span class="n">it_index</span><span class="p">][:,:,</span><span class="n">iz</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\rho_0$ at $t=0$ and $z=0$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$y$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$\rho_0$ at $t=0$ and $z=0$'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$x$'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$y$'</span><span class="p">)</span>
 
 <span class="c1"># get the maximum rest mass density at each iteration</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">])</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">'max'</span><span class="p">])</span>
 
 <span class="c1"># plot the maximum rest mass density as a function of time</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0_max&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0_max&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'t'</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">'rho0_max'</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">'rho0_max'</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$t$ [$M_{\odot}$]&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$max(\rho_0) / \rho_0(0)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$t$ [$M_{\odot}$]'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$max(\rho_0) / \rho_0(0)$'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found scalar keys for estimation: [&#39;Weyl_Psi4r&#39;, &#39;velz&#39;, &#39;kxz&#39;, &#39;gyz&#39;, &#39;dtbetay&#39;, &#39;eps&#39;, &#39;gxy&#39;, &#39;kzz&#39;, &#39;betay&#39;, &#39;dtbetax&#39;, &#39;w_lorentz&#39;, &#39;kyy&#39;, &#39;gzz&#39;, &#39;Momentumy&#39;, &#39;Weyl_Psi4i&#39;, &#39;betaz&#39;, &#39;gxx&#39;, &#39;vely&#39;, &#39;rho0&#39;, &#39;gxz&#39;, &#39;Momentumz&#39;, &#39;Momentumx&#39;, &#39;gyy&#39;, &#39;Ktrace&#39;, &#39;velx&#39;, &#39;kyz&#39;, &#39;dtalpha&#39;, &#39;betax&#39;, &#39;dtbetaz&#39;, &#39;kxx&#39;, &#39;press&#39;, &#39;Hamiltonian&#39;, &#39;kxy&#39;, &#39;alpha&#39;]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found scalar keys for estimation: ['Weyl_Psi4r', 'velz', 'kxz', 'gyz', 'dtbetay', 'eps', 'gxy', 'kzz', 'betay', 'dtbetax', 'w_lorentz', 'kyy', 'gzz', 'Momentumy', 'Weyl_Psi4i', 'betaz', 'gxx', 'vely', 'rho0', 'gxz', 'Momentumz', 'Momentumx', 'gyy', 'Ktrace', 'velx', 'kyz', 'dtalpha', 'betax', 'dtbetaz', 'kxx', 'press', 'Hamiltonian', 'kxy', 'alpha']
 Processing it = 0
 Processing estimation item: max
 Now processing remaining time steps sequentially
@@ -300,7 +300,7 @@ Now processing remaining time steps sequentially
 <script type="application/vnd.jupyter.widget-view+json">{"model_id": "4aa3b8c76c73470bad3ea03e2d027d0f", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;$max(\\rho_0) / \\rho_0(0)$&#39;)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, '$max(\\rho_0) / \\rho_0(0)$')
 </pre></div>
 </div>
 <img alt="../_images/1ea45a11797ceba75ad42b7b2ed4d00222c578f801a96b108c2385f118c9eb43.png" src="../_images/1ea45a11797ceba75ad42b7b2ed4d00222c578f801a96b108c2385f118c9eb43.png" />
@@ -311,9 +311,9 @@ Now processing remaining time steps sequentially
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculating at the determinant of the spatial metric</span>
-<span class="n">variable</span> <span class="o">=</span> <span class="s1">&#39;gammadet&#39;</span>
-<span class="n">varstr</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$\gamma$&#39;</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="n">variable</span><span class="p">],</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">])</span>
+<span class="n">variable</span> <span class="o">=</span> <span class="s1">'gammadet'</span>
+<span class="n">varstr</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">'$\gamma$'</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="n">variable</span><span class="p">],</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">'max'</span><span class="p">])</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
@@ -321,16 +321,16 @@ Now processing remaining time steps sequentially
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">variable</span><span class="p">][</span><span class="n">it_index</span><span class="p">][:,:,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">varstr</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39; at $t=0$ and $z=0$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$y$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">varstr</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">' at $t=0$ and $z=0$'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$x$'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$y$'</span><span class="p">)</span>
 
 <span class="c1"># plot the maximum rest mass density as a function of time</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">variable</span><span class="o">+</span><span class="s1">&#39;_max&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'t'</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">variable</span><span class="o">+</span><span class="s1">'_max'</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$t$ [$M_{\odot}$]&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;max(&#39;</span> <span class="o">+</span> <span class="n">varstr</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$t$ [$M_{\odot}$]'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'max('</span> <span class="o">+</span> <span class="n">varstr</span> <span class="o">+</span> <span class="s1">')'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -347,7 +347,7 @@ Now processing remaining time steps sequentially
 <script type="application/vnd.jupyter.widget-view+json">{"model_id": "e112de8af4304aa3bb273a1270d1c743", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done!
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;max($\\gamma$)&#39;)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, 'max($\\gamma$)')
 </pre></div>
 </div>
 <img alt="../_images/5a7881e95bdb95951717ce739441491bce60867c0737a61ceee3b3a8fe125282.png" src="../_images/5a7881e95bdb95951717ce739441491bce60867c0737a61ceee3b3a8fe125282.png" />
@@ -366,21 +366,21 @@ Now processing remaining time steps sequentially
 <span class="c1"># load the data from that level</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span>
     <span class="n">param</span><span class="p">,</span>
-    <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">,</span> <span class="s1">&#39;gammadown3&#39;</span><span class="p">],</span>
+    <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">'rho0'</span><span class="p">,</span> <span class="s1">'gammadown3'</span><span class="p">],</span>
     <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">409600</span><span class="p">,</span> <span class="mi">4096</span><span class="p">),</span>
     <span class="n">rl</span> <span class="o">=</span> <span class="n">rl</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># relevant parameters of this grid level</span>
-<span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'rho0'</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">grid</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;Nx&#39;</span><span class="p">:</span> <span class="n">Nx</span><span class="p">,</span> <span class="s1">&#39;Ny&#39;</span><span class="p">:</span> <span class="n">Ny</span><span class="p">,</span> <span class="s1">&#39;Nz&#39;</span><span class="p">:</span> <span class="n">Nz</span><span class="p">,</span>
-    <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;zmin&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-    <span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
-    <span class="s1">&#39;dy&#39;</span><span class="p">:</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
-    <span class="s1">&#39;dz&#39;</span><span class="p">:</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
-    <span class="s1">&#39;Lx&#39;</span><span class="p">:</span> <span class="n">Nx</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
-    <span class="s1">&#39;Ly&#39;</span><span class="p">:</span> <span class="n">Ny</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
-    <span class="s1">&#39;Lz&#39;</span><span class="p">:</span> <span class="n">Nz</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
+    <span class="s1">'Nx'</span><span class="p">:</span> <span class="n">Nx</span><span class="p">,</span> <span class="s1">'Ny'</span><span class="p">:</span> <span class="n">Ny</span><span class="p">,</span> <span class="s1">'Nz'</span><span class="p">:</span> <span class="n">Nz</span><span class="p">,</span>
+    <span class="s1">'xmin'</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">'ymin'</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">'zmin'</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s1">'dx'</span><span class="p">:</span> <span class="n">param</span><span class="p">[</span><span class="s1">'dx'</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
+    <span class="s1">'dy'</span><span class="p">:</span> <span class="n">param</span><span class="p">[</span><span class="s1">'dx'</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
+    <span class="s1">'dz'</span><span class="p">:</span> <span class="n">param</span><span class="p">[</span><span class="s1">'dx'</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
+    <span class="s1">'Lx'</span><span class="p">:</span> <span class="n">Nx</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s1">'dx'</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
+    <span class="s1">'Ly'</span><span class="p">:</span> <span class="n">Ny</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s1">'dx'</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
+    <span class="s1">'Lz'</span><span class="p">:</span> <span class="n">Nz</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s1">'dx'</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">rl</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">fd</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">FiniteDifference</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
 </pre></div>
@@ -393,10 +393,10 @@ Nothing new to process. Consider running with skip_last=False to analyse the las
 Loading existing content from /Users/rlm36AA/simulations/tov_ET/output-0000/tov_ET/content.txt...
 Loaded 34 variables from cache.
  =========== Restart 0:
-vars to get [&#39;rho0&#39;, &#39;gammadown3&#39;]:
+vars to get ['rho0', 'gammadown3']:
 Data read from split iterations: []
-Variables read from ET files: [&#39;t&#39;, &#39;gyz&#39;, &#39;rho0&#39;, &#39;gxz&#39;, &#39;gzz&#39;, &#39;gxy&#39;, &#39;gyy&#39;, &#39;it&#39;, &#39;gxx&#39;]
-Variables saved to split iterations files: [&#39;gyz&#39;, &#39;rho0&#39;, &#39;gxz&#39;, &#39;gxy&#39;, &#39;gyy&#39;, &#39;gzz&#39;, &#39;gxx&#39;]
+Variables read from ET files: ['t', 'gyz', 'rho0', 'gxz', 'gzz', 'gxy', 'gyy', 'it', 'gxx']
+Variables saved to split iterations files: ['gyz', 'rho0', 'gxz', 'gxy', 'gyy', 'gzz', 'gxx']
 4th order finite difference schemes are defined
 </pre></div>
 </div>
@@ -404,7 +404,7 @@ Variables saved to split iterations files: [&#39;gyz&#39;, &#39;rho0&#39;, &#39;
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="n">variable</span><span class="p">],</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="n">variable</span><span class="p">],</span> <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">'max'</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -431,23 +431,23 @@ Now processing remaining time steps sequentially
 <span class="n">it_index</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># iteration index</span>
 <span class="n">iz</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># z slice index</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0&#39;</span><span class="p">][</span><span class="n">it_index</span><span class="p">][:,:,</span><span class="n">iz</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">'rho0'</span><span class="p">][</span><span class="n">it_index</span><span class="p">][:,:,</span><span class="n">iz</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\rho_0$ at $t=0$ and $z=0$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$y$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$\rho_0$ at $t=0$ and $z=0$'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$x$'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$y$'</span><span class="p">)</span>
 
 <span class="c1"># plot the maximum rest mass density as a function of time</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0_max&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;rho0_max&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'t'</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">'rho0_max'</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">'rho0_max'</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$t$ [$M_{\odot}$]&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$max(\rho_0) / \rho_0(0)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$t$ [$M_{\odot}$]'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$max(\rho_0) / \rho_0(0)$'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;$max(\\rho_0) / \\rho_0(0)$&#39;)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, '$max(\\rho_0) / \\rho_0(0)$')
 </pre></div>
 </div>
 <img alt="../_images/8363535a52042eb98122ee6c05c8f39f1da2728af963f4924d91b19ce714f464.png" src="../_images/8363535a52042eb98122ee6c05c8f39f1da2728af963f4924d91b19ce714f464.png" />
@@ -456,8 +456,8 @@ Now processing remaining time steps sequentially
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculating at the determinant of the spatial metric</span>
-<span class="n">variable</span> <span class="o">=</span> <span class="s1">&#39;gammadet&#39;</span>
-<span class="n">varstr</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$\gamma$&#39;</span>
+<span class="n">variable</span> <span class="o">=</span> <span class="s1">'gammadet'</span>
+<span class="n">varstr</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">'$\gamma$'</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">it_index</span> <span class="o">=</span> <span class="mi">0</span>
@@ -466,21 +466,21 @@ Now processing remaining time steps sequentially
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">xarray</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">yarray</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">variable</span><span class="p">][</span><span class="n">it_index</span><span class="p">][:,:,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">varstr</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39; at $t=0$ and $z=0$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$y$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">varstr</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">' at $t=0$ and $z=0$'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$x$'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$y$'</span><span class="p">)</span>
 
 <span class="c1"># plot the maximum rest mass density as a function of time</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">variable</span><span class="o">+</span><span class="s1">&#39;_max&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'t'</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">variable</span><span class="o">+</span><span class="s1">'_max'</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$t$ [$M_{\odot}$]&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;max(&#39;</span> <span class="o">+</span> <span class="n">varstr</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$t$ [$M_{\odot}$]'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'max('</span> <span class="o">+</span> <span class="n">varstr</span> <span class="o">+</span> <span class="s1">')'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;max($\\gamma$)&#39;)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, 'max($\\gamma$)')
 </pre></div>
 </div>
 <img alt="../_images/09a5152cf3ff5994d790a8a9e1c1c3cb43abeb5a0b0b2403e1fe398faf925834.png" src="../_images/09a5152cf3ff5994d790a8a9e1c1c3cb43abeb5a0b0b2403e1fe398faf925834.png" />

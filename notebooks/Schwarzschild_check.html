@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=3721e3c3" />
 
   
@@ -20,7 +20,7 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
       <script src="../_static/custom.js?v=67be0c79"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -130,27 +130,27 @@
 <span class="n">NNerror</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">allN</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">96</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">144</span><span class="p">,</span> <span class="mi">192</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">N</span> <span class="ow">in</span> <span class="n">allN</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; *** N = &quot;</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">" *** N = "</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
     <span class="n">dx</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">L</span> <span class="o">/</span> <span class="n">N</span>
-    <span class="n">param</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;Nx&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s1">&#39;Ny&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s1">&#39;Nz&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span>
-            <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">+</span><span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">+</span><span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;zmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">+</span><span class="mf">0.01</span><span class="p">,</span>
-            <span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="n">dx</span><span class="p">,</span> <span class="s1">&#39;dy&#39;</span><span class="p">:</span> <span class="n">dx</span><span class="p">,</span> <span class="s1">&#39;dz&#39;</span><span class="p">:</span> <span class="n">dx</span><span class="p">}</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">'Nx'</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s1">'Ny'</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s1">'Nz'</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span>
+            <span class="s1">'xmin'</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">+</span><span class="mf">0.01</span><span class="p">,</span> <span class="s1">'ymin'</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">+</span><span class="mf">0.01</span><span class="p">,</span> <span class="s1">'zmin'</span><span class="p">:</span> <span class="o">-</span><span class="n">L</span><span class="o">+</span><span class="mf">0.01</span><span class="p">,</span>
+            <span class="s1">'dx'</span><span class="p">:</span> <span class="n">dx</span><span class="p">,</span> <span class="s1">'dy'</span><span class="p">:</span> <span class="n">dx</span><span class="p">,</span> <span class="s1">'dz'</span><span class="p">:</span> <span class="n">dx</span><span class="p">}</span>
     <span class="n">fd</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">FiniteDifference</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">fd_order</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
     <span class="n">rel</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">AurelCore</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
     <span class="n">rel</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
     <span class="n">rel</span><span class="o">.</span><span class="n">freeze_data</span><span class="p">()</span>
     <span class="n">rel</span><span class="o">.</span><span class="n">memory_threshold_inGB</span> <span class="o">=</span> <span class="mi">20</span>
 
-    <span class="n">R_numerical</span> <span class="o">=</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;s_RicciS&quot;</span><span class="p">]</span>
+    <span class="n">R_numerical</span> <span class="o">=</span> <span class="n">rel</span><span class="p">[</span><span class="s2">"s_RicciS"</span><span class="p">]</span>
     <span class="n">Rerror</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">R_numerical</span><span class="p">)</span>
     <span class="n">NRerror</span> <span class="o">+=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">excision2</span><span class="p">(</span><span class="n">Rerror</span><span class="p">))]</span>
 
-    <span class="n">K_numerical</span> <span class="o">=</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;Kretschmann&quot;</span><span class="p">]</span>
+    <span class="n">K_numerical</span> <span class="o">=</span> <span class="n">rel</span><span class="p">[</span><span class="s2">"Kretschmann"</span><span class="p">]</span>
     <span class="n">K_exact</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">Kretschmann</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
     <span class="n">Kerror</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">K_numerical</span> <span class="o">-</span> <span class="n">K_exact</span><span class="p">)</span> <span class="o">/</span> <span class="n">K_exact</span><span class="p">)</span>
     <span class="n">NKerror</span> <span class="o">+=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">excision2</span><span class="p">(</span><span class="n">Kerror</span><span class="p">))]</span>
 
-    <span class="n">N_numerical</span> <span class="o">=</span> <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;null_ray_exp_out&quot;</span><span class="p">]</span>
+    <span class="n">N_numerical</span> <span class="o">=</span> <span class="n">rel</span><span class="p">[</span><span class="s2">"null_ray_exp_out"</span><span class="p">]</span>
     <span class="n">N_exact</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">null_ray_exp_out</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fd</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
     <span class="n">Nerror</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">N_numerical</span> <span class="o">-</span> <span class="n">N_exact</span><span class="p">)</span> <span class="o">/</span> <span class="n">N_exact</span><span class="p">)</span>
     <span class="n">NNerror</span> <span class="o">+=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">excision2</span><span class="p">(</span><span class="n">Nerror</span><span class="p">))]</span>
@@ -171,9 +171,9 @@ Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with s
 Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
 Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
 Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
-Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
-Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
-Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data['betax'] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data['betay'] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data['betaz'] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
 Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
@@ -187,16 +187,16 @@ Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor
 Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
 CLEAN-UP: Cleaning up cache after 20 calculations...
 CLEAN-UP: data size before cleanup: 202.25 MB
-CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 5 calculations ago (size: 2.25 MB).
-CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 10 calculations ago (size: 2.25 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 15 calculations ago (size: 20.25 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 14 calculations ago (size: 20.25 MB).
-CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 10 calculations ago (size: 0.75 MB).
-CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 7 calculations ago (size: 0.75 MB).
-CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 6 calculations ago (size: 4.00 MB).
-CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 4.00 MB).
-CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 3 calculations ago (size: 2.25 MB).
-CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 2 calculations ago (size: 64.00 MB).
+CLEAN-UP: Removing cached value for 'gammaup3' used 5 calculations ago (size: 2.25 MB).
+CLEAN-UP: Removing cached value for 's_Ricci_down3' used 10 calculations ago (size: 2.25 MB).
+CLEAN-UP: Removing cached value for 's_Riemann_uddd3' used 15 calculations ago (size: 20.25 MB).
+CLEAN-UP: Removing cached value for 's_Riemann_down3' used 14 calculations ago (size: 20.25 MB).
+CLEAN-UP: Removing cached value for 'betaup3' used 10 calculations ago (size: 0.75 MB).
+CLEAN-UP: Removing cached value for 'betadown3' used 7 calculations ago (size: 0.75 MB).
+CLEAN-UP: Removing cached value for 'gdown4' used 6 calculations ago (size: 4.00 MB).
+CLEAN-UP: Removing cached value for 'gup4' used 2 calculations ago (size: 4.00 MB).
+CLEAN-UP: Removing cached value for 'st_Ricci_down3' used 3 calculations ago (size: 2.25 MB).
+CLEAN-UP: Removing cached value for 'st_Riemann_down4' used 2 calculations ago (size: 64.00 MB).
 CLEAN-UP: Removed 10 items
 CLEAN-UP: data size after cleanup: 81.50 MB
 Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
@@ -212,9 +212,9 @@ Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with s
 Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
 Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
 Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
-Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
-Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
-Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data['betax'] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data['betay'] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data['betaz'] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
 Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
@@ -228,16 +228,16 @@ Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor
 Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
 CLEAN-UP: Cleaning up cache after 20 calculations...
 CLEAN-UP: data size before cleanup: 1618.00 MB
-CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 5 calculations ago (size: 18.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 10 calculations ago (size: 18.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 15 calculations ago (size: 162.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 14 calculations ago (size: 162.00 MB).
-CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 10 calculations ago (size: 6.00 MB).
-CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 7 calculations ago (size: 6.00 MB).
-CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 6 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 32.00 MB).
-CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 3 calculations ago (size: 18.00 MB).
-CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 2 calculations ago (size: 512.00 MB).
+CLEAN-UP: Removing cached value for 'gammaup3' used 5 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for 's_Ricci_down3' used 10 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for 's_Riemann_uddd3' used 15 calculations ago (size: 162.00 MB).
+CLEAN-UP: Removing cached value for 's_Riemann_down3' used 14 calculations ago (size: 162.00 MB).
+CLEAN-UP: Removing cached value for 'betaup3' used 10 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for 'betadown3' used 7 calculations ago (size: 6.00 MB).
+CLEAN-UP: Removing cached value for 'gdown4' used 6 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for 'gup4' used 2 calculations ago (size: 32.00 MB).
+CLEAN-UP: Removing cached value for 'st_Ricci_down3' used 3 calculations ago (size: 18.00 MB).
+CLEAN-UP: Removing cached value for 'st_Riemann_down4' used 2 calculations ago (size: 512.00 MB).
 CLEAN-UP: Removed 10 items
 CLEAN-UP: data size after cleanup: 652.00 MB
 Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
@@ -253,9 +253,9 @@ Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with s
 Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
 Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
 Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
-Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
-Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
-Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data['betax'] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data['betay'] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data['betaz'] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
 Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
@@ -269,16 +269,16 @@ Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor
 Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
 CLEAN-UP: Cleaning up cache after 20 calculations...
 CLEAN-UP: data size before cleanup: 5460.75 MB
-CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 5 calculations ago (size: 60.75 MB).
-CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 10 calculations ago (size: 60.75 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 15 calculations ago (size: 546.75 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 14 calculations ago (size: 546.75 MB).
-CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 10 calculations ago (size: 20.25 MB).
-CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 7 calculations ago (size: 20.25 MB).
-CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 6 calculations ago (size: 108.00 MB).
-CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 108.00 MB).
-CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 3 calculations ago (size: 60.75 MB).
-CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 2 calculations ago (size: 1728.00 MB).
+CLEAN-UP: Removing cached value for 'gammaup3' used 5 calculations ago (size: 60.75 MB).
+CLEAN-UP: Removing cached value for 's_Ricci_down3' used 10 calculations ago (size: 60.75 MB).
+CLEAN-UP: Removing cached value for 's_Riemann_uddd3' used 15 calculations ago (size: 546.75 MB).
+CLEAN-UP: Removing cached value for 's_Riemann_down3' used 14 calculations ago (size: 546.75 MB).
+CLEAN-UP: Removing cached value for 'betaup3' used 10 calculations ago (size: 20.25 MB).
+CLEAN-UP: Removing cached value for 'betadown3' used 7 calculations ago (size: 20.25 MB).
+CLEAN-UP: Removing cached value for 'gdown4' used 6 calculations ago (size: 108.00 MB).
+CLEAN-UP: Removing cached value for 'gup4' used 2 calculations ago (size: 108.00 MB).
+CLEAN-UP: Removing cached value for 'st_Ricci_down3' used 3 calculations ago (size: 60.75 MB).
+CLEAN-UP: Removing cached value for 'st_Riemann_down4' used 2 calculations ago (size: 1728.00 MB).
 CLEAN-UP: Removed 10 items
 CLEAN-UP: data size after cleanup: 2200.50 MB
 Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
@@ -294,9 +294,9 @@ Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with s
 Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
 Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
 Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
-Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
-Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
-Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data['betax'] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data['betay'] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data['betaz'] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
 Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
@@ -310,16 +310,16 @@ Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor
 Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
 CLEAN-UP: Cleaning up cache after 20 calculations...
 CLEAN-UP: data size before cleanup: 12944.00 MB
-CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 5 calculations ago (size: 144.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 10 calculations ago (size: 144.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 15 calculations ago (size: 1296.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 14 calculations ago (size: 1296.00 MB).
-CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 10 calculations ago (size: 48.00 MB).
-CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 7 calculations ago (size: 48.00 MB).
-CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 6 calculations ago (size: 256.00 MB).
-CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 256.00 MB).
-CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 3 calculations ago (size: 144.00 MB).
-CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 2 calculations ago (size: 4096.00 MB).
+CLEAN-UP: Removing cached value for 'gammaup3' used 5 calculations ago (size: 144.00 MB).
+CLEAN-UP: Removing cached value for 's_Ricci_down3' used 10 calculations ago (size: 144.00 MB).
+CLEAN-UP: Removing cached value for 's_Riemann_uddd3' used 15 calculations ago (size: 1296.00 MB).
+CLEAN-UP: Removing cached value for 's_Riemann_down3' used 14 calculations ago (size: 1296.00 MB).
+CLEAN-UP: Removing cached value for 'betaup3' used 10 calculations ago (size: 48.00 MB).
+CLEAN-UP: Removing cached value for 'betadown3' used 7 calculations ago (size: 48.00 MB).
+CLEAN-UP: Removing cached value for 'gdown4' used 6 calculations ago (size: 256.00 MB).
+CLEAN-UP: Removing cached value for 'gup4' used 2 calculations ago (size: 256.00 MB).
+CLEAN-UP: Removing cached value for 'st_Ricci_down3' used 3 calculations ago (size: 144.00 MB).
+CLEAN-UP: Removing cached value for 'st_Riemann_down4' used 2 calculations ago (size: 4096.00 MB).
 CLEAN-UP: Removed 10 items
 CLEAN-UP: data size after cleanup: 5216.00 MB
 Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
@@ -335,9 +335,9 @@ Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with s
 Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
 Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
 Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
-Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
-Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
-Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data['betax'] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data['betay'] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data['betaz'] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
 Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
@@ -351,16 +351,16 @@ Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor
 Calculated Kretschmann: $K={R^{\alpha\beta}}_{\mu\nu}{R_{\alpha\beta}}^{\mu\nu}$ Kretschmann scalar
 CLEAN-UP: Cleaning up cache after 20 calculations...
 CLEAN-UP: data size before cleanup: 18430.03 MB
-CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 5 calculations ago (size: 205.03 MB).
-CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 10 calculations ago (size: 205.03 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 15 calculations ago (size: 1845.28 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 14 calculations ago (size: 1845.28 MB).
-CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 10 calculations ago (size: 68.34 MB).
-CLEAN-UP: Removing cached value for &#39;betadown3&#39; used 7 calculations ago (size: 68.34 MB).
-CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 6 calculations ago (size: 364.50 MB).
-CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 364.50 MB).
-CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 3 calculations ago (size: 205.03 MB).
-CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 2 calculations ago (size: 5832.00 MB).
+CLEAN-UP: Removing cached value for 'gammaup3' used 5 calculations ago (size: 205.03 MB).
+CLEAN-UP: Removing cached value for 's_Ricci_down3' used 10 calculations ago (size: 205.03 MB).
+CLEAN-UP: Removing cached value for 's_Riemann_uddd3' used 15 calculations ago (size: 1845.28 MB).
+CLEAN-UP: Removing cached value for 's_Riemann_down3' used 14 calculations ago (size: 1845.28 MB).
+CLEAN-UP: Removing cached value for 'betaup3' used 10 calculations ago (size: 68.34 MB).
+CLEAN-UP: Removing cached value for 'betadown3' used 7 calculations ago (size: 68.34 MB).
+CLEAN-UP: Removing cached value for 'gdown4' used 6 calculations ago (size: 364.50 MB).
+CLEAN-UP: Removing cached value for 'gup4' used 2 calculations ago (size: 364.50 MB).
+CLEAN-UP: Removing cached value for 'st_Ricci_down3' used 3 calculations ago (size: 205.03 MB).
+CLEAN-UP: Removing cached value for 'st_Riemann_down4' used 2 calculations ago (size: 5832.00 MB).
 CLEAN-UP: Removed 10 items
 CLEAN-UP: data size after cleanup: 7426.69 MB
 Center of extraction sphere set to AurelCore.center = (0.0, 0.0, 0.0)
@@ -376,9 +376,9 @@ Calculated s_Ricci_down3: ${}^{(3)}R_{ij}$ Ricci tensor of spatial metric with s
 Calculated s_RicciS: ${}^{(3)}R$ Ricci scalar of spatial metric
 Calculated s_Riemann_uddd3: ${}^{(3)}{R^{i}}_{jkl}$ Riemann tensor of spatial metric with mixed spatial indices
 Calculated s_Riemann_down3: ${}^{(3)}R_{ijkl}$ Riemann tensor of spatial metric with all spatial indices down
-Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data[&#39;betax&#39;] = ... 
-Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data[&#39;betay&#39;] = ... 
-Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data[&#39;betaz&#39;] = ... 
+Calculated betax: $\beta^{x}$ x component of the shift vector with indices up. I assume $\beta^{x}=0$, if not then please define AurelCore.data['betax'] = ... 
+Calculated betay: $\beta^{y}$ y component of the shift vector with indices up. I assume $\beta^{y}=0$, if not then please define AurelCore.data['betay'] = ... 
+Calculated betaz: $\beta^{z}$ z component of the shift vector with indices up. I assume $\beta^{z}=0$, if not then please define AurelCore.data['betaz'] = ... 
 Calculated betaup3: $\beta^{i}$ Shift vector with spatial indices up
 Calculated betadown3: $\beta_{i}$ Shift vector with spatial indices down
 Calculated betamag: $\beta_{i}\beta^{i}$ Magnitude of shift vector
@@ -390,21 +390,21 @@ Calculated st_Ricci_down3: ${}^{(4)}R_{ij}$ Ricci tensor of spacetime metric wit
 Calculated st_Riemann_down4: ${}^{(4)}R_{\alpha\beta\mu\nu}$ Riemann tensor of spacetime metric with spacetime indices down
 CLEAN-UP: Cleaning up cache after 18 calculations...
 CLEAN-UP: data size before cleanup: 29808.00 MB
-CLEAN-UP: Removing cached value for &#39;gammaup3&#39; used 3 calculations ago (size: 486.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Ricci_down3&#39; used 8 calculations ago (size: 486.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_uddd3&#39; used 13 calculations ago (size: 4374.00 MB).
-CLEAN-UP: Removing cached value for &#39;s_Riemann_down3&#39; used 12 calculations ago (size: 4374.00 MB).
-CLEAN-UP: Removing cached value for &#39;betaup3&#39; used 8 calculations ago (size: 162.00 MB).
-CLEAN-UP: Removing cached value for &#39;gdown4&#39; used 4 calculations ago (size: 864.00 MB).
-CLEAN-UP: Removing cached value for &#39;gup4&#39; used 2 calculations ago (size: 864.00 MB).
+CLEAN-UP: Removing cached value for 'gammaup3' used 3 calculations ago (size: 486.00 MB).
+CLEAN-UP: Removing cached value for 's_Ricci_down3' used 8 calculations ago (size: 486.00 MB).
+CLEAN-UP: Removing cached value for 's_Riemann_uddd3' used 13 calculations ago (size: 4374.00 MB).
+CLEAN-UP: Removing cached value for 's_Riemann_down3' used 12 calculations ago (size: 4374.00 MB).
+CLEAN-UP: Removing cached value for 'betaup3' used 8 calculations ago (size: 162.00 MB).
+CLEAN-UP: Removing cached value for 'gdown4' used 4 calculations ago (size: 864.00 MB).
+CLEAN-UP: Removing cached value for 'gup4' used 2 calculations ago (size: 864.00 MB).
 CLEAN-UP: Removed 7 items
 CLEAN-UP: data size after cleanup: 18198.00 MB
 Calculated gdown4: $g_{\mu\nu}$ Spacetime metric with spacetime indices down
 Calculated gup4: $g^{\mu\nu}$ Spacetime metric with spacetime indices up
 CLEAN-UP: Cleaning up cache after 20 calculations...
 CLEAN-UP: data size before cleanup: 19926.00 MB
-CLEAN-UP: Removing cached value for &#39;st_Ricci_down3&#39; used 3 calculations ago (size: 486.00 MB).
-CLEAN-UP: Removing cached value for &#39;st_Riemann_down4&#39; used 2 calculations ago (size: 13824.00 MB).
+CLEAN-UP: Removing cached value for 'st_Ricci_down3' used 3 calculations ago (size: 486.00 MB).
+CLEAN-UP: Removing cached value for 'st_Riemann_down4' used 2 calculations ago (size: 13824.00 MB).
 CLEAN-UP: Removed 2 items
 CLEAN-UP: data size after cleanup: 5616.00 MB
 Calculated st_Riemann_uudd4: ${}^{(4)}{R^{\alpha\beta}}_{\mu\nu}$ Riemann tensor of spacetime metric with mixed spacetime indices
@@ -420,34 +420,34 @@ Calculated null_ray_exp_out: $\Theta_{out}$ List of expansion of null rays radia
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">NRerror</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;3 Ricci scalar&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">NRerror</span><span class="p">,</span> <span class="s1">'o-'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'C0'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'3 Ricci scalar'</span><span class="p">)</span>
 <span class="n">order</span> <span class="o">=</span> <span class="mi">8</span>
 <span class="n">ical</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span>
 <span class="n">converge</span> <span class="o">=</span> <span class="p">[</span><span class="n">NRerror</span><span class="p">[</span><span class="n">ical</span><span class="p">]</span><span class="o">*</span><span class="p">((</span><span class="n">allN</span><span class="p">[</span><span class="n">ical</span><span class="p">]</span><span class="o">/</span><span class="n">allN</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="p">(</span><span class="n">order</span><span class="p">))</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">allN</span><span class="p">))]</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">converge</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s1">th order&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">converge</span><span class="p">,</span> <span class="s1">'--'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'C0'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s1">th order'</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">NKerror</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Kretschmann&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">NKerror</span><span class="p">,</span> <span class="s1">'o-'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'C1'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Kretschmann'</span><span class="p">)</span>
 <span class="n">order</span> <span class="o">=</span> <span class="mi">8</span>
 <span class="n">ical</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span>
 <span class="n">converge</span> <span class="o">=</span> <span class="p">[</span><span class="n">NKerror</span><span class="p">[</span><span class="n">ical</span><span class="p">]</span><span class="o">*</span><span class="p">((</span><span class="n">allN</span><span class="p">[</span><span class="n">ical</span><span class="p">]</span><span class="o">/</span><span class="n">allN</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="p">(</span><span class="n">order</span><span class="p">))</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">allN</span><span class="p">))]</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">converge</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s1">th order&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">converge</span><span class="p">,</span> <span class="s1">'--'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'C1'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s1">th order'</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">NNerror</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\Theta_</span><span class="si">{out}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">NNerror</span><span class="p">,</span> <span class="s1">'o-'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'C2'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">'$\Theta_</span><span class="si">{out}</span><span class="s1">$'</span><span class="p">)</span>
 <span class="n">order</span> <span class="o">=</span> <span class="mi">8</span>
 <span class="n">ical</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span>
 <span class="n">converge</span> <span class="o">=</span> <span class="p">[</span><span class="n">NNerror</span><span class="p">[</span><span class="n">ical</span><span class="p">]</span><span class="o">*</span><span class="p">((</span><span class="n">allN</span><span class="p">[</span><span class="n">ical</span><span class="p">]</span><span class="o">/</span><span class="n">allN</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="p">(</span><span class="n">order</span><span class="p">))</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">allN</span><span class="p">))]</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">converge</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s1">th order&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">allN</span><span class="p">,</span> <span class="n">converge</span><span class="p">,</span> <span class="s1">'--'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'C2'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s1">th order'</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Error&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'N'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Error'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;8th order FD with excision&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'8th order FD with excision'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;8th order FD with excision&#39;)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, '8th order FD with excision')
 </pre></div>
 </div>
 <img alt="../_images/498601149e9b3b12180a680245f10580be9d9b325df20472362953566ab9d054.png" src="../_images/498601149e9b3b12180a680245f10580be9d9b325df20472362953566ab9d054.png" />

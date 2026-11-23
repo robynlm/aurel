@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=3721e3c3" />
 
   
@@ -20,7 +20,7 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
       <script src="../_static/custom.js?v=67be0c79"></script>
@@ -1662,15 +1662,15 @@ for cache cleanup. To never delete a variable, set its importance to 0.</p>
 tensor, with shape corresponding to <cite>indexing</cite>.</p></li>
 <li><p><strong>indexing</strong> (<em>str</em>) – <p>String describing the type and index structure of <cite>f</cite>.
 Must be one of:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="s1">&#39;&#39;</span>     <span class="p">:</span> <span class="n">scalar</span>
-<span class="o">-</span> <span class="s1">&#39;s_u&#39;</span>  <span class="p">:</span> <span class="n">spatial</span> <span class="n">vector</span><span class="p">,</span> <span class="n">upper</span> <span class="n">index</span>
-<span class="o">-</span> <span class="s1">&#39;st_u&#39;</span> <span class="p">:</span> <span class="n">spacetime</span> <span class="n">vector</span><span class="p">,</span> <span class="n">upper</span> <span class="n">index</span>
-<span class="o">-</span> <span class="s1">&#39;s_d&#39;</span>  <span class="p">:</span> <span class="n">spatial</span> <span class="n">vector</span><span class="p">,</span> <span class="n">lower</span> <span class="n">index</span>
-<span class="o">-</span> <span class="s1">&#39;st_d&#39;</span> <span class="p">:</span> <span class="n">spacetime</span> <span class="n">vector</span><span class="p">,</span> <span class="n">lower</span> <span class="n">index</span>
-<span class="o">-</span> <span class="s1">&#39;s_uu&#39;</span> <span class="p">:</span> <span class="n">spatial</span> <span class="n">rank</span><span class="o">-</span><span class="mi">2</span> <span class="n">tensor</span><span class="p">,</span> <span class="n">both</span> <span class="n">indices</span> <span class="n">up</span>
-<span class="o">-</span> <span class="s1">&#39;s_ud&#39;</span> <span class="p">:</span> <span class="n">spatial</span> <span class="n">rank</span><span class="o">-</span><span class="mi">2</span> <span class="n">tensor</span><span class="p">,</span> <span class="n">first</span> <span class="n">up</span><span class="p">,</span> <span class="n">second</span> <span class="n">down</span>
-<span class="o">-</span> <span class="s1">&#39;s_du&#39;</span> <span class="p">:</span> <span class="n">spatial</span> <span class="n">rank</span><span class="o">-</span><span class="mi">2</span> <span class="n">tensor</span><span class="p">,</span> <span class="n">first</span> <span class="n">down</span><span class="p">,</span> <span class="n">second</span> <span class="n">up</span>
-<span class="o">-</span> <span class="s1">&#39;s_dd&#39;</span> <span class="p">:</span> <span class="n">spatial</span> <span class="n">rank</span><span class="o">-</span><span class="mi">2</span> <span class="n">tensor</span><span class="p">,</span> <span class="n">both</span> <span class="n">indices</span> <span class="n">down</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="s1">''</span>     <span class="p">:</span> <span class="n">scalar</span>
+<span class="o">-</span> <span class="s1">'s_u'</span>  <span class="p">:</span> <span class="n">spatial</span> <span class="n">vector</span><span class="p">,</span> <span class="n">upper</span> <span class="n">index</span>
+<span class="o">-</span> <span class="s1">'st_u'</span> <span class="p">:</span> <span class="n">spacetime</span> <span class="n">vector</span><span class="p">,</span> <span class="n">upper</span> <span class="n">index</span>
+<span class="o">-</span> <span class="s1">'s_d'</span>  <span class="p">:</span> <span class="n">spatial</span> <span class="n">vector</span><span class="p">,</span> <span class="n">lower</span> <span class="n">index</span>
+<span class="o">-</span> <span class="s1">'st_d'</span> <span class="p">:</span> <span class="n">spacetime</span> <span class="n">vector</span><span class="p">,</span> <span class="n">lower</span> <span class="n">index</span>
+<span class="o">-</span> <span class="s1">'s_uu'</span> <span class="p">:</span> <span class="n">spatial</span> <span class="n">rank</span><span class="o">-</span><span class="mi">2</span> <span class="n">tensor</span><span class="p">,</span> <span class="n">both</span> <span class="n">indices</span> <span class="n">up</span>
+<span class="o">-</span> <span class="s1">'s_ud'</span> <span class="p">:</span> <span class="n">spatial</span> <span class="n">rank</span><span class="o">-</span><span class="mi">2</span> <span class="n">tensor</span><span class="p">,</span> <span class="n">first</span> <span class="n">up</span><span class="p">,</span> <span class="n">second</span> <span class="n">down</span>
+<span class="o">-</span> <span class="s1">'s_du'</span> <span class="p">:</span> <span class="n">spatial</span> <span class="n">rank</span><span class="o">-</span><span class="mi">2</span> <span class="n">tensor</span><span class="p">,</span> <span class="n">first</span> <span class="n">down</span><span class="p">,</span> <span class="n">second</span> <span class="n">up</span>
+<span class="o">-</span> <span class="s1">'s_dd'</span> <span class="p">:</span> <span class="n">spatial</span> <span class="n">rank</span><span class="o">-</span><span class="mi">2</span> <span class="n">tensor</span><span class="p">,</span> <span class="n">both</span> <span class="n">indices</span> <span class="n">down</span>
 </pre></div>
 </div>
 </p></li>

@@ -9,7 +9,7 @@
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=3721e3c3" />
 
   
@@ -19,7 +19,7 @@
       <script src="../../_static/documentation_options.js?v=8d170800"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
       <script src="../../_static/custom.js?v=67be0c79"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -105,11 +105,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for aurel.numerical</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">numerical.py.</span>
 
 <span class="sd">This module contains numerical methods for various calculations.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
@@ -118,7 +118,7 @@
 <div class="viewcode-block" id="dichotomy">
 <a class="viewcode-back" href="../../source/numerical.html#aurel.numerical.dichotomy">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dichotomy</span><span class="p">(</span><span class="n">y_wanted</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find the root of a function using the bisection method.</span>
+<span class="w">    </span><span class="sd">"""Find the root of a function using the bisection method.</span>
 
 <span class="sd">    Numerically solving for x: function(x) = y_wanted</span>
 
@@ -139,7 +139,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    float</span>
 <span class="sd">        The x value for which the function is equal to y_wanted.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">x_low</span> <span class="o">=</span> <span class="n">lower_bound</span>
     <span class="n">x_upp</span> <span class="o">=</span> <span class="n">upper_bound</span>
     <span class="n">x_mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_low</span> <span class="o">+</span> <span class="n">x_upp</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
@@ -162,8 +162,8 @@
 
 <div class="viewcode-block" id="interpolate">
 <a class="viewcode-back" href="../../source/numerical.html#aurel.numerical.interpolate">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">interpolate</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">grid_points</span><span class="p">,</span> <span class="n">target_points</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate scalar field from one grid to a new grid.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">interpolate</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">grid_points</span><span class="p">,</span> <span class="n">target_points</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">'linear'</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Interpolate scalar field from one grid to a new grid.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -185,7 +185,7 @@
 <span class="sd">    ndarray</span>
 <span class="sd">        Interpolated values at the target points, with the same shape as the</span>
 <span class="sd">        target coordinate arrays.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">target_flat</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">target_points</span><span class="p">:</span>
         <span class="n">target_flat</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span>
@@ -202,9 +202,9 @@
         <span class="n">target_min</span><span class="p">,</span> <span class="n">target_max</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">target</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">target_min</span> <span class="o">&lt;</span> <span class="n">grid_min</span> <span class="ow">or</span> <span class="n">target_max</span> <span class="o">&gt;</span> <span class="n">grid_max</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Target points in dimension </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> are outside grid bounds. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Grid range: [</span><span class="si">{</span><span class="n">grid_min</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">grid_max</span><span class="si">}</span><span class="s2">], &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Target range: [</span><span class="si">{</span><span class="n">target_min</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">target_max</span><span class="si">}</span><span class="s2">]&quot;</span>
+                <span class="sa">f</span><span class="s2">"Target points in dimension </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> are outside grid bounds. "</span>
+                <span class="sa">f</span><span class="s2">"Grid range: [</span><span class="si">{</span><span class="n">grid_min</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">grid_max</span><span class="si">}</span><span class="s2">], "</span>
+                <span class="sa">f</span><span class="s2">"Target range: [</span><span class="si">{</span><span class="n">target_min</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">target_max</span><span class="si">}</span><span class="s2">]"</span>
             <span class="p">)</span>
 
     <span class="c1"># Create interpolator and evaluate</span>

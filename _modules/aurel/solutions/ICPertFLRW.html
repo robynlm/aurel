@@ -9,7 +9,7 @@
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=3721e3c3" />
 
   
@@ -19,7 +19,7 @@
       <script src="../../../_static/documentation_options.js?v=8d170800"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
       <script src="../../../_static/custom.js?v=67be0c79"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -105,11 +105,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for aurel.solutions.ICPertFLRW</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Perturbed FLRW initial conditions.</span>
+<span></span><span class="sd">"""Perturbed FLRW initial conditions.</span>
 
 <span class="sd">See: https://arxiv.org/pdf/2302.09033</span>
 <span class="sd">and: https://arxiv.org/pdf/1307.1478.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
@@ -117,7 +117,7 @@
 <div class="viewcode-block" id="Rc_func">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.ICPertFLRW.Rc_func">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Rc_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">lamb</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Comoving curvature perturbation.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Comoving curvature perturbation."""</span>
     <span class="n">Ax</span><span class="p">,</span> <span class="n">Ay</span><span class="p">,</span> <span class="n">Az</span> <span class="o">=</span> <span class="n">amp</span>
     <span class="n">Lx</span><span class="p">,</span> <span class="n">Ly</span><span class="p">,</span> <span class="n">Lz</span> <span class="o">=</span> <span class="n">lamb</span>
     <span class="k">return</span> <span class="p">(</span>
@@ -129,7 +129,7 @@
 <div class="viewcode-block" id="gammadown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.ICPertFLRW.gammadown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gammadown3</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">Rc</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spatial metric with 1st order perturbations.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Spatial metric with 1st order perturbations."""</span>
     <span class="n">a2</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
     <span class="n">F</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Omega_m</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
     <span class="n">m2iFH2</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span> <span class="n">F</span> <span class="o">*</span><span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
@@ -148,7 +148,7 @@
 <div class="viewcode-block" id="Kdown3">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.ICPertFLRW.Kdown3">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Kdown3</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">Rc</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrinsic curvature, nonlinear from gammmadown3.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Extrinsic curvature, nonlinear from gammmadown3."""</span>
     <span class="n">a2</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
     <span class="n">F</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Omega_m</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
     <span class="n">iFH</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span> <span class="n">F</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Hprop</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span>
@@ -171,7 +171,7 @@
 <div class="viewcode-block" id="delta1">
 <a class="viewcode-back" href="../../../source/solutions.html#aurel.solutions.ICPertFLRW.delta1">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">delta1</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">Rc</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Linear density contrast.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Linear density contrast."""</span>
     <span class="n">F</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">fL</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">Omega_m</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3x</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">+</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3y</span><span class="p">(</span><span class="n">Rc</span><span class="p">))</span> <span class="o">+</span> <span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">d3z</span><span class="p">(</span><span class="n">Rc</span><span class="p">)))</span>

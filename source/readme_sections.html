@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=3721e3c3" />
 
   
@@ -20,7 +20,7 @@
       <script src="../_static/documentation_options.js?v=8d170800"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
       <script src="../_static/custom.js?v=67be0c79"></script>
@@ -118,13 +118,13 @@
   <a href="https://arxiv.org/abs/2602.00155"><img src="https://img.shields.io/badge/arXiv-2602.00155-b31b1b.svg?logo=arxiv&logoColor=white"/></a>
   <a href="https://joss.theoj.org/papers/acde0bf6036016f0b9c24a7e8b64cae3"><img src="https://joss.theoj.org/papers/acde0bf6036016f0b9c24a7e8b64cae3/status.svg"></a>
   <br>
-  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11%2B-blue?logo=python&logoColor=white"/></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11--3.14-blue?logo=python&logoColor=white"/></a>
   <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg?logo=opensourceinitiative&logoColor=white"/></a>
   <a href="https://pypi.org/project/aurel/"><img src="https://img.shields.io/pypi/v/aurel?logo=pypi&logoColor=white"/></a>
   <a href="https://github.com/robynlm/aurel/actions/workflows/test-build.yml"><img src="https://github.com/robynlm/aurel/actions/workflows/test-build.yml/badge.svg?branch=main"/></a>
   <a href="https://github.com/robynlm/aurel/actions/workflows/test-build.yml"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/robynlm/aurel/main/.github/badges/coverage.json&logo=pytest&logoColor=white"/></a>
   <br>
-  <a href="mailto:r.l.munoz@sussex.ac.uk"><img src="https://img.shields.io/badge/Email-r.l.munoz@sussex.ac.uk-red?logo=gmail&logoColor=white"/></a>
+  <a href="mailto:MunozR2@cardiff.ac.uk"><img src="https://img.shields.io/badge/Email-MunozR2@cardiff.ac.uk-red?logo=gmail&logoColor=white"/></a>
 </p>
 <p>Aurel is an open source Python package for numerical relativity analysis.
 Designed with ease of use in mind, it will <strong>au</strong>tomatically calculate <strong>rel</strong>ativistic terms.</p>
@@ -150,15 +150,14 @@ Designed with ease of use in mind, it will <strong>au</strong>tomatically calcul
 <h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
 <p><strong>Requirements:</strong></p>
 <ul class="simple">
-<li><p>Python 3.11 or higher (<a class="reference external" href="https://www.python.org/downloads/">download here</a>)</p></li>
-<li><p>pip (usually included with Python, or <a class="reference external" href="https://pip.pypa.io/en/stable/installation/">install separately</a>)</p></li>
+<li><p>Python (<a class="reference external" href="https://www.python.org/downloads/">download here</a>)</p></li>
 </ul>
 <p>Install aurel using pip (all other dependencies will be installed automatically):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>aurel
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>aurel
 </pre></div>
 </div>
 <p>To get the latest development version:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/robynlm/aurel.git@development
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/robynlm/aurel.git@development
 </pre></div>
 </div>
 </section>
@@ -171,9 +170,9 @@ and import the <code class="docutils literal notranslate"><span class="pre">aure
    
    <span class="c1"># Define your grid parameters</span>
    <span class="n">param</span> <span class="o">=</span> <span class="p">{</span>
-       <span class="s1">&#39;Nx&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s1">&#39;Ny&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s1">&#39;Nz&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span>
-       <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;zmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span>
-       <span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="mf">0.03125</span><span class="p">,</span> <span class="s1">&#39;dy&#39;</span><span class="p">:</span> <span class="mf">0.03125</span><span class="p">,</span> <span class="s1">&#39;dz&#39;</span><span class="p">:</span> <span class="mf">0.03125</span><span class="p">,</span>
+       <span class="s1">'Nx'</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s1">'Ny'</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s1">'Nz'</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span>
+       <span class="s1">'xmin'</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="s1">'ymin'</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="s1">'zmin'</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span>
+       <span class="s1">'dx'</span><span class="p">:</span> <span class="mf">0.03125</span><span class="p">,</span> <span class="s1">'dy'</span><span class="p">:</span> <span class="mf">0.03125</span><span class="p">,</span> <span class="s1">'dz'</span><span class="p">:</span> <span class="mf">0.03125</span><span class="p">,</span>
    <span class="p">}</span>
    
    <span class="c1"># Initialize the finite difference class</span>
@@ -188,7 +187,7 @@ and matter fields (see <a class="reference external" href="https://robynlm.githu
 assumed to correspond to Minkowski vacuum.
 These are passed as numpy arrays to aurel in the following way:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the xx component of the spacetime metric</span>
-<span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;gxx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]))</span>
+<span class="n">rel</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">'gxx'</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">param</span><span class="p">[</span><span class="s1">'Nx'</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">'Ny'</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">'Nz'</span><span class="p">]))</span>
 </pre></div>
 </div>
 <p>and so on for the other components and required quantities.
@@ -200,7 +199,7 @@ is conserved during the cache cleanup.</p>
 <p>With everything defined, you can call any entity listed in the
 <a class="reference external" href="https://robynlm.github.io/aurel/source/core.html#descriptions-of-available-terms">descriptions list</a>.
 Just call it as:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rel</span><span class="p">[</span><span class="s2">&quot;name_of_the_entity&quot;</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rel</span><span class="p">[</span><span class="s2">"name_of_the_entity"</span><span class="p">]</span>
 </pre></div>
 </div>
 <p><strong>Aurel will automatically do its best to calculate any relativistic term you ask for.</strong></p>
@@ -214,8 +213,8 @@ use the <code class="docutils literal notranslate"><span class="pre">aurel.over_
 containing the spacetime and matter fields over time:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the spacetime metric gxx over time</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;gxx&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">])),</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">&#39;Nz&#39;</span><span class="p">]))],</span>
+    <span class="s1">'gxx'</span><span class="p">:</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">param</span><span class="p">[</span><span class="s1">'Nx'</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">'Ny'</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">'Nz'</span><span class="p">])),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">param</span><span class="p">[</span><span class="s1">'Nx'</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">'Ny'</span><span class="p">],</span> <span class="n">param</span><span class="p">[</span><span class="s1">'Nz'</span><span class="p">]))],</span>
     <span class="o">...</span>
 <span class="p">}</span>
 </pre></div>
@@ -225,8 +224,8 @@ list of numpy arrays, one for each time step. Calculations will be performed
 for each of these time steps as:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">aurel</span><span class="o">.</span><span class="n">over_time</span><span class="p">(</span>
    <span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> 
-   <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name_of_the_entity&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;custom_quantity&#39;</span><span class="p">:</span> <span class="n">custom_quantity</span><span class="p">}],</span> 
-   <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name_of_estimate&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;custom_estimate&#39;</span><span class="p">:</span> <span class="n">custom_estimate</span><span class="p">}],</span>
+   <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">'name_of_the_entity'</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="p">{</span><span class="s1">'custom_quantity'</span><span class="p">:</span> <span class="n">custom_quantity</span><span class="p">}],</span> 
+   <span class="n">estimates</span><span class="o">=</span><span class="p">[</span><span class="s1">'name_of_estimate'</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="p">{</span><span class="s1">'custom_estimate'</span><span class="p">:</span> <span class="n">custom_estimate</span><span class="p">}],</span>
    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
